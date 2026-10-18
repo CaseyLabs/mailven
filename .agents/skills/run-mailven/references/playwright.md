@@ -24,9 +24,9 @@ Its leading setup-module import runs before entry-point dependencies, so a
 It captures persisted UI/extension state from a bindings-only page, removes fakes
 by reloading, waits for debounced saves, asserts state is unchanged, and always
 closes the browser. Neither helper needs `serve-fakes.py`; the composer helpers
-still use that server. `headless-shot.js` writes the four README shots (`ss.png`, `ss-light.png`,
-`ss-narrow.png`, `ss-webmail.png`) plus the dark/light x Accounts-column expanded/collapsed crops.
-When retaking the README screenshots, copy those four files to `docs/` as is.
+still use that server. `headless-shot.js` writes the five README shots (`ss.png`, `ss-light.png`,
+`ss-narrow.png`, `ss-webmail.png`, `ss-webmail-thread.png`) plus the dark/light x Accounts-column expanded/collapsed crops.
+When retaking the README screenshots, copy those five files to `docs/` as is.
 
 `ui-matrix.js <outdir> <prefix>` uses the same page setup and writes 36 PNGs:
 `<prefix>-<dark|light>-<1400|900|700>-<expanded|collapsed>-<previews|nopreviews>.png`

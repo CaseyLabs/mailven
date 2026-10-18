@@ -1,8 +1,9 @@
 // Headless README shots and Accounts-column crops. See "Playwright checks" in SKILL.md.
 // Usage: node headless-shot.js <outdir>   (dev server on :34115, DISPLAY not needed)
-// Writes the README shots <outdir>/ss.png (1040x660, dark), ss-light.png (1040x690, light, Accounts expanded)
+// Writes the README shots <outdir>/ss.png (1040x660, dark), ss-light.png (1040x690, light, Accounts collapsed)
 // and ss-narrow.png (480x750, single-pane layout), ss-webmail.png (1040x690, the generic webmail mock
-// in webmail-mock.html, for the README comparison), plus <outdir>/vc-<theme>-<expanded|collapsed>.png (title bar + sidebar).
+// in webmail-mock.html, for the README comparison), ss-webmail-thread.png (480x750, the dark
+// webmail thread mock in webmail-thread-mock.html, beside ss-narrow.png), plus <outdir>/vc-<theme>-<expanded|collapsed>.png (title bar + sidebar).
 const path = require('path')
 const { withFakePage } = require('./fake-page')
 const { launch } = require('./pw')
@@ -30,7 +31,6 @@ const scrollChatToTop = (p) => p.evaluate(() => { document.querySelector('.flex-
   // The heights end the chat between messages once it is scrolled to the top.
   await withFakePage({ width: 1040, height: 690 }, async (p) => {
     await p.evaluate(() => document.documentElement.setAttribute('data-theme', 'light'))
-    await toggleOf(p).click()
     await p.waitForTimeout(800)
     await scrollChatToTop(p)
     await p.mouse.move(1039, 689)
@@ -49,5 +49,8 @@ const scrollChatToTop = (p) => p.evaluate(() => { document.querySelector('.flex-
     const p = await browser.newPage({ viewport: { width: 1040, height: 690 } })
     await p.goto('file://' + path.join(__dirname, 'webmail-mock.html'))
     await p.screenshot({ path: `${out}/ss-webmail.png` })
+    const t = await browser.newPage({ viewport: { width: 480, height: 750 } })
+    await t.goto('file://' + path.join(__dirname, 'webmail-thread-mock.html'))
+    await t.screenshot({ path: `${out}/ss-webmail-thread.png` })
   } finally { await browser.close() }
 })().catch(error => { console.error(error); process.exitCode = 1 })

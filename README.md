@@ -8,9 +8,11 @@
 
 | A typical cluttered webmail inbox | The same mail in Mailven |
 | --- | --- |
-| ![A generic webmail inbox crowded with category tabs, labels, a sponsored row, a notification banner and a storage meter, with each conversation squeezed into one line](docs/ss-webmail.png) | ![Mailven in the light theme with the Accounts column open, showing the same conversations as chats and the trip chat open as message bubbles](docs/ss-light.png) |
+| ![A generic webmail inbox crowded with category tabs, labels, a sponsored row, a notification banner and a storage meter, with each conversation squeezed into one line](docs/ss-webmail.png) | ![Mailven in the light theme with the Accounts column collapsed, showing the same conversations as chats and the trip chat open as message bubbles](docs/ss-light.png) |
 
-<img src="docs/ss-narrow.png" width="320" alt="Mailven in a narrow window, showing a single chat that starts with its subject heading">
+| A typical webmail thread | The same thread in Mailven |
+| --- | --- |
+| <img src="docs/ss-webmail-thread.png" width="320" alt="A generic dark webmail thread view with toolbar icons, a notification banner, label chips, collapsed messages, a signature, quoted history and suggested-reply buttons"> | <img src="docs/ss-narrow.png" width="320" alt="Mailven in a narrow window, showing the same thread as a single chat that starts with its subject heading"> |
 
 _Note_: this is a personal project that is alpha software under active development. User-caution is heavily emphasized, no guarantees or warranties provided. 
 
