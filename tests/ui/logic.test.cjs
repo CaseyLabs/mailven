@@ -179,4 +179,22 @@ describe('account form logic', () => {
     })
     assert.equal(days, '30', 'the sync period starts at 1 month')
   }))
+
+  it('built-in OAuth sign-in saves the email as the username; other routes keep a typed one', ui.run(opts, async (page) => {
+    const r = await page.evaluate(async () => {
+      const { AccountFormState } = await import('/src/lib/components/settings/account/accountFormState.svelte.ts')
+      const { buildConfig } = await import('/src/lib/components/settings/account/accountFormSubmit.ts')
+      const { getProvider } = await import('/src/lib/config/providers.ts')
+      const s = new AccountFormState({ editAccount: null })
+      s.selectedProvider = getProvider('gmail')
+      s.oauthConfigured = { google: true, microsoft: false }
+      s.email = 'alex@example.com'
+      s.username = 'stale-typed-name'
+      s.authMethod = 'oauth2'
+      const oauth = buildConfig(s).username
+      s.authMethod = 'password'
+      return [oauth, buildConfig(s).username]
+    })
+    assert.deepEqual(r, ['alex@example.com', 'stale-typed-name'])
+  }))
 })

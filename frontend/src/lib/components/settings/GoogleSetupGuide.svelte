@@ -1,3 +1,10 @@
+<script lang="ts" module>
+  // Ticks are shared by every guide instance and outlive the component, so
+  // they survive closing the Add Account dialog to work in the console. They
+  // last for the app session.
+  const done = $state<Record<string, boolean>>({})
+</script>
+
 <script lang="ts">
   // GoogleSetupGuide — checklist for creating your own Google Cloud OAuth
   // client. Console links and the scope list come from the backend
@@ -34,7 +41,6 @@
   let open = $state(false)
   let links = $state<Record<string, GuideStep>>({})
   let scopes = $state<string[]>([])
-  let done = $state<Record<string, boolean>>({})
   let loadError = $state('')
 
   onMount(async () => {

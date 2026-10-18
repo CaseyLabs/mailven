@@ -11,7 +11,7 @@ All Microsoft work, including Microsoft 365 and regular/personal Outlook.com, is
 - [SEND — Sending, privacy and compatibility](#send): [MA1](#ma1), [PD2](#pd2), [DAV1](#dav1), [DAV2](#dav2), [DAV3](#dav3) (resolved: [PD10](#pd10), [CD2](#cd2))
 - [API — Provider API activation and migration](#api): [MA4](#ma4) (resolved: [MA7](#ma7), [MA8](#ma8), [F5b-1](#f5b-1), [F5b-3](#f5b-3))
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10) (resolved: [SY9](#sy9), [SY7](#sy7), [SY8](#sy8), [R2](#r2), [R3](#r3), [R4](#r4), [SY2](#sy2), [SY3](#sy3), [SY4](#sy4), [SY5](#sy5), [SY6](#sy6))
-- [GOAUTH — Google OAuth client setup](#goauth): [GO4](#go4) (resolved: [GO3](#go3), [GO1](#go1), [GO2](#go2))
+- [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded (resolved: [GO4](#go4), [GO3](#go3), [GO1](#go1), [GO2](#go2))
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded (resolved: [CH1](#ch1), [R1](#r1))
 - [MAINT — Maintenance and documentation](#maint): [D2](#d2) (resolved: [MA9](#ma9), [MA10](#ma10), UI10, UI9, UI8, [TF3](#tf3), [UI6](#ui6), [UI5](#ui5), [DOC6](#doc6), [UI3](#ui3), [TF1](#tf1), [TF2](#tf2), [L2](#l2), [L3](#l3), [UI1](#ui1), [UI2](#ui2), [UI4](#ui4), [DOC4](#doc4), [DOC5](#doc5), [MA2](#ma2), [MA6](#ma6), [SY1](#sy1))
 - [AI — AI development workflows](#ai): [AI6](#ai6)
@@ -281,8 +281,9 @@ Project: [GOAUTH](PLAN.md#goauth).
 
 ### GO4 — Add Account does not show which Google client signs in
 
-- **Owner / milestone:** [GOAUTH](PLAN.md#goauth) / unscheduled; found in the 2026-10-16 Gmail setup walkthrough.
-- **Severity / proposed priority / status:** low / P3 / open.
+- **Owner / milestone:** [GOAUTH](PLAN.md#goauth) / independent fix (2026-10-18); found in the 2026-10-16 Gmail setup walkthrough.
+- **Severity / proposed priority / status:** low / P3 / resolved.
+- **Resolution / evidence:** below **Sign in with Google**, `GoogleClientNote` reads `GetOAuthCredsChoices('google-mail', '')` and says "Signs in with Mailven’s Google client." or "Signs in with your imported Google client (ID ending …abcd).", reloading after an inline import. Checklist ticks live in `GoogleSetupGuide`'s module state, so they survive closing the dialog for the app session (not a restart). The Username field was not unused: IMAP/SMTP XOAUTH2 authenticates as the account username, so a stray value could break sign-in. A new account on built-in OAuth now hides the field and saves the email as the username; password, custom OAuth and edit forms keep it. Regression tests: the GO4 case in `tests/ui/google-add-account.test.cjs` (fails without the fix) and the username case in `tests/ui/logic.test.cjs`; full `make test-ui` 144 passed; the brand check allows the two `aerion-shipped` uses. Native window and a real Google sign-in are unrun.
 - **Details:** the Google sign-in form does not say whether **Sign in with Google** uses Mailven's client or an imported custom one, so a user who imported a client cannot confirm it took effect before signing in. The setup checklist's ticks live only in the component and are lost when the dialog closes. The form also shows a **Username** field that OAuth sign-in does not use.
 
 <a id="go3"></a>

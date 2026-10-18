@@ -9,14 +9,18 @@ import { account } from '../../../../../wailsjs/go/models'
 import { AcceptCertificate } from '../../../../../wailsjs/go/app/App'
 import type { AccountFormState } from './accountFormState.svelte'
 import type { OAuthCredentials } from './accountFormTypes'
+import { canUseOAuth } from './accountFormOAuth'
 
 export function buildConfig(s: AccountFormState): account.AccountConfig {
+  // Built-in OAuth sign-in hides the Username field; XOAUTH2 authenticates as
+  // the email address, so a stale typed username must not be saved.
+  const builtInOAuth = !s.editAccount && s.authMethod === 'oauth2' && canUseOAuth(s, s.selectedProvider)
   return new account.AccountConfig({
     name: s.name,
     displayName: s.displayName,
     color: s.color,
     email: s.email,
-    username: s.username || s.email,
+    username: builtInOAuth ? s.email : (s.username || s.email),
     password: s.authMethod === 'oauth2' ? '' : s.password,
     imapHost: s.imapHost,
     imapPort: s.imapPort,

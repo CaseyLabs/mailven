@@ -795,6 +795,8 @@
     "tryAgain": "Try again",
     "leaveEmptyToKeep": "Leave empty to keep current",
     "notesGoogle": "Sign in with Google or use an App Password",
+    "googleClientShipped": "Signs in with Mailven’s Google client.",
+    "googleClientCustom": "Signs in with your imported Google client (ID ending {id}).",
     "googleClientNeeded": "To sign in with Google, Mailven needs a Google Cloud client of your own. Follow the checklist and import the JSON file; Sign in with Google then appears here. Or use an App Password below.",
     "notesYahoo": "Requires App Password (enable 2-Step Verification first)",
     "notesIcloud": "Requires App-Specific Password from appleid.apple.com",

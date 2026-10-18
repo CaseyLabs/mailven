@@ -4,6 +4,7 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import GoogleSetupGuide from '../GoogleSetupGuide.svelte'
+  import GoogleClientNote from './GoogleClientNote.svelte'
   import { oauthStore } from '$lib/stores/oauth.svelte'
   import {
     allowsPasswordFallback,
@@ -16,6 +17,9 @@
   import { _ } from '$lib/i18n'
 
   let { s }: { s: AccountFormState } = $props()
+
+  // Bumped after an inline import so the client note reloads.
+  let clientImports = $state(0)
 
   // Get OAuth button text based on provider
   function getOAuthButtonText(provider: EmailProvider | null): string {
@@ -171,7 +175,8 @@
       {#if s.authMethod === 'oauth2'}
         {@render oauthFlowStatus(getOAuthProviderType(s.selectedProvider!) === 'microsoft' && !s.microsoftAccountType)}
         {#if getOAuthProviderType(s.selectedProvider!) === 'google'}
-          <GoogleSetupGuide inlineImport />
+          <GoogleClientNote refresh={clientImports} />
+          <GoogleSetupGuide inlineImport onImported={() => clientImports++} />
         {/if}
       {:else}
         <!-- Password field for app password -->

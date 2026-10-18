@@ -9,7 +9,7 @@ Mailven supports Gmail through two authentication methods: OAuth (recommended) a
 
 ## OAuth Method (Recommended)
 
-Mailven bundles no Google OAuth credentials. Create your own first: see [Custom Google OAuth Credentials](./google-oauth-credentials.md), or use an app password below. Until you have a client, the Gmail form shows the **Setup checklist**; after you import the downloaded JSON with its **Import JSON…** button, **Sign in with Google** appears in the same form.
+Mailven bundles no Google OAuth credentials. Create your own first: see [Custom Google OAuth Credentials](./google-oauth-credentials.md), or use an app password below. Until you have a client, the Gmail form shows the **Setup checklist**; after you import the downloaded JSON with its **Import JSON…** button, **Sign in with Google** appears in the same form. Below it, the form names the client it will use and the last four characters of its client ID, so you can confirm the import took effect before signing in. Checklist ticks stay while Mailven is running, even if you close the dialog to work in the console. OAuth sign-in uses your email address as the username, so the form shows no **Username** field.
 
 OAuth is the easiest and most secure way to connect your Gmail account.
 

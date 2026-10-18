@@ -3,7 +3,7 @@
   import { Label } from '$lib/components/ui/label'
   import { ColorPicker } from '$lib/components/ui/color-picker'
   import { getOAuthProviderType } from '$lib/config/providers'
-  import { chooseMicrosoftAccountType } from './accountFormOAuth'
+  import { canUseOAuth, chooseMicrosoftAccountType } from './accountFormOAuth'
   import AccountFormAuth from './AccountFormAuth.svelte'
   import type { AccountFormState } from './accountFormState.svelte'
   import { _ } from '$lib/i18n'
@@ -63,6 +63,8 @@
           {/if}
         </div>
 
+        <!-- Built-in OAuth sign-in authenticates as the email address. -->
+        {#if s.editAccount || s.authMethod !== 'oauth2' || !canUseOAuth(s, s.selectedProvider)}
         <div class="space-y-2">
           <Label for="username">{$_('account.username')}</Label>
           <Input
@@ -75,6 +77,7 @@
             {$_('account.usernameHelp')}
           </p>
         </div>
+        {/if}
 
         {#if !s.editAccount && s.selectedProvider && getOAuthProviderType(s.selectedProvider) === 'microsoft'}
           <div class="space-y-2">
