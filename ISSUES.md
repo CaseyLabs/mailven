@@ -13,7 +13,7 @@ All Microsoft work, including Microsoft 365 and regular/personal Outlook.com, is
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10) (resolved: [SY9](#sy9), [SY7](#sy7), [SY8](#sy8), [R2](#r2), [R3](#r3), [R4](#r4), [SY2](#sy2), [SY3](#sy3), [SY4](#sy4), [SY5](#sy5), [SY6](#sy6))
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded (resolved: [GO4](#go4), [GO3](#go3), [GO1](#go1), [GO2](#go2))
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded (resolved: [CH1](#ch1), [R1](#r1))
-- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [UI13](#ui13) (resolved: [UI12](#ui12), [UI11](#ui11), [MA9](#ma9), [MA10](#ma10), UI10, UI9, UI8, [TF3](#tf3), [UI6](#ui6), [UI5](#ui5), [DOC6](#doc6), [UI3](#ui3), [TF1](#tf1), [TF2](#tf2), [L2](#l2), [L3](#l3), [UI1](#ui1), [UI2](#ui2), [UI4](#ui4), [DOC4](#doc4), [DOC5](#doc5), [MA2](#ma2), [MA6](#ma6), [SY1](#sy1))
+- [MAINT — Maintenance and documentation](#maint): [UI14](#ui14), [MA11](#ma11), [UI15](#ui15), [D2](#d2), [UI13](#ui13) (resolved: [UI12](#ui12), [UI11](#ui11), [MA9](#ma9), [MA10](#ma10), UI10, UI9, UI8, [TF3](#tf3), [UI6](#ui6), [UI5](#ui5), [DOC6](#doc6), [UI3](#ui3), [TF1](#tf1), [TF2](#tf2), [L2](#l2), [L3](#l3), [UI1](#ui1), [UI2](#ui2), [UI4](#ui4), [DOC4](#doc4), [DOC5](#doc5), [MA2](#ma2), [MA6](#ma6), [SY1](#sy1))
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 
@@ -545,12 +545,33 @@ Project: [MAINT](PLAN.md#maint).
 - **Resolution:** every tracked component is under 500 lines (largest 493); `git ls-files '*.svelte' | grep -v '^archive/' | xargs wc -l | sort -n | awk '$1>500'` prints only the total. The 15 components were split into state classes, logic modules and child components without behavior change ([checkpoint](docs/plans/maint-13.md)). Lint, check, build and the full UI suite pass. The suite does not open the account settings, signature editor, email body or calendar components, so those splits are verified by type checks and review only.
 - **Problem / evidence (2026-10-15):** besides `App.svelte` ([UI5](#ui5)), 15 tracked Svelte components exceeded the 500-line limit in AGENTS.md, the largest `composer/Composer.svelte` at about 2,490 lines.
 
-<a id="ai"></a>
+<a id="ui14"></a>
 
-## AI — AI development workflows
+### UI14 — Account check summary says sign-in passed when it was skipped
 
-Project: [AI](PLAN.md#ai).
+- **Owner / milestone:** [MAINT](PLAN.md#maint); found 2026-10-18 by a code review of [MAINT-20](PLAN.md#maint-20), verified by reading the code. Not fixed.
+- **Severity / proposed priority / status:** medium (misleading diagnostic) / P2 / open.
+- **Problem / reproduction:** `outcomeOf` in `frontend/src/lib/components/settings/account/setupDiagnosticSummary.ts` ignores the `skipped` status. When `app/setup_diagnostic.go` sets `AuthSkip` (saved password missing, OAuth token near expiry, grant lacks the protocol scope, owner unavailable), the report holds `<proto> transport: passed` and `<proto> authentication: skipped`, which rolls up to `ok`, so the summary says Mailven connected and signed in although no sign-in was tried. A related cause: `summarize` assigns checks to areas by regex over the free-text Go check names (`transport`, `authentication`, `permission`, `cached sender`), so renaming a check in Go silently moves it between areas or drops it.
+- **Closure:** `skipped` counts as unconfirmed (or not checked) in the roll-up, with a UI regression test for passed transport plus skipped authentication. Ideally `setupdiagnostic.Check` emits a structured area so the summary stops parsing names.
 
+<a id="ui15"></a>
+
+### UI15 — Account settings apply stale async responses
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint); found 2026-10-18 by a code review, verified by reading the code. Not fixed.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Problem / reproduction:** `SentPolicySection.svelte` `loadFolders` has no request ordering: choosing mailbox A and then B quickly can let A's slower `GetFolders` reply replace B's folder list, so `add()` saves a Sent destination with B's account ID and one of A's folders. `GoogleClientNote.svelte` has the same race: an import bumps `refresh` while the first `GetOAuthCredsChoices` call is in flight, and the older reply can land last and show the previous client, which GO4 was meant to prevent. Its `.catch` also clears `current` but leaves `fingerprint`.
+- **Related cleanups (not defects):** `SentPolicySection` `refresh()` awaits three independent calls in series (`Promise.all` would cut the latency). `SettingsDialog.svelte` binds each General setting and also writes it back through an `on…Change` callback, so every change is assigned twice. That pattern covers every General setting, so drop one path for all of them, not just the delay.
+- **Closure:** both components ignore responses from superseded requests (request counter or token), with UI regression tests that resolve the replies out of order.
+
+<a id="ma11"></a>
+
+### MA11 — Store row loops do not check `rows.Err()`
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint); also affects [API](PLAN.md#api) migration. Found 2026-10-18 by a code review, verified by `grep` (about 40 `rows.Next()` loops without a matching `rows.Err()` in 12 files). Not fixed.
+- **Severity / proposed priority / status:** medium (silent partial results) / P2 / open.
+- **Problem:** loops in `internal/{account,carddav,certificate,contact,draft,folder}/store.go`, `internal/message/{store,attachment_store,api_store,chat_store,fts}.go` and `internal/apimigrate/apimigrate.go` stop at the first iteration error and return the partial result as complete. Worst cases: `contact` upsert reads the existing `contact_emails` metadata, then deletes and reinserts every row, so a partial read drops `send_count`, `last_used` and `name_overridden`. `apimigrate.Correlate` treats a partial IMAP row set as complete, so the affected API rows are counted as uncorrelated and lose their read, star and local state, with migration reporting success. Elsewhere, lists (drafts for sync, accounts) come back short with no error logged. SQLite iteration errors (busy, interrupt) are rare, so this has not been seen in use.
+- **Closure:** every loop checks `rows.Err()` (preferably through one shared scan helper, not per-site patches), with a test that injects an iteration error into the contact upsert and `Correlate`.
 
 <a id="ma10"></a>
 
@@ -582,6 +603,12 @@ Project: [AI](PLAN.md#ai).
 - **Resolution:** the route state has a `sleep` test seam (`apiRoutes.sleep`) passed to the Gmail and Graph drivers; the route test fixture sets it to a no-op. The two tests plus the rest of `TestMailAPIRoute*` now run in about 11 s with the same assertions.
 - **Problem / evidence (2026-10-15):** `TestMailAPIRouteActivationAndDeactivationSwapRows` and `TestMailAPIRouteActivationFailureStaysOnIMAP` (`app/api_route_test.go`) each take about 106 s: their fake Gmail answers 500 and the reconcile sleeps through `apiBackoff`'s real waits (`internal/sync/apicommon.go`), lengthened by the SY7 fix. Together they add about 3.5 minutes to `make test` and to every Go landing check.
 - **Dependencies / closure:** the route tests inject a no-op sleep (or the fake answers a non-retried error) and each runs in a few seconds, with the same assertions.
+
+<a id="ai"></a>
+
+## AI — AI development workflows
+
+Project: [AI](PLAN.md#ai).
 
 <a id="ai6"></a>
 

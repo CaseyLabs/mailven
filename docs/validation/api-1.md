@@ -12,6 +12,6 @@ Base `ca973f3`; design branch `api-1-shared-mailbox-design`. [Milestone](../../P
 
 ## Findings and limits
 
-The draft route-mode/scope confusion, implicit credential-owner resolution and deletion-cascade assumption were corrected. The existing best-effort parent removal defect is recorded as [MA5](../../ISSUES.md#ma5), open and not fixed here. [MA4](../../ISSUES.md#ma4) remains deferred: a completed design does not implement shared activation. Proposed [API-6](../../PLAN.md#api-6) is unselected.
+The draft route-mode/scope confusion, implicit credential-owner resolution and deletion-cascade assumption were corrected. The existing best-effort parent removal defect was recorded as MA5, open and not fixed here (later resolved by [API-6](../../PLAN.md#api-6)). [MA4](../../ISSUES.md#ma4) remains deferred: a completed design does not implement shared activation. Proposed [API-6](../../PLAN.md#api-6) is unselected.
 
 No check failed. Builds, Go/frontend tests and Mail UI checks (including Accounts expanded/collapsed) were unrun because no runtime code or UI changed. No real deletion/fault injection, credentials changes, provider calls, test mail, route switch or migration was performed. Shared identity, delta, delegated read/write, Send As/on Behalf, Sent copies, MIME Bcc and tenant-policy behavior need separately authorized live evidence before shared migration may be exposed.
