@@ -1,8 +1,11 @@
 // Headless README shots and Accounts-column crops. See "Playwright checks" in SKILL.md.
 // Usage: node headless-shot.js <outdir>   (dev server on :34115, DISPLAY not needed)
 // Writes the README shots <outdir>/ss.png (1040x660, dark), ss-light.png (1040x690, light, Accounts expanded)
-// and ss-narrow.png (480x750, single-pane layout), plus <outdir>/vc-<theme>-<expanded|collapsed>.png (title bar + sidebar).
+// and ss-narrow.png (480x750, single-pane layout), ss-webmail.png (1040x690, the generic webmail mock
+// in webmail-mock.html, for the README comparison), plus <outdir>/vc-<theme>-<expanded|collapsed>.png (title bar + sidebar).
+const path = require('path')
 const { withFakePage } = require('./fake-page')
+const { launch } = require('./pw')
 const out = process.argv[2]
 if (!out) { console.error('usage: node headless-shot.js <outdir>'); process.exit(1) }
 const toggleOf = (p) => p.locator('[title="Hide sidebar"],[aria-label="Hide sidebar"],[title="Show sidebar"],[aria-label="Show sidebar"]').first()
@@ -41,4 +44,10 @@ const scrollChatToTop = (p) => p.evaluate(() => { document.querySelector('.flex-
     await p.waitForTimeout(300)
     await p.screenshot({ path: `${out}/ss-narrow.png` })
   })
+  const browser = await launch()
+  try {
+    const p = await browser.newPage({ viewport: { width: 1040, height: 690 } })
+    await p.goto('file://' + path.join(__dirname, 'webmail-mock.html'))
+    await p.screenshot({ path: `${out}/ss-webmail.png` })
+  } finally { await browser.close() }
 })().catch(error => { console.error(error); process.exitCode = 1 })

@@ -1,0 +1,106 @@
+<!doctype html>
+<!-- Generic cluttered-webmail mock for the README comparison shot (docs/ss-webmail.png).
+     Made-up mail matching screenshot-fakes.js; deliberately no real product's name or logo.
+     Rendered at 1040x690 by headless-shot.js. -->
+<meta charset="utf-8">
+<title>Webmail mock</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; width: 1040px; height: 690px; overflow: hidden; font: 13px/1.3 "Noto Sans", "Segoe UI", Arial, sans-serif; color: #202124; background: #f6f8fc; }
+  .top { height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 12px; }
+  .ic { width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; color: #5f6368; flex: none; }
+  .logo { display: flex; align-items: center; gap: 6px; font-size: 19px; color: #5f6368; width: 150px; }
+  .logo b { width: 26px; height: 20px; border-radius: 3px; background: linear-gradient(135deg, #4a7bd0, #6b5bc6); }
+  .search { flex: 1; max-width: 560px; height: 40px; border-radius: 20px; background: #e9eef6; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: #5f6368; font-size: 14px; }
+  .search .q { flex: 1; }
+  .status { font-size: 12px; padding: 4px 10px; border-radius: 14px; border: 1px solid #c4c7c5; color: #444; display: flex; align-items: center; gap: 6px; }
+  .status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #1e8e3e; }
+  .spacer { flex: 1; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: #7b6bd0; color: #fff; display: grid; place-items: center; font-weight: 600; }
+  .wrap { display: flex; height: 634px; }
+  nav { width: 196px; padding: 0 8px 0 0; flex: none; }
+  .compose { margin: 2px 0 12px 8px; height: 50px; width: 132px; border-radius: 16px; background: #c2e7ff; display: flex; align-items: center; gap: 12px; padding: 0 18px; font-weight: 600; font-size: 14px; }
+  .nv { height: 30px; border-radius: 0 15px 15px 0; display: flex; align-items: center; gap: 14px; padding: 0 12px 0 22px; font-size: 13.5px; }
+  .nv .n { margin-left: auto; font-size: 12px; font-weight: 600; }
+  .nv.on { background: #d3e3fd; font-weight: 700; }
+  .nh { padding: 12px 22px 4px; font-size: 14px; display: flex; justify-content: space-between; }
+  .dot { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .store { margin: 10px 22px 0; font-size: 11.5px; color: #5f6368; }
+  .bar { height: 4px; border-radius: 2px; background: #dadce0; margin: 4px 0; } .bar i { display: block; height: 100%; width: 87%; border-radius: 2px; background: #d93025; }
+  main { flex: 1; background: #fff; border-radius: 16px; margin-bottom: 14px; overflow: hidden; min-width: 0; }
+  .tool { height: 46px; display: flex; align-items: center; gap: 14px; padding: 0 14px; color: #5f6368; }
+  .cb { width: 14px; height: 14px; border: 2px solid #80868b; border-radius: 2px; flex: none; }
+  .tool .pg { margin-left: auto; font-size: 12px; }
+  .banner { margin: 0 10px 6px; padding: 8px 12px; border-radius: 8px; background: #fef7e0; font-size: 12.5px; display: flex; align-items: center; gap: 10px; }
+  .banner u { color: #0b57d0; text-decoration: none; font-weight: 600; } .banner .x { margin-left: auto; color: #5f6368; }
+  .tabs { display: flex; border-bottom: 1px solid #e0e0e0; }
+  .tab { flex: 1; height: 50px; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 13.5px; color: #444; position: relative; }
+  .tab.on { color: #0b57d0; font-weight: 600; } .tab.on::after { content: ''; position: absolute; left: 8px; right: 8px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: #0b57d0; }
+  .tab small { display: block; font-size: 11px; color: #5f6368; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+  .pill { font-size: 10.5px; padding: 1px 6px; border-radius: 8px; color: #fff; font-weight: 600; }
+  .row { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-bottom: 1px solid #f1f3f4; background: #f2f6fc; white-space: nowrap; }
+  .row.u { background: #fff; font-weight: 700; }
+  .row .st { color: #9aa0a6; } .row .imp { width: 14px; height: 10px; flex: none; clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%, 25% 50%); background: #c8ccd0; } .row .imp.y { background: #f2b600; }
+  .row .fr { width: 150px; overflow: hidden; text-overflow: ellipsis; flex: none; }
+  .row .fr em { font-style: normal; color: #5f6368; font-weight: 400; font-size: 11.5px; }
+  .row .sb { flex: 1; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .row .sb span { color: #5f6368; font-weight: 400; }
+  .lbl { font-size: 10.5px; padding: 1px 5px; border-radius: 3px; background: #e6e8eb; color: #444; font-weight: 600; margin-right: 6px; }
+  .row .dt { width: 52px; text-align: right; font-size: 12px; flex: none; }
+  .ad { background: #fff; } .ad .sp { font-size: 10.5px; font-weight: 700; color: #202124; border: 1px solid #80868b; border-radius: 3px; padding: 0 4px; margin-right: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid #dadce0; border-radius: 12px; padding: 1px 8px; font-size: 11.5px; font-weight: 400; color: #444; margin-left: 6px; }
+  .chip::before { content: ''; width: 10px; height: 12px; background: #d93025; border-radius: 2px; }
+  aside { width: 48px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 18px; padding-top: 10px; }
+  aside b { width: 22px; height: 22px; border-radius: 6px; }
+</style>
+<div class="top">
+  <span class="ic">☰</span>
+  <div class="logo"><b></b>Webmail</div>
+  <div class="search"><span class="ic">⌕</span><span class="q">Search mail</span><span class="ic">⚟</span></div>
+  <span class="spacer"></span>
+  <span class="status">Active</span>
+  <span class="ic">?</span><span class="ic">⚙</span><span class="ic">✦</span><span class="ic">⋮⋮</span>
+  <span class="avatar">A</span>
+</div>
+<div class="wrap">
+  <nav>
+    <div class="compose">✎ Compose</div>
+    <div class="nv on">▤ Inbox <span class="n">2,481</span></div>
+    <div class="nv">☆ Starred</div>
+    <div class="nv">◷ Snoozed</div>
+    <div class="nv">▷ Sent</div>
+    <div class="nv">▢ Drafts <span class="n">14</span></div>
+    <div class="nv">▱ Purchases <span class="n">37</span></div>
+    <div class="nv">⌄ More</div>
+    <div class="nh">Labels <span>+</span></div>
+    <div class="nv"><span class="dot" style="background:#7cb342"></span>Family <span class="n">12</span></div>
+    <div class="nv"><span class="dot" style="background:#f4511e"></span>Receipts <span class="n">58</span></div>
+    <div class="nv"><span class="dot" style="background:#8e24aa"></span>Travel</div>
+    <div class="nv"><span class="dot" style="background:#039be5"></span>Work <span class="n">203</span></div>
+    <div class="nv"><span class="dot" style="background:#9e9e9e"></span>[Imap]/Archive</div>
+    <div class="store">13.1 GB of 15 GB used<div class="bar"><i></i></div><u style="color:#0b57d0">Get more storage</u></div>
+  </nav>
+  <main>
+    <div class="tool"><span class="cb"></span>▾ <span>⟳</span><span>⋮</span><span class="pg">1–50 of 2,481 &nbsp; ‹ &nbsp; ›</span></div>
+    <div class="banner">🔔 Enable desktop notifications for Webmail. <u>OK</u> <u>No thanks</u><span class="x">✕</span></div>
+    <div class="tabs">
+      <div class="tab on">▤ Primary</div>
+      <div class="tab">🏷 <div>Promotions <span class="pill" style="background:#1e8e3e">23 new</span><small>Corner Grocer, Trail Magazine</small></div></div>
+      <div class="tab">👥 <div>Social <span class="pill" style="background:#0b57d0">9 new</span><small>Photo Share, Running club</small></div></div>
+      <div class="tab">ⓘ <div>Updates <span class="pill" style="background:#e37400">41 new</span><small>City Library, Harbour Dental</small></div></div>
+    </div>
+    <div class="row ad"><span class="sp">Sponsored</span><span class="fr">Corner Grocer</span><span class="sb">Weekend flash sale: 30% off everything <span>– Ends Sunday. Shop seasonal fruit, veg and more before it's gone</span></span><span class="dt">⋮</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp y"></span><span class="fr">Priya, me, Sam <em>6</em></span><span class="sb"><span class="lbl">Travel</span>Re: Weekend trip to the coast <span>– Booking the cabin tonight. Sunday dinner is on me. On Fri, Alex Morgan wrote: &gt; Saturday at 8 then…</span></span><span class="dt">10:29</span></div>
+    <div class="row u"><span class="cb"></span><span class="st">☆</span><span class="imp y"></span><span class="fr">Jamie, Lena <em>6</em></span><span class="sb">Re: Book club: October pick <span>– Has anyone actually finished it yet? I am on chapter nine. -- Sent from my phone</span></span><span class="dt">10:14</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">Omar Haddad <em>2</em></span><span class="sb">Re: Bike for sale <span>– Still available! Happy to meet Saturday morning if that works. On Thu, Alex wrote…</span></span><span class="dt">08:54</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp y"></span><span class="fr">Mum</span><span class="sb"><span class="lbl">Family</span>Re: Sunday lunch <span>– Lovely, see you at one. Bring the lemon tart! xx</span></span><span class="dt">07:54</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">Harbour Dental</span><span class="sb">Appointment reminder <span>– Your check-up is on Tuesday 14 October at 9:30 AM. Reply C to confirm. Unsubscribe | Privacy</span></span><span class="dt">05:54</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">Kim Park <em>4</em></span><span class="sb">Photos from the wedding <span>– Uploaded the whole album, there are some great ones…</span><span class="chip">album.zip</span></span><span class="dt">Oct 17</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">Noah, Ines, me <em>8</em></span><span class="sb">Re: Re: Running club Thursday <span>– Same route as last week? I can bring the new route map.</span></span><span class="dt">Oct 16</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">City Library</span><span class="sb"><span class="lbl">Receipts</span>Your reservation is ready <span>– The book you reserved is ready for collection until Friday. This is an automated…</span></span><span class="dt">Oct 15</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">Grace Okafor <em>3</em></span><span class="sb">Re: Recipe you asked for <span>– Here it is. The trick is to toast the spices first.</span></span><span class="dt">Oct 14</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">Trail Magazine</span><span class="sb">Ten autumn hikes worth the drive <span>– This week: coastal paths, quiet ridges and where to find good coffee. View in browser</span></span><span class="dt">Oct 14</span></div>
+    <div class="row"><span class="cb"></span><span class="st">☆</span><span class="imp"></span><span class="fr">Corner Grocer <em>20</em></span><span class="sb">Your weekly offers <span>– Fresh deals on seasonal fruit and vegetables. Prices valid while stocks last. Unsubscribe</span></span><span class="dt">Oct 13</span></div>
+  </main>
+  <aside><b style="background:#e0a33a"></b><b style="background:#5b8def"></b><b style="background:#4caf7a"></b><span class="ic">+</span></aside>
+</div>

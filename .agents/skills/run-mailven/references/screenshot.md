@@ -4,14 +4,17 @@ Paths in commands are relative to the active checkout root; helper filenames ref
 
 ## Retaking the README screenshots
 
-The README has three shots, all of made-up mail only:
+The README has four shots, all of made-up mail only:
 
 - `docs/ss.png`: 1040×660, Dark theme, mail sidebar collapsed.
 - `docs/ss-light.png`: 1040×690, Light theme, Accounts column expanded, chat scrolled to its subject heading.
 - `docs/ss-narrow.png`: 480×750, single-pane layout, chat scrolled to its subject heading.
+- `docs/ss-webmail.png`: 1040×690, a generic cluttered webmail inbox (`webmail-mock.html`, static HTML with
+  the same made-up mail) shown beside `ss-light.png` for comparison. It must not use a real
+  product's name or logo; keep its conversations in step with `screenshot-fakes.js`.
 
 The quickest route is headless: `node .agents/skills/run-mailven/headless-shot.js <outdir>`
-writes all three (see [Playwright](playwright.md)). The heights of the last two end the
+writes all four (see [Playwright](playwright.md)). The heights of the light and narrow shots end the
 chat between messages; recheck them after changing the fake conversation. The browser
 steps below retake `docs/ss.png` only.
 

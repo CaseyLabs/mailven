@@ -25,6 +25,8 @@ def infer_scopes(paths):
             scopes.add('docs')
             if name.startswith(('.agents/', '.claude/', '.codex/')):
                 scopes.add('tooling')
+        elif name.startswith('docs/') and name.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp')):
+            scopes.add('docs')  # Images are checked through the Markdown links that reference them.
         elif name.startswith(('frontend/', 'tests/ui/')) or re.match(r'extensions/[^/]+/frontend/', name):
             scopes.add('frontend')
         elif name.endswith('.go') or name in ('go.mod', 'go.sum', 'Makefile'):

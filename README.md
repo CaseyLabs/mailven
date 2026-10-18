@@ -6,9 +6,11 @@
 
 ![Mailven chat mail view](docs/ss.png)
 
-| Light theme with all accounts and folders | Narrow window |
+| A typical cluttered webmail inbox | The same mail in Mailven |
 | --- | --- |
-| ![Mailven in the light theme with the Accounts column open, showing a combined inbox for two accounts](docs/ss-light.png) | ![Mailven in a narrow window, showing a single chat that starts with its subject heading](docs/ss-narrow.png) |
+| ![A generic webmail inbox crowded with category tabs, labels, a sponsored row, a notification banner and a storage meter, with each conversation squeezed into one line](docs/ss-webmail.png) | ![Mailven in the light theme with the Accounts column open, showing the same conversations as chats and the trip chat open as message bubbles](docs/ss-light.png) |
+
+<img src="docs/ss-narrow.png" width="320" alt="Mailven in a narrow window, showing a single chat that starts with its subject heading">
 
 _Note_: this is a personal project that is alpha software under active development. User-caution is heavily emphasized, no guarantees or warranties provided. 
 
