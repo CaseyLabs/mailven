@@ -98,6 +98,7 @@
           <span class="text-sm truncate">{acc.account.name} — {acc.account.email}</span>
           <Switch
             id={`default-${kind}-${acc.account.id}`}
+            ariaLabel={`${title}: ${acc.account.name} — ${acc.account.email}`}
             checked={enabled[acc.account.id] ?? false}
             onCheckedChange={(v) => handleToggle(acc.account.id, v)}
           />

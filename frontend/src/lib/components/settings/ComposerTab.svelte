@@ -232,6 +232,7 @@
             <span class="text-sm">{lang.name}</span>
             <Switch
               id={`spellcheck-lang-${lang.code}`}
+              ariaLabel={lang.name}
               checked={spellcheckLanguages.includes(lang.code)}
               onCheckedChange={(v) => handleLangToggle(lang.code, v)}
             />

@@ -174,7 +174,7 @@
               <Icon icon="mdi:alert-circle" class="w-4 h-4 text-destructive shrink-0 mt-0.5" />
               <div class="flex-1 min-w-0">
                 <div class="text-destructive font-medium">{$_('contactSource.syncFailed')}</div>
-                <div class="text-xs text-muted-foreground break-all max-h-24 overflow-y-auto">{source.last_error}</div>
+                <div class="text-xs text-muted-foreground wrap-anywhere max-h-24 overflow-y-auto">{source.last_error}</div>
               </div>
             </div>
           {/if}

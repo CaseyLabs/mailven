@@ -13,7 +13,7 @@ All Microsoft work, including Microsoft 365 and regular/personal Outlook.com, is
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10) (resolved: [SY9](#sy9), [SY7](#sy7), [SY8](#sy8), [R2](#r2), [R3](#r3), [R4](#r4), [SY2](#sy2), [SY3](#sy3), [SY4](#sy4), [SY5](#sy5), [SY6](#sy6))
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded (resolved: [GO4](#go4), [GO3](#go3), [GO1](#go1), [GO2](#go2))
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded (resolved: [CH1](#ch1), [R1](#r1))
-- [MAINT — Maintenance and documentation](#maint): [D2](#d2) (resolved: [MA9](#ma9), [MA10](#ma10), UI10, UI9, UI8, [TF3](#tf3), [UI6](#ui6), [UI5](#ui5), [DOC6](#doc6), [UI3](#ui3), [TF1](#tf1), [TF2](#tf2), [L2](#l2), [L3](#l3), [UI1](#ui1), [UI2](#ui2), [UI4](#ui4), [DOC4](#doc4), [DOC5](#doc5), [MA2](#ma2), [MA6](#ma6), [SY1](#sy1))
+- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [UI12](#ui12) (resolved: [UI11](#ui11), [MA9](#ma9), [MA10](#ma10), UI10, UI9, UI8, [TF3](#tf3), [UI6](#ui6), [UI5](#ui5), [DOC6](#doc6), [UI3](#ui3), [TF1](#tf1), [TF2](#tf2), [L2](#l2), [L3](#l3), [UI1](#ui1), [UI2](#ui2), [UI4](#ui4), [DOC4](#doc4), [DOC5](#doc5), [MA2](#ma2), [MA6](#ma6), [SY1](#sy1))
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 
@@ -375,6 +375,24 @@ Project: [MAINT](PLAN.md#maint).
 - **Resolution:** both guides now describe the offline whole-database restore (consent, backup, undo) and link `docs/MAIL_APIS.md#snapshot-restoration`; they state route rollback does not restore the snapshot or undo provider changes.
 - **Evidence (2026-10-14):** `docs/PROVIDERS.md` Switching routes says full snapshot restoration is not implemented, and `docs/user-guide/features/settings.md` Mail API route says restoring the full snapshot is unavailable. These conflict with the implemented [API-3](PLAN.md#api-3) workflow in `app/snapshot_restore.go` and the current snapshot section of `docs/MAIL_APIS.md`.
 - **Impact / closure:** users may miss the offline whole-database restore/undo option. Correct both guides to describe current restore scope and link its consent/backup/undo instructions, preserving that ordinary route rollback does not restore the snapshot or undo provider changes. Documentation links/source review must pass; do not reopen live restore testing or migration work.
+
+<a id="ui11"></a>
+
+### UI11 — Settings readability and clarity review
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / independent fix (2026-10-18, branch `ui-review-mail-settings`); found in a visual review of Mail and every Settings and Edit Account tab (dark and light, Accounts column expanded and collapsed, 1400 and 900 px; the Mail view had no findings).
+- **Severity / proposed priority / status:** low / P3 / resolved.
+- **Problem:** the eight Settings tab labels overlapped below about 900 px, and tab content sat in a fixed 350 px box at any window height. The mark-as-read delay was a bare number field whose hint explained `-1`/`0` codes, and it had no accessible name. Switches without a wrapping label were announced as "Toggle on/off". The Sent copy and account check sections used internal terms ("route", "append", "evidence", "scopes", "unreviewed"), headings styled unlike the other sections, and `break-all`, which split ordinary words ("Mai / lven"). The sender-lookup error and the auto-advance label were unclear or inconsistently capitalized, and the Extensions heading differed from the other tabs.
+- **Resolution / evidence:** tabs form a 4×2 grid and the content height follows the window (`clamp(14rem, 100vh − 22rem, 40rem)`). The delay is a named select: Never (only when I mark it myself), Immediately, or After 0.5–5 seconds. `Switch` takes no state fallback name, and every unlabeled switch passes `ariaLabel`. The Sent copy and account check copy is plain language, with icon headings, and prose uses `wrap-anywhere`. `docs/SENDING.md`, the settings guide and the `tools/*-check.cjs` scripts use the new strings. Regression tests: `tests/ui/settings-layout.test.cjs` (tab layout, height, delay choices, switch names with no `no-name` audit finding, no word splitting). The layout, switch and wrapping tests fail without their fixes. The native window was not checked.
+
+<a id="ui12"></a>
+
+### UI12 — Remaining Settings readability follow-ups
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint); found in the [UI11](#ui11) review, not fixed there.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Details:** (1) Sent copy policy and Check account setup still use native `<select>`s, unlike the bits-ui selects elsewhere in Settings. (2) The account check report shows raw values (ISO timestamps, `imap host:993 (tls)`, OAuth resource URLs) with no plain summary. (3) Extension cards list developer-facing capability names. (4) The Contacts sources empty state does not say what a contact source is. (5) Several setting descriptions repeat their label (e.g. the colored-circle options). (6) Input placeholders (`text-muted-foreground`) are close in brightness to entered values in dark themes; any change must keep the contrast check passing.
+- **Closure:** each item fixed or dismissed by the owner, with UI tests for the behavior changes.
 
 <a id="ma9"></a>
 

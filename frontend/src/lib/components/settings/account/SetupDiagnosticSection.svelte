@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte'
   import { onDestroy } from 'svelte'
   import { _ } from '$lib/i18n'
   import { Button } from '$lib/components/ui/button'
@@ -42,8 +43,8 @@
   onDestroy(() => { if (busy) void CancelSetupDiagnostic(runId).catch(() => {}) })
 </script>
 <section class="space-y-3 border-t border-border pt-4" aria-label={$_('setupDiagnostic.title')}>
-  <h3 class="font-medium">{$_('setupDiagnostic.title')}</h3>
-  <p class="text-sm text-muted-foreground">{$_('setupDiagnostic.guidance')}</p>
+  <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="mdi:stethoscope" class="w-4 h-4" />{$_('setupDiagnostic.title')}</h3>
+  <p class="text-xs text-muted-foreground">{$_('setupDiagnostic.guidance')}</p>
   <label class="block space-y-1 text-sm">
     <span>{$_('setupDiagnostic.from')}</span>
     <select class="block w-full rounded border border-border bg-background p-2" aria-label={$_('setupDiagnostic.from')} bind:value={from} disabled={busy}>
@@ -69,11 +70,11 @@
   {#if exported}<p role="status" class="text-sm">{$_('setupDiagnostic.exportSaved')}</p>{/if}
   <div aria-live="polite" class="space-y-3 text-sm">
     {#if report}
-      <p class="break-all">{$_('setupDiagnostic.checkedSelection', { values: { mailbox: report.mailbox, from: report.from } })}</p>
+      <p class="wrap-anywhere">{$_('setupDiagnostic.checkedSelection', { values: { mailbox: report.mailbox, from: report.from } })}</p>
       <p>{report.startedAt} – {report.finishedAt}</p>
-      {#each report.endpoints || [] as endpoint (endpoint)}<p class="break-all">{endpoint}</p>{/each}
-      <p class="break-all">{$_('setupDiagnostic.oauth')}: {report.oauthResource || $_('setupDiagnostic.notApplicable')} · {report.oauthExpiresAt || $_('setupDiagnostic.unknown')}</p>
-      <p class="break-all">{$_('setupDiagnostic.scopes')}: {report.oauthScopesKnown ? (report.oauthScopes || []).join(', ') || $_('setupDiagnostic.none') : $_('setupDiagnostic.unknown')}</p>
+      {#each report.endpoints || [] as endpoint (endpoint)}<p class="wrap-anywhere">{endpoint}</p>{/each}
+      <p class="wrap-anywhere">{$_('setupDiagnostic.oauth')}: {report.oauthResource || $_('setupDiagnostic.notApplicable')} · {report.oauthExpiresAt || $_('setupDiagnostic.unknown')}</p>
+      <p class="wrap-anywhere">{$_('setupDiagnostic.scopes')}: {report.oauthScopesKnown ? (report.oauthScopes || []).join(', ') || $_('setupDiagnostic.none') : $_('setupDiagnostic.unknown')}</p>
       {#each report.checks || [] as check, i (i)}
         <div class="rounded border border-border p-2">
           <p class="font-medium">{check.name}: {check.status}</p>
@@ -81,7 +82,7 @@
         </div>
       {/each}
       {#each report.dns?.checks || [] as check, i (i)}
-        <div class="rounded border border-border p-2 break-all"><p class="font-medium">{check.query}: {check.status}</p><p>{check.evidence}</p><p class="text-xs text-muted-foreground">{check.resolver} · TTL: {check.ttlSeconds ?? $_('setupDiagnostic.unknown')} · {check.observedAt}</p></div>
+        <div class="rounded border border-border p-2 wrap-anywhere"><p class="font-medium">{check.query}: {check.status}</p><p>{check.evidence}</p><p class="text-xs text-muted-foreground">{check.resolver} · TTL: {check.ttlSeconds ?? $_('setupDiagnostic.unknown')} · {check.observedAt}</p></div>
       {/each}
       <p class="text-muted-foreground">{report.limitations}</p>
     {/if}

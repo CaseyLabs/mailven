@@ -96,13 +96,11 @@ Control how compact the message list appears:
 
 ### Auto-Mark as Read
 
-Set how long a message must be viewed before marking it as read:
+Set how long a message must be open before it is marked as read:
 
+- **Never (only when I mark it myself)**
 - **Immediately** - Mark read as soon as opened
-- **After 1 second**
-- **After 2 seconds**
-- **After 5 seconds**
-- **Never** - Only mark read manually
+- **After 0.5, 1, 2, 3 or 5 seconds** - Lets you glance at a message without marking it read
 
 ### Background
 

@@ -49,8 +49,11 @@
 
 <div class="space-y-6">
   <header>
-    <h2 class="text-lg font-semibold">{$_('settings.extensionsCoreHeading')}</h2>
-    <p class="text-sm text-muted-foreground mt-1">{$_('settings.extensionsCoreDescription')}</p>
+    <h3 class="text-sm font-medium flex items-center gap-2">
+      <Icon icon="lucide:puzzle" class="w-4 h-4" />
+      {$_('settings.extensionsCoreHeading')}
+    </h3>
+    <p class="text-xs text-muted-foreground mt-1">{$_('settings.extensionsCoreDescription')}</p>
   </header>
 
   {#if loading}

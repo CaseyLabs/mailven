@@ -152,7 +152,7 @@ old messages. Removed/renamed destinations need review.
 Each submission snapshots destinations before SMTP, then records a one-shot
 APPEND claim before contacting IMAP. Interrupted or failed APPEND remains
 unconfirmed and is never automatically retried, including after restart. Accepted
-submission and missing-copy evidence are separate. **Refresh copy evidence**
+submission and missing-copy evidence are separate. **Look for copies**
 checks already synced messages by stable Message-ID in each intended folder;
 absence can mean delayed sync, and a Sent copy does not prove recipient delivery.
 This SMTP copy policy does not promise exactly one global copy or automatically

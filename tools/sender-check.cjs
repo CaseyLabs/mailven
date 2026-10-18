@@ -88,7 +88,7 @@ async function main() {
       await p.addInitScript(e => { window.__senderEvidence = e; if (e.action === 'error') window.__senderEvidenceError = 'Sender evidence lookup unavailable' }, evidence(state === 'lookup-error' ? 'unknown' : state, action))
       await p.goto('http://localhost:34115/composer.html')
       const composer = await populate(p)
-      if (action === 'error') await p.getByText(/Sender evidence could not be read/).waitFor()
+      if (action === 'error') await p.getByText(/Couldn't check whether this account may send/).waitFor()
       await composer.getByRole('button', { name: 'Send', exact: true }).click()
       await p.getByRole('button', { name: /Send now/ }).click()
       if (action === 'block' || action === 'error') {

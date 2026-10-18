@@ -101,6 +101,7 @@
           <div class="flex items-center gap-3">
             <Label>{$_('account.manageFolderSync')}</Label>
             <Switch
+              ariaLabel={$_('account.manageFolderSync')}
               bind:checked={syncFoldersEnabled}
               onCheckedChange={(v) => { syncFoldersEnabled = v; onSyncFoldersEnabledChange(v); if (v) loadSyncFolders() }}
             />
@@ -115,6 +116,7 @@
           <div class="flex items-center gap-3">
             <Label>{$_('account.syncAllFolders')}</Label>
             <Switch
+              ariaLabel={$_('account.syncAllFolders')}
               bind:checked={syncAllFolders}
               onCheckedChange={handleSyncAllToggle}
             />

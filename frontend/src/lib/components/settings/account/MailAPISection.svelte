@@ -149,7 +149,7 @@
     <p class="text-sm">{$_('mailApi.active')}</p>
     {#if reauthRequired}<p role="alert" class="text-sm text-destructive">{$_('mailApi.reauthorize')}</p>{/if}
     {#if status?.failure}<p role="alert" class="text-sm text-destructive">{failureText(status.failure)}</p>{/if}
-    {#if plan?.migration?.snapshotPath}<p class="break-all text-xs text-muted-foreground">{$_('mailApi.snapshotAt', { values: { path: plan.migration.snapshotPath } })}</p>{/if}
+    {#if plan?.migration?.snapshotPath}<p class="wrap-anywhere text-xs text-muted-foreground">{$_('mailApi.snapshotAt', { values: { path: plan.migration.snapshotPath } })}</p>{/if}
     <div class="flex flex-wrap gap-2">
       <Button size="sm" variant="outline" onclick={authorize} disabled={busy}>{$_('mailApi.reauthorizeAction')}</Button>
       {#if waiting}<Button size="sm" variant="outline" onclick={cancelConsent}>{$_('common.cancel')}</Button>{/if}

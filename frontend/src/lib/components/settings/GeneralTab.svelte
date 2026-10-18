@@ -2,7 +2,6 @@
   import Icon from '@iconify/svelte'
   import * as Select from '$lib/components/ui/select'
   import { Label } from '$lib/components/ui/label'
-  import { Input } from '$lib/components/ui/input'
   import Switch from '$lib/components/ui/switch/Switch.svelte'
   import { _, setLocale } from '$lib/i18n'
   import { supportedLocales } from '$lib/i18n'
@@ -139,13 +138,24 @@
     return titleBarOptions.find(opt => opt.value === value)?.label || value
   }
 
-  function handleDelayInput(e: Event) {
-    const target = e.target as HTMLInputElement
-    const value = parseFloat(target.value)
-    markAsReadDelaySeconds = value
-    onDelayChange?.(value)
-  }
+  // Mark-as-read delay presets; a stored value outside them (settings allow -1 to 5) stays selectable.
+  const delayPresets = [-1, 0, 0.5, 1, 2, 3, 5]
+  const delayLabel = (seconds: number) =>
+    seconds < 0 ? $_('settingsGeneral.markAsReadManual')
+      : seconds === 0 ? $_('settingsGeneral.markAsReadImmediately')
+        : $_('settingsGeneral.markAsReadDelay', { values: { seconds } })
+  const delayOptions = $derived(
+    [...new Set([...delayPresets, markAsReadDelaySeconds])]
+      .filter((v) => Number.isFinite(v))
+      .sort((a, b) => a - b)
+      .map((v) => ({ value: String(v), label: delayLabel(v) }))
+  )
 
+  function handleDelayChange(value: string) {
+    const seconds = Number(value)
+    markAsReadDelaySeconds = seconds
+    onDelayChange?.(seconds)
+  }
 
   function handleLanguageChange(value: string) {
     language = value
@@ -399,18 +409,16 @@
 
     <div class="space-y-2">
       <Label>{$_('settingsGeneral.markAsReadAfter')}</Label>
-      <div class="flex items-center gap-2">
-        <Input
-          type="number"
-          value={markAsReadDelaySeconds}
-          oninput={handleDelayInput}
-          min={-1}
-          max={5}
-          step={0.1}
-          class="w-24"
-        />
-        <span class="text-sm text-muted-foreground">{$_('common.seconds')}</span>
-      </div>
+      <Select.Root value={String(markAsReadDelaySeconds)} onValueChange={handleDelayChange}>
+        <Select.Trigger aria-label={$_('settingsGeneral.markAsReadAfter')}>
+          <Select.Value>{delayLabel(markAsReadDelaySeconds)}</Select.Value>
+        </Select.Trigger>
+        <Select.Content>
+          {#each delayOptions as opt (opt.value)}
+            <Select.Item value={opt.value} label={opt.label} />
+          {/each}
+        </Select.Content>
+      </Select.Root>
       <p class="text-xs text-muted-foreground">
         {$_('settingsGeneral.markAsReadHelp')}
       </p>

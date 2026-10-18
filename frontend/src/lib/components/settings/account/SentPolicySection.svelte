@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte'
   import { onMount } from 'svelte'
   import { _ } from '$lib/i18n'
   import { Button } from '$lib/components/ui/button'
@@ -50,15 +51,15 @@
   }
 </script>
 <section class="space-y-3 border-t border-border pt-4" aria-label={$_('sentPolicy.title')}>
-  <h3 class="font-medium">{$_('sentPolicy.title')}</h3>
-  <p class="text-sm text-muted-foreground">{$_('sentPolicy.guidance')}</p>
+  <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="mdi:email-arrow-right-outline" class="w-4 h-4" />{$_('sentPolicy.title')}</h3>
+  <p class="text-xs text-muted-foreground">{$_('sentPolicy.guidance')}</p>
   {#if error}<p role="alert" class="text-sm text-destructive">{error}</p>{/if}
   {#if policy}
-    <p class="break-all text-xs text-muted-foreground">{$_('sentPolicy.route')}: {routeSummary}</p>
+    <p class="wrap-anywhere text-xs text-muted-foreground">{$_('sentPolicy.route')}: {routeSummary}</p>
     {#if !policy.destinations.length}<p class="text-sm">{$_('sentPolicy.unreviewed')}</p>{/if}
     {#each policy.destinations as d, i (`${d.accountId}/${d.folderPath}`)}
       <div class="flex items-center gap-2 text-sm">
-        <span class="flex-1 break-all">{accounts.find(a => a.id === d.accountId)?.email || d.accountId} / {d.folderPath} — {$_(`sentPolicy.${d.mode}`)}</span>
+        <span class="flex-1 wrap-anywhere">{accounts.find(a => a.id === d.accountId)?.email || d.accountId} / {d.folderPath} — {$_(`sentPolicy.${d.mode}`)}</span>
         <Button variant="ghost" size="sm" onclick={() => { if (policy) policy.destinations = policy.destinations.filter((_, index) => index !== i) }}>{$_('sentPolicy.remove')}</Button>
       </div>
     {/each}
@@ -84,8 +85,8 @@
     <Button disabled={busy} onclick={save}>{$_('sentPolicy.save')}</Button>
     <Button variant="outline" disabled={busy} onclick={refresh}>{$_('sentPolicy.refresh')}</Button>
   {/if}
-  <p class="text-sm text-muted-foreground">{$_('sentPolicy.evidenceGuidance')}</p>
+  <p class="text-xs text-muted-foreground">{$_('sentPolicy.evidenceGuidance')}</p>
   {#each copies as copy (`${copy.attemptId}/${copy.accountId}/${copy.folderPath}`)}
-    <p class="break-all text-xs">{copy.messageId} · {accounts.find(a => a.id === copy.accountId)?.email || copy.accountId} / {copy.folderPath || $_('sentPolicy.choose')} · {$_(`sentPolicy.${copy.mode}`)} · {$_(`sentPolicy.state.${copy.state}`)}</p>
+    <p class="wrap-anywhere text-xs">{copy.messageId} · {accounts.find(a => a.id === copy.accountId)?.email || copy.accountId} / {copy.folderPath || $_('sentPolicy.choose')} · {$_(`sentPolicy.${copy.mode}`)} · {$_(`sentPolicy.state.${copy.state}`)}</p>
   {/each}
 </section>

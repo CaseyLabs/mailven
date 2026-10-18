@@ -47,7 +47,7 @@
       {#if rep.removedSince?.length}<p>{$_('snapshotRestore.removedSince', { values: { emails: rep.removedSince.join(', ') } })}</p>{/if}
       <p>{$_('snapshotRestore.serverNote')}</p>
       <p>{$_('snapshotRestore.heldNote')}</p>
-      <p class="break-all">{$_('snapshotRestore.backup', { values: { dir: rep.backupDir } })}</p>
+      <p class="wrap-anywhere">{$_('snapshotRestore.backup', { values: { dir: rep.backupDir } })}</p>
       <label class="flex items-start gap-2">
         <input type="checkbox" bind:checked={agreed} disabled={working || closing} />
         <span>{$_('snapshotRestore.ack', { values: { date } })}</span>

@@ -340,42 +340,42 @@
       </div>
     {:else}
       <Tabs.Root bind:value={activeTab} class="w-full">
-        <Tabs.List class="grid w-full grid-cols-8">
-          <Tabs.Trigger value="general" class="flex items-center gap-2">
+        <Tabs.List class="grid h-auto w-full grid-cols-4">
+          <Tabs.Trigger value="general" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:settings-2" width="16" height="16" /></span>
             {$_('settings.general')}
           </Tabs.Trigger>
-          <Tabs.Trigger value="composer" class="flex items-center gap-2">
+          <Tabs.Trigger value="composer" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:square-pen" width="46" height="46" /></span>
             {$_('settings.composer')}
           </Tabs.Trigger>
-          <Tabs.Trigger value="chat" class="flex items-center gap-2">
+          <Tabs.Trigger value="chat" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:messages-square" width="16" height="16" /></span>
             {$_('settings.chat')}
           </Tabs.Trigger>
-          <Tabs.Trigger value="images" class="flex items-center gap-2">
+          <Tabs.Trigger value="images" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:image" width="16" height="16" /></span>
             {$_('settings.images')}
           </Tabs.Trigger>
-          <Tabs.Trigger value="accounts" class="flex items-center gap-2">
+          <Tabs.Trigger value="accounts" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:mails" width="16" height="16" /></span>
             {$_('settings.accounts')}
           </Tabs.Trigger>
-          <Tabs.Trigger value="contacts" class="flex items-center gap-2">
+          <Tabs.Trigger value="contacts" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:contact" width="16" height="16" /></span>
             {$_('settings.contacts')}
           </Tabs.Trigger>
-          <Tabs.Trigger value="extensions" class="flex items-center gap-2">
+          <Tabs.Trigger value="extensions" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:puzzle" width="16" height="16" /></span>
             {$_('settings.extensions')}
           </Tabs.Trigger>
-          <Tabs.Trigger value="about" class="flex items-center gap-2">
+          <Tabs.Trigger value="about" class="flex min-w-0 items-center gap-2">
             <span class="inline-flex w-4 h-4 items-center justify-center shrink-0"><Icon icon="lucide:info" width="16" height="16" /></span>
             {$_('settings.about')}
           </Tabs.Trigger>
         </Tabs.List>
 
-        <div bind:this={tabScrollEl} class="mt-4 h-[350px] overflow-y-auto pl-1 pr-3">
+        <div bind:this={tabScrollEl} class="mt-4 h-[clamp(14rem,calc(100vh-22rem),40rem)] overflow-y-auto pl-1 pr-3">
           <Tabs.Content value="general" class="mt-0">
             <GeneralTab
               bind:markAsReadDelaySeconds

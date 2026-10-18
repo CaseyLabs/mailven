@@ -26,13 +26,13 @@
       {#if s.showPGPSignOption}
         <div class="flex items-center gap-1.5" title={$_('composer.pgpSign')}>
           <span>{$_('composer.sign')}</span>
-          <Switch bind:checked={s.pgpSignMessage} onCheckedChange={(v) => { if (v) { s.signMessage = false } }} class="scale-75 origin-left" />
+          <Switch ariaLabel={$_('composer.pgpSign')} bind:checked={s.pgpSignMessage} onCheckedChange={(v) => { if (v) { s.signMessage = false } }} class="scale-75 origin-left" />
         </div>
       {/if}
       {#if s.showPGPEncryptOption}
         <div class="flex items-center gap-1.5" title={$_('composer.pgpEncrypt')}>
           <span>{$_('composer.encrypt')}</span>
-          <Switch bind:checked={s.pgpEncryptMessage} onCheckedChange={(v) => { if (v) { s.encryptMessage = false } }} class="scale-75 origin-left" />
+          <Switch ariaLabel={$_('composer.pgpEncrypt')} bind:checked={s.pgpEncryptMessage} onCheckedChange={(v) => { if (v) { s.encryptMessage = false } }} class="scale-75 origin-left" />
         </div>
       {/if}
     </div>
@@ -55,13 +55,13 @@
       {#if s.showSignOption}
         <div class="flex items-center gap-1.5" title={$_('composer.smimeSign')}>
           <span>{$_('composer.sign')}</span>
-          <Switch bind:checked={s.signMessage} onCheckedChange={(v) => { if (v) { s.pgpSignMessage = false } }} class="scale-75 origin-left" />
+          <Switch ariaLabel={$_('composer.smimeSign')} bind:checked={s.signMessage} onCheckedChange={(v) => { if (v) { s.pgpSignMessage = false } }} class="scale-75 origin-left" />
         </div>
       {/if}
       {#if s.showEncryptOption}
         <div class="flex items-center gap-1.5" title={$_('composer.smimeEncrypt')}>
           <span>{$_('composer.encrypt')}</span>
-          <Switch bind:checked={s.encryptMessage} onCheckedChange={(v) => { if (v) { s.pgpEncryptMessage = false } }} class="scale-75 origin-left" />
+          <Switch ariaLabel={$_('composer.smimeEncrypt')} bind:checked={s.encryptMessage} onCheckedChange={(v) => { if (v) { s.pgpEncryptMessage = false } }} class="scale-75 origin-left" />
         </div>
       {/if}
     </div>
