@@ -155,7 +155,7 @@ This shape is **subprocess-ready**: if community-extension demand emerges and a 
 | `description` | 1–2 sentence summary shown in the Settings listing. |
 | `author` | Display name only. No URL. |
 | `minAerionVersion` | Semver. Future host versions will refuse to load an extension whose minAerionVersion is higher than the running build. |
-| `capabilities` | Coarse capability strings the extension declares. See [coreapi.Capability](../internal/core/api/v1/manifest.go) for the known set (e.g., `contacts.read`, `contacts.write`, `ui.rail-tab`, `ui.settings-tab`). Unknown strings are treated as opaque so the set can grow without breaking older hosts. |
+| `capabilities` | Coarse capability strings the extension declares. See [coreapi.Capability](../internal/core/api/v1/manifest.go) for the known set (e.g., `contacts.read`, `contacts.write`, `ui.rail-tab`, `ui.settings-tab`). Unknown strings are treated as opaque so the set can grow without breaking older hosts. Settings → Extensions shows each known ID as a plain phrase (map in [`extensionCapabilities.ts`](../frontend/src/lib/components/settings/extensionCapabilities.ts)) and an unknown ID as declared. |
 | `oauth.first_party_uses_core_for_scopes` | Optional. Lists OAuth scopes that should route through Mailven core's mail OAuth (reusing the user's existing consent) instead of the extension's own client config. See [§ Manifest OAuth routing](#manifest-oauth-routing--first_party_uses_core_for_scopes). First-party only. |
 
 ### Loading the manifest into Go

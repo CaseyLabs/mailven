@@ -529,7 +529,7 @@
     "extensionsDisabled": "Disabled",
     "extensionsEnable": "Enable",
     "extensionsDisable": "Disable",
-    "extensionsCapabilities": "Capabilities",
+    "extensionsCapabilities": "This extension can",
     "extensionsVersion": "Version",
     "extensionsNone": "No extensions are available in this build.",
     "images": "Images",
@@ -569,13 +569,13 @@
     "messageListDensity": "Message list density",
     "messageListDensityHelp": "Adjust the spacing and text size in the message list",
     "showMessageListCircles": "Show colored circles in message list",
-    "showMessageListCirclesHelp": "Show colored circles with sender initials in the message list",
+    "showMessageListCirclesHelp": "Each circle holds the sender's initials.",
     "showViewerCircles": "Show colored circles in conversation viewer",
-    "showViewerCirclesHelp": "Show colored circles with sender initials in the conversation viewer",
+    "showViewerCirclesHelp": "Each message in an open conversation gets the same circle.",
     "showMessageListProfilePics": "Show contact photos in message list",
     "showMessageListProfilePicsHelp": "Show the contact's profile picture (falling back to a colored circle) in the message list. Requires \"Show colored circles in message list\".",
     "accentBarUnread": "Accent for unread messages",
-    "accentBarUnreadHelp": "Shows an accent on the left side of unread messages for easier identification.",
+    "accentBarUnreadHelp": "A stripe on the left edge that disappears once you read the message.",
     "accentStyle": "Accent style",
     "accentStyleDot": "Dot",
     "accentStyleGlowDot": "Glow Dot",
@@ -772,7 +772,7 @@
     "checkNewMail": "Check for New Mail",
     "checkNewMailHelp": "How often to check for new messages (IDLE push is also used when available)",
     "requestReadReceipts": "Request Read Receipts",
-    "requestReadReceiptsHelp": "When to request read receipts for outgoing messages",
+    "requestReadReceiptsHelp": "A request only: the recipient's mail app decides whether to send one.",
     "folderMappingHelp2": "Map folder types to specific IMAP folders on your server.",
     "saveAccountFirst": "(save account first)",
     "loadingFolders": "Loading folders...",
@@ -1049,7 +1049,7 @@
   },
   "contactSource": {
     "title": "Contact Sources",
-    "noSources": "No contact sources configured",
+    "noSources": "No contact sources yet. A contact source is an address book Mailven syncs, such as Google Contacts or a CardDAV server, so you can pick names when you write. Choose Add Contact Source to connect one.",
     "addSource": "Add Contact Source",
     "editSource": "Edit Contact Source",
     "deleteTitle": "Delete Contact Source",
@@ -1395,7 +1395,34 @@
     "scopes": "Granted permissions",
     "age": "Permissions last checked",
     "exportSaved": "Redacted report saved.",
-    "checkedSelection": "Checked mailbox: {mailbox} · From: {from}"
+    "checkedSelection": "Checked mailbox: {mailbox} · From: {from}",
+    "summary": "Summary",
+    "details": "Details",
+    "area": {
+      "sending": "Connecting and signing in",
+      "dns": "Domain records",
+      "permissions": "Permissions"
+    },
+    "outcome": {
+      "sending": {
+        "ok": "Mailven connected securely and signed in.",
+        "problem": "Something failed. Open Details to see which step.",
+        "unconfirmed": "Mailven couldn't confirm every step. Open Details for what was missing.",
+        "notChecked": "Not checked."
+      },
+      "dns": {
+        "ok": "The records looked well formed.",
+        "problem": "A record is missing or invalid. Open Details to see which.",
+        "unconfirmed": "A lookup couldn't be completed. Open Details for which.",
+        "notChecked": "Not checked. Tick the domain option to check them."
+      },
+      "permissions": {
+        "ok": "The saved sign-in includes the permissions needed.",
+        "problem": "The saved sign-in lacks a permission. Re-authorize the account to grant it.",
+        "unconfirmed": "Your provider decides whether you may send from this address; Mailven couldn't confirm it.",
+        "notChecked": "Not checked."
+      }
+    }
   },
   "snapshotRestore": {
     "open": "Restore database to snapshot…",

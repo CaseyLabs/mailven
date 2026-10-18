@@ -174,7 +174,12 @@ Nothing runs until Start. The diagnostic never sends a test message, starts an S
 mail transaction, reads mail, requests consent, changes DNS, or retries automatically.
 Only local results are retained in memory; a new run replaces them.
 
-The report separates TLS/capability, login, recorded OAuth protocol scopes, cached
+The result opens with a plain-language summary of three areas (connecting and
+signing in, domain records, permissions), each reported as working, a problem,
+not confirmed or not checked; the worst result in an area decides its line. The
+**Details** disclosure holds the rest of the report.
+
+Details separate TLS/capability, login, recorded OAuth protocol scopes, cached
 sender evidence, and unknown provider/tenant policy. It shows effective endpoints,
 UTC observations, token expiry and actual known grants (legacy requested scopes
 remain unknown). Cached sender evidence includes its observation age and sender-evidence

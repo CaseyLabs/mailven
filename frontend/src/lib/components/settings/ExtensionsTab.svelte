@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { capabilityLabel } from './extensionCapabilities'
   import { onMount } from 'svelte'
   import Icon from '@iconify/svelte'
   import { Button } from '$lib/components/ui/button'
@@ -88,7 +89,7 @@
                 <div class="mt-2 flex flex-wrap gap-1">
                   <span class="text-xs text-muted-foreground">{$_('settings.extensionsCapabilities')}:</span>
                   {#each ext.capabilities as cap (cap)}
-                    <code class="text-xs px-1.5 py-0.5 rounded bg-muted">{cap}</code>
+                    <span class="text-xs px-1.5 py-0.5 rounded bg-muted" title={cap}>{capabilityLabel(cap)}</span>
                   {/each}
                 </div>
               {/if}

@@ -3,6 +3,7 @@
   import { onMount } from 'svelte'
   import { _ } from '$lib/i18n'
   import { Button } from '$lib/components/ui/button'
+  import NamedSelect from './NamedSelect.svelte'
   import { GetSentPolicy, SetSentPolicy, GetSubmissionCopies, GetAccounts, GetFolders } from '../../../../../wailsjs/go/app/App'
   import { account, folder, submission } from '../../../../../wailsjs/go/models'
   let { accountId }: { accountId: string } = $props()
@@ -36,6 +37,9 @@
       return `${r[1]}:${r[2]} (${r[3]}) · ${r[7]} · ${accounts.find(a => a.id === r[8])?.email || r[8]}`
     } catch { return policy.route }
   })
+  const mailboxOptions = $derived(accounts.map(a => ({ value: a.id, label: a.email })))
+  const folderOptions = $derived(folders.map(f => ({ value: f.path, label: f.path })))
+  const modeOptions = $derived(['unresolved', 'provider', 'append'].map(value => ({ value, label: $_(`sentPolicy.${value}`) })))
   onMount(refresh)
   function add() {
     if (!policy || !path) return
@@ -63,23 +67,10 @@
         <Button variant="ghost" size="sm" onclick={() => { if (policy) policy.destinations = policy.destinations.filter((_, index) => index !== i) }}>{$_('sentPolicy.remove')}</Button>
       </div>
     {/each}
-    <div class="flex flex-wrap gap-2">
-      <label class="text-sm">{$_('sentPolicy.mailbox')}
-        <select class="block rounded border border-border bg-background p-2" aria-label={$_('sentPolicy.mailbox')} bind:value={mailbox} onchange={() => loadFolders().catch(e => { error = String(e) })}>
-          {#each accounts as a (a.id)}<option value={a.id}>{a.email}</option>{/each}
-        </select>
-      </label>
-      <label class="text-sm">{$_('sentPolicy.folder')}
-        <select class="block rounded border border-border bg-background p-2" aria-label={$_('sentPolicy.folder')} bind:value={path}>
-          <option value="">{$_('sentPolicy.choose')}</option>
-          {#each folders as f (f.id)}<option value={f.path}>{f.path}</option>{/each}
-        </select>
-      </label>
-      <label class="text-sm">{$_('sentPolicy.mode')}
-        <select class="block rounded border border-border bg-background p-2" aria-label={$_('sentPolicy.mode')} bind:value={mode}>
-          {#each ['unresolved', 'provider', 'append'] as value (value)}<option {value}>{$_(`sentPolicy.${value}`)}</option>{/each}
-        </select>
-      </label>
+    <div class="flex flex-wrap items-end gap-2">
+      <NamedSelect class="min-w-44" label={$_('sentPolicy.mailbox')} bind:value={mailbox} options={mailboxOptions} onValueChange={(v) => { mailbox = v; loadFolders().catch(e => { error = String(e) }) }} />
+      <NamedSelect class="min-w-44" label={$_('sentPolicy.folder')} bind:value={path} options={folderOptions} placeholder={$_('sentPolicy.choose')} />
+      <NamedSelect class="min-w-44" label={$_('sentPolicy.mode')} bind:value={mode} options={modeOptions} />
       <Button variant="outline" disabled={!path} onclick={add}>{$_('sentPolicy.add')}</Button>
     </div>
     <Button disabled={busy} onclick={save}>{$_('sentPolicy.save')}</Button>

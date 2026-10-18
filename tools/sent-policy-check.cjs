@@ -21,6 +21,11 @@ A.SetSentPolicy = async (id,p) => { if(window.__changedRoute) throw Error('accou
 A.GetSendAsStatus = async () => ({supported:false});
 A.GetSenderEvidence = async () => null;
 `
+// Choose an option in a named Select: open its trigger, then click the option.
+async function choose(p, scope, name, option) {
+ await scope.getByRole('button', { name, exact: true }).click()
+ await p.getByRole('option', { name: option, exact: true }).click()
+}
 async function main() {
  await withFakePage({ width: 1400, height: 1100 }, async p => {
   await p.getByRole('button', { name: 'Show sidebar', exact: true }).click()
@@ -39,12 +44,12 @@ async function main() {
   await s.getByText(/Saving the copy may not have finished/).waitFor()
   await s.scrollIntoViewIfNeeded()
   await p.screenshot({ path: path.join(out, 'sent-unresolved.png') })
-  await s.getByLabel('Destination folder', { exact:true }).selectOption('Sent')
-  await s.getByLabel('Who saves the copy', { exact:true }).selectOption('provider')
+  await choose(p, s, 'Destination folder', 'Sent')
+  await choose(p, s, 'Who saves the copy', 'Provider saves a copy')
   await s.getByRole('button', { name:'Add destination',exact:true }).click()
-  await s.getByLabel('Account', { exact:true }).selectOption('acc2')
-  await s.getByLabel('Destination folder', { exact:true }).selectOption('Sent')
-  await s.getByLabel('Who saves the copy', { exact:true }).selectOption('append')
+  await choose(p, s, 'Account', 'alex.morgan@northwind.example')
+  await choose(p, s, 'Destination folder', 'Sent')
+  await choose(p, s, 'Who saves the copy', 'Mailven saves a copy')
   await s.getByRole('button', { name:'Add destination',exact:true }).click()
   await s.getByRole('button', { name:'Save Sent copy policy',exact:true }).focus()
   await p.keyboard.press('Enter')

@@ -3,6 +3,8 @@
   import { onDestroy } from 'svelte'
   import { _ } from '$lib/i18n'
   import { Button } from '$lib/components/ui/button'
+  import NamedSelect from './NamedSelect.svelte'
+  import { summarize } from './setupDiagnosticSummary'
   import { RunSetupDiagnostic, CancelSetupDiagnostic, ExportSetupDiagnostic } from '../../../../../wailsjs/go/app/App'
   import { account, app } from '../../../../../wailsjs/go/models'
   let { accountId, identities }: { accountId: string, identities: account.Identity[] } = $props()
@@ -16,6 +18,7 @@
   let report = $state<app.SetupDiagnosticReport | null>(null)
   let error = $state('')
   let exported = $state(false)
+  const summary = $derived(report ? summarize(report) : [])
   const selectedFrom = $derived(from || identities[0]?.email || '')
   async function start() {
     if (busy || !selectedFrom) return
@@ -45,17 +48,8 @@
 <section class="space-y-3 border-t border-border pt-4" aria-label={$_('setupDiagnostic.title')}>
   <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="mdi:stethoscope" class="w-4 h-4" />{$_('setupDiagnostic.title')}</h3>
   <p class="text-xs text-muted-foreground">{$_('setupDiagnostic.guidance')}</p>
-  <label class="block space-y-1 text-sm">
-    <span>{$_('setupDiagnostic.from')}</span>
-    <select class="block w-full rounded border border-border bg-background p-2" aria-label={$_('setupDiagnostic.from')} bind:value={from} disabled={busy}>
-      <option value="">{identities[0]?.email || $_('setupDiagnostic.chooseIdentity')}</option>
-      {#each identities as identity (identity.id)}<option value={identity.email}>{identity.email}</option>{/each}
-    </select>
-  </label>
-  <label class="block space-y-1 text-sm">
-    <span>{$_('setupDiagnostic.route')}</span>
-    <select aria-label={$_('setupDiagnostic.route')} class="block w-full rounded border border-border bg-background p-2" disabled={busy}><option value="imap-smtp">{$_('setupDiagnostic.existingRoute')}</option></select>
-  </label>
+  <NamedSelect label={$_('setupDiagnostic.from')} value={selectedFrom} options={identities.map(i => ({ value: i.email, label: i.email }))} placeholder={$_('setupDiagnostic.chooseIdentity')} disabled={busy} onValueChange={(v) => { from = v }} />
+  <NamedSelect label={$_('setupDiagnostic.route')} value="imap-smtp" options={[{ value: 'imap-smtp', label: $_('setupDiagnostic.existingRoute') }]} disabled />
   <label class="flex items-center gap-2 text-sm"><input type="checkbox" bind:checked={owned} disabled={busy} />{$_('setupDiagnostic.owned')}</label>
   {#if owned}
     <label class="block space-y-1 text-sm"><span>{$_('setupDiagnostic.domain')}</span><input class="block w-full rounded border border-border bg-background p-2" bind:value={domain} disabled={busy} maxlength="253" /></label>
@@ -71,19 +65,29 @@
   <div aria-live="polite" class="space-y-3 text-sm">
     {#if report}
       <p class="wrap-anywhere">{$_('setupDiagnostic.checkedSelection', { values: { mailbox: report.mailbox, from: report.from } })}</p>
-      <p>{report.startedAt} – {report.finishedAt}</p>
-      {#each report.endpoints || [] as endpoint (endpoint)}<p class="wrap-anywhere">{endpoint}</p>{/each}
-      <p class="wrap-anywhere">{$_('setupDiagnostic.oauth')}: {report.oauthResource || $_('setupDiagnostic.notApplicable')} · {report.oauthExpiresAt || $_('setupDiagnostic.unknown')}</p>
-      <p class="wrap-anywhere">{$_('setupDiagnostic.scopes')}: {report.oauthScopesKnown ? (report.oauthScopes || []).join(', ') || $_('setupDiagnostic.none') : $_('setupDiagnostic.unknown')}</p>
-      {#each report.checks || [] as check, i (i)}
-        <div class="rounded border border-border p-2">
-          <p class="font-medium">{check.name}: {check.status}</p>
-          <p>{check.detail}</p><p class="text-xs text-muted-foreground">{check.at} · {$_('setupDiagnostic.age')}: {check.evidenceAgeSeconds < 0 ? $_('setupDiagnostic.unknown') : `${check.evidenceAgeSeconds}s`} {check.code}</p>
+      <ul class="space-y-1" aria-label={$_('setupDiagnostic.summary')}>
+        {#each summary as item (item.area)}
+          <li><span class="font-medium">{$_(`setupDiagnostic.area.${item.area}`)}:</span> {$_(`setupDiagnostic.outcome.${item.area}.${item.outcome}`)}</li>
+        {/each}
+      </ul>
+      <details class="rounded border border-border p-2">
+        <summary class="cursor-pointer font-medium">{$_('setupDiagnostic.details')}</summary>
+        <div class="mt-2 space-y-3">
+          <p>{report.startedAt} – {report.finishedAt}</p>
+          {#each report.endpoints || [] as endpoint (endpoint)}<p class="wrap-anywhere">{endpoint}</p>{/each}
+          <p class="wrap-anywhere">{$_('setupDiagnostic.oauth')}: {report.oauthResource || $_('setupDiagnostic.notApplicable')} · {report.oauthExpiresAt || $_('setupDiagnostic.unknown')}</p>
+          <p class="wrap-anywhere">{$_('setupDiagnostic.scopes')}: {report.oauthScopesKnown ? (report.oauthScopes || []).join(', ') || $_('setupDiagnostic.none') : $_('setupDiagnostic.unknown')}</p>
+          {#each report.checks || [] as check, i (i)}
+            <div class="rounded border border-border p-2">
+              <p class="font-medium">{check.name}: {check.status}</p>
+              <p>{check.detail}</p><p class="text-xs text-muted-foreground">{check.at} · {$_('setupDiagnostic.age')}: {check.evidenceAgeSeconds < 0 ? $_('setupDiagnostic.unknown') : `${check.evidenceAgeSeconds}s`} {check.code}</p>
+            </div>
+          {/each}
+          {#each report.dns?.checks || [] as check, i (i)}
+            <div class="rounded border border-border p-2 wrap-anywhere"><p class="font-medium">{check.query}: {check.status}</p><p>{check.evidence}</p><p class="text-xs text-muted-foreground">{check.resolver} · TTL: {check.ttlSeconds ?? $_('setupDiagnostic.unknown')} · {check.observedAt}</p></div>
+          {/each}
         </div>
-      {/each}
-      {#each report.dns?.checks || [] as check, i (i)}
-        <div class="rounded border border-border p-2 wrap-anywhere"><p class="font-medium">{check.query}: {check.status}</p><p>{check.evidence}</p><p class="text-xs text-muted-foreground">{check.resolver} · TTL: {check.ttlSeconds ?? $_('setupDiagnostic.unknown')} · {check.observedAt}</p></div>
-      {/each}
+      </details>
       <p class="text-muted-foreground">{report.limitations}</p>
     {/if}
   </div>
