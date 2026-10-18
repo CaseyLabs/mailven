@@ -13,7 +13,7 @@ All Microsoft work, including Microsoft 365 and regular/personal Outlook.com, is
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10) (resolved: [SY9](#sy9), [SY7](#sy7), [SY8](#sy8), [R2](#r2), [R3](#r3), [R4](#r4), [SY2](#sy2), [SY3](#sy3), [SY4](#sy4), [SY5](#sy5), [SY6](#sy6))
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded (resolved: [GO4](#go4), [GO3](#go3), [GO1](#go1), [GO2](#go2))
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded (resolved: [CH1](#ch1), [R1](#r1))
-- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [UI12](#ui12) (resolved: [UI11](#ui11), [MA9](#ma9), [MA10](#ma10), UI10, UI9, UI8, [TF3](#tf3), [UI6](#ui6), [UI5](#ui5), [DOC6](#doc6), [UI3](#ui3), [TF1](#tf1), [TF2](#tf2), [L2](#l2), [L3](#l3), [UI1](#ui1), [UI2](#ui2), [UI4](#ui4), [DOC4](#doc4), [DOC5](#doc5), [MA2](#ma2), [MA6](#ma6), [SY1](#sy1))
+- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [UI12](#ui12), [UI13](#ui13) (resolved: [UI11](#ui11), [MA9](#ma9), [MA10](#ma10), UI10, UI9, UI8, [TF3](#tf3), [UI6](#ui6), [UI5](#ui5), [DOC6](#doc6), [UI3](#ui3), [TF1](#tf1), [TF2](#tf2), [L2](#l2), [L3](#l3), [UI1](#ui1), [UI2](#ui2), [UI4](#ui4), [DOC4](#doc4), [DOC5](#doc5), [MA2](#ma2), [MA6](#ma6), [SY1](#sy1))
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 
@@ -389,10 +389,19 @@ Project: [MAINT](PLAN.md#maint).
 
 ### UI12 — Remaining Settings readability follow-ups
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint); found in the [UI11](#ui11) review, not fixed there.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-20](PLAN.md#maint-20) (proposed); found in the [UI11](#ui11) review, not fixed there.
 - **Severity / proposed priority / status:** low / P3 / open.
-- **Details:** (1) Sent copy policy and Check account setup still use native `<select>`s, unlike the bits-ui selects elsewhere in Settings. (2) The account check report shows raw values (ISO timestamps, `imap host:993 (tls)`, OAuth resource URLs) with no plain summary. (3) Extension cards list developer-facing capability names. (4) The Contacts sources empty state does not say what a contact source is. (5) Several setting descriptions repeat their label (e.g. the colored-circle options). (6) Input placeholders (`text-muted-foreground`) are close in brightness to entered values in dark themes; any change must keep the contrast check passing.
-- **Closure:** each item fixed or dismissed by the owner, with UI tests for the behavior changes.
+- **Details:** (1) Sent copy policy and Check account setup still use native `<select>`s, unlike the bits-ui selects elsewhere in Settings. (2) The account check report shows raw values (ISO timestamps, `imap host:993 (tls)`, OAuth resource URLs) with no plain summary. (3) Extension cards list developer-facing capability names. (4) The Contacts sources empty state does not say what a contact source is. (5) Several setting descriptions repeat their label (e.g. the colored-circle options). Placeholder contrast moved to [UI13](#ui13).
+- **Closure:** [MAINT-20](PLAN.md#maint-20) acceptance; each item fixed or dismissed by the owner, with UI tests for the behavior changes.
+
+<a id="ui13"></a>
+
+### UI13 — Input placeholders read almost like entered values
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint); found in the [UI11](#ui11) review; needs an owner decision, not part of [MAINT-20](PLAN.md#maint-20).
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Details:** `Input` styles placeholders with `text-muted-foreground`, the same token as secondary text. In dark themes an empty field's example value looks close to a filled one. Dimming placeholders means a separate token in every theme, and `tools/contrast-check.mjs` requires text tiers of at least 4.5:1, so the change is a design decision rather than a local fix.
+- **Closure:** the owner either dismisses it or approves a placeholder token that passes the contrast check in all themes, checked with screenshots of filled and empty fields.
 
 <a id="ma9"></a>
 
