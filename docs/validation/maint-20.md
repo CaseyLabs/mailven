@@ -5,7 +5,7 @@ Owner selection: 2026-10-18. [Roadmap](../../PLAN.md#maint-20); base `5e07465`, 
 ## Result
 
 1. Sent copy policy (Account, Destination folder, Who saves the copy) and Check account setup (Send from, Server settings) use the bits-ui `Select` through `NamedSelect.svelte`; each trigger carries the control's name.
-2. Check account setup opens with a three-line summary (`setupDiagnosticSummary.ts`): connecting and signing in, domain records, permissions. The worst status in an area decides its line (failed, then unknown, then passed; otherwise not checked). Timestamps, endpoints, OAuth values and per-check details sit under Details; the limitations line stays visible.
+2. Check account setup opens with a three-line summary (`setupDiagnosticSummary.ts`): connecting and signing in, domain records, permissions. Failed takes precedence, then unknown; cancelled or skipped checks stay not checked even when another check passed. Timestamps, endpoints, OAuth values and per-check details sit under Details; the limitations line stays visible.
 3. Extension cards say "This extension can" followed by plain phrases from `extensionCapabilities.ts`; an ID missing from the map is shown as declared, and the ID is the tooltip.
 4. The empty Contacts sources state explains that a contact source is a synced address book.
 5. Four help lines no longer restate their labels (colored circles in the list and viewer, unread accent, read receipts).

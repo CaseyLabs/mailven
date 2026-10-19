@@ -13,7 +13,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [SYNC — Mail synchronization and action reliability](#sync) | proposed | P1 | [1](ISSUES.md#sync) | SYNC-1–4 done; SY9 resolved by API-7; SYNC-5 done (Gmail Load older, SY10 partly); SYNC-7 done (older IMAP mail, SY10 partly); SYNC-6 deferred (Graph window) |
 | [GOAUTH — Google OAuth client setup](#goauth) | done | P2 | [0](ISSUES.md#goauth) | GOAUTH-1–4 done (GO1, GO2 resolved); GOAUTH-5 done (assessment; owner kept bring-your-own); GO3 and GO4 resolved by independent fixes |
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
-| [MAINT — Maintenance and documentation](#maint) | proposed | P2 | [5](ISSUES.md#maint) | UI14, MA11 (P2) and UI15 (P3) open from the 2026-10-18 code review; UI13 needs an owner decision; D2 deferred/upstream blocked; MAINT-1–20 done, their linked issues resolved |
+| [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [3](ISSUES.md#maint) | MAINT-1–21 done; UI14 and MA11 resolved. UI15 is the next local candidate; UI13 needs an owner decision; D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
@@ -28,9 +28,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-No active milestone.
+**Active:** No active milestone. [MAINT-21](#maint-21) is complete: UI14 and MA11 are resolved; [verification](docs/validation/maint-21.md) and [checkpoint](docs/plans/maint-21.md).
 
-**Next recommended:** none authorized; no milestone is eligible (SEND-2 waits on live authorization; SYNC-6, Microsoft, Wails, G4 and D2 are deferred; UI13 needs an owner decision). Best issues to turn into a MAINT milestone: [UI14](ISSUES.md#ui14) (the account check summary reports a skipped sign-in as passed) and [MA11](ISSUES.md#ma11) (store row loops skip `rows.Err()`), both P2 from the 2026-10-18 code review; [UI15](ISSUES.md#ui15) (stale async responses in account settings) is P3.
+**Next recommended:** [UI15](ISSUES.md#ui15) — select a milestone for stale account-setting responses. UI13 needs an owner design decision; existing live gates and deferrals remain in force.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -305,7 +305,7 @@ Completed milestones below retain their IDs and evidence; detailed execution his
 ## MAINT — Maintenance and documentation
 
 - **Objective / outcome:** Keep developer tooling and user documentation accurate; resolve external review flags explicitly.
-- **Status / proposed priority:** proposed / P2.
+- **Status / proposed priority:** proposed / P3.
 - **Dependencies / blockers:** no cross-project implementation prerequisite established; milestone gates below apply.
 - **Sequence:** the owner ordered MAINT-9 to MAINT-13 on 2026-10-16 (all done) and approved [MAINT-14](#maint-14) to [MAINT-19](#maint-19) the same day, run in ID order (each depends on the previous).
 - **Issues:** [owning register section](ISSUES.md#maint); each linked milestone lists its relevant issues.
@@ -479,6 +479,15 @@ Completed milestones below retain their IDs and evidence; detailed execution his
 - **Issues:** [UI12](ISSUES.md#ui12) (resolved).
 - **Evidence:** [validation](docs/validation/maint-20.md).
 - **Limits / retained decisions:** backend-free UI checks only.
+
+<a id="maint-21"></a>
+
+### MAINT-21 — Account check accuracy and store iteration errors
+
+- **Status:** done (2026-10-19; UI14 and MA11 resolved).
+- **Result:** skipped authentication stays not checked even when transport passed; all 72 scoped row loops check iteration errors, including 43 corrected sites. Contact upsert and both correlation reads fail safely under injected iteration errors.
+- **Evidence / limits:** [validation](docs/validation/maint-21.md), [execution checkpoint](docs/plans/maint-21.md). Required local checks and independent acceptance passed. Native/live-provider checks and real migrations were not run; existing gates remain closed. UI15 and UI13 remain separate.
+- **Issues:** [UI14](ISSUES.md#ui14), [MA11](ISSUES.md#ma11).
 
 <a id="d2"></a>
 

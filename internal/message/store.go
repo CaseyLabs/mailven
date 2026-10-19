@@ -106,7 +106,7 @@ func (s *Store) ListByFolder(folderID string, offset, limit int) ([]*MessageHead
 		messages = append(messages, m)
 	}
 
-	return messages, nil
+	return messages, rows.Err()
 }
 
 // ListConversationsUnifiedInbox returns conversations from all inbox folders across all accounts
@@ -203,7 +203,7 @@ func (s *Store) ListConversationsUnifiedInbox(offset, limit int, sortOrder, filt
 		conversations = append(conversations, c)
 	}
 
-	return conversations, nil
+	return conversations, rows.Err()
 }
 
 // CountConversationsUnifiedInbox returns the total count of conversations across all inbox folders
@@ -257,6 +257,9 @@ func (s *Store) GetUnifiedInboxUnreadCount() (int, error) {
 					Msg("Inbox folder for unified count")
 			}
 		}
+		if err := rows.Err(); err != nil {
+			s.log.Debug().Err(err).Msg("Failed to iterate inbox count diagnostics")
+		}
 	}
 
 	query := `
@@ -302,7 +305,7 @@ func (s *Store) GetUnreadMessageIDsByFolder(folderID string) ([]string, error) {
 		}
 		ids = append(ids, id)
 	}
-	return ids, nil
+	return ids, rows.Err()
 }
 
 // GetReadMessageIDsByFolder returns the IDs of all read messages in a folder
@@ -321,7 +324,7 @@ func (s *Store) GetReadMessageIDsByFolder(folderID string) ([]string, error) {
 		}
 		ids = append(ids, id)
 	}
-	return ids, nil
+	return ids, rows.Err()
 }
 
 // GetAllIDsByFolder returns the IDs of all messages in a folder
@@ -340,7 +343,7 @@ func (s *Store) GetAllIDsByFolder(folderID string) ([]string, error) {
 		}
 		ids = append(ids, id)
 	}
-	return ids, nil
+	return ids, rows.Err()
 }
 
 // Get returns a full message by ID
@@ -866,7 +869,7 @@ func (s *Store) GetAllUIDs(folderID string) ([]uint32, error) {
 		uids = append(uids, uid)
 	}
 
-	return uids, nil
+	return uids, rows.Err()
 }
 
 // PinByUIDs marks IMAP messages as kept across the sync window: a server
@@ -1000,7 +1003,7 @@ func (s *Store) GetMessagesWithoutBody(folderID string, limit int, sinceDate tim
 		}
 		ids = append(ids, id)
 	}
-	return ids, nil
+	return ids, rows.Err()
 }
 
 // MessageWithSize holds a message ID and its RFC822 size for batch planning
@@ -1056,7 +1059,7 @@ func (s *Store) GetMessagesWithoutBodyAndSize(folderID string, limit int, sinceD
 		}
 		messages = append(messages, msg)
 	}
-	return messages, nil
+	return messages, rows.Err()
 }
 
 // CountMessagesWithoutBody returns the count of messages that don't have their body fetched,
@@ -1194,7 +1197,7 @@ func (s *Store) GetMessageUIDsAndFolder(messageIDs []string) (map[string]UIDInfo
 		result[id] = UIDInfo{UID: uint32(uidI64), FolderID: folderID}
 	}
 
-	return result, nil
+	return result, rows.Err()
 }
 
 // BodyUpdate holds body content for batch updates
@@ -1455,7 +1458,7 @@ func (s *Store) ListConversationsByFolder(folderID string, offset, limit int, so
 		conversations = append(conversations, c)
 	}
 
-	return conversations, nil
+	return conversations, rows.Err()
 }
 
 // parseParticipantsJSON parses the per-message sender objects produced by
@@ -2379,7 +2382,7 @@ func (s *Store) GetByIDs(ids []string) ([]*Message, error) {
 		messages = append(messages, m)
 	}
 
-	return messages, nil
+	return messages, rows.Err()
 }
 
 // SearchConversations searches for conversations in a folder using FTS5
@@ -2508,7 +2511,7 @@ func (s *Store) SearchConversations(folderID, query string, offset, limit int, f
 		results = append(results, c)
 	}
 
-	return results, totalCount, nil
+	return results, totalCount, rows.Err()
 }
 
 // SearchConversationsUnifiedInbox searches across all inbox folders for all accounts
@@ -2639,7 +2642,7 @@ func (s *Store) SearchConversationsUnifiedInbox(query string, offset, limit int,
 		results = append(results, c)
 	}
 
-	return results, totalCount, nil
+	return results, totalCount, rows.Err()
 }
 
 // prepareFTSQuery prepares a user query for FTS5

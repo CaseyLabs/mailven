@@ -103,7 +103,7 @@ func (s *AttachmentStore) GetByMessage(messageID string) ([]*Attachment, error) 
 		attachments = append(attachments, a)
 	}
 
-	return attachments, nil
+	return attachments, rows.Err()
 }
 
 // Get returns a single attachment by ID
@@ -189,7 +189,7 @@ func (s *AttachmentStore) GetInlineByMessage(messageID string) (map[string]strin
 		}
 	}
 
-	return result, nil
+	return result, rows.Err()
 }
 
 // ReplaceForMessages replaces the attachment records of messageIDs with

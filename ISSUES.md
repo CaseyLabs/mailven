@@ -15,7 +15,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10)
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded
-- [MAINT — Maintenance and documentation](#maint): [UI14](#ui14), [MA11](#ma11), [UI15](#ui15), [D2](#d2), [UI13](#ui13)
+- [MAINT — Maintenance and documentation](#maint): [UI15](#ui15), [D2](#d2), [UI13](#ui13)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 
@@ -492,10 +492,9 @@ Project: [MAINT](PLAN.md#maint).
 
 ### UI14 — Account check summary says sign-in passed when it was skipped
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint); found 2026-10-18 by a code review of [MAINT-20](PLAN.md#maint-20), verified by reading the code. Not fixed.
-- **Severity / proposed priority / status:** medium (misleading diagnostic) / P2 / open.
-- **Problem / reproduction:** `outcomeOf` in `frontend/src/lib/components/settings/account/setupDiagnosticSummary.ts` ignores the `skipped` status. When `app/setup_diagnostic.go` sets `AuthSkip` (saved password missing, OAuth token near expiry, grant lacks the protocol scope, owner unavailable), the report holds `<proto> transport: passed` and `<proto> authentication: skipped`, which rolls up to `ok`, so the summary says Mailven connected and signed in although no sign-in was tried. A related cause: `summarize` assigns checks to areas by regex over the free-text Go check names (`transport`, `authentication`, `permission`, `cached sender`), so renaming a check in Go silently moves it between areas or drops it.
-- **Closure:** `skipped` counts as unconfirmed (or not checked) in the roll-up, with a UI regression test for passed transport plus skipped authentication. Ideally `setupdiagnostic.Check` emits a structured area so the summary stops parsing names.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-21](PLAN.md#maint-21).
+- **Severity / proposed priority / status:** medium (misleading diagnostic) / P2 / resolved (2026-10-19).
+- **Resolution:** `outcomeOf` treats skipped checks as not checked before considering passed checks; failed and unknown retain precedence. The frontend regression combines passed transport with skipped authentication and rejects the successful sign-in summary. Existing failed and successful cases pass. Name-based area classification remains unchanged because no check names or bindings changed. [Verification](docs/validation/maint-21.md).
 
 <a id="ui15"></a>
 
@@ -511,10 +510,9 @@ Project: [MAINT](PLAN.md#maint).
 
 ### MA11 — Store row loops do not check `rows.Err()`
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint); also affects [API](PLAN.md#api) migration. Found 2026-10-18 by a code review, verified by `grep` (about 40 `rows.Next()` loops without a matching `rows.Err()` in 12 files). Not fixed.
-- **Severity / proposed priority / status:** medium (silent partial results) / P2 / open.
-- **Problem:** loops in `internal/{account,carddav,certificate,contact,draft,folder}/store.go`, `internal/message/{store,attachment_store,api_store,chat_store,fts}.go` and `internal/apimigrate/apimigrate.go` stop at the first iteration error and return the partial result as complete. Worst cases: `contact` upsert reads the existing `contact_emails` metadata, then deletes and reinserts every row, so a partial read drops `send_count`, `last_used` and `name_overridden`. `apimigrate.Correlate` treats a partial IMAP row set as complete, so the affected API rows are counted as uncorrelated and lose their read, star and local state, with migration reporting success. Elsewhere, lists (drafts for sync, accounts) come back short with no error logged. SQLite iteration errors (busy, interrupt) are rare, so this has not been seen in use.
-- **Closure:** every loop checks `rows.Err()` (preferably through one shared scan helper, not per-site patches), with a test that injects an iteration error into the contact upsert and `Correlate`.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-21](PLAN.md#maint-21); also affects [API](PLAN.md#api) migration.
+- **Severity / proposed priority / status:** medium (silent partial results) / P2 / resolved (2026-10-19).
+- **Resolution:** all 72 row loops in the twelve scoped store/correlation files check iteration errors (43 corrected sites). Simple lists follow existing direct-error-return conventions; read-before-write paths stop before subsequent writes; certificate trust fails closed and diagnostic-only inbox logging records its error. Tests inject failures before/after the first contact metadata row and after the first row in each correlation read, proving error propagation, transaction rollback, preserved metadata/message state and no partial-success correlation result. [Verification and scope](docs/validation/maint-21.md).
 
 <a id="ma10"></a>
 

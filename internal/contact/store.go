@@ -140,7 +140,7 @@ func (s *Store) searchUnified(query string, limit int) ([]*Contact, error) {
 		c.Source = mapSourceForLegacy(source)
 		contacts = append(contacts, &c)
 	}
-	return contacts, nil
+	return contacts, rows.Err()
 }
 
 // mapSourceForLegacy maps the unified `source` column values onto the legacy
@@ -428,6 +428,10 @@ func (s *Store) Delete(email string) error {
 		}
 		recordIDs = append(recordIDs, id)
 	}
+	if err := rows.Err(); err != nil {
+		rows.Close()
+		return fmt.Errorf("iterate contact records: %w", err)
+	}
 	rows.Close()
 	if len(recordIDs) == 0 {
 		return nil
@@ -510,7 +514,7 @@ func (s *Store) ListByKind(kind string, limit int) ([]*Contact, error) {
 		c.Kind = k
 		contacts = append(contacts, &c)
 	}
-	return contacts, nil
+	return contacts, rows.Err()
 }
 
 // Count returns the total number of contact_emails rows. Public signature preserved.
@@ -751,6 +755,10 @@ func (s *Store) loadRecordSubTables(rec *Record) error {
 		}
 		rec.Emails = append(rec.Emails, re)
 	}
+	if err := emailRows.Err(); err != nil {
+		emailRows.Close()
+		return fmt.Errorf("iterate contact emails: %w", err)
+	}
 	emailRows.Close()
 
 	phoneRows, err := s.db.Query(`
@@ -770,6 +778,10 @@ func (s *Store) loadRecordSubTables(rec *Record) error {
 		rp.IsPrimary = isPrimary != 0
 		rec.Phones = append(rec.Phones, rp)
 	}
+	if err := phoneRows.Err(); err != nil {
+		phoneRows.Close()
+		return fmt.Errorf("iterate contact phones: %w", err)
+	}
 	phoneRows.Close()
 
 	addrRows, err := s.db.Query(`
@@ -788,6 +800,10 @@ func (s *Store) loadRecordSubTables(rec *Record) error {
 		}
 		rec.Addresses = append(rec.Addresses, ra)
 	}
+	if err := addrRows.Err(); err != nil {
+		addrRows.Close()
+		return fmt.Errorf("iterate contact addresses: %w", err)
+	}
 	addrRows.Close()
 
 	urlRows, err := s.db.Query(`
@@ -804,6 +820,10 @@ func (s *Store) loadRecordSubTables(rec *Record) error {
 			continue
 		}
 		rec.URLs = append(rec.URLs, ru)
+	}
+	if err := urlRows.Err(); err != nil {
+		urlRows.Close()
+		return fmt.Errorf("iterate contact URLs: %w", err)
 	}
 	urlRows.Close()
 
@@ -822,6 +842,10 @@ func (s *Store) loadRecordSubTables(rec *Record) error {
 		}
 		rec.IMPPs = append(rec.IMPPs, ri)
 	}
+	if err := imppRows.Err(); err != nil {
+		imppRows.Close()
+		return fmt.Errorf("iterate contact IMPPs: %w", err)
+	}
 	imppRows.Close()
 
 	catRows, err := s.db.Query(`SELECT category FROM contact_categories WHERE record_id = ? ORDER BY category ASC`, rec.ID)
@@ -834,6 +858,10 @@ func (s *Store) loadRecordSubTables(rec *Record) error {
 			continue
 		}
 		rec.Categories = append(rec.Categories, cat)
+	}
+	if err := catRows.Err(); err != nil {
+		catRows.Close()
+		return fmt.Errorf("iterate contact categories: %w", err)
 	}
 	catRows.Close()
 
@@ -892,6 +920,9 @@ func (s *Store) ListRecords(filter RecordFilter) ([]*Record, error) {
 			continue
 		}
 		ids = append(ids, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate contact records: %w", err)
 	}
 
 	records := make([]*Record, 0, len(ids))
@@ -1029,6 +1060,10 @@ func UpsertRecordTx(tx DBOrTx, rec *Record) error {
 			LastUsed       sql.NullTime
 			NameOverridden int
 		}{sc, lu, no}
+	}
+	if err := rows.Err(); err != nil {
+		rows.Close()
+		return fmt.Errorf("read existing emails: %w", err)
 	}
 	rows.Close()
 

@@ -212,6 +212,10 @@ func (s *Store) Correlate(accountID string) (CorrelateResult, error) {
 		k := key(mid, date.Time)
 		imap[k] = append(imap[k], localRow{id, strings.TrimPrefix(ftype, "hidden:imap:")})
 	}
+	if err := rows.Err(); err != nil {
+		rows.Close()
+		return res, fmt.Errorf("iterate correlation rows: %w", err)
+	}
 	if err := rows.Close(); err != nil {
 		return res, err
 	}
@@ -237,6 +241,10 @@ func (s *Store) Correlate(accountID string) (CorrelateResult, error) {
 		}
 		r.mid, r.date = mid.String, date.Time
 		api = append(api, r)
+	}
+	if err := rows.Err(); err != nil {
+		rows.Close()
+		return res, fmt.Errorf("iterate correlation rows: %w", err)
 	}
 	if err := rows.Close(); err != nil {
 		return res, err

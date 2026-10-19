@@ -106,6 +106,15 @@ test('Account check shows a working connection when transport and sign-in pass',
   assert.match(lines[0], /^Connecting and signing in: Mailven connected securely/)
 }))
 
+test('Account check leaves a skipped sign-in unconfirmed when transport passes', ui.run({ beforeMount: `window.__auth = 'skipped';${diagnosticFakes}` }, async (page) => {
+  const account = await openIdentity(page)
+  const section = account.getByRole('region', { name: 'Check account setup', exact: true })
+  await section.getByRole('button', { name: 'Start diagnostic', exact: true }).click()
+  const line = (await section.getByRole('list', { name: 'Summary', exact: true }).getByRole('listitem').first().innerText()).replace(/\s+/g, ' ').trim()
+  assert.match(line, /^Connecting and signing in: Not checked\./)
+  assert.doesNotMatch(line, /connected securely/)
+}))
+
 // Item 3: extension cards use words, not capability IDs.
 test('Extension cards describe capabilities in plain words', ui.run({
   beforeMount: `window.go.app.App.ListExtensions = async () => [{ id: 'contacts', name: 'Contacts', version: '1.0', description: 'Address book', author: 'x', enabled: true, capabilities: ['contacts.read', 'ui.rail-tab', 'future.thing'] }]`,

@@ -916,6 +916,10 @@ func (s *Store) ListDueSnoozes(now time.Time) ([]DueSnooze, error) {
 		}
 		dues = append(dues, d)
 	}
+	if err := rows.Err(); err != nil {
+		rows.Close()
+		return nil, fmt.Errorf("iterate due snoozes: %w", err)
+	}
 	rows.Close()
 
 	// Find thread snoozes now inside a sender chat, one query per account.

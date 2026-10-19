@@ -214,6 +214,11 @@ func (f *FTSIndexer) IndexFolder(ctx context.Context, folderID string) error {
 
 			batchCount++
 		}
+		if err := rows.Err(); err != nil {
+			rows.Close()
+			_ = tx.Rollback()
+			return fmt.Errorf("failed to iterate FTS messages: %w", err)
+		}
 		rows.Close()
 
 		if err := tx.Commit(); err != nil {

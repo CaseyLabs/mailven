@@ -157,7 +157,7 @@ func (s *Store) ListSources() ([]*Source, error) {
 		sources = append(sources, &source)
 	}
 
-	return sources, nil
+	return sources, rows.Err()
 }
 
 // SetSourceWritable flips the writable flag for a CardDAV source. Used by the
@@ -327,7 +327,7 @@ func (s *Store) GetSourcesWithErrors() ([]*SourceError, error) {
 		errors = append(errors, &se)
 	}
 
-	return errors, nil
+	return errors, rows.Err()
 }
 
 // ============================================================================
@@ -456,7 +456,7 @@ func (s *Store) ListAddressbooks(sourceID string) ([]*Addressbook, error) {
 		addressbooks = append(addressbooks, &ab)
 	}
 
-	return addressbooks, nil
+	return addressbooks, rows.Err()
 }
 
 // ListEnabledAddressbooks returns all enabled addressbooks for a source
@@ -497,7 +497,7 @@ func (s *Store) ListEnabledAddressbooks(sourceID string) ([]*Addressbook, error)
 		addressbooks = append(addressbooks, &ab)
 	}
 
-	return addressbooks, nil
+	return addressbooks, rows.Err()
 }
 
 // SetAddressbookEnabled enables or disables an addressbook

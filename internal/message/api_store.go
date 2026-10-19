@@ -210,6 +210,10 @@ func (s *Store) applyAPIUpsert(tx *sql.Tx, u APIUpsert) error {
 		}
 		existing[folderID] = id
 	}
+	if err := rows.Err(); err != nil {
+		rows.Close()
+		return fmt.Errorf("iterate api message rows: %w", err)
+	}
 	if err := rows.Close(); err != nil {
 		return err
 	}

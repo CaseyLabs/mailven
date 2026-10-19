@@ -5,12 +5,12 @@ export type SummaryArea = 'sending' | 'dns' | 'permissions'
 interface Item { name?: string, query?: string, status: string }
 interface ReportLike { checks?: Item[] | null, dns?: { checks?: Item[] | null } | null }
 
-// Worst status wins: a failure outranks an unknown, which outranks a pass.
+// Failures and unknown evidence outrank skipped checks, which outrank a pass.
 function outcomeOf(items: Item[]): Outcome {
   const statuses = items.map((i) => i.status)
   if (statuses.includes('failed')) return 'problem'
   if (statuses.includes('unknown')) return 'unconfirmed'
-  if (statuses.includes('cancelled')) return 'notChecked'
+  if (statuses.includes('cancelled') || statuses.includes('skipped')) return 'notChecked'
   if (statuses.includes('passed')) return 'ok'
   return 'notChecked'
 }

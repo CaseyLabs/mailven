@@ -281,7 +281,7 @@ func (s *Store) List() ([]*Account, error) {
 		accounts = append(accounts, account)
 	}
 
-	return accounts, nil
+	return accounts, rows.Err()
 }
 
 // ListBySharedMailboxParent returns all shared mailbox accounts linked to a parent account.
@@ -339,7 +339,7 @@ func (s *Store) ListBySharedMailboxParent(parentID string) ([]*Account, error) {
 		account.StarredFolderPath = starredPath.String
 		accounts = append(accounts, account)
 	}
-	return accounts, nil
+	return accounts, rows.Err()
 }
 
 // Update updates an account
@@ -605,7 +605,7 @@ func (s *Store) GetIdentities(accountID string) ([]*Identity, error) {
 		identities = append(identities, identity)
 	}
 
-	return identities, nil
+	return identities, rows.Err()
 }
 
 // GetIdentity retrieves a single identity by ID

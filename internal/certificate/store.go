@@ -57,6 +57,10 @@ func (s *Store) IsTrusted(host, fingerprint string) bool {
 				hosts = append(hosts, h)
 			}
 		}
+		if err := rows.Err(); err != nil {
+			rows.Close()
+			return false
+		}
 		rows.Close()
 	}
 

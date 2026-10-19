@@ -103,7 +103,7 @@ func (s *Store) list(where string, args ...any) ([]*Folder, error) {
 		folders = append(folders, f)
 	}
 
-	return folders, nil
+	return folders, rows.Err()
 }
 
 // Get returns a folder by ID
@@ -467,7 +467,7 @@ func (s *Store) ListSubscribed(accountID string) ([]*Folder, error) {
 		folders = append(folders, f)
 	}
 
-	return folders, nil
+	return folders, rows.Err()
 }
 
 // UpdateSubscribed updates the IMAP subscription state for a folder.

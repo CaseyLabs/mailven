@@ -361,7 +361,7 @@ func (s *Store) scanDrafts(rows *sql.Rows) ([]*Draft, error) {
 		drafts = append(drafts, d)
 	}
 
-	return drafts, nil
+	return drafts, rows.Err()
 }
 
 // Helper functions for nullable fields
