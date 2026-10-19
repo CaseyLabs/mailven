@@ -6,11 +6,10 @@
 - Continue authorized work without asking between steps; stop at the requested scope (one milestone for project-next-milestone). Batch material questions using the host's question tool when available. Ask before destructive actions unless that exact action is authorized; preserve a local rollback.
 - Keep output bounded and inspect targeted log excerpts. Reuse required guidance already read in the current session while it remains unchanged; load it again in a new session. Run servers/watchers in the host's background facility and stop those you started before finishing.
 - Use subagents for independent, well-scoped work when isolation or specialization helps; this is an explicit request to delegate suitable work. Give each agent a distinct scope. Keep architecture, integration, and security decisions in the main session. Verify consequential agent claims before acting; change approach after failed or partial delegation.
-- In Claude Code and Codex, use the native `project-worker` for general delegated project work instead of a generic worker. Use `project-acceptance-checker` for milestone acceptance. For mechanical file retrieval, listings, or exact text extraction in Codex, use `file_reader` or deterministic tools directly; do not use it for investigation or acceptance review. Specialist tools/agents (including bounded exploration and skill-owned reviews) keep their own routing. If a named agent is unavailable, disclose the fallback; do not silently claim its model/effort settings. Definitions live in `.claude/agents/` and `.codex/agents/`.
-- If Codex reports `unknown agent_type`, see CONTRIBUTING.md (checkout trust) before changing configuration.
+- In Claude Code and Codex, use the native `project-worker` for general delegated project work instead of a generic worker. Use `project-acceptance-checker` for milestone acceptance. For mechanical file retrieval, listings, or exact text extraction in Codex, use `file_reader` or deterministic tools directly; do not use it for investigation or acceptance review. Specialist tools/agents (including bounded exploration and skill-owned reviews) keep their own routing. If a named agent is unavailable, disclose the fallback; do not silently claim its model/effort settings. See [AI project guidance](CONTRIBUTING.md#ai-project-guidance) for native adapters and checkout-trust troubleshooting.
 - Only one agent may run builds or tests in a checkout at a time. Independent read-only work and light static checks may run concurrently; use agent teams only when requested.
-- Use the configured Git identity. Never add generated-by attribution, AI co-authors, or AI/session trailers to commits or PRs, or override identity for an assistant. The `.githooks/commit-msg` hook rejects such lines once enabled (see CONTRIBUTING.md); never bypass it with `--no-verify`.
-- This file is shared policy. Links are pointers, not automatic imports: read references when their stated trigger applies. Host-specific configuration (permissions, models, agent definitions, tool schemas) belongs in native host adapters, not shared policy. The documented Claude-only next-milestone `model` frontmatter is the sole shared-skill exception.
+- Use the configured Git identity. Never add generated-by attribution, AI co-authors, or AI/session trailers to commits or PRs, or override identity for an assistant. Never bypass hooks with `--no-verify`.
+- This file is shared policy. Links are pointers, not automatic imports: read references when their stated trigger applies. Host-specific configuration (permissions, models, agent definitions, tool schemas) belongs in native host adapters, not shared policy. See CONTRIBUTING for the Claude-only skill frontmatter exception.
 - Before adding or changing guidance in this file or a skill, read [AI project guidance](CONTRIBUTING.md#ai-project-guidance): keep always-loaded text to rules that must always hold, and move procedures to the doc that owns them with a one-line trigger.
 
 ## Project Identity
@@ -27,19 +26,11 @@
 
 ## Commands
 
-Toolchain: Go 1.26, Node.js 24 (matches CI), Wails v2 CLI. Linux needs GTK 3 and WebKitGTK 4.1 development libraries.
+Toolchain and command reference: [Development Setup](CONTRIBUTING.md#development-setup), [Code and Validation](CONTRIBUTING.md#code-and-validation), and [workflow helpers](CONTRIBUTING.md#workflow-helpers). Use `project-context.py <milestone-id>` for scoped roadmap reads and `project-check.py --base <base>` to plan proportionate checks.
 
-- Workflow helpers: `python3 tools/project-context.py <milestone-id>` for scoped context, `python3 tools/project-check.py --base <base>` to plan checks (`--run` executes with logs/evidence), `python3 tools/check-doc-links.py --changed` for local/site links, `tools/project-land.sh <branch>` for guarded landing preview, and `make milestone` (`tools/project-run.py`; options via `ARGS='...'`, `--land` to land each milestone) for unattended milestone runs. Details and execution boundaries: [CONTRIBUTING.md](CONTRIBUTING.md#workflow-helpers).
-- `cd frontend && npm ci`: install locked frontend dependencies.
-- `cd frontend && npm run build`: build frontend assets. Run before Go checks that include the root package if `frontend/dist/` is missing; rebuild when validating changed assets.
-- `make dev`: launch the desktop app with hot reload. It blocks; for agent-driven UI checks use `.agents/skills/run-mailven/dev.sh` instead.
-- `make build`: production build in `build/bin/`.
-- `make generate`: regenerate Wails TypeScript bindings.
-- `make test`, `make fmt`: Go tests and formatting.
-- `make lint`: golangci-lint v2, frontend ESLint, the brand check (`tools/brand-check.sh`, allowlist in `tools/brand-check.allow`) and the theme contrast check (`tools/contrast-check.mjs`, text tiers ≥ 4.5:1 on pane surfaces).
-- `cd frontend && npm run check`: Svelte/TypeScript checks.
-- OAuth testing: copy `.env.example` to `.env`; `.env.local` overrides it.
-- In noninteractive agent shells, use `git rm` for authorized tracked-file removals and `command rm` for authorized untracked-file cleanup; the shell’s `rm` wrapper prompts and aborts without a terminal. Preserve a local rollback for destructive cleanup.
+- Build the frontend before Go checks including the root package when `frontend/dist/` is missing; rebuild when validating changed assets.
+- For agent-driven UI checks use `run-mailven`; stop servers/watchers you started before finishing.
+- In noninteractive shells, use `git rm` for authorized tracked removals and `command rm` for untracked cleanup; the shell's `rm` wrapper prompts and aborts without a terminal. Preserve a rollback for destructive cleanup.
 
 ## Code Style
 
@@ -49,15 +40,10 @@ Toolchain: Go 1.26, Node.js 24 (matches CI), Wails v2 CLI. Linux needs GTK 3 and
 
 ## Testing
 
-- Start with checks relevant to the change.
-- Run `make test` when a change affects multiple Go packages or shared behavior, or when focused checks leave unresolved risks.
-- Use table-driven Go tests for critical paths and edge cases.
-- `internal/database/database_test.go` rewinds the schema and reapplies later migrations: a new `ADD COLUMN` needs matching `DROP COLUMN` lines in its rewind blocks, and every migration must be rerunnable (`IF NOT EXISTS`, and backfills that clear their table first).
-- For frontend changes, run `npm run lint` and `npm run check` in `frontend/`, then `make test-ui` (backend-free UI audit and regression tests, fake data; [tests/ui/README.md](tests/ui/README.md)); `node tests/ui/run.mjs <filter>` runs only the matching suites, for quick iteration; run the full suite before reporting. Use the `run-mailven` skill for checks the suite cannot make (native window, real backend, subjective visuals). In cloud sessions use the skill's headless path (Xvfb + Playwright); if no UI check can run at all, say so in the active execution checkpoint and in your report.
-- Before writing or changing frontend fakes or UI tests, read [Writing tests](tests/ui/README.md#writing-tests).
-- Give native selects explicit accessible names (`aria-label` or a separate `for`/`id` label); wrapping labels can absorb option text and break exact-name UI checks.
-- Turn each confirmed frontend bug into a regression test. Treat a UI test failure as a product, test or fixture defect: read its message and `test-results/ui/results.json`, and use screenshots only for investigation. Do not rerun unchanged or loosen an assertion or allowlist entry to pass; escalate ambiguous visual failures. Report passed, failed, skipped and unrun checks separately.
-- Visual UI checks always cover the Mail view with the Accounts column expanded and collapsed (how-to: [Accounts column check](.agents/skills/run-mailven/SKILL.md#accounts-column-check)). Report checks you couldn't perform.
+- Before choosing checks or changing tests, follow [validation procedures](docs/VALIDATION.md), including database migration rewind rules, frontend regression checks and failure handling.
+- Start with relevant checks; run `make test` for shared or multiple-package Go changes or unresolved risks. Frontend changes require lint, Svelte/TypeScript check and the full UI suite.
+- Turn confirmed frontend bugs into regression tests. Report passed, failed, skipped and unrun checks; never claim unverified success.
+- Visual checks cover Mail with Accounts expanded and collapsed; use `run-mailven` for native/backend/subjective checks and report those that could not run.
 
 ## Documentation
 

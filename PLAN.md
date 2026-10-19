@@ -8,21 +8,21 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 
 | Project | Status | Proposed priority | Unresolved issues | Candidate / gate |
 | --- | --- | --- | --- | --- |
-| [SEND — Sending, privacy and compatibility](#send) | proposed | P1 | [4](ISSUES.md#send) | PD10 resolved (Gmail final-MIME validation); SEND-3/4 deferred; SEND-2 retains its live gate, with Microsoft work deferred |
+| [SEND — Sending, privacy and compatibility](#send) | proposed | P1 | [5](ISSUES.md#send) | PD10 resolved (Gmail final-MIME validation); SEND-3/4 deferred; SEND-2 retains its live gate, with Microsoft work deferred |
 | [API — Provider API activation and migration](#api) | proposed | P2 | [1](ISSUES.md#api) | API-7 done (MA7, MA8, SY9 resolved); API-3 done (snapshot restore); Microsoft shared rollout deferred and live-gated |
 | [SYNC — Mail synchronization and action reliability](#sync) | proposed | P1 | [1](ISSUES.md#sync) | SYNC-1–4 done; SY9 resolved by API-7; SYNC-5 done (Gmail Load older, SY10 partly); SYNC-7 done (older IMAP mail, SY10 partly); SYNC-6 deferred (Graph window) |
-| [GOAUTH — Google OAuth client setup](#goauth) | proposed | P2 | [0](ISSUES.md#goauth) | GOAUTH-1–4 done (GO1, GO2 resolved); GOAUTH-5 done (assessment; owner kept bring-your-own); GO3 and GO4 resolved by independent fixes |
-| [CHAT — Chat composer sender review](#chat) | proposed | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
+| [GOAUTH — Google OAuth client setup](#goauth) | done | P2 | [0](ISSUES.md#goauth) | GOAUTH-1–4 done (GO1, GO2 resolved); GOAUTH-5 done (assessment; owner kept bring-your-own); GO3 and GO4 resolved by independent fixes |
+| [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
 | [MAINT — Maintenance and documentation](#maint) | proposed | P2 | [5](ISSUES.md#maint) | UI14, MA11 (P2) and UI15 (P3) open from the 2026-10-18 code review; UI13 needs an owner decision; D2 deferred/upstream blocked; MAINT-1–20 done, their linked issues resolved |
-| [UIX — UI refresh](#uix) | proposed | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
+| [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
-**Remaining nondeferred scope:** SEND-2 has non-Microsoft privacy/size-limit investigation and separately gated live verification; MAINT-3 is complete following owner disposition. CH1 and UI1 to UI6 are resolved. Completed milestones are not new implementation work. No automatic selection or status transition occurs here.
+**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; MAINT has unresolved follow-ups listed in Progress and ISSUES. Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
-Provider F1–F5 is complete for its local scope; completion does not establish live provider compatibility. Retain full Gmail API and delegated Microsoft Graph direction, future shared-mailbox support and explicit opt-in migration. Shared API activation remains unsupported. Existing accounts retain configured routes until explicitly migrated; there is no automatic route switch or fallback. Snapshot rollback currently changes route only and does not restore data or undo remote actions.
+Provider F1–F5 is complete for its local scope; completion does not establish live provider compatibility. Retain full Gmail API and delegated Microsoft Graph direction, future shared-mailbox support and explicit opt-in migration. Shared API activation remains unsupported. Existing accounts retain configured routes until explicitly migrated; there is no automatic route switch or fallback. Ordinary route rollback changes route only; the separate offline whole-database snapshot restore is implemented ([API-3](#api-3)) and does not undo remote actions.
 
 No live provider access, test emails, credentials changes, mailbox migration, provider registrations, tenant/DNS changes, dependency upgrades or personal CLI configuration changes are authorized by this roadmap. Live checks need accounts, From identities, controlled recipients and cases specified separately; see [live limits](docs/MAIL_APIS.md#live-verification-limits) and [P2 parity scenarios](docs/validation/provider-transport-recommendations.md). Wails research additionally prohibits application/dependency/packaging changes, real data, releases and unapproved prototypes or installs under its existing brief. G4 and D2 remain deferred. All further Microsoft 365 and regular/personal Outlook.com work—including native OAuth, IMAP/SMTP, Graph, shared mailboxes, DavMail, live validation and migration—is deferred indefinitely until explicitly reopened by the owner. This also applies to Microsoft-specific work inside mixed-provider milestones; unrelated provider work retains its existing status and gates.
 
@@ -30,13 +30,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 No active milestone.
 
-**Next recommended:** none authorized; no milestone is eligible (SEND-2 waits on live authorization; SYNC-6, Microsoft, Wails, G4 and D2 are deferred; UI13 needs an owner decision). Best issues to turn into a MAINT milestone: [UI14](ISSUES.md#ui14) (the account check summary reports a skipped sign-in as passed) and [MA11](ISSUES.md#ma11) (store row loops skip `rows.Err()`), both P2 from the 2026-10-18 code review; [UI15](ISSUES.md#ui15) (stale async responses in account settings) is P3. Completed milestones record their outcome and limits in their own Progress lines and validation evidence.
+**Next recommended:** none authorized; no milestone is eligible (SEND-2 waits on live authorization; SYNC-6, Microsoft, Wails, G4 and D2 are deferred; UI13 needs an owner decision). Best issues to turn into a MAINT milestone: [UI14](ISSUES.md#ui14) (the account check summary reports a skipped sign-in as passed) and [MA11](ISSUES.md#ma11) (store row loops skip `rows.Err()`), both P2 from the 2026-10-18 code review; [UI15](ISSUES.md#ui15) (stale async responses in account settings) is P3.
 
-API-7 is done (2026-10-15): Edit Account saves on a Gmail API route (MA8), an activation interrupted by quitting returns to IMAP at the next start (MA7), and removing an account no longer hangs on a busy IMAP connection (SY9) ([evidence](docs/validation/api-7.md)); live and native checks are unrun. SYNC-7 is done (2026-10-15): IMAP accounts get "Search the whole mailbox" and "Load older mail" like Gmail; the mail they bring in is pinned (`messages.pinned`), so the window's deletions skip it and a sync checks it by UID instead ([evidence](docs/validation/sync-7.md), [checkpoint](#sync-7)); the live IMAP check is unrun and Graph stays with SYNC-6. SYNC-5 is done (2026-10-15): Gmail API accounts get "Load older mail" at the end of the list, a reconcile notices pinned mail deleted on the server, and a search no longer blanks the history cursor; the unused IMAP search bindings are removed and IMAP follows as SYNC-7 ([evidence](docs/validation/sync-5.md), [checkpoint](#sync-5)); the live Gmail check is unrun. MAINT-8 is done and UI4 resolved (2026-10-15): closed responsive viewers in Mail and the kit detail pane reject keyboard focus, and closing returns focus to the list ([evidence](docs/validation/maint-8.md), [checkpoint](#maint-8)); native WebKitGTK unrun. GOAUTH-5 is done (2026-10-15): recommendation and owner decision recorded ([evidence](docs/validation/goauth-5.md), [checkpoint](#goauth-5)). GOAUTH-4 is done (2026-10-15): Setup checklist in OAuth Credentials and the Google sign-in form, scope list generated from `internal/oauth2` with drift tests, and all console links confirmed live ([evidence](docs/validation/goauth-4.md), [checkpoint](#goauth-4)); GOAUTH-5 stays deferred. GOAUTH-3 is done (2026-10-15): Settings → Accounts → OAuth Credentials has Import JSON…, which reads Google's Desktop client_secret file and saves it to the ticked Mail, Contacts and Calendar slots; web, malformed, oversized and non-UTF-8 files are rejected with a specific message and change nothing ([evidence](docs/validation/goauth-3.md), [checkpoint](#goauth-3)); the native dialog is unrun. GOAUTH-2 is done (2026-10-15): Settings → Identity → Check Google setup probes Gmail, People and Calendar read-only and offers Enable API or Re-authorize per result; it also runs once after the first Google sign-in ([evidence](docs/validation/goauth-2.md), [checkpoint](#goauth-2)); the owner-run live check is unrun; GOAUTH-3–5 remain unselected. GOAUTH-1 is done (2026-10-15): disabled Gmail, People and Calendar APIs are reported with the API, project and an Enable URL, and the docs say Gmail API is required for every Google OAuth account ([evidence](docs/validation/goauth-1.md), [checkpoint](#goauth-1)); GOAUTH-2–5 remain unselected. GOAUTH was proposed on 2026-10-15 (bring-your-own Google client: diagnosis, health check, JSON import, guided setup); none of it is selected. SEND-2 static review and authorized Gmail Bcc cases 1–4 are recorded (2026-10-15): neither provider documents Bcc-header stripping or an API size limit; the alias cases cannot show a separate recipient's copy and size case 5 is unauthorized, so SEND-2 and MA1 stay blocked. SY7/SY8 (Gmail quota backoff, sync-period window, oversize messages) were fixed and verified live on the way ([evidence](docs/validation/send-2.md)). UIX-6 is done: Settings → Chat → Message style switches the thread between bubbles (default) and a flat transcript with no bubbles or avatars, a name line on every message and an accent rule on mine ([evidence](docs/validation/uix-6.md), [checkpoint](#uix-6)); the UIX project is complete. UIX-5 is done: runs of three or more older read messages fold into one "N earlier messages" row (latest five, unread, drafts and subject headings never fold); rows are `aria-expanded` buttons and hold the scroll position; the low-priority-sender "Notice from X" variant is deferred because messages carry no sender-priority data ([evidence](docs/validation/uix-5.md), [checkpoint](#uix-5)); UIX-6 remains unselected. UIX-4 is done: the chat composer is a rounded card with the sender, Attach and Send inside and the Reply-to/recipients/Topic chip row below; the From is a read-only label and the attachment summary card is deferred ([evidence](docs/validation/uix-4.md), [checkpoint](#uix-4)); UIX-5–6 remain unselected. UIX-3 is done: labeled New message and Search rows lead the expanded Accounts sidebar, section labels are quieter, and each chat row shows one status glyph (sending, snoozed, unread); the needs-reply glyph is deferred because `ChatItem` has no latest-sender data ([evidence](docs/validation/uix-3.md), [checkpoint](#uix-3)); UIX-4–6 remain unselected. UIX-2 is done: the chat header is title, `⋯`, bordered Archive and Delete, with Snooze and Pin in the menu ([evidence](docs/validation/uix-2.md), [checkpoint](#uix-2)); UIX-3–6 remain unselected. UIX-1 is done and UI1 resolved: Nord surfaces retuned to near-neutral greys, light primary darkened to 4.5:1, `--radius` restored, audit allowlist empty ([evidence](docs/validation/uix-1.md), [checkpoint](#uix-1)); UIX-3–6 remain unselected. MAINT-3 is done following owner approval and factual privacy/Terms revisions; L2/L3 are resolved by recorded owner disposition, with legal enforceability limits retained ([evidence](docs/validation/maint-3.md), [checkpoint](#maint-3)). MAINT-6 is done and UI2 resolved: closed narrow Mail and shared extension sidebars reject focus, with open/close/resize regressions and the full UI audit passing ([evidence](docs/validation/maint-6.md), [checkpoint](#maint-6)). UI4 records the separately scoped hidden-viewer follow-up. On 2026-10-14 the owner additionally deferred all future Wails work, including W3-M0–W3-M7 assessment, until the official stable Wails v3 release, and confirmed indefinite deferral of all Microsoft work until explicit owner reopening. Wails work still requires selection after the release gate is met. On 2026-10-14 the owner requested merging the `experiment/davmail-microsoft365` evidence into main and deferring all further Microsoft 365 and regular/personal Outlook.com development. SEND-3, SEND-4 and the remaining API-6/MA4 work are deferred, as are Microsoft-specific portions of SEND-2/MA1. Resumption requires explicit owner selection; prior experiment authorization does not authorize continued live work while deferred. The [experiment checkpoint](docs/plans/davmail-microsoft365-test.md) preserves results, private artifact locations and possible future investigation steps. D7/D8 remain failed; no compatibility acceptance is implied by landing.
-
-API-3 is done and F5b-1 resolved: offline snapshot restore with consent, backup and undo ([evidence](docs/validation/api-3.md), [checkpoint](docs/plans/api-3.md)); native and real-account restore remain unrun. API-6 local implementation is done ([evidence](docs/validation/api-6.md), [checkpoint](docs/plans/api-6.md)); shared activation stays closed pending live checks. MAINT-5 is done: all four compact workflow helpers, logged check evidence and guarded landing are implemented and verified ([evidence](docs/validation/maint-5.md), [checkpoint](docs/plans/maint-5.md)). API-5 is done and F5b-3 resolved: rollback reports only a sync request, with scheduler-ordering and UI coverage ([evidence](docs/validation/api-5.md), [checkpoint](docs/plans/api-5.md)). API-1 design is done ([evidence](docs/validation/api-1.md), [checkpoint](docs/plans/api-1.md)); MA5 was resolved by API-6 (verified by fixture) and MA4 stays open for live evidence. No next milestone is activated.
-
-CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 is done and MA2/SY1 resolved ([evidence](docs/validation/maint-2.md)). MAINT-4 is done ([validation evidence](docs/validation/maint-4.md)); its findings UI1, UI2 and UI3 are resolved by UIX-1, MAINT-6 and MAINT-10. SEND-1 is done and CD2 resolved; SYNC-1 is done and R3 resolved ([evidence](docs/validation/sync-1.md)); SYNC-2 is done and R4 resolved ([evidence](docs/validation/sync-2.md)); SYNC-3 is done and SY2/SY6 resolved ([evidence](docs/validation/sync-3.md)); API-4 is done and F5b-2 resolved ([evidence](docs/validation/api-4.md)); SYNC-4 is done and R2/SY3/SY4/SY5 resolved ([evidence](docs/validation/sync-4.md)); see [validation evidence](docs/validation/send-1.md). Other proposed milestones remain unselected; SEND-2/3 retain their gates, and G4/D2 remain deferred.
+Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
 <a id="send"></a>
 
@@ -52,11 +48,9 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 
 ### SEND-1 — Autosave encryption failure policy
 
-- **Status / proposed priority:** done / P1. **Dependencies / gates:** none.
-- **Scope / deliverable:** Define and implement the separately scoped ordinary-autosave failure policy; preserve pre-submission recovery protections.
-- **Acceptance:** Missing-key and encryption-failure fixtures prove the selected policy never silently downgrades requested encryption; retain existing draft behavior outside that policy.
-- **Validation:** Focused draft Go tests with disposable data; frontend lint/check and guarded UI if prompts change.
-- **Issues:** [CD2](ISSUES.md#cd2). **Progress:** Verified fail-closed saves in both composers, with plaintext and encrypted success regressions. [Evidence](docs/validation/send-1.md); [completed checkpoint](docs/plans/send-1.md).
+- **Status / proposed priority:** done / P1.
+- **Issues:** [CD2](ISSUES.md#cd2).
+- **Evidence:** [Evidence](docs/validation/send-1.md); [completed checkpoint](docs/plans/send-1.md).
 
 <a id="send-2"></a>
 
@@ -102,51 +96,42 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 
 ### API-1 — Shared mailbox activation design
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none; implementation requires later selection.
-- **Scope / deliverable:** Design shared identity storage, route schema, delegate flow and read/write identity semantics; produce a bounded implementation proposal.
-- **Acceptance:** Proposal maps all shared route blockers and data/security invariants with validation and migration gates; do not claim shared support from design alone.
-- **Validation:** Trace apiRemote/activation and Graph clients; read-only review against MAIL_APIS and provider architecture.
-- **Issues:** [MA4](ISSUES.md#ma4). **Progress:** design verified ([evidence](docs/validation/api-1.md), [checkpoint](docs/plans/api-1.md)); implemented locally under API-6.
+- **Status / proposed priority:** done / P2.
+- **Issues:** [MA4](ISSUES.md#ma4).
+- **Evidence:** [evidence](docs/validation/api-1.md); [checkpoint](docs/plans/api-1.md).
 
 <a id="api-2"></a>
 
 ### API-2 — Snapshot restoration design
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none; implemented by [API-3](#api-3).
-- **Scope / deliverable:** Design live-DB replacement, crash recovery, data-loss consent and rollback; leave route-only rollback truthful.
-- **Acceptance:** Approved design distinguishes local snapshot restore from undoing remote actions and covers active database replacement, credentials and data-loss UX.
-- **Validation:** Review isolated backup/restore strategy and failure cases; no real database replacement.
-- **Issues:** [F5b-1](ISSUES.md#f5b-1). **Progress:** design recorded ([design](docs/API_SNAPSHOT_RESTORE_DESIGN.md), [evidence](docs/validation/api-2.md), [checkpoint](docs/plans/api-2.md)); owner approved the design 2026-10-14; implemented by [API-3](#api-3).
+- **Status / proposed priority:** done / P2.
+- **Issues:** [F5b-1](ISSUES.md#f5b-1).
+- **Evidence:** [design](docs/API_SNAPSHOT_RESTORE_DESIGN.md); [evidence](docs/validation/api-2.md); [checkpoint](docs/plans/api-2.md).
 
 <a id="api-3"></a>
 
 ### API-3 — Snapshot restoration implementation
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** [API-2](#api-2) (design approved); implementation selected and authorized 2026-10-14. Live migration/restore remains separately gated.
-- **Scope / deliverable:** Implement only the selected restore design and consent flow after its gate.
-- **Acceptance:** Isolated restore/crash fixtures and UI verify approved recovery and loss semantics; provider-side changes remain accurately disclosed.
-- **Validation:** Disposable database fixtures, relevant Go checks, frontend lint/check and guarded UI; live migration requires separate authorization.
-- **Issues:** [F5b-1](ISSUES.md#f5b-1). **Progress:** done; F5b-1 resolved ([evidence](docs/validation/api-3.md), [checkpoint](docs/plans/api-3.md)). Native/real-account restore unrun.
+- **Status / proposed priority:** done / P2.
+- **Issues:** [F5b-1](ISSUES.md#f5b-1).
+- **Evidence:** [evidence](docs/validation/api-3.md); [checkpoint](docs/plans/api-3.md).
+- **Limits / retained decisions:** Native and real-account restore unrun.
 
 <a id="api-4"></a>
 
 ### API-4 — Migration correlation follow-up
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none.
-- **Scope / deliverable:** Investigate absent/ambiguous Message-ID handling and propose safe state-carrying behavior or explicit limitation guidance.
-- **Acceptance:** No ambiguous identity is guessed; fixtures cover absent IDs and duplicates; selected behavior and limitations are documented.
-- **Validation:** Focused internal/apimigrate fixtures; guarded migration UI if changed.
-- **Issues:** F5b-2 (resolved). **Progress:** done ([evidence](docs/validation/api-4.md)).
+- **Status / proposed priority:** done / P2.
+- **Issues:** F5b-2 (resolved).
+- **Evidence:** [evidence](docs/validation/api-4.md).
 
 <a id="api-5"></a>
 
 ### API-5 — Rollback sync progress and coverage
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none.
-- **Scope / deliverable:** Define rollback progress promises; add scheduler seam and trigger coverage if selected.
-- **Acceptance:** A test asserts rollback triggers IMAP sync; UI and API distinguish route transition from asynchronous reconcile completion.
-- **Validation:** Focused rollback/scheduler fixtures; frontend checks and guarded UI for progress changes.
-- **Issues:** [F5b-3](ISSUES.md#f5b-3). **Progress:** verified sync request after IMAP route/row restoration, failure/unavailable/no-new-request cases and UI copy under both Accounts states; full UI 50/50 ([evidence](docs/validation/api-5.md), [checkpoint](docs/plans/api-5.md)).
+- **Status / proposed priority:** done / P2.
+- **Issues:** [F5b-3](ISSUES.md#f5b-3).
+- **Evidence:** [evidence](docs/validation/api-5.md); [checkpoint](docs/plans/api-5.md).
 
 <a id="api-6"></a>
 
@@ -162,9 +147,10 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 
 ### API-7 — Gmail API route fixes from live testing
 
-- **Status / proposed priority:** done (2026-10-15) / P2. **Dependencies / gates:** none; fixtures only, live checks unrun.
-- **Scope / deliverable:** Edit Account saves on an API route ([MA8](ISSUES.md#ma8)); an activation interrupted by quitting returns to IMAP at the next start ([MA7](ISSUES.md#ma7)); removing an account no longer hangs on a busy IMAP connection ([SY9](ISSUES.md#sy9), owned by SYNC).
-- **Validation:** [evidence](docs/validation/api-7.md). Go tests per fix that fail without it; the live Gmail and native checks are unrun. Found [TF2](ISSUES.md#tf2).
+- **Status / proposed priority:** done / P2.
+- **Issues:** none.
+- **Evidence:** [evidence](docs/validation/api-7.md).
+- **Limits / retained decisions:** Fixtures only; live checks unrun.
 
 <a id="sync"></a>
 
@@ -180,61 +166,51 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 
 ### SYNC-1 — Durable API move re-key recovery
 
-- **Status / proposed priority:** done / P1. **Dependencies / gates:** none.
-- **Scope / deliverable:** Preserve an action or retry re-key after provider success and local failure.
-- **Acceptance:** Fault injection proves stale queued IDs cannot cause local deletion following re-key failure.
-- **Validation:** Focused apiactions/database tests; broaden Go tests if shared action semantics change.
-- **Issues:** [R3](ISSUES.md#r3). **Progress:** Failed re-keys keep the move open and retry only the re-key; fault-injection test passes. [Evidence](docs/validation/sync-1.md).
+- **Status / proposed priority:** done / P1.
+- **Issues:** [R3](ISSUES.md#r3).
+- **Evidence:** [Evidence](docs/validation/sync-1.md).
 
 <a id="sync-2"></a>
 
 ### SYNC-2 — Partial move batch refresh
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none.
-- **Scope / deliverable:** Emit accurate move/count state for successful rows before reporting later batch failure.
-- **Acceptance:** Partial batch fixture proves successful rows refresh and failures remain visible.
-- **Validation:** Focused app fixtures and guarded Mail UI, including Accounts expanded/collapsed.
-- **Issues:** [R4](ISSUES.md#r4). **Progress:** `apiMoveLocal` refreshes rows moved before a later batch failure, then returns the error; fixture passes. UI check not run. [Evidence](docs/validation/sync-2.md).
+- **Status / proposed priority:** done / P2.
+- **Issues:** [R4](ISSUES.md#r4).
+- **Evidence:** [Evidence](docs/validation/sync-2.md).
 
 <a id="sync-3"></a>
 
 ### SYNC-3 — Ingest cursor and timestamp correctness
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none.
-- **Scope / deliverable:** Scope oversize Graph handling and provider received-time preservation as separate substeps.
-- **Acceptance:** Oversize messages do not silently block an entire folder; missing Date uses stable provider time without falsely sorting as newly received.
-- **Validation:** Disposable Graph/Gmail raw-message and cursor fixtures; relevant sync tests.
-- **Issues:** [SY2](ISSUES.md#sy2), [SY6](ISSUES.md#sy6). **Progress:** Oversize Graph messages become header-only rows and the cursor advances; missing Date uses the provider receive time. Fixtures pass; no live check. [Evidence](docs/validation/sync-3.md).
+- **Status / proposed priority:** done / P2.
+- **Issues:** [SY2](ISSUES.md#sy2), [SY6](ISSUES.md#sy6).
+- **Evidence:** [Evidence](docs/validation/sync-3.md).
 
 <a id="sync-4"></a>
 
 ### SYNC-4 — Bounded reconciliation investigation
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** none; [SYNC-1](#sync-1) takes priority among independent work.
-- **Scope / deliverable:** Measure journal/folder growth, reset request cost and 5xx policy; select bounded optimizations from evidence.
-- **Acceptance:** Reproducible synthetic measurements and correctness fixtures justify changes; enumeration/copy correctness and retry bounds remain intact.
-- **Validation:** Focused synthetic large-folder/journal tests; no live mailbox benchmarking.
-- **Issues:** [R2](ISSUES.md#r2), [SY3](ISSUES.md#sy3), [SY4](ISSUES.md#sy4), [SY5](ISSUES.md#sy5). **Progress:** R2 scoped to the new attempt; SY3/SY4 drop the per-ID map for a sorted-slice diff (1M IDs: 56.6 MB to ~0.7 MB extra); SY5 pinned as policy by request-count and bounded-5xx fixtures. No live check. [Evidence](docs/validation/sync-4.md).
+- **Status / proposed priority:** done / P3.
+- **Issues:** [R2](ISSUES.md#r2), [SY3](ISSUES.md#sy3), [SY4](ISSUES.md#sy4), [SY5](ISSUES.md#sy5).
+- **Evidence:** [Evidence](docs/validation/sync-4.md).
 
 <a id="sync-5"></a>
 
 ### SYNC-5 — Older mail beyond the sync window
 
-- **Status / proposed priority:** done (2026-10-15) / P2. **Dependencies / gates:** none. The live Gmail check (search, Load older, pinned deletion) is unrun and gated on the owner moving an account to the Gmail API route.
-- **Scope / deliverable:** (1) Owner chose Gmail only: the unused IMAP `IMAPSearchFolder` / `FetchServerMessage` bindings and their engine code are removed; IMAP moves to [SYNC-7](#sync-7). (2) "Load older mail" at the end of a list stores and pins mail from before the window on the Gmail API route. (3) A reconcile fetches pinned refs outside the window and removes the ones Gmail deleted. A search no longer blanks the history cursor. Graph is out of scope.
-- **Acceptance:** Older mail is reachable offline-first by search and by load-older without widening the period; a reconcile still removes unpinned out-of-window mail and notices deleted pinned mail; the Accounts column checks pass expanded and collapsed.
-- **Validation:** [evidence](docs/validation/sync-5.md). Fake-server Go fixtures and `make test-ui` regressions; the live Gmail check is separately authorized and unrun.
+- **Status / proposed priority:** done / P2.
 - **Issues:** [SY10](ISSUES.md#sy10).
+- **Evidence:** [evidence](docs/validation/sync-5.md).
+- **Limits / retained decisions:** Live Gmail search, Load older and pinned-deletion check unrun.
 
 <a id="sync-7"></a>
 
 ### SYNC-7 — Older IMAP mail beyond the sync window
 
-- **Status / proposed priority:** done (2026-10-15) / P3. **Dependencies / gates:** none left; owner selected it on 2026-10-15. The live IMAP check is unrun and needs an authorized account.
-- **Scope / deliverable:** Add a pin concept for IMAP messages (`messages.pinned`, migration with rewind lines) that `DeleteOlderThan` and the windowed UID reconcile skip, an existence check for pinned UIDs (including the CONDSTORE path), "Search the server" in the chat search across the account's folders, and per-folder "Load older" paging.
-- **Acceptance:** Older IMAP mail is reachable by search and Load older without widening the period; a sync removes unpinned out-of-window mail and notices pinned mail deleted on the server; the Accounts column checks pass expanded and collapsed.
-- **Validation:** [evidence](docs/validation/sync-7.md). In-memory IMAP server fixtures (`internal/sync/imap_older_test.go`) and `make test-ui` regressions; the live IMAP check is separately authorized and unrun.
+- **Status / proposed priority:** done / P3.
 - **Issues:** [SY10](ISSUES.md#sy10) (Graph remains, [SYNC-6](#sync-6)).
+- **Evidence:** [evidence](docs/validation/sync-7.md).
+- **Limits / retained decisions:** Live IMAP check unrun; Microsoft Graph remains deferred under SYNC-6.
 
 <a id="sync-6"></a>
 
@@ -250,7 +226,7 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 ## GOAUTH — Google OAuth client setup
 
 - **Objective / outcome:** Help users create and verify their own Google OAuth Desktop client with as little manual console work as Google allows, and say exactly what is wrong when a client is misconfigured.
-- **Status / proposed priority:** proposed / P2.
+- **Status / proposed priority:** done / P2.
 - **Dependencies / blockers:** none between projects. Order: GOAUTH-1 → GOAUTH-2 → GOAUTH-3 → GOAUTH-4. GOAUTH-5 is deferred until the owner decides.
 - **Issues:** [owning register section](ISSUES.md#goauth); each milestone links its issues.
 - **Technical references:** [custom Google credentials guide](docs/user-guide/getting-started/first-account/google-oauth-credentials.md), [Gmail setup](docs/user-guide/getting-started/first-account/gmail.md), [providers](docs/PROVIDERS.md), `frontend/src/lib/components/kit/OAuthCredsSlotEditor.svelte` (read [EXT_RULES](docs/EXT_RULES.md) before changing it), `internal/gmailapi/sendas.go`.
@@ -267,65 +243,52 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 
 ### GOAUTH-1 — Disabled Google API diagnosis
 
-- **Status / proposed priority:** done / P2 (selected by the owner 2026-10-15). **Dependencies / gates:** none. Local fixtures only.
-- **Result:** a 403 `SERVICE_DISABLED` from the Gmail send-as list, People (search, sync, writes) and Calendar becomes a typed `googleerr.DisabledError` ("*Gmail API is disabled in Google Cloud project N*") with an Enable URL Mailven builds from the validated service and project. Other 403s keep their handling. PROVIDERS.md, gmail.md and the custom-credentials guide agree that every Google OAuth account needs the Gmail API. Evidence and limits (local fixtures only; the URL is text in a toast, not a link): [validation](docs/validation/goauth-1.md).
+- **Status / proposed priority:** done / P2.
 - **Issues:** [GO1](ISSUES.md#go1), [GO2](ISSUES.md#go2) (both resolved).
+- **Evidence:** [validation](docs/validation/goauth-1.md).
+- **Limits / retained decisions:** Local fixtures only.
 
 <a id="goauth-2"></a>
 
 ### GOAUTH-2 — Google client health check
 
-- **Status / proposed priority:** done / P2 (selected by the owner 2026-10-15). **Dependencies / gates:** GOAUTH-1. The owner-run live check against a client with one API disabled is unrun.
-- **Result:** Settings → Accounts → Edit → Identity has a "Check Google setup" section for Google OAuth accounts. It makes read-only GETs (Gmail `users.getProfile` and the send-as list; People `people/me/connections`; Calendar list) and reports each API as working, disabled (with an Enable API button that opens the console link), missing permission (with Re-authorize), not set up or an error. People and Calendar are probed only when the account has a grant for them. The check runs on demand and once after the first Google sign-in, which shows a message only on a disabled or permission problem. No polling. Evidence and limits: [validation](docs/validation/goauth-2.md).
+- **Status / proposed priority:** done / P2.
 - **Issues:** [GO1](ISSUES.md#go1) (resolved by GOAUTH-1).
+- **Evidence:** [validation](docs/validation/goauth-2.md).
+- **Limits / retained decisions:** Live check against a client with one API disabled unrun.
 
 <a id="goauth-3"></a>
 
 ### GOAUTH-3 — Import a client_secret JSON file
 
-- **Status / proposed priority:** done / P2 (selected by the owner 2026-10-15). **Dependencies / gates:** none technically. The native file dialog and a real Google download are unrun.
-- **Result:** Settings → Accounts → OAuth Credentials has **Import JSON…** above the Google Mail editor. It picks the file natively; the Go parser accepts only a top-level `installed` client, rejects `web`, other shapes, malformed, non-UTF-8 and over-64 KB files with a specific message and changes nothing, then saves the client to the ticked Mail, Contacts and Calendar slots through the existing credential store. The secret never reaches the UI, results or logs. The button lives beside the kit editor, not in it, to keep the kit provider-agnostic ([evidence](docs/validation/goauth-3.md)).
+- **Status / proposed priority:** done / P2.
 - **Issues:** none.
+- **Evidence:** [evidence](docs/validation/goauth-3.md).
+- **Limits / retained decisions:** Native dialog and real Google download unrun.
 
 <a id="goauth-4"></a>
 
 ### GOAUTH-4 — Guided Google Cloud setup
 
-- **Status / proposed priority:** done / P2 (selected by the owner 2026-10-15; live links confirmed 2026-10-15). **Dependencies / gates:** GOAUTH-2 and GOAUTH-3 are done. Checking the console deep links live needs the owner's Google account in a browser and must change no console state without approval.
-- **Scope / deliverable:**
-  - Add an in-app checklist, started from the Google account form and the custom-credentials editor. It opens console links in the system browser:
-    1. Create a project.
-    2. Enable the Gmail, People and Calendar APIs in one step with `flows/enableapi?apiid=gmail.googleapis.com,people.googleapis.com,calendar-json.googleapis.com`.
-    3. Google Auth Platform Branding.
-    4. Audience: External, with the Testing and production trade-off explained.
-    5. Data Access, with a copyable scope list generated from `internal/oauth2` so it cannot drift.
-    6. Clients: create a Desktop app client and download its JSON now.
-    7. Import the JSON (GOAUTH-3).
-    8. Sign in, then run the health check (GOAUTH-2).
-  - Rewrite the custom-credentials guide to follow the same steps.
-- **Acceptance:**
-  - Every deep link is confirmed against the live console, recorded with its date in `docs/validation/goauth-4.md`. A fallback is needed for any link that cannot be confirmed.
-  - The scope list matches the scopes Mailven requests, enforced by a test.
-  - The checklist is keyboard accessible, and the guide matches it.
-- **Validation:** a Go test for the scope list; UI regression tests; `make test-ui`; a doc link check; an owner-authorized browser check of the links.
-- **Result:** a Setup checklist in OAuth Credentials and on the Google sign-in form; links and the scope list come from `internal/oauth2`, with tests against provider scopes, Go scope literals and the guide's table; the guide follows the same eight steps. All six console links and the fallback passed an owner-authorized live check on 2026-10-15 without changing console state ([evidence](docs/validation/goauth-4.md)).
+- **Status / proposed priority:** done / P2.
 - **Issues:** none.
+- **Evidence:** [evidence](docs/validation/goauth-4.md).
 
 <a id="goauth-5"></a>
 
 ### GOAUTH-5 — Verified Mailven Google client assessment
 
-- **Status / proposed priority:** done / P3 (reopened and selected by the owner 2026-10-15). **Dependencies / gates:** none remaining. Assessment only: no registration or submission to Google.
-- **Result:** [recommendation](docs/validation/goauth-5.md) with sources. Mailven requests restricted Gmail scopes, so verification needs a verified domain, privacy policy, demo video and a yearly security assessment; third-party sources put CASA at roughly $500–$1,500 a year (unconfirmed). Whether CASA applies to a local-only client is unresolved: Google's text has no clause for it. The Aerion questionnaire is a starting draft only.
-- **Owner decision (2026-10-15):** keep bring-your-own; no Mailven-owned verified client. The no-bundled-client decision stands.
+- **Status / proposed priority:** done / P3.
 - **Issues:** none.
+- **Evidence:** [recommendation](docs/validation/goauth-5.md).
+- **Limits / retained decisions:** Owner decision (2026-10-15): keep bring-your-own; no Mailven-owned verified client or registration. CASA applicability/cost remains uncertain in the evidence.
 
 <a id="chat"></a>
 
 ## CHAT — Chat composer sender review
 
 - **Objective / outcome:** Allow reviewed sender identities in chat without weakening existing send safeguards.
-- **Status / proposed priority:** proposed / P2.
+- **Status / proposed priority:** done / P2.
 - **Dependencies / blockers:** no cross-project implementation prerequisite established; milestone gates below apply.
 - **Issues:** [owning register section](ISSUES.md#chat); each linked milestone lists its relevant issues.
 - **Technical references:** [SENDING](docs/SENDING.md), [implementation record](docs/validation/provider-implementation.md).
@@ -334,11 +297,8 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 
 ### CHAT-1 — Chat sender review
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none; existing sender policy is implemented.
-- **Scope / deliverable:** Add sender review to chat while retaining queue-time safeguards.
-- **Acceptance:** Review-required senders can complete an accessible chat review; stale/rejected evidence still blocks submission.
-- **Validation:** Queue fixtures, frontend lint/check and guarded chat/Mail UI with both Accounts states; no test emails.
-- **Issues:** [R1](ISSUES.md#r1). **Progress:** done (branch `chat-1-sender-review`, base 02a0b11). Chat runs the sender review (`GetChatSenderEvidence`, `ChatReply.senderReviewToken`) before `QueueChatReply`; queue-time and send-time checks are unchanged. Evidence: `node tests/ui/run.mjs chat-compose` (11 pass, review confirm under Accounts expanded and collapsed, cancel, stale token, block), `make test-ui` 46 pass, `go test ./app -run 'Sender|Chat'`, frontend lint/check. Live provider review not exercised (no test emails). Follow-up [CH1](ISSUES.md#ch1) (cosmetic) was resolved 2026-10-16 by an independent fix.
+- **Status / proposed priority:** done / P2.
+- **Issues:** [R1](ISSUES.md#r1).
 
 <a id="maint"></a>
 
@@ -355,207 +315,170 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 
 ### MAINT-1 — User guide corrections
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** none.
-- **Scope / deliverable:** Correct conditional shortcut guidance, malformed Svelte URL and log-location link.
-- **Acceptance:** Guides match canonical shortcut behavior and all corrected destinations exist.
-- **Validation:** Targeted source/doc comparison and Markdown/link checks; no product code needed.
-- **Issues:** [DOC4](ISSUES.md#doc4), [DOC5](ISSUES.md#doc5). **Progress:** `Alt+G` guidance, Svelte URL and log link corrected (docs only, base `0a0ea88`); source comparison and link grep pass; no live check.
+- **Status / proposed priority:** done / P3.
+- **Issues:** [DOC4](ISSUES.md#doc4), [DOC5](ISSUES.md#doc5).
 
 <a id="maint-2"></a>
 
 ### MAINT-2 — Owned formatting and reader reuse
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** none.
-- **Scope / deliverable:** Format the owned Go file and assess behavior-preserving reader extraction in distinct substeps.
-- **Acceptance:** Formatting is clean and any extraction preserves refresh, size caps and error classification across both providers.
-- **Validation:** gofmt and focused affected Go tests; review diff for unrelated churn.
-- **Issues:** [MA2](ISSUES.md#ma2), [SY1](ISSUES.md#sy1). **Progress:** base `db18d02`; `store.go` formatted; transport extracted to `internal/apiread` with provider tests unchanged and passing. [Evidence](docs/validation/maint-2.md).
+- **Status / proposed priority:** done / P3.
+- **Issues:** [MA2](ISSUES.md#ma2), [SY1](ISSUES.md#sy1).
+- **Evidence:** [Evidence](docs/validation/maint-2.md).
 
 <a id="maint-3"></a>
 
 ### MAINT-3 — Resolve legal draft review flags
 
-- **Status / proposed priority:** done / P2. Owner disposition recorded on 2026-10-14; L2/L3 resolved. See [validation evidence](docs/validation/maint-3.md).
-- **Acceptance:** Recorded owner disposition determines whether draft markers and texts may change; historical concerns are explicitly resolved or retained.
-- **Validation:** Documentation and approval-evidence review; no assumed sign-off or autonomous legal text revision.
+- **Status / proposed priority:** done / P2.
 - **Issues:** [L2](ISSUES.md#l2), [L3](ISSUES.md#l3).
-- **Checkpoint:** branch `docs/maint-3-review`, pre-milestone base `9d1542d11295908b7610a1913a51f16f8340d16e`. Owner approved proposed corrections, then requested explicit project-owner liability protection. Terms and Privacy revised and review markers removed; owner protection covers the software and accompanying documentation, with a mandatory-law exception; absolute immunity is not promised. Historical concerns and external-review limits are retained in the evidence. Changed files: `docs/TERMS.md`, `docs/PRIVACY.md`, `docs/PROVIDERS.md`, `docs/validation/maint-3.md`, `PLAN.md`, `ISSUES.md`. Final documentation checks and independent acceptance review recorded in validation evidence before landing. No next milestone selected; SEND-2 remains a candidate with its separate live gate, and deferred work requires reopening.
+- **Evidence:** [validation evidence](docs/validation/maint-3.md).
 
 <a id="maint-4"></a>
 
 ### MAINT-4 — Deterministic UI audit, frontend regression tests and CI
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none; authorized 2026-10-14 (local commits only; merge and push need approval).
-- **Scope / deliverable:** Backend-free headless UI test mode, UI quality audit over the theme × width × Accounts × previews matrix, chat presentation/triage/composition regression tests, `make test-ui` and a CI job with machine-readable diagnostics, workflow guidance.
-- **Acceptance:** Repeatable PASS/FAIL results naming element, configuration and reason; no false failures on expected responsive behavior; synthetic data only and nothing persisted; critical chat behaviors covered; existing checks pass; CI config valid; failure detection demonstrated.
-- **Validation:** [execution plan](docs/plans/maint-4.md) acceptance table; evidence in [docs/validation/maint-4.md](docs/validation/maint-4.md).
-- **Issues:** found [UI1](ISSUES.md#ui1), [UI2](ISSUES.md#ui2), [UI3](ISSUES.md#ui3) (recorded, not fixed here). **Progress:** `make test-ui` passes 41/41 repeatably; mutations detected; CI job validated statically, not yet run on GitHub. [Evidence](docs/validation/maint-4.md); [completed checkpoint](docs/plans/maint-4.md).
+- **Status / proposed priority:** done / P2.
+- **Issues:** found [UI1](ISSUES.md#ui1), [UI2](ISSUES.md#ui2), [UI3](ISSUES.md#ui3) (recorded, not fixed here).
+- **Evidence:** [execution plan](docs/plans/maint-4.md); [docs/validation/maint-4.md](docs/validation/maint-4.md).
+- **Limits / retained decisions:** Backend-free checks with synthetic data; native/live coverage remains separate.
 
 <a id="maint-5"></a>
 
 ### MAINT-5 — Compact project workflow helpers
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** user authorized 2026-10-14 after the Mailven session audit; no reopening of deferred G4/D2.
-- **Scope / deliverable:** Milestone context loader, serial check runner with compact persisted evidence, guarded branch landing helper, maintained local Markdown/site-link checker; integrate into existing project skills and developer docs.
-- **Acceptance:** Helpers handle checkout/worktree paths, linked project context and site links; required checks remain intact and failures visible; landing defaults to preview and preserves clean-tree, conflict-abort, checks-after-rebase, configured identity/upstream and equal-tree-before-deletion rules. Disposable fixtures verify success and failure paths. Instructions avoid rereading unchanged skill files within one session while still loading required guidance for each new session.
-- **Validation:** Standard-library unit/integration tests with temporary repositories and fake check commands, existing skill path tests, real docs/context/preview runs, whitespace/brand checks and independent acceptance. No production mail/backend changes.
-- **Issues:** none initially; scriptable repetition is an optimization finding, not a verified product defect. **Progress:** 30 disposable fixture tests, existing skill/worktree path checks, local docs/whitespace/brand checks and independent acceptance pass; canonical next/finish/ship workflows integrated ([evidence](docs/validation/maint-5.md), [checkpoint](docs/plans/maint-5.md)). Review follow-up [MA6](ISSUES.md#ma6) resolved both P2 evidence defects with common-ancestor baselines and complete feature-path coverage; 35 helper tests and independent acceptance passed ([validation](docs/validation/maint-5.md#review-follow-up-ma6)).
+- **Status / proposed priority:** done / P3.
+- **Issues:** none initially; scriptable repetition is an optimization finding, not a verified product defect.
+- **Evidence:** [evidence](docs/validation/maint-5.md); [checkpoint](docs/plans/maint-5.md); [validation](docs/validation/maint-5.md#review-follow-up-ma6).
 
 <a id="maint-6"></a>
 
 ### MAINT-6 — Closed sidebar keyboard isolation
 
-- **Status / proposed priority:** done / P2. **Authorization:** owner selected UI2 on 2026-10-14.
-- **Scope:** Mail and shared kit narrow sidebars; preserve opening, closing and full/medium layouts. Viewer investigation is evidence only, not a separate implementation scope.
-- **Acceptance:** Closed sidebars reject keyboard focus; open sidebars remain interactive; resizing restores normal sidebar focus; delete the UI2 audit allowlist entry and pass the full audit.
-- **Validation:** Regression tests for Mail and kit sidebars; frontend lint/check/build; full UI suite including Mail Accounts expanded/collapsed. Native WebKitGTK checks remain unrun.
+- **Status / proposed priority:** done / P2.
 - **Issues:** [UI2](ISSUES.md#ui2); the viewer follow-up [UI4](ISSUES.md#ui4) was resolved by [MAINT-8](#maint-8).
-- **Checkpoint:** branch `fix/ui2-sidebar-focus`, pre-commit base `2c25557`; implementation and verification complete. `node tests/ui/run.mjs sidebar-focus`: 2 pass. `python3 tools/project-check.py --base main --run`: whitespace, docs, frontend lint/check/build and 58 UI tests pass (0 failed/skipped). [Evidence and limitations](docs/validation/maint-6.md). No next milestone selected; future work requires selection. Existing Gmail investigation is preserved on `docs/send-2-gmail-verification`.
+- **Evidence:** [Evidence and limitations](docs/validation/maint-6.md).
+- **Limits / retained decisions:** Native WebKitGTK checks remain unrun.
 
 <a id="maint-7"></a>
 
 ### MAINT-7 — Unattended milestone runner
 
-- **Status / proposed priority:** done / P3. **Authorization:** owner requested on 2026-10-15 migrating the external plan runner into `tools/` with automatic milestone selection.
-- **Scope:** `tools/project-run.py`: one fresh Claude Code or Codex session per milestone, ranked selection from this roadmap, per-milestone local authorization, handoff continuation, blocked-milestone skipping and usage-limit resumption; `make milestone` runs it without `.env` credentials in the session environment. No push, landing or gate changes.
-- **Acceptance:** Selection never picks deferred, blocked or done milestones, milestones in closed projects, or milestones with unfinished dependencies; success requires a commit, a clean tree and a `done` status; handoff and blocked outcomes behave as documented; [CONTRIBUTING](CONTRIBUTING.md#unattended-milestone-runs) and the [lifecycle rules](docs/PROJECT_MANAGEMENT.md#status-priority-and-eligibility) describe the authorization.
-- **Validation:** `tools/tests/test_project_run.py` (fixture plans and a fake agent CLI in disposable repositories); helper test suite; doc links; brand check. A real agent session is unrun.
-- **Checkpoint:** branch `feat/project-run`, base `main`; complete.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none.
+- **Evidence:** [CONTRIBUTING](CONTRIBUTING.md#unattended-milestone-runs).
 
 <a id="maint-8"></a>
 
 ### MAINT-8 — Closed responsive viewer keyboard isolation
 
-- **Status / proposed priority:** done / P2 (selected by the owner 2026-10-15). **Dependencies / gates:** none.
-- **Outcome:** closed responsive viewers in Mail and kit `DetailPane` are inert and hand the focused pane and focus to the list on close; open viewers, focus mode and full layout unchanged ([evidence](docs/validation/maint-8.md)). Native WebKitGTK check unrun.
+- **Status / proposed priority:** done / P2.
 - **Issues:** [UI4](ISSUES.md#ui4) resolved.
+- **Evidence:** [evidence](docs/validation/maint-8.md).
+- **Limits / retained decisions:** Native WebKitGTK check unrun.
 
 <a id="maint-9"></a>
 
 ### MAINT-9 — Calendar syncer test cleanup flake
 
-- **Status / proposed priority:** done (2026-10-16) / P3. **Dependencies / gates:** none. Checkpoint: base fdf27f9; the fix is the milestone commit; `-count=100` and `make test` passed.
-- **Scope:** diagnose and fix the `TestSyncerSubscriptionsPerInstance` TempDir cleanup race in `extensions/calendar/backend`; test-side stop/wait first, product code only if the syncer leaks a goroutine. Read `docs/EXT_RULES.md` before committing under `extensions/**`.
-- **Acceptance:** `go test ./extensions/calendar/backend -count=100` passes; assertions are not loosened.
-- **Validation:** that command, then the focused package tests and `make test` if shared behavior changed.
+- **Status / proposed priority:** done / P3.
 - **Issues:** [TF1](ISSUES.md#tf1).
+- **Limits / retained decisions:** `go test ./extensions/calendar/backend -count=100` and `make test` passed; base `fdf27f9`.
 
 <a id="maint-10"></a>
 
 ### MAINT-10 — Single Archive in the chat row menu
 
-- **Status / proposed priority:** done (2026-10-16) / P3. **Dependencies / gates:** none. Checkpoint: base 5f59e2f; the fix is the milestone commit. `npm run lint`, `npm run check`, `inbox-triage` (7 passed) and the full `make test-ui` (107 passed, Accounts column expanded and collapsed included) passed; native WebKitGTK unrun.
-- **Scope:** `ChatRow.svelte` and `MessageContextMenu.svelte`: the chat row menu shows one Archive with the chat behavior (the "Conversation archived" toast and list follow-up). The open chat's header menu is unchanged.
-- **Acceptance:** one Archive item in a chat row menu; `inbox-triage.test.cjs` `menu()` drops `.first()` for Archive; the chat Archive still archives the same message IDs.
-- **Validation:** `npm run lint`, `npm run check`, `node tests/ui/run.mjs inbox-triage`, then `make test-ui` including Mail with the Accounts column expanded and collapsed.
+- **Status / proposed priority:** done / P3.
 - **Issues:** [UI3](ISSUES.md#ui3).
+- **Limits / retained decisions:** Frontend lint/check and full UI suite (107 passed) verified; native WebKitGTK unrun; base `5f59e2f`.
 
 <a id="maint-11"></a>
 
 ### MAINT-11 — Snapshot restore documentation
 
-- **Status / proposed priority:** done (2026-10-16) / P3. **Dependencies / gates:** none ([API-3](#api-3) is implemented). Checkpoint: base ff5ff56; the docs change is the milestone commit. `python3 tools/check-doc-links.py --changed` passed (2 files, 0 errors); source review against `app/snapshot_restore.go` and `docs/MAIL_APIS.md`; no live restore.
-- **Scope:** correct `docs/PROVIDERS.md` (Switching routes) and `docs/user-guide/features/settings.md` (Mail API route) to describe the offline whole-database restore with consent, backup and undo, linking `docs/MAIL_APIS.md`. State that ordinary route rollback does not restore the snapshot or undo provider changes. No live restore testing.
-- **Acceptance:** neither guide says restoration is unavailable; the provider matrix is current; links resolve.
-- **Validation:** `python3 tools/check-doc-links.py --changed`; source review against `app/snapshot_restore.go`.
+- **Status / proposed priority:** done / P3.
 - **Issues:** [DOC6](ISSUES.md#doc6).
+- **Limits / retained decisions:** Guide/source comparison and doc links passed; no live restore; base `ff5ff56`.
 
 <a id="maint-12"></a>
 
 ### MAINT-12 — Split App.svelte under the size limit
 
-- **Status / proposed priority:** done (2026-10-16) / P3. **Dependencies / gates:** none; do not run in parallel with MAINT-13 (shared files). Checkpoint: base 04d80d9; the split is the milestone commit. `App.svelte` 1,712 → 361 lines; new modules `lib/stores/{mailSelection,appComposer,shutdown}.svelte.ts`, `lib/keyboard/{globalShortcuts,mailKeys,bulkActions,shortcutContext}.ts`, `lib/appStartup.ts` and `components/common/AppOverlays.svelte`. `npm run lint`, `npm run check`, the build and the full `make test-ui` (107 passed, tests unchanged, Accounts column expanded and collapsed included) passed; native WebKitGTK unrun.
-- **Scope:** move keyboard shortcuts, composer state and selection logic out of `frontend/src/App.svelte` into modules or components without behavior change.
-- **Acceptance:** `App.svelte` under 500 lines; `make test-ui` passes unchanged; keyboard accessibility preserved.
-- **Validation:** `npm run lint`, `npm run check`, `make test-ui`, Mail with the Accounts column expanded and collapsed.
+- **Status / proposed priority:** done / P3.
 - **Issues:** [UI5](ISSUES.md#ui5).
+- **Limits / retained decisions:** App.svelte split verified by lint/check/build and full UI suite (107 passed); native WebKitGTK unrun; base `04d8bd9`.
 
 <a id="maint-13"></a>
 
 ### MAINT-13 — Split oversized components, largest first
 
-- **Status / proposed priority:** done (2026-10-16) / P3 ([checkpoint](docs/plans/maint-13.md)). **Dependencies / gates:** after MAINT-12; calendar components follow `docs/EXT_RULES.md`. Base 054800c; one commit per component, then a close-out commit. The UI6 listing shows no file over 500 lines; whitespace, docs, tooling, brand, frontend lint/check/build and the full `make test-ui` (107 passed, tests unchanged) passed (`tools/project-check.py --base 054800c --run`). The UI suite opens the composer and sidebar but no settings, signature, email-body or calendar component, so those splits rest on type checks and review; native WebKitGTK unrun.
-- **Scope:** the 15 components listed in UI6, starting with `composer/Composer.svelte`, `settings/AccountForm.svelte` and `settings/account/AccountSecurityTab.svelte`.
-- **Acceptance:** every tracked component under 500 lines (the milestone stays active until then); `make test-ui` passes.
-- **Validation:** the UI6 listing command shows no file over 500 lines; frontend lint/check; full UI suite.
+- **Status / proposed priority:** done / P3.
 - **Issues:** [UI6](ISSUES.md#ui6).
+- **Evidence:** [checkpoint](docs/plans/maint-13.md).
+- **Limits / retained decisions:** Lint/check/build and full UI suite passed; settings, signature, email-body and calendar splits rest on type checks/review; native WebKitGTK unrun.
 
 <a id="maint-14"></a>
 
 ### MAINT-14 — Quoted names in Copy addresses
 
-- **Status / proposed priority:** done / P2. **Dependencies / gates:** none.
-- **Authorization:** owner approved this milestone and the rest of the MAINT chat follow-up sequence on 2026-10-16 for sequential implementation, including unattended `make milestone ARGS='--land'` runs that land each milestone on `main`.
-- **Scope / deliverable:** quote display names that need it (RFC 5322 quoted-string) when copying a chat's addresses, through one shared address formatter and copy helper in the chat modules (the helper half of [MA10](ISSUES.md#ma10)), used by `ChatPeopleMenu` and `ChatBubble`.
-- **Acceptance:** a name with a comma, quote or angle bracket round-trips as one recipient; the bubble's recipients title uses the same formatter; UI7 closure holds.
-- **Validation:** logic test of the formatter (table-driven: plain, comma, quote, no name), UI regression test of Copy addresses, frontend lint/check, full `make test-ui`.
-- **Issues:** UI7 (resolved), [MA10](ISSUES.md#ma10) (shared helpers; the rest was MAINT-18). **Progress:** done 2026-10-16. **Evidence:** [validation](docs/validation/maint-14.md); Chromium with fake data only, native WebKitGTK unchecked.
+- **Status / proposed priority:** done / P2.
+- **Issues:** UI7 (resolved), [MA10](ISSUES.md#ma10) (shared helpers; the rest was MAINT-18).
+- **Evidence:** [validation](docs/validation/maint-14.md).
+- **Limits / retained decisions:** Chromium with fake data only, native WebKitGTK unchecked.
 
 <a id="maint-15"></a>
 
 ### MAINT-15 — Day label clear of the sticky heading after the unread jump
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** [MAINT-14](#maint-14).
-- **Authorization:** owner approved this milestone and the rest of the MAINT chat follow-up sequence on 2026-10-16 for sequential implementation, including unattended `make milestone ARGS='--land'` runs that land each milestone on `main`.
-- **Scope / deliverable:** derive the unread-anchor offset in `chatScroll.svelte.ts` and the stream's scroll padding from the rendered subject heading (or `scroll-margin-top` with `scrollIntoView`) instead of the fixed 48 px and `scroll-pt-10`.
-- **Acceptance:** opening a chat at an unread message that starts a subject on a new day shows its day label and sender line below the heading; UI8 closure holds; audit passes in both Accounts states.
-- **Validation:** UI regression test measuring the heading against the day label after the jump, frontend lint/check, full `make test-ui`.
-- **Issues:** UI8 (resolved). **Progress:** done 2026-10-16. **Evidence:** [validation](docs/validation/maint-15.md); Chromium with fake data only, native WebKitGTK unchecked.
+- **Status / proposed priority:** done / P3.
+- **Issues:** UI8 (resolved).
+- **Evidence:** [validation](docs/validation/maint-15.md).
+- **Limits / retained decisions:** Chromium with fake data only, native WebKitGTK unchecked.
 
 <a id="maint-16"></a>
 
 ### MAINT-16 — Message actions clickable under the sticky heading
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** [MAINT-15](#maint-15).
-- **Authorization:** owner approved this milestone and the rest of the MAINT chat follow-up sequence on 2026-10-16 for sequential implementation, including unattended `make milestone ARGS='--land'` runs that land each milestone on `main`.
-- **Scope / deliverable:** a hovered or focused message's action toolbar stacks above (or sits clear of) the sticky `ChatSubjectHeading`.
-- **Acceptance:** with a message's top under the heading, its Reply and Message actions buttons receive clicks; keyboard focus still reaches them; UI9 closure holds.
-- **Validation:** UI regression test using `elementFromPoint` on the toolbar under the heading, frontend lint/check, full `make test-ui`.
-- **Issues:** UI9 (resolved). **Progress:** done 2026-10-16. **Evidence:** [validation](docs/validation/maint-16.md); Chromium with fake data only, native WebKitGTK unchecked.
+- **Status / proposed priority:** done / P3.
+- **Issues:** UI9 (resolved).
+- **Evidence:** [validation](docs/validation/maint-16.md).
+- **Limits / retained decisions:** Chromium with fake data only, native WebKitGTK unchecked.
 
 <a id="maint-17"></a>
 
 ### MAINT-17 — Embedded pictures in decrypted reader mail
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** [MAINT-16](#maint-16).
-- **Authorization:** owner approved this milestone and the rest of the MAINT chat follow-up sequence on 2026-10-16 for sequential implementation, including unattended `make milestone ARGS='--land'` runs that land each milestone on `main`.
-- **Scope / deliverable:** reader extraction keeps `cid:` image blocks for decrypted view results, and `ChatReaderMessage` resolves them from `inlineAttachments` data URLs within the existing inline-image budget; unencrypted mail unchanged.
-- **Acceptance:** a decrypted rich message shows its embedded pictures in the reader with no remote request; unknown content IDs are dropped; user guide limit removed; UI10 closure holds.
-- **Validation:** table-driven Go test for `cid:` handling, UI regression test with a faked PGP or S/MIME result, frontend lint/check, `make test`, full `make test-ui`.
-- **Issues:** UI10 (resolved). **Progress:** done 2026-10-16. **Evidence:** [validation](docs/validation/maint-17.md); Chromium with fake data only, native WebKitGTK and real encrypted mail unchecked.
+- **Status / proposed priority:** done / P3.
+- **Issues:** UI10 (resolved).
+- **Evidence:** [validation](docs/validation/maint-17.md).
+- **Limits / retained decisions:** Chromium with fake data only, native WebKitGTK and real encrypted mail unchecked.
 
 <a id="maint-18"></a>
 
 ### MAINT-18 — Chat code cleanups
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** [MAINT-17](#maint-17).
-- **Authorization:** owner approved this milestone and the rest of the MAINT chat follow-up sequence on 2026-10-16 for sequential implementation, including unattended `make milestone ARGS='--land'` runs that land each milestone on `main`.
-- **Scope / deliverable:** `chatThread.svelte.ts` uses the generated `app.SMIMEViewResult`/`app.PGPViewResult` models instead of hand-copied interfaces; `subjectSections` in `chatCompact.ts` drops its duplicate `entry.kind` test.
-- **Acceptance:** no behavior change; [MA10](ISSUES.md#ma10) closure holds (with MAINT-14's shared helpers).
-- **Validation:** frontend lint/check/build, full `make test-ui`.
-- **Issues:** [MA10](ISSUES.md#ma10) (resolved). **Progress:** done 2026-10-16; owner authorization recorded (unattended runner, this milestone only), base `cbcafa3`, branch `milestone/maint-18`. **Evidence:** [validation](docs/validation/maint-18.md); Chromium with fake data only, native WebKitGTK unchecked.
+- **Status / proposed priority:** done / P3.
+- **Issues:** [MA10](ISSUES.md#ma10) (resolved).
+- **Evidence:** [validation](docs/validation/maint-18.md).
+- **Limits / retained decisions:** Chromium with fake data only, native WebKitGTK unchecked.
 
 <a id="maint-19"></a>
 
 ### MAINT-19 — Binding generation leaves no file-mode diff
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** [MAINT-18](#maint-18).
-- **Authorization:** the owner's `tools/project-run.py` runner (started 2026-10-16) selects and authorizes exactly this milestone for local implementation (base `0d79461`, branch `milestone/maint-19`); no live access, push or landing. The owner approved this milestone and the rest of the MAINT chat follow-up sequence on 2026-10-16 for sequential implementation, including unattended `make milestone ARGS='--land'` runs that land each milestone on `main`.
-- **Scope / deliverable:** `make generate` leaves `frontend/wailsjs/runtime/` at the committed 0644 (for example a `chmod` in the target), and the [Regenerating Wails bindings](CONTRIBUTING.md#regenerating-wails-bindings) note describes every generator path.
-- **Acceptance:** stopping Mailven, running `make generate` and then `git status --short frontend/wailsjs` prints nothing; [MA9](ISSUES.md#ma9) closure holds.
-- **Validation:** `make generate` followed by `git status --short frontend/wailsjs`, `make lint`.
-- **Issues:** [MA9](ISSUES.md#ma9) (resolved). **Progress:** done 2026-10-16; base `0d79461`, branch `milestone/maint-19`. **Evidence:** [validation](docs/validation/maint-19.md); `make generate` only, no native check needed.
+- **Status / proposed priority:** done / P3.
+- **Issues:** [MA9](ISSUES.md#ma9) (resolved).
+- **Evidence:** [validation](docs/validation/maint-19.md).
 
 <a id="maint-20"></a>
 
 ### MAINT-20 — Settings readability follow-ups
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** none.
-- **Authorization:** the owner asked for this milestone to be added on 2026-10-18 after the [UI11](ISSUES.md#ui11) review and selected it the same day (base `5e07465`, branch `maint-20-settings-readability`).
-- **Scope / deliverable:** frontend and English locale only. (1) Sent copy policy and Check account setup use the bits-ui `Select` with explicit accessible names instead of native `<select>`s. (2) The account check report opens with a plain-language summary (sending, DNS, permissions), and the raw timestamps, endpoints and OAuth resource fold under a Details disclosure. (3) Extension cards describe capabilities in user terms instead of capability IDs. (4) The Contacts sources empty state says what a contact source is and how to add one. (5) Setting descriptions that repeat their label are trimmed or removed. Placeholder contrast ([UI13](ISSUES.md#ui13)) is out of scope.
-- **Acceptance:** each item visible in Settings with fake data, dark and light, at 1400 and 900 px; no `no-name` audit finding; existing guarded check scripts (`tools/sent-policy-check.cjs`, `tools/setup-diagnostic-check.cjs`) still pass with any updated selectors; user guide matches; [UI12](ISSUES.md#ui12) closure holds.
-- **Validation:** frontend lint/check/build, `make lint`, full `make test-ui` with regression tests for items 1, 2 and 4; Mail with the Accounts column expanded and collapsed.
-- **Issues:** [UI12](ISSUES.md#ui12) (resolved). **Progress:** done 2026-10-18. **Evidence:** [validation](docs/validation/maint-20.md); backend-free UI checks only.
+- **Status / proposed priority:** done / P3.
+- **Issues:** [UI12](ISSUES.md#ui12) (resolved).
+- **Evidence:** [validation](docs/validation/maint-20.md).
+- **Limits / retained decisions:** backend-free UI checks only.
 
 <a id="d2"></a>
 
@@ -572,7 +495,7 @@ CHAT-1 is done and R1 resolved. MAINT-1 is done and DOC4/DOC5 resolved. MAINT-2 
 ## UIX — UI refresh
 
 - **Objective / outcome:** Refine the Mail view toward a calmer, lower-noise look inspired by bb: quieter Nord surfaces, a minimal header, list status glyphs, conversation compaction, a carded composer and an optional flat transcript.
-- **Status / proposed priority:** proposed / P3. UIX-1 to UIX-8 done. A 2026-10-15 review fix (branch `fix/uix-review`): Tab and Shift+Tab stop on folded-run rows between messages; scrolling or sending ends an expanded row's position hold; an expanded run's first message shows its sender, and the message after a folded run shows its date when the run hid a day change; pending replies follow flat mode; a snoozed or sending chat with unread mail shows a small unread dot on its glyph; the App.svelte size finding is [UI5](ISSUES.md#ui5).
+- **Status / proposed priority:** done / P3. UIX-1 to UIX-8 done. A 2026-10-15 review fix (branch `fix/uix-review`): Tab and Shift+Tab stop on folded-run rows between messages; scrolling or sending ends an expanded row's position hold; an expanded run's first message shows its sender, and the message after a folded run shows its date when the run hid a day change; pending replies follow flat mode; a snoozed or sending chat with unread mail shows a small unread dot on its glyph; the App.svelte size finding is [UI5](ISSUES.md#ui5).
 - **Dependencies / blockers:** UIX-1 first (tokens); UIX-2–5 independent; UIX-6 last.
 - **Issues:** [UI1](ISSUES.md#ui1), [UI5](ISSUES.md#ui5).
 - **Technical references:** [design plan](docs/plans/ui-refresh.md), [UI_TOKENS](docs/UI_TOKENS.md), [UI tests](tests/ui/README.md).
@@ -583,81 +506,73 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 
 ### UIX-1 — Nord retune and type tokens
 
-- **Status / proposed priority:** done / P3. **Authorization:** owner selected UIX-1 on 2026-10-14.
-- **Scope / deliverable:** Lower-chroma Nord surfaces, light primary/selected contrast, base type/radius tokens; UI_TOKENS updated.
-- **Acceptance:** UI1 audit allowlist entry removed; contrast check and full UI suite pass.
-- **Validation:** `make lint`, full `make test-ui`, both themes with Accounts expanded/collapsed.
-- **Issues:** [UI1](ISSUES.md#ui1). **Checkpoint:** branch `feat/uix-1-nord-retune`, base `d5d3bec`; done and verified ([evidence](docs/validation/uix-1.md)). Base type sizes deliberately unchanged; `--radius` was undefined since the theme reduction and is now defined. Native WebKitGTK and visual review unrun.
+- **Status / proposed priority:** done / P3.
+- **Issues:** [UI1](ISSUES.md#ui1).
+- **Evidence:** [evidence](docs/validation/uix-1.md).
+- **Limits / retained decisions:** Native WebKitGTK and visual review unrun.
 
 <a id="uix-2"></a>
 
 ### UIX-2 — Header simplification
 
-- **Status / proposed priority:** done / P3. **Authorization:** owner selected UIX-2 on 2026-10-14; owner chose to keep a Delete button.
-- **Scope / deliverable:** Conversation header with title, `⋯` menu and one Archive primary action.
-- **Acceptance:** Every header action stays reachable by mouse, menu and keyboard.
-- **Validation:** Header/triage regression tests, frontend lint/check, full UI suite.
-- **Issues:** none. **Checkpoint:** branch `feat/uix-1-nord-retune`, base `ddd94f6`; done and verified ([evidence](docs/validation/uix-2.md)). Header is title, `⋯` beside it, bordered Archive and a Delete button; Snooze and Pin moved into the `⋯` menu at every width. Native WebKitGTK and visual review unrun.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none.
+- **Evidence:** [evidence](docs/validation/uix-2.md).
+- **Limits / retained decisions:** Native WebKitGTK and visual review unrun.
 
 <a id="uix-3"></a>
 
 ### UIX-3 — List and sidebar polish
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** selection; UIX-1.
-- **Scope / deliverable:** Labeled sidebar actions, quieter section labels, row status glyphs; `ChatList.svelte` extraction first.
-- **Acceptance:** Glyph priority regression test; components under 500 lines; audit passes in both Accounts states.
-- **Validation:** New glyph test, frontend lint/check, full UI suite.
-- **Issues:** none. **Progress:** done 2026-10-15; [evidence](docs/validation/uix-3.md). Owner selected UIX-3 on 2026-10-15 (branch `feat/uix-1-nord-retune`, base 23f529a). Decisions: the needs-reply glyph is deferred (no latest-sender data on `ChatItem`; Go changes out of scope), so the glyph slot shows sending/queued, then snoozed, then unread; labeled "New message" and "Search" rows go at the top of the expanded Accounts sidebar, and the list-header Compose stays. Steps: (1) extract `ChatListSection`; (2) status glyph + priority test; (3) quieter section labels; (4) sidebar actions; (5) lint/check/full UI suite, visual check in both Accounts states. All done except the screenshot review, which was not performed (see evidence). Follow-up when selected: a needs-reply glyph needs a latest-sender field from the backend summary.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none.
+- **Evidence:** [evidence](docs/validation/uix-3.md).
+- **Limits / retained decisions:** Needs-reply glyph deferred: ChatItem has no latest-sender data. Native WebKitGTK and screenshot review unrun.
 
 <a id="uix-4"></a>
 
 ### UIX-4 — Composer card and chips
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** selection; UIX-1.
-- **Scope / deliverable:** Carded chat composer with in-card sender, chip row; attachment summary card deferred.
-- **Acceptance:** `chat-compose` suite passes; send key and sender review unchanged.
-- **Validation:** `node tests/ui/run.mjs chat-compose`, full UI suite.
-- **Issues:** none ([CH1](ISSUES.md#ch1) adjacent, out of scope). **Progress:** done 2026-10-15; [evidence](docs/validation/uix-4.md). Owner selected UIX-4 on 2026-10-15 (branch `feat/uix-1-nord-retune`, base 23d40a4). Decisions: the From stays a read-only label inside the card (no sender picker: the backend resolves the alias and the sender-review flow is unchanged); the optional conversation-attachment summary card is deferred (attachments load per message, no thread-level source). Native WebKitGTK and visual review unrun.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none ([CH1](ISSUES.md#ch1) adjacent, out of scope).
+- **Evidence:** [evidence](docs/validation/uix-4.md).
+- **Limits / retained decisions:** Attachment summary card deferred: no thread-level source. Native WebKitGTK and visual review unrun.
 
 <a id="uix-5"></a>
 
 ### UIX-5 — Conversation compaction
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** selection; UIX-1.
-- **Scope / deliverable:** Expandable one-line rows for earlier read messages (low-priority-sender variant deferred).
-- **Acceptance:** Latest/unread never collapse; keyboard expand/collapse; scroll position holds.
-- **Validation:** New compaction tests on fakes, full UI suite.
-- **Issues:** none. **Progress:** done 2026-10-15; [evidence](docs/validation/uix-5.md). Owner selected UIX-5 on 2026-10-15 (branch `feat/uix-1-nord-retune`, base 8e4a14b). Decisions: the latest 5 messages never fold and a run needs at least 3 older read messages (so short chats are unchanged; tune with the owner); unread, draft and subject-heading messages never fold, and a message unread at open stays visible once read; the "Notice from X" variant for low-priority senders is deferred (the frontend has only a per-chat `isLowPriority`, no per-message sender priority; needs backend data). Native WebKitGTK and visual review unrun.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none.
+- **Evidence:** [evidence](docs/validation/uix-5.md).
+- **Limits / retained decisions:** Low-priority-sender variant deferred: no per-message priority. Native WebKitGTK and visual review unrun.
 
 <a id="uix-6"></a>
 
 ### UIX-6 — Optional flat transcript mode
 
-- **Status / proposed priority:** done / P3. **Dependencies / gates:** selection; UIX-1–5.
-- **Scope / deliverable:** `chat_display_style` setting (bubbles default, flat) and a flat message variant.
-- **Acceptance:** Both modes pass the audit; Go settings test; user guide updated.
-- **Validation:** `go test ./internal/settings`, bindings regenerated per CONTRIBUTING, frontend checks, full UI suite in both modes.
-- **Issues:** none. **Progress:** done 2026-10-15; [evidence](docs/validation/uix-6.md). Owner selected UIX-6 on 2026-10-15 (branch `feat/uix-1-nord-retune`, base 24e37b4). Decisions: flat mode uses the wide stream width, drops the avatar column and distinguishes my messages by name line plus a left accent rule; the audit matrix adds eight flat configurations (both themes, 1400/900 px, Accounts expanded/collapsed) rather than doubling. Native WebKitGTK unrun.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none.
+- **Evidence:** [evidence](docs/validation/uix-6.md).
+- **Limits / retained decisions:** Native WebKitGTK unrun.
 
 <a id="uix-7"></a>
 
 ### UIX-7 — Readable newsletters in chat
 
-- **Status / proposed priority:** done (2026-10-16) / P3. **Authorization:** owner selected UIX-7 on 2026-10-16 (plan and implement). Decisions: all rich mail (newsletters, receipts, long text) gets the reader view; content images follow the remote-image rules (allowlist, always-load setting, Load images, Ctrl+L); on by default with a Settings → Chat option to keep the collapsed card.
-- **Scope / deliverable:** Backend reader extraction of rich HTML into sanitized blocks (headings, paragraphs, list items, images; http/https/mailto links only) on `ChatText.reader`; a chat reader message in bubble and flat styles with Show more/less folding; `chat_rich_style` setting (`reader` default, `card`); user guide.
-- **Acceptance:** Rich mail renders as readable chat content with working links and no layout tables, hidden preheaders, tracking pixels or scripts; remote images stay blocked until allowed; the card setting restores the card; Show original still shows the full body; keyboard reachable; audit passes in both Accounts states.
-- **Validation:** Table-driven Go tests for extraction and the setting, frontend lint/check, new UI suite, full `make test-ui`.
-- **Issues:** none. **Checkpoint:** [ExecPlan](docs/plans/uix-7.md). **Evidence:** [validation](docs/validation/uix-7.md); Chromium with synthetic data only, native WebKitGTK and real newsletters unchecked.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none.
+- **Evidence:** [ExecPlan](docs/plans/uix-7.md); [validation](docs/validation/uix-7.md).
+- **Limits / retained decisions:** Chromium with synthetic data only; native WebKitGTK and real newsletters unchecked.
 
 <a id="uix-8"></a>
 
 ### UIX-8 — Signed and encrypted mail as chat content
 
-- **Status / proposed priority:** done (2026-10-16) / P3. **Authorization:** owner requested UIX-8 on 2026-10-16 (plan and implement). Decisions: signed and decrypted mail get the chat view (image-only HTML keeps its card); the existing `chat_rich_style` select becomes "Email layout" (Readable text default, Original layout), values unchanged.
-- **Scope / deliverable:** `chat` on the S/MIME and PGP view results; the chat bubble uses it for signed or encrypted mail under Readable text; Settings strings; user guide.
-- **Acceptance:** Signed and decrypted mail shows as a bubble or reader content with its badge or banner; Original layout and Show original show the full body; failed decryption still shows its banner; decrypted text is not cached; audit passes in both Accounts states.
-- **Validation:** Go test for the view-result chat text, frontend lint/check, UI regression tests with faked security results, full `make test-ui`.
-- **Issues:** none ([MA9](ISSUES.md#ma9) and UI7 found during it; UI10 for its embedded-picture limit; in [MAINT-14](#maint-14) to [MAINT-19](#maint-19)). **Checkpoint:** [ExecPlan](docs/plans/uix-8.md). **Evidence:** [validation](docs/validation/uix-8.md); Chromium with faked security results only, native WebKitGTK and real signed or encrypted mail unchecked.
+- **Status / proposed priority:** done / P3.
+- **Issues:** none ([MA9](ISSUES.md#ma9) and UI7 found during it; UI10 for its embedded-picture limit; in [MAINT-14](#maint-14) to [MAINT-19](#maint-19)).
+- **Evidence:** [ExecPlan](docs/plans/uix-8.md); [validation](docs/validation/uix-8.md).
+- **Limits / retained decisions:** Chromium with faked security results only; native WebKitGTK and real signed/encrypted mail unchecked.
 
 <a id="ai"></a>
 
