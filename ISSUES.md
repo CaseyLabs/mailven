@@ -232,7 +232,7 @@ Project: [SYNC](PLAN.md#sync).
 ### SY10 — Older Graph mail is not reachable beyond the sync window
 
 - **Owner / milestone:** [SYNC](PLAN.md#sync) / [SYNC-6](PLAN.md#sync-6); found while assessing partial sync (2026-10-15). Gmail API accounts were covered by [SYNC-5](PLAN.md#sync-5) and IMAP by [SYNC-7](PLAN.md#sync-7).
-- **Severity / proposed priority / status:** low / P3 / open.
+- **Severity / proposed priority / status:** low / P3 / deferred (the remaining Graph work is deferred with the Microsoft work under [SYNC-6](PLAN.md#sync-6)).
 - **Evidence:** the chat search reads only the local store, which holds the sync window. Accounts on the Gmail API route ([SYNC-5](PLAN.md#sync-5)) and IMAP accounts ([SYNC-7](PLAN.md#sync-7)) have "Search the whole mailbox" and "Load older mail", which store and pin older mail ([MAIL_APIS](docs/MAIL_APIS.md)). Graph has no server search and its sync deletes what falls outside the window, so Graph accounts have nothing to offer yet (deferred with the Microsoft work).
 - **Resolution criteria:** Graph accounts offer the same search and Load older beyond the window.
 
@@ -362,8 +362,8 @@ Project: [MAINT](PLAN.md#maint).
 
 ### UI13 — Input placeholders read almost like entered values
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint); found in the [UI11](#ui11) review; needs an owner decision, not part of [MAINT-20](PLAN.md#maint-20).
-- **Severity / proposed priority / status:** low / P3 / open.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-23](PLAN.md#maint-23); found in the [UI11](#ui11) review. On 2026-10-19 the owner approved a placeholder token, not dismissal.
+- **Severity / proposed priority / status:** low / P3 / active.
 - **Details:** `Input` styles placeholders with `text-muted-foreground`, the same token as secondary text. In dark themes an empty field's example value looks close to a filled one. Dimming placeholders means a separate token in every theme, and `tools/contrast-check.mjs` requires text tiers of at least 4.5:1, so the change is a design decision rather than a local fix.
 - **Closure:** the owner either dismisses it or approves a placeholder token that passes the contrast check in all themes, checked with screenshots of filled and empty fields.
 
@@ -500,10 +500,10 @@ Project: [MAINT](PLAN.md#maint).
 
 ### UI15 — Account settings apply stale async responses
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint); found 2026-10-18 by a code review, verified by reading the code. Not fixed.
-- **Severity / proposed priority / status:** low / P3 / open.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-22](PLAN.md#maint-22); found 2026-10-18 by a code review, verified by reading the code (rechecked 2026-10-19, still unfixed).
+- **Severity / proposed priority / status:** low / P3 / active.
 - **Problem / reproduction:** `SentPolicySection.svelte` `loadFolders` has no request ordering: choosing mailbox A and then B quickly can let A's slower `GetFolders` reply replace B's folder list, so `add()` saves a Sent destination with B's account ID and one of A's folders. `GoogleClientNote.svelte` has the same race: an import bumps `refresh` while the first `GetOAuthCredsChoices` call is in flight, and the older reply can land last and show the previous client, which GO4 was meant to prevent. Its `.catch` also clears `current` but leaves `fingerprint`.
-- **Related cleanups (not defects):** `SentPolicySection` `refresh()` awaits three independent calls in series (`Promise.all` would cut the latency). `SettingsDialog.svelte` binds each General setting and also writes it back through an `on…Change` callback, so every change is assigned twice. That pattern covers every General setting, so drop one path for all of them, not just the delay.
+- **Related cleanups (not defects):** `SentPolicySection` `refresh()` awaits three independent calls in series (`Promise.all` would cut the latency). `SettingsDialog.svelte` binds each General setting and also writes it back through an `on…Change` callback, so every change is assigned twice. That pattern covers every General setting, so drop one path for all of them, not just the delay. The owner included both cleanups in MAINT-22 on 2026-10-19.
 - **Closure:** both components ignore responses from superseded requests (request counter or token), with UI regression tests that resolve the replies out of order.
 
 <a id="ma11"></a>

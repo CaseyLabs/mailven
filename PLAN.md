@@ -1,6 +1,6 @@
 # Project roadmap
 
-Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **No active milestone.** All Microsoft work is deferred indefinitely until the owner explicitly reopens it. All future Wails work, including assessment, is deferred until Wails v3 officially releases as a stable version; release availability alone does not authorize execution. Owner decision: 2026-10-14. The DavMail experiment is preserved for future work. Other proposed or deferred work remains unauthorized.
+Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **Active:** [MAINT-22](#maint-22), then [MAINT-23](#maint-23) (owner authorization 2026-10-19). All Microsoft work is deferred indefinitely until the owner explicitly reopens it. All future Wails work, including assessment, is deferred until Wails v3 officially releases as a stable version; release availability alone does not authorize execution. Owner decision: 2026-10-14. The DavMail experiment is preserved for future work. Other proposed or deferred work remains unauthorized.
 
 ## Portfolio
 
@@ -13,12 +13,12 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [SYNC — Mail synchronization and action reliability](#sync) | proposed | P1 | [1](ISSUES.md#sync) | SYNC-1–4 done; SY9 resolved by API-7; SYNC-5 done (Gmail Load older, SY10 partly); SYNC-7 done (older IMAP mail, SY10 partly); SYNC-6 deferred (Graph window) |
 | [GOAUTH — Google OAuth client setup](#goauth) | done | P2 | [0](ISSUES.md#goauth) | GOAUTH-1–4 done (GO1, GO2 resolved); GOAUTH-5 done (assessment; owner kept bring-your-own); GO3 and GO4 resolved by independent fixes |
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
-| [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [3](ISSUES.md#maint) | MAINT-1–21 done; UI14 and MA11 resolved. UI15 is the next local candidate; UI13 needs an owner decision; D2 deferred/upstream blocked |
+| [MAINT — Maintenance and documentation](#maint) | active | P3 | [3](ISSUES.md#maint) | MAINT-1–21 done; MAINT-22 (UI15) then MAINT-23 (UI13) active; D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
-**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; MAINT has unresolved follow-ups listed in Progress and ISSUES. Completed milestones are not selectable work.
+**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; MAINT-22 and MAINT-23 are active. Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
@@ -28,9 +28,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**Active:** No active milestone. [MAINT-21](#maint-21) is complete: UI14 and MA11 are resolved; [verification](docs/validation/maint-21.md) and [checkpoint](docs/plans/maint-21.md).
+**Active:** [MAINT-22](#maint-22) (UI15 stale responses and Settings cleanups), then [MAINT-23](#maint-23) (UI13 placeholder token); owner authorized both on 2026-10-19, run in ID order, one per session. Neither has started. The last completed milestone is [MAINT-21](#maint-21).
 
-**Next recommended:** [UI15](ISSUES.md#ui15) — select a milestone for stale account-setting responses. UI13 needs an owner design decision; existing live gates and deferrals remain in force.
+**Next recommended:** [MAINT-22](#maint-22) — the only open defect with local scope; MAINT-23 follows. Existing live gates and deferrals remain in force.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -305,9 +305,9 @@ Completed milestones below retain their IDs and evidence; detailed execution his
 ## MAINT — Maintenance and documentation
 
 - **Objective / outcome:** Keep developer tooling and user documentation accurate; resolve external review flags explicitly.
-- **Status / proposed priority:** proposed / P3.
+- **Status / proposed priority:** active / P3.
 - **Dependencies / blockers:** no cross-project implementation prerequisite established; milestone gates below apply.
-- **Sequence:** the owner ordered MAINT-9 to MAINT-13 on 2026-10-16 (all done) and approved [MAINT-14](#maint-14) to [MAINT-19](#maint-19) the same day, run in ID order (each depends on the previous).
+- **Sequence:** MAINT-1–21 are done. On 2026-10-19 the owner authorized [MAINT-22](#maint-22) and then [MAINT-23](#maint-23), run in ID order. They are independent, but both change account and Settings components, so running them one after the other avoids conflicting edits.
 - **Issues:** [owning register section](ISSUES.md#maint); each linked milestone lists its relevant issues.
 - **Technical references:** [CONTRIBUTING](CONTRIBUTING.md), [canonical shortcuts](docs/KEYBOARD_SHORTCUTS.md), [Terms draft](docs/TERMS.md), [Privacy draft](docs/PRIVACY.md).
 
@@ -488,6 +488,26 @@ Completed milestones below retain their IDs and evidence; detailed execution his
 - **Result:** skipped authentication stays not checked even when transport passed; all 72 scoped row loops check iteration errors, including 43 corrected sites. Contact upsert and both correlation reads fail safely under injected iteration errors.
 - **Evidence / limits:** [validation](docs/validation/maint-21.md), [execution checkpoint](docs/plans/maint-21.md). Required local checks and independent acceptance passed. Native/live-provider checks and real migrations were not run; existing gates remain closed. UI15 and UI13 remain separate.
 - **Issues:** [UI14](ISSUES.md#ui14), [MA11](ISSUES.md#ma11).
+
+<a id="maint-22"></a>
+
+### MAINT-22 — Ordered account-setting responses and Settings cleanups
+
+- **Status / proposed priority:** active / P3 (authorized 2026-10-19). **Dependencies / gates:** none; frontend only.
+- **Scope / deliverable:** `SentPolicySection.svelte` `loadFolders` and `GoogleClientNote.svelte` ignore responses from superseded requests (request counter or token). The note's error path clears `fingerprint` as well as `current`. Cleanups the owner included: `SentPolicySection` `refresh()` runs its independent calls with `Promise.all`; `SettingsDialog.svelte` drops one of its two write paths (`bind:` plus the `on…Change` callback) for every General setting, not just the delay.
+- **Acceptance:** UI regression tests resolve the `GetFolders` and `GetOAuthCredsChoices` replies out of order and fail without the fix. A failed choices call leaves no client fingerprint shown. Each General setting is written once per change and still persists. Existing Settings tests pass unchanged.
+- **Validation:** frontend lint, Svelte/TypeScript check and the full UI suite ([validation procedures](docs/VALIDATION.md)); native window check with `run-mailven` if available, otherwise reported unrun.
+- **Issues:** [UI15](ISSUES.md#ui15). **Progress:** not started.
+
+<a id="maint-23"></a>
+
+### MAINT-23 — Distinct placeholder text token
+
+- **Status / proposed priority:** active / P3 (owner approved the token on 2026-10-19). **Dependencies / gates:** run after [MAINT-22](#maint-22).
+- **Scope / deliverable:** add a placeholder text token to every theme, dimmer than secondary text, and use it in `Input` (and any other field with placeholder text) in place of `text-muted-foreground`. Add the token to `tools/contrast-check.mjs` at 4.5:1 on the field surfaces, and document it in [UI_TOKENS](docs/UI_TOKENS.md).
+- **Acceptance:** `node tools/contrast-check.mjs` passes in all themes with the new token included; an empty field's placeholder is visibly dimmer than an entered value in dark and light themes; no other text tier changes.
+- **Validation:** contrast check, frontend lint, Svelte/TypeScript check and the full UI suite; screenshots of empty and filled fields in dark and light themes, with Mail shown with Accounts expanded and collapsed.
+- **Issues:** [UI13](ISSUES.md#ui13). **Progress:** not started.
 
 <a id="d2"></a>
 
