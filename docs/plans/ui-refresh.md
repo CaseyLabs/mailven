@@ -110,6 +110,8 @@ Priya Shah  00:15
 
 ### Palette and type (UIX-1)
 
+Superseded by the proposed [DS reading-first redesign](reading-redesign.md#what-it-supersedes), which replaces this Nord palette with warm neutrals and a terracotta accent.
+
 - Lower the chroma of the Nord surface tokens (`--surface-rail/sidebar/list/content`, `--selected`, `--bubble-own`, `--divider`) toward near-neutral greys, keeping the Nord Frost and Aurora accents.
 - Darken the light `--primary` and retune light `--selected` so the header Compose label and the selected sidebar item reach 4.5:1 (UI1).
 - Use a slightly larger base text size and line height and a slightly softer `--radius`; spacing comes from tokens, not per-component values.

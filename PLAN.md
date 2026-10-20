@@ -15,6 +15,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
 | [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [1](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
+| [DS — Reading-first redesign](#ds) | proposed | P3 | 0 | DS-1 (tokens and fonts) first; DS-2–5 independent; DS-6 last. Awaiting owner selection |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
@@ -28,7 +29,7 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**Active:** [MAINT-24](#maint-24) (UI16 composer placeholder contrast); owner authorized it on 2026-10-19. It has not started. The last completed milestone is [MAINT-23](#maint-23).
+**No active milestone.** The last completed milestone is [MAINT-24](#maint-24) (UI16 composer placeholder contrast, done 2026-10-19 in `2cc98bc`).
 
 **Next recommended:** none eligible — SEND-2 needs separately authorized live verification; deferred work (SYNC-6, SEND-3/4, WAILS, D2, AI6) stays deferred until the owner selects it.
 
@@ -618,6 +619,66 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 - **Issues:** none ([MA9](ISSUES.md#ma9) and UI7 found during it; UI10 for its embedded-picture limit; in [MAINT-14](#maint-14) to [MAINT-19](#maint-19)).
 - **Evidence:** [ExecPlan](docs/plans/uix-8.md); [validation](docs/validation/uix-8.md).
 - **Limits / retained decisions:** Chromium with faked security results only; native WebKitGTK and real signed/encrypted mail unchecked.
+
+<a id="ds"></a>
+
+## DS — Reading-first redesign
+
+- **Objective / outcome:** Make Mailven read like a calm chat app. Warm neutral surfaces, one muted terracotta accent kept for the primary action, unread state and focus, Inter for the interface and Literata for message bodies, and WCAG AA in both themes. It changes visuals and hierarchy only: no flows, bindings, settings keys or keyboard shortcuts change. It supersedes UIX's Nord palette and bubble default.
+- **Status / proposed priority:** proposed / P3. No milestone is selected; the owner selects each one.
+- **Dependencies / blockers:** DS-1 first (tokens and fonts); DS-2–5 independent; DS-6 last. Downloading the font files (DS-1) and removing icon packages (DS-5) need owner approval.
+- **Issues:** none.
+- **Technical references:** [design plan](docs/plans/reading-redesign.md), [design system](https://claude.ai/artifact/UwQS72qVnHhLuxpkU1sVbc), [UI_TOKENS](docs/UI_TOKENS.md), [EXT_RULES](docs/EXT_RULES.md), [UI tests](tests/ui/README.md).
+
+Each milestone's scope, acceptance and validation are in the [design plan's milestone table](docs/plans/reading-redesign.md#milestones).
+
+<a id="ds-1"></a>
+
+### DS-1 — Warm tokens, type and bundled fonts
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** none; the font download needs owner approval.
+- **Scope:** new tokens in `built-in.css`, `_defaults.css` and `app.css` with the old names as aliases; Inter and Literata woff2 under `frontend/src/assets/fonts/`; the 12 px floor; contrast-check pairs; UI_TOKENS update.
+- **Issues:** none.
+
+<a id="ds-2"></a>
+
+### DS-2 — Avatar tints and chat rows
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1.
+- **Scope:** kit `Avatar` with eight tints chosen by `% 8`; `ChatRow` at 64/52 px with the unread treatment and hover actions.
+- **Issues:** none.
+
+<a id="ds-3"></a>
+
+### DS-3 — Reading-first thread messages
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1; owner decision on the bubble setting.
+- **Scope:** collapsed message lines; folded quotes, signatures and details; Literata bodies at 68ch; paper card for HTML email in dark mode.
+- **Issues:** none.
+
+<a id="ds-4"></a>
+
+### DS-4 — Anchored composer and controls
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1.
+- **Scope:** anchored, collapsible `ChatComposer`; button, input and menu sizes and variants.
+- **Issues:** none.
+
+<a id="ds-5"></a>
+
+### DS-5 — Sidebar states and Lucide icons
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1; removing icon packages needs owner approval.
+- **Scope:** sidebar and kit navigation states matching rows; mdi and heroicons replaced with Lucide.
+- **Issues:** none.
+
+<a id="ds-6"></a>
+
+### DS-6 — Visual matrix and screenshots
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1–DS-5.
+- **Scope:** full visual matrix (both themes, Accounts expanded and collapsed), leftover cleanup, refreshed user-guide and README screenshots, CHANGELOG.
+- **Issues:** none.
 
 <a id="ai"></a>
 
