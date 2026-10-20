@@ -8,18 +8,12 @@
     runBackground: boolean
     startHidden: boolean
     autostart: boolean
-    onRunBackgroundChange: (value: boolean) => void
-    onStartHiddenChange: (value: boolean) => void
-    onAutostartChange: (value: boolean) => void
   }
 
   let {
     runBackground = $bindable(),
     startHidden = $bindable(),
     autostart = $bindable(),
-    onRunBackgroundChange,
-    onStartHiddenChange,
-    onAutostartChange,
   }: Props = $props()
 
   function handleRunBackgroundChange(value: boolean) {
@@ -27,21 +21,17 @@
     if (!value) {
       startHidden = false
     }
-    onRunBackgroundChange?.(value)
   }
 
   function handleStartHiddenChange(value: boolean) {
     startHidden = value
     if (value && !runBackground) {
       runBackground = true
-      onRunBackgroundChange?.(true)
     }
-    onStartHiddenChange?.(value)
   }
 
   function handleAutostartChange(value: boolean) {
     autostart = value
-    onAutostartChange?.(value)
   }
 </script>
 

@@ -18,14 +18,6 @@
     startHidden: boolean
     autostart: boolean
     language: string
-    onDelayChange: (value: number) => void
-    onDensityChange: (value: string) => void
-    onThemeChange: (value: string) => void
-    onTitleBarChange: (nativeTitleBar: boolean, showTitleBar: boolean) => void
-    onRunBackgroundChange: (value: boolean) => void
-    onStartHiddenChange: (value: boolean) => void
-    onAutostartChange: (value: boolean) => void
-    onLanguageChange: (value: string) => void
     accentBarUnread: boolean
     accentUnreadStyle: string
     showMessageListCircles: boolean
@@ -47,14 +39,6 @@
     startHidden = $bindable(),
     autostart = $bindable(),
     language = $bindable(),
-    onDelayChange,
-    onDensityChange,
-    onThemeChange,
-    onTitleBarChange,
-    onRunBackgroundChange,
-    onStartHiddenChange,
-    onAutostartChange,
-    onLanguageChange,
     accentBarUnread = $bindable(),
     accentUnreadStyle = $bindable(),
     showMessageListCircles = $bindable(),
@@ -108,12 +92,10 @@
 
   function handleDensityChange(value: string) {
     messageListDensity = value
-    onDensityChange?.(value)
   }
 
   function handleThemeChange(value: string) {
     themeMode = value
-    onThemeChange?.(value)
   }
 
   function handleTitleBarChange(value: string) {
@@ -131,7 +113,6 @@
         showTitleBar = false
         break
     }
-    onTitleBarChange?.(nativeTitleBar, showTitleBar)
   }
 
   function getTitleBarLabel(value: string): string {
@@ -154,14 +135,12 @@
   function handleDelayChange(value: string) {
     const seconds = Number(value)
     markAsReadDelaySeconds = seconds
-    onDelayChange?.(seconds)
   }
 
   function handleLanguageChange(value: string) {
     language = value
     // Apply immediately for live preview
     setLocale(value)
-    onLanguageChange?.(value)
   }
 
 
@@ -429,9 +408,6 @@
     bind:runBackground
     bind:startHidden
     bind:autostart
-    {onRunBackgroundChange}
-    {onStartHiddenChange}
-    {onAutostartChange}
   />
 
 </div>

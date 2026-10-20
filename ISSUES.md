@@ -15,7 +15,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10)
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded
-- [MAINT — Maintenance and documentation](#maint): [UI15](#ui15), [D2](#d2), [UI13](#ui13)
+- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [UI16](#ui16)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 
@@ -363,9 +363,9 @@ Project: [MAINT](PLAN.md#maint).
 ### UI13 — Input placeholders read almost like entered values
 
 - **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-23](PLAN.md#maint-23); found in the [UI11](#ui11) review. On 2026-10-19 the owner approved a placeholder token, not dismissal.
-- **Severity / proposed priority / status:** low / P3 / active.
-- **Details:** `Input` styles placeholders with `text-muted-foreground`, the same token as secondary text. In dark themes an empty field's example value looks close to a filled one. Dimming placeholders means a separate token in every theme, and `tools/contrast-check.mjs` requires text tiers of at least 4.5:1, so the change is a design decision rather than a local fix.
-- **Closure:** the owner either dismisses it or approves a placeholder token that passes the contrast check in all themes, checked with screenshots of filled and empty fields.
+- **Severity / proposed priority / status:** low / P3 / resolved (2026-10-19).
+- **Resolution:** a `--fg-placeholder` token in both built-in themes (Dark `219 12% 64%`, Light `220 9% 44%`) replaces the old placeholder colours in `Input`, `SelectTrigger`, the folder picker search, kit `RichTextEditor` and `SignatureEditor`; `tools/contrast-check.mjs` requires 4.5:1 on the field and content surfaces; a UI regression compares placeholder and entered colours in both themes ([validation](docs/validation/maint-23.md)).
+- **Original details:** `Input` styles placeholders with `text-muted-foreground`, the same token as secondary text. In dark themes an empty field's example value looks close to a filled one. Dimming placeholders means a separate token in every theme, and `tools/contrast-check.mjs` requires text tiers of at least 4.5:1, so the change is a design decision rather than a local fix.
 
 <a id="ma9"></a>
 
@@ -500,11 +500,18 @@ Project: [MAINT](PLAN.md#maint).
 
 ### UI15 — Account settings apply stale async responses
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-22](PLAN.md#maint-22); found 2026-10-18 by a code review, verified by reading the code (rechecked 2026-10-19, still unfixed).
-- **Severity / proposed priority / status:** low / P3 / active.
-- **Problem / reproduction:** `SentPolicySection.svelte` `loadFolders` has no request ordering: choosing mailbox A and then B quickly can let A's slower `GetFolders` reply replace B's folder list, so `add()` saves a Sent destination with B's account ID and one of A's folders. `GoogleClientNote.svelte` has the same race: an import bumps `refresh` while the first `GetOAuthCredsChoices` call is in flight, and the older reply can land last and show the previous client, which GO4 was meant to prevent. Its `.catch` also clears `current` but leaves `fingerprint`.
-- **Related cleanups (not defects):** `SentPolicySection` `refresh()` awaits three independent calls in series (`Promise.all` would cut the latency). `SettingsDialog.svelte` binds each General setting and also writes it back through an `on…Change` callback, so every change is assigned twice. That pattern covers every General setting, so drop one path for all of them, not just the delay. The owner included both cleanups in MAINT-22 on 2026-10-19.
-- **Closure:** both components ignore responses from superseded requests (request counter or token), with UI regression tests that resolve the replies out of order.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-22](PLAN.md#maint-22).
+- **Severity / proposed priority / status:** low / P3 / resolved (2026-10-19).
+- **Resolution:** `SentPolicySection` `loadFolders` and `GoogleClientNote` ignore replies from superseded requests (request counters); the note's error path clears the fingerprint too. Related cleanups: `refresh()` uses `Promise.all`, and the General-tab `on…Change` callbacks are gone, leaving `bind:` as the only write path. Out-of-order UI regressions fail without the fix ([validation](docs/validation/maint-22.md)).
+
+<a id="ui16"></a>
+
+### UI16 — Composer placeholder is below 4.5:1 on white
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / none yet; found in the [MAINT-23](PLAN.md#maint-23) review.
+- **Severity / proposed priority / status:** low / P3 / proposed.
+- **Details:** `Composer.svelte` styles the empty ProseMirror placeholder `#adb5bd` (about 2.1:1 on white). The composer body is `bg-white` / `dark:bg-zinc-900`, or the forced-light palette (`.composer-body--light` in `app.css`, whose textarea placeholder uses its own `--muted-foreground`), not the theme surfaces, so `--fg-placeholder` does not apply directly.
+- **Closure:** composer placeholders reach 4.5:1 on each composer body surface, dimmer than typed text, checked in both themes and with the forced-light composer.
 
 <a id="ma11"></a>
 

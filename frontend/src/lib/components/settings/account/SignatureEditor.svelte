@@ -433,7 +433,7 @@
 
 <style>
   :global(.ProseMirror p.is-editor-empty:first-child::before) {
-    color: #adb5bd;
+    color: hsl(var(--fg-placeholder));
     content: attr(data-placeholder);
     float: left;
     height: 0;

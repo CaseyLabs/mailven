@@ -33,6 +33,7 @@
     --fg-primary:   var(--foreground);
     --fg-secondary: var(--muted-foreground);
     --fg-tertiary:  var(--muted-foreground);
+    --fg-placeholder: var(--muted-foreground);
 
     --selected: var(--muted);
   }

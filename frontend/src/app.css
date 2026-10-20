@@ -99,6 +99,7 @@
   --color-fg-primary: hsl(var(--fg-primary));
   --color-fg-secondary: hsl(var(--fg-secondary));
   --color-fg-tertiary: hsl(var(--fg-tertiary));
+  --color-fg-placeholder: hsl(var(--fg-placeholder));
 
   --animate-fade-in: fadeIn 150ms ease-out;
   --animate-slide-up: slideUp 150ms ease-out;

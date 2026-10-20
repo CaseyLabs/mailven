@@ -387,14 +387,6 @@
               bind:startHidden
               bind:autostart
               bind:language
-              onDelayChange={(v) => markAsReadDelaySeconds = v}
-              onDensityChange={(v) => messageListDensity = v}
-              onThemeChange={(v) => themeMode = v}
-              onTitleBarChange={(ntb, stb) => { nativeTitleBar = ntb; showTitleBar = stb }}
-              onRunBackgroundChange={(v) => { runBackground = v; if (!v) startHidden = false }}
-              onStartHiddenChange={(v) => { startHidden = v; if (v) runBackground = true }}
-              onAutostartChange={(v) => autostart = v}
-              onLanguageChange={(v) => language = v}
               bind:accentBarUnread
               bind:accentUnreadStyle
               bind:showMessageListCircles

@@ -44,6 +44,7 @@ internal/credentials/*.go :: aerion-(shipped|mail)|[Ll]egacy identifier from Aer
 frontend/src/lib/components/kit/OAuthCredsSlotEditor.svelte :: aerion-(shipped|mail)|'aerion'|statusBadgeKind|kit\.oauth\.aerion|badge|aerion\) :: D6 OAuth choice IDs and badge kind built on them
 frontend/src/lib/components/settings/account/GoogleClientNote.svelte :: 'aerion-shipped' :: D6 OAuth choice ID naming Mailven's shipped Google client
 tests/ui/google-add-account.test.cjs :: 'aerion-shipped' :: D6 OAuth choice ID in the GO4 fixture
+tests/ui/settings-stale-responses.test.cjs :: 'aerion-shipped' :: D6 OAuth choice ID in the UI15 stale-response fixture
 frontend/src/lib/i18n/locales/en.json :: titleBarAerion|"aerion": :: Message keys for the D6 'aerion' title-bar setting and OAuth badge
 frontend/src/lib/components/settings/GeneralTab.svelte :: 'aerion'|titleBarAerion :: D6 'aerion' title-bar setting value and its message keys
 extensions/contacts/**/*.go :: .aerion. :: D6 'aerion' contact source

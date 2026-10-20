@@ -16,17 +16,22 @@
   let mode = $state('unresolved')
   let error = $state('')
   let busy = $state(false)
+  // Only the latest folder request may update the list; a slower reply for an earlier mailbox is dropped.
+  let folderRequest = 0
   async function loadFolders() {
+    const request = ++folderRequest
     path = ''
-    folders = (await GetFolders(mailbox)) || []
+    const loaded = (await GetFolders(mailbox)) || []
+    if (request === folderRequest) folders = loaded
   }
   async function refresh() {
     if (!mailbox) mailbox = accountId
     error = ''
     try {
-      policy = await GetSentPolicy(accountId)
-      copies = (await GetSubmissionCopies(accountId)) || []
-      accounts = (await GetAccounts()) || []
+      const [p, c, a] = await Promise.all([GetSentPolicy(accountId), GetSubmissionCopies(accountId), GetAccounts()])
+      policy = p
+      copies = c || []
+      accounts = a || []
       await loadFolders()
     } catch (e) { error = String(e) }
   }

@@ -35,6 +35,8 @@ const fills = {
   'surface-rail': tiers, 'surface-sidebar': tiers, 'surface-list': tiers, 'surface-content': tiers,
   muted: tiers, selected: tiers, 'bubble-own': ['primary'],
 }
+// Field placeholder text, drawn on the field surface (--background) and the content pane.
+const placeholderFills = ['background', 'surface-content']
 const MIN = 4.5
 
 let failed = false
@@ -55,5 +57,14 @@ for (const [name, selector] of Object.entries(themes)) {
     })
     console.log(`  fg-${t.padEnd(9)} ${cells.join('  |  ')}`)
   }
+  const ph = get('fg-placeholder')
+  const phCells = placeholderFills.map((s) => {
+    const bg = get(s)
+    if (!ph || !bg) { failed = true; return `${s}: missing` }
+    const r = ratio(ph, bg)
+    if (r < MIN) failed = true
+    return `${s.replace('surface-', '')} ${r.toFixed(2)} ${r >= MIN ? 'pass' : 'FAIL'}`
+  })
+  console.log(`  fg-placeholder ${phCells.join('  |  ')}`)
 }
 process.exit(failed ? 1 : 0)

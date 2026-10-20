@@ -35,6 +35,7 @@ and the composer editor and email body default to 15 px.
 | `--fg-primary` | `text-fg-primary` | Main text | `--foreground` | Chat rows, headers, bubbles |
 | `--fg-secondary` | `text-fg-secondary` | Secondary text | `--muted-foreground` | Previews, subjects, folder names, sender line |
 | `--fg-tertiary` | `text-fg-tertiary` | Least prominent text | `--muted-foreground` | Times, day separators, group toggles |
+| `--fg-placeholder` | `text-fg-placeholder` | Placeholder text in fields, dimmer than tertiary | `--muted-foreground` (themes set their own) | `Input`, `SelectTrigger`, `FolderPickerDialog` search, kit `RichTextEditor`, `SignatureEditor` |
 
 Some pixel budgets are computed from these line heights, so update them when
 the type scale changes: `--height-header`, `PILL_PX`/`BAND_PX` in Calendar's
@@ -60,7 +61,7 @@ headers, attachment cards) draws the same hairline.
 `node tools/contrast-check.mjs` (also in `make lint` and CI) prints each text
 tier against each pane surface, the hover and others'-bubble fill (`--muted`)
 and the selected-row fill (`--selected`), plus primary text on my bubbles
-(`--bubble-own`), for both themes, and exits 1 if any pair is below 4.5:1.
+(`--bubble-own`), plus `--fg-placeholder` on the field surface (`--background`) and the content pane, for both themes, and exits 1 if any pair is below 4.5:1.
 `--selected` and `--bubble-own` are the Frost accent mixed over
 `--surface-list` and `--surface-content` (Dark nord8 at 14 % and 25 %, Light
 nord10 at 14 % and 18 %, approximated on the low-chroma surfaces); keep that relation if the
@@ -87,6 +88,7 @@ Final values (HSL triples, `built-in.css`):
 | `--fg-primary` | 219 28% 95% | 220 16% 22% |
 | `--fg-secondary` | 219 24% 85% | 220 17% 30% |
 | `--fg-tertiary` | 219 14% 72% | 220 11% 39% |
+| `--fg-placeholder` | 219 12% 64% | 220 9% 44% |
 
 Reading width is not a token: `data-reading-width` on `<html>` (the "Reading
 width" chat setting) selects the plain variables `--chat-column` (Narrow 52 /

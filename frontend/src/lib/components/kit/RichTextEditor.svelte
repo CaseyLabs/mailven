@@ -186,6 +186,6 @@
     float: left;
     height: 0;
     pointer-events: none;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--fg-placeholder));
   }
 </style>

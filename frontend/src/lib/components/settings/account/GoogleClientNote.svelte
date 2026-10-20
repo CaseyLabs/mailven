@@ -17,14 +17,23 @@
   let current = $state('')
   let fingerprint = $state('')
 
+  // Only the latest request may update the note; a slower, superseded reply is dropped.
+  let latest = 0
+
   $effect(() => {
     void refresh
+    const request = ++latest
     GetOAuthCredsChoices('google-mail', '')
       .then((c: { current: string; clientIdFingerprint: string }) => {
+        if (request !== latest) return
         current = c.current
         fingerprint = c.clientIdFingerprint
       })
-      .catch(() => { current = '' })
+      .catch(() => {
+        if (request !== latest) return
+        current = ''
+        fingerprint = ''
+      })
   })
 </script>
 
