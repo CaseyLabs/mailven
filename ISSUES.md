@@ -15,7 +15,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10)
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded
-- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [UI16](#ui16)
+- [MAINT — Maintenance and documentation](#maint): [D2](#d2)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 
@@ -508,10 +508,10 @@ Project: [MAINT](PLAN.md#maint).
 
 ### UI16 — Composer placeholder is below 4.5:1 on white
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-24](PLAN.md#maint-24); found in the [MAINT-23](PLAN.md#maint-23) review. The owner authorized the fix on 2026-10-19.
-- **Severity / proposed priority / status:** low / P3 / active.
-- **Details:** `Composer.svelte` styles the empty ProseMirror placeholder `#adb5bd` (about 2.1:1 on white). The composer body is `bg-white` / `dark:bg-zinc-900`, or the forced-light palette (`.composer-body--light` in `app.css`, whose textarea placeholder uses its own `--muted-foreground`), not the theme surfaces, so `--fg-placeholder` does not apply directly.
-- **Closure:** composer placeholders reach 4.5:1 on each composer body surface, dimmer than typed text, checked in both themes and with the forced-light composer.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-24](PLAN.md#maint-24); found in the [MAINT-23](PLAN.md#maint-23) review.
+- **Severity / proposed priority / status:** low / P3 / resolved (2026-10-19).
+- **Resolution:** a composer-scoped `--composer-placeholder` in `app.css` (Light and forced-light `220 9% 44%`, Dark `219 12% 64%`) colours the editor and forced-light textarea placeholders at 4.5:1 or more on each body surface; `tests/ui/composer-placeholder.test.cjs` checks it.
+- **Original details:** the empty ProseMirror placeholder was `#adb5bd` (about 2.1:1 on white) on a body that is `bg-white` / `dark:bg-zinc-900` or the forced-light palette, not a theme surface.
 
 <a id="ma11"></a>
 

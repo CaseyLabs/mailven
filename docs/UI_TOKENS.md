@@ -90,6 +90,11 @@ Final values (HSL triples, `built-in.css`):
 | `--fg-tertiary` | 219 14% 72% | 220 11% 39% |
 | `--fg-placeholder` | 219 12% 64% | 220 9% 44% |
 
+The composer body is not a theme surface (`bg-white` in Light, `dark:bg-zinc-900` in Dark, or the
+forced-light palette), so its placeholder uses the composer-scoped `--composer-placeholder` in `app.css`
+(UI16): `220 9% 44%` on white and the forced-light body, `219 12% 64%` on zinc-900, the same values as
+`--fg-placeholder`. Both clear 4.5:1 and stay dimmer than typed text; `composer-placeholder.test.cjs` checks this.
+
 Reading width is not a token: `data-reading-width` on `<html>` (the "Reading
 width" chat setting) selects the plain variables `--chat-column` (Narrow 52 /
 Standard 60 / Wide 72 rem, the centred column for bubbles, pending sends and

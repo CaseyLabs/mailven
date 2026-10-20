@@ -44,7 +44,7 @@
 {/if}
 
 <!-- Editor -->
-<div class="flex-1 overflow-auto {forceLightComposer ? 'composer-body--light' : 'bg-white dark:bg-zinc-900'}">
+<div class="flex-1 overflow-auto {forceLightComposer ? 'composer-body--light' : 'composer-body bg-white dark:bg-zinc-900'}">
   <!-- Both surfaces stay mounted; we toggle visibility instead of using
        {#if}/{:else}. Unmounting the editor <div> orphaned the TipTap
        instance, so a later switch back to rich text wrote into a dead

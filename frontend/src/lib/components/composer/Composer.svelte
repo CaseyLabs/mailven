@@ -141,14 +141,6 @@
     line-height: 1.25;
   }
 
-  :global(.ProseMirror p.is-editor-empty:first-child::before) {
-    color: #adb5bd;
-    content: attr(data-placeholder);
-    float: left;
-    height: 0;
-    pointer-events: none;
-  }
-
   /* Table styling for composer */
   :global(.composer-editor table) {
     border-collapse: collapse;
