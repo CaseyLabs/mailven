@@ -508,8 +508,8 @@ Project: [MAINT](PLAN.md#maint).
 
 ### UI16 — Composer placeholder is below 4.5:1 on white
 
-- **Owner / milestone:** [MAINT](PLAN.md#maint) / none yet; found in the [MAINT-23](PLAN.md#maint-23) review.
-- **Severity / proposed priority / status:** low / P3 / proposed.
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-24](PLAN.md#maint-24); found in the [MAINT-23](PLAN.md#maint-23) review. The owner authorized the fix on 2026-10-19.
+- **Severity / proposed priority / status:** low / P3 / active.
 - **Details:** `Composer.svelte` styles the empty ProseMirror placeholder `#adb5bd` (about 2.1:1 on white). The composer body is `bg-white` / `dark:bg-zinc-900`, or the forced-light palette (`.composer-body--light` in `app.css`, whose textarea placeholder uses its own `--muted-foreground`), not the theme surfaces, so `--fg-placeholder` does not apply directly.
 - **Closure:** composer placeholders reach 4.5:1 on each composer body surface, dimmer than typed text, checked in both themes and with the forced-light composer.
 

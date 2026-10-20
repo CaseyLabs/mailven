@@ -1,6 +1,6 @@
 # Project roadmap
 
-Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **Active:** none. [MAINT-23](#maint-23) (UI13 placeholder token) is implemented and done (2026-10-19). The last completed milestone is [MAINT-23](#maint-23).
+Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **Active:** [MAINT-24](#maint-24) (UI16 composer placeholder contrast); owner authorized it on 2026-10-19. It has not started. The last completed milestone is [MAINT-23](#maint-23).
 
 ## Portfolio
 
@@ -13,12 +13,12 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [SYNC — Mail synchronization and action reliability](#sync) | proposed | P1 | [1](ISSUES.md#sync) | SYNC-1–4 done; SY9 resolved by API-7; SYNC-5 done (Gmail Load older, SY10 partly); SYNC-7 done (older IMAP mail, SY10 partly); SYNC-6 deferred (Graph window) |
 | [GOAUTH — Google OAuth client setup](#goauth) | done | P2 | [0](ISSUES.md#goauth) | GOAUTH-1–4 done (GO1, GO2 resolved); GOAUTH-5 done (assessment; owner kept bring-your-own); GO3 and GO4 resolved by independent fixes |
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
-| [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [2](ISSUES.md#maint) | MAINT-1–23 done (UI13 resolved); UI16 proposed; D2 deferred/upstream blocked |
+| [MAINT — Maintenance and documentation](#maint) | active | P3 | [2](ISSUES.md#maint) | MAINT-1–23 done (UI13 resolved); MAINT-24 (UI16) active; D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
-**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; no local milestone is active. Completed milestones are not selectable work.
+**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; MAINT-24 is active. Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
@@ -28,9 +28,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**Active:** none. [MAINT-22](#maint-22) and [MAINT-23](#maint-23) (authorized 2026-10-19) are done. The last completed milestone is [MAINT-23](#maint-23).
+**Active:** [MAINT-24](#maint-24) (UI16 composer placeholder contrast); owner authorized it on 2026-10-19. It has not started. The last completed milestone is [MAINT-23](#maint-23).
 
-**Next recommended:** none eligible locally. [SEND-2](#send-2) needs separately authorized live verification; deferred work stays deferred. Name the next milestone or authorize the live check to continue.
+**Next recommended:** [MAINT-24](#maint-24) — the only open issue with local scope, now authorized. Existing live gates and deferrals remain in force.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -307,7 +307,7 @@ Completed milestones below retain their IDs and evidence; detailed execution his
 - **Objective / outcome:** Keep developer tooling and user documentation accurate; resolve external review flags explicitly.
 - **Status / proposed priority:** active / P3.
 - **Dependencies / blockers:** no cross-project implementation prerequisite established; milestone gates below apply.
-- **Sequence:** MAINT-1–23 are done. On 2026-10-19 the owner authorized [MAINT-22](#maint-22) and then [MAINT-23](#maint-23), run in ID order. They are independent, but both change account and Settings components, so running them one after the other avoids conflicting edits.
+- **Sequence:** MAINT-1–23 are done; the owner authorized [MAINT-24](#maint-24) on 2026-10-19. On 2026-10-19 the owner authorized [MAINT-22](#maint-22) and then [MAINT-23](#maint-23), run in ID order. They are independent, but both change account and Settings components, so running them one after the other avoids conflicting edits.
 - **Issues:** [owning register section](ISSUES.md#maint); each linked milestone lists its relevant issues.
 - **Technical references:** [CONTRIBUTING](CONTRIBUTING.md), [canonical shortcuts](docs/KEYBOARD_SHORTCUTS.md), [Terms draft](docs/TERMS.md), [Privacy draft](docs/PRIVACY.md).
 
@@ -512,6 +512,16 @@ Completed milestones below retain their IDs and evidence; detailed execution his
 - **Result:** `--fg-placeholder` is set in both built-in themes (Dark `219 12% 64%`, Light `220 9% 44%`), defaults to `--muted-foreground` for other themes, and replaces the old placeholder colours in `Input`, `SelectTrigger`, the folder picker search, kit `RichTextEditor` and `SignatureEditor`. `tools/contrast-check.mjs` checks it at 4.5:1 on `--background` and the content pane; [UI_TOKENS](docs/UI_TOKENS.md) documents it. No other text tier changed.
 - **Evidence / limits:** [validation](docs/validation/maint-23.md). Backend-free UI checks only; native window check not run. The mail composer body keeps its own placeholder colour ([UI16](ISSUES.md#ui16)).
 - **Issues:** [UI13](ISSUES.md#ui13); [UI16](ISSUES.md#ui16) found during review.
+
+<a id="maint-24"></a>
+
+### MAINT-24 — Composer placeholder contrast
+
+- **Status / proposed priority:** active / P3 (owner authorized on 2026-10-19). **Dependencies / gates:** none; frontend only.
+- **Scope / deliverable:** composer placeholders (the empty ProseMirror paragraph in `Composer.svelte`, and the textarea placeholder in `.composer-body--light` in `app.css`) reach 4.5:1 on each composer body surface: `bg-white` (Light), `dark:bg-zinc-900` (Dark) and the forced-light composer. They stay dimmer than typed text. Reuse `--fg-placeholder` where the surface is a theme surface, otherwise define composer-scoped values beside the existing `.composer-body--light` overrides; document the choice in [UI_TOKENS](docs/UI_TOKENS.md).
+- **Acceptance:** composer placeholder contrast is at least 4.5:1 and lower than typed text on all three composer surfaces; a UI regression checks this in Dark, Light and the forced-light composer; no theme text tier or `--fg-placeholder` value changes.
+- **Validation:** frontend lint, Svelte/TypeScript check and the full UI suite; screenshots of an empty and a filled composer in each case, with Mail shown with Accounts expanded and collapsed.
+- **Issues:** [UI16](ISSUES.md#ui16). **Progress:** not started.
 
 <a id="d2"></a>
 
