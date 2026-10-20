@@ -136,8 +136,8 @@ func TestReviewedClientAppendAcknowledgedAndNeverRepeated(t *testing.T) {
 	server := imapserver.New(&imapserver.Options{InsecureAuth: true, NewSession: func(*imapserver.Conn) (imapserver.Session, *imapserver.GreetingData, error) {
 		return memory.NewSession(), nil, nil
 	}})
-	done := make(chan error, 1)
-	go func() { done <- server.Serve(listener) }()
+	done := make(chan struct{})
+	go func() { _ = server.Serve(listener); close(done) }()
 	t.Cleanup(func() { _ = server.Close(); <-done })
 	if _, err := f.db.Exec(`UPDATE accounts SET imap_host='localhost',imap_port=?,imap_security='none' WHERE id=?`, listener.Addr().(*net.TCPAddr).Port, f.accountID); err != nil {
 		t.Fatal(err)

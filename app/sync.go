@@ -190,9 +190,9 @@ func (a *App) ForceSyncFolder(accountID, folderID string) error {
 	return a.SyncFolder(accountID, folderID)
 }
 
-// SyncAccountComplete performs a comprehensive sync of an account:
-// 1. Syncs folder list from IMAP
-// 2. Syncs core folders' messages (Inbox, Drafts, Sent)
+// SyncAccountComplete performs a comprehensive sync of an account: the folder
+// list from IMAP and the messages of its sync folders (by default Inbox,
+// Drafts and Sent). runAccountSync sets the order.
 func (a *App) SyncAccountComplete(accountID string) error {
 	log := logging.WithComponent("app.masterSync")
 	log.Info().Str("accountID", accountID).Msg("Starting complete account sync")
@@ -208,23 +208,34 @@ func (a *App) SyncAccountComplete(accountID string) error {
 		return fmt.Errorf("sync cancelled")
 	}
 
-	// 1. Sync folder list first (required for message sync)
-	if err := a.SyncFolders(accountID); err != nil {
-		return fmt.Errorf("folder sync failed: %w", err)
-	}
-
-	// 2. Determine which folders to sync based on account settings
-	foldersToSync, err := a.getSyncFolders(accountID)
+	err := runAccountSync(accountSyncSteps{
+		refreshFolders: func() error { return a.SyncFolders(accountID) },
+		syncTargets:    func() ([]*folder.Folder, error) { return a.getSyncFolders(accountID) },
+		syncMessages: func(folders []*folder.Folder) []folderSyncFailure {
+			return a.syncFolderMessages(accountID, folders)
+		},
+		folderExists: func(id string) (bool, error) {
+			f, err := a.folderStore.Get(id)
+			return f != nil, err
+		},
+	})
 	if err != nil {
-		return fmt.Errorf("failed to determine sync folders: %w", err)
+		return err
 	}
 
+	log.Info().Str("accountID", accountID).Msg("Complete account sync finished")
+	return nil
+}
+
+// syncFolderMessages syncs the messages of folders and returns the failures.
+func (a *App) syncFolderMessages(accountID string, foldersToSync []*folder.Folder) []folderSyncFailure {
+	log := logging.WithComponent("app.masterSync")
 	log.Info().Str("accountID", accountID).Int("folders", len(foldersToSync)).Msg("Syncing folders")
 
 	// Sync with semaphore (max 2 concurrent to leave pool room for user actions)
 	sem := make(chan struct{}, 2)
-	var syncErrors []string
-	var errorsMu gosync.Mutex
+	var failures []folderSyncFailure
+	var failuresMu gosync.Mutex
 	var wg gosync.WaitGroup
 
 	for _, f := range foldersToSync {
@@ -247,20 +258,14 @@ func (a *App) SyncAccountComplete(accountID string) error {
 			log.Info().Str("path", f.Path).Str("id", f.ID).Msg("Syncing folder")
 			if syncErr := a.SyncFolder(accountID, f.ID); syncErr != nil {
 				log.Warn().Err(syncErr).Str("folder", f.Path).Msg("Message sync failed")
-				errorsMu.Lock()
-				syncErrors = append(syncErrors, fmt.Sprintf("%s: %v", f.Path, syncErr))
-				errorsMu.Unlock()
+				failuresMu.Lock()
+				failures = append(failures, folderSyncFailure{folder: f, err: syncErr})
+				failuresMu.Unlock()
 			}
 		}(f)
 	}
 	wg.Wait()
-
-	if len(syncErrors) > 0 {
-		return fmt.Errorf("some folders failed to sync: %s", strings.Join(syncErrors, "; "))
-	}
-
-	log.Info().Str("accountID", accountID).Msg("Complete account sync finished")
-	return nil
+	return failures
 }
 
 // getSyncFolders returns the folders that should be automatically synced for an account.
