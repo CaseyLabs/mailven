@@ -5,8 +5,8 @@
 // IMPORTANT: read access goes through plain exported FUNCTIONS, not via an
 // object with getters. Svelte 5's reactivity tracker doesn't reliably see
 // through getter properties on plain object literals — using them inside a
-// template made the whole rail re-render on every tick, hogging the main
-// thread and dropping IPC events. Plain functions are the established pattern
+// template made the whole view switcher re-render on every tick, hogging the
+// main thread and dropping IPC events. Plain functions are the established pattern
 // elsewhere in the codebase (see getActiveExtension in uiState.svelte.ts).
 
 // @ts-ignore - wailsjs bindings

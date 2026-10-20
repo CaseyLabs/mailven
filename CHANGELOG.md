@@ -15,7 +15,8 @@ Mailven is an independent email client derived from [Aerion](https://github.com/
 
 - Calmer chat list: roomy, airy density-aware rows (micro, compact, standard, large), sentence-case group labels, a quieter list header with an accent Compose button, and a soft Frost tint on the selected chat and on your own bubbles
 - Easier-to-read text: one size step larger throughout the app
-- Clearer hierarchy: contrast-checked primary, secondary and tertiary text, and a tonal step between the extension rail, Accounts column, chat list and conversation pane in Dark and Light
+- Clearer hierarchy: contrast-checked primary, secondary and tertiary text, and a tonal step between the Accounts column, chat list and conversation pane in Dark and Light
+- No left navigation rail: Mail, enabled extensions and Settings are labeled options at the top of each view's sidebar, so with the sidebar collapsed the chat list sits at the window's left edge; the Accounts column drops its New message action (Compose stays in the list header)
 - Conversation pane polish: messages span the whole pane (theirs on the left, yours on the right), a Reading width setting (Narrow, Standard, Wide) for how wide bubbles grow, and larger message text
 - Design tokens documented in `docs/UI_TOKENS.md`; `make lint` checks text contrast
 

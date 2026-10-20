@@ -59,6 +59,23 @@ exports.calls = (page, name) => page.evaluate((n) => window.__calls.filter((c) =
 
 exports.describeConfig = describeConfig
 
+// Shows the active view's sidebar the way a user would: Back out of a conversation that covers the list, then
+// the list header's sidebar toggle.
+exports.showSidebar = async (page) => {
+  if (await page.locator('aside.responsive-sidebar-visible').count()) return
+  const back = page.locator('main').getByRole('button', { name: 'Back', exact: true })
+  if (await back.isVisible()) await back.click()
+  const toggle = page.locator('[aria-label="Show sidebar"],[aria-label="Toggle sidebar"]').first()
+  if (await toggle.isVisible()) await toggle.click()
+}
+
+// Opens app Settings from the sidebar's app navigation.
+exports.openSettings = async (page) => {
+  await exports.showSidebar(page)
+  await page.getByRole('group', { name: 'Views', exact: true }).getByRole('button', { name: 'Settings', exact: true }).click()
+  return page.getByRole('dialog', { name: 'Settings', exact: true })
+}
+
 // run(options, fn) returns a node:test function that opens the app, runs fn(page, config, t) and closes it.
 // options: width, height, theme ('dark'|'light'), accounts ('expanded'|'collapsed'), previews (bool),
 // style (label suffix for a variant), allow (binding names that resolve), beforeMount (browser source), ready (selector), path (URL path).

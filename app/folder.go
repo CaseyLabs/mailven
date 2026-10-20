@@ -47,6 +47,10 @@ func (a *App) SyncFolders(accountID string) error {
 	}
 	defer done()
 	err := a.syncEngine.SyncFolders(a.ctx, accountID)
+	// The engine reports folder-list progress under an empty folder ID and
+	// sends no end event. End it here, or the sidebar keeps showing
+	// "Syncing folders" when the refresh is the last step of a sync.
+	eventsEmit(a.ctx, "folder:synced", map[string]interface{}{"accountId": accountID, "folderId": "", "ok": err == nil})
 	if err == nil {
 		// Checkpoint WAL after heavy sync operation
 		if checkpointErr := a.db.Checkpoint(); checkpointErr != nil {

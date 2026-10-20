@@ -26,7 +26,6 @@ and the composer editor and email body default to 15 px.
 | `--height-control-sm` | `h-control-sm` | Small control | 28 px | `ChatListHeader` |
 | `--height-control` | `min-h-control` | Standard control | 32 px | Accounts column rows, list search, composer, `ToolbarButton` |
 | `--height-header` | `min-h-header` | Pane header bar | 61 px (conversation header: two 22 px lines) | `ChatViewHeader`, `ChatListHeader` top row, kit `ListHeader` and `DetailPane`, Calendar `ViewSwitcher` |
-| `--surface-rail` | `bg-surface-rail` | Extension rail | `--muted` at 30 % | `ExtensionRail` |
 | `--surface-sidebar` | `bg-surface-sidebar` | Accounts column | `--muted` at 30 % | `App.svelte`, `SidebarFrame` |
 | `--surface-list` | `bg-surface-list` | Chat list, Contacts list | `--background` | `App.svelte`, `ContactList` |
 | `--surface-content` | `bg-surface-content` | Conversation pane, Calendar views | `--background` | `App.svelte`, `DetailPane`, `CalendarPane` and its views |
@@ -44,8 +43,8 @@ shown by the composer and signature toolbars.
 
 Surface and text-tier variables hold raw HSL triples, like the existing
 `--background`, and are wrapped in `hsl()` by the matching `--color-*`
-variable. The rail and sidebar defaults carry their own `/ 0.3` alpha, so
-don't add an opacity modifier (`bg-surface-sidebar/50`) to them. The sidebar
+variable. The sidebar default carries its own `/ 0.3` alpha, so
+don't add an opacity modifier (`bg-surface-sidebar/50`) to it. The sidebar
 overlay of the narrow layout keeps `bg-background`; the viewer overlay uses
 `bg-surface-content`. Contacts and Calendar use the same surface tokens and
 header height as Mail.
@@ -53,9 +52,9 @@ header height as Mail.
 ## Theme values and the contrast check
 
 `built-in.css` sets every surface and text tier per theme: surfaces step
-from the rail (darkest in Dark, lowest in Light) up to the conversation pane,
-and `--divider` is a hairline darker than all of them, so it is also the pane
-border colour (`border-divider`). Every other `border-divider` user (composer,
+from the Accounts sidebar (darkest in Dark, lowest in Light) up to the
+conversation pane, and `--divider` is a hairline darker than all of them, so it
+is also the pane border colour (`border-divider`). Every other `border-divider` user (composer,
 headers, attachment cards) draws the same hairline.
 
 `node tools/contrast-check.mjs` (also in `make lint` and CI) prints each text
@@ -78,7 +77,6 @@ Final values (HSL triples, `built-in.css`):
 
 | Token | Dark | Light |
 |---|---|---|
-| `--surface-rail` | 220 10% 15% | 220 12% 90% |
 | `--surface-sidebar` | 220 10% 18% | 220 12% 93% |
 | `--surface-list` | 220 10% 20.5% | 220 14% 96% |
 | `--surface-content` | 220 10% 22% | 220 14% 98% |

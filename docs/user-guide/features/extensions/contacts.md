@@ -17,7 +17,7 @@ The Contacts extension is currently in ALPHA. Expect rough edges.
 1. Go to **Settings → Extensions**
 2. Toggle **Contacts** on
 
-A Contacts button is added to the [rail](/docs/features/extensions#the-rail) on the left of the window. The extension has its own settings dialog.
+Contacts is added to the [views at the top of the sidebar](/docs/features/extensions#switching-views). The extension has its own settings dialog.
 
 ## Manual Sync
 

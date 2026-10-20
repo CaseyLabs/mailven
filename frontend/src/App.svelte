@@ -14,12 +14,13 @@
   import ToastContainer from './lib/components/ui/toast/ToastContainer.svelte'
   import SpellSuggestionMenu from './lib/spellcheck/SpellSuggestionMenu.svelte'
   import ExtensionSettingsDialog from './lib/components/settings/ExtensionSettingsDialog.svelte'
-  import ExtensionRail from './lib/components/rail/ExtensionRail.svelte'
+  import SettingsDialog from './lib/components/settings/SettingsDialog.svelte'
   import ContactsPane from '$extensions/contacts/frontend/components/ContactsPane.svelte'
   import CalendarPane from '$extensions/calendar/frontend/components/CalendarPane.svelte'
   import { getShowTitleBar, getNativeTitleBar, getThemeMode } from '$lib/stores/settings.svelte'
   import { applyThemeFromMode } from '$lib/stores/theme.svelte'
   import { saveUIState, getActiveExtension } from '$lib/stores/uiState.svelte'
+  import { isAppSettingsOpen, setAppSettingsOpen } from '$lib/stores/appSettings.svelte'
   import { type FocusablePane, getFocusedPane, setFocusedPane, isPaneFlashing, setComposerOpen } from '$lib/stores/keyboard.svelte'
   import { registerViewerSelection, getLayoutMode, getResponsiveView, hideViewer, hideSidebar, isResponsive, isSidebarHidden } from '$lib/stores/layout.svelte'
   import {
@@ -173,6 +174,10 @@
   function handlePaneClick(pane: FocusablePane) {
     setFocusedPane(pane)
   }
+
+  function closeAppSettings() {
+    if (getActiveExtension() === 'mail') setFocusedPane('messageList')
+  }
 </script>
 
 <svelte:window onkeydown={shortcuts.onKeyDown} onkeyup={shortcuts.onKeyUp} />
@@ -187,8 +192,6 @@
 
   <!-- Main Content -->
   <div class="flex flex-1 min-h-0 overflow-hidden relative">
-    <ExtensionRail />
-
     {#if getActiveExtension() === 'contacts'}
       <ContactsPane />
     {/if}
@@ -217,7 +220,6 @@
         onUnifiedFolderSelect={handleUnifiedFolderSelect}
         onUnifiedInboxSelect={selectUnifiedInbox}
         onMessagesMoved={() => messageListRef?.handleActionComplete(false)}
-        onCompose={openNewMessage}
         onSearch={focusListSearch}
         selectedAccountId={mailSelection.accountId}
         selectedFolderId={mailSelection.folderId}
@@ -338,6 +340,7 @@
 <SpellSuggestionMenu />
 
 <!-- Per-extension settings dialog dispatcher (Settings → Extensions → Edit) -->
+<SettingsDialog bind:open={() => isAppSettingsOpen(), setAppSettingsOpen} onClose={closeAppSettings} />
 <ExtensionSettingsDialog />
 
 <!-- Composer Modal -->

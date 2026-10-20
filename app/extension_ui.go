@@ -28,9 +28,8 @@ func (a *App) ListEnabledExtensions() ([]string, error) {
 }
 
 // ListExtensionRailTabs returns rail-tab registrations for currently enabled
-// extensions only. The frontend uses this to render ExtensionRail.svelte.
-// The rail renders when len() >= 1 — one enabled extension plus the implicit
-// always-on Mail tab gives the user something to switch between.
+// extensions only. The frontend lists them as views in AppNav.svelte, after
+// the implicit always-on Mail view.
 func (a *App) ListExtensionRailTabs() ([]coreapi.RailTabRequest, error) {
 	if a.uiRegistry == nil {
 		return nil, nil

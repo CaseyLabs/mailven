@@ -23,6 +23,7 @@
   import { getLayoutMode, getResponsiveView, hideSidebar, isSidebarHidden } from '$lib/stores/layout.svelte'
   import { getPaneWidth, setPaneWidth, savePaneWidths } from '$lib/stores/uiState.svelte'
   import PaneResizeHandle from './PaneResizeHandle.svelte'
+  import AppNav from './AppNav.svelte'
 
   interface Props {
     /** Optional title rendered as <h2>. Omit for sidebars with no title. */
@@ -101,6 +102,8 @@
       <span>{$_('common.back')}</span>
     </button>
   {/if}
+
+  <AppNav />
 
   {#if title}
     <h2 class="px-4 mb-3 text-lg font-semibold text-foreground">{title}</h2>

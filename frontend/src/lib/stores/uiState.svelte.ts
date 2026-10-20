@@ -71,9 +71,9 @@ let currentState: UIState = { ...defaultState }
 // Sidebar can depend on this to re-initialize expanded states
 let uiStateLoadedVersion = $state(0)
 
-// Reactive mirror of activeExtension specifically. The rail and the main pane
-// swap depend on this and live in different components, so a $state at the
-// module level keeps them in sync without prop drilling. currentState still
+// Reactive mirror of activeExtension specifically. The sidebar navigation and
+// the main pane swap depend on this and live in different components, so a
+// $state at the module level keeps them in sync without prop drilling. currentState still
 // holds the persisted value; this mirror is what consumers read.
 let activeExtensionState = $state<string>('mail')
 

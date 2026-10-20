@@ -3,14 +3,8 @@ const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
 const audit = require('./ui-audit.cjs')
 
-const openSettings = async (page) => {
-  const back = page.getByRole('button', { name: /^Back/ }).first()
-  if (await back.isVisible().catch(() => false)) await back.click()
-  await page.getByRole('button', { name: 'Settings', exact: true }).click()
-  return page.getByRole('dialog', { name: 'Settings', exact: true })
-}
 const openIdentity = async (page) => {
-  const dialog = await openSettings(page)
+  const dialog = await ui.openSettings(page)
   await dialog.getByRole('tab', { name: 'Accounts', exact: true }).click()
   await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
   const account = page.getByRole('dialog', { name: 'Edit Account', exact: true })
@@ -119,7 +113,7 @@ test('Account check leaves a skipped sign-in unconfirmed when transport passes',
 test('Extension cards describe capabilities in plain words', ui.run({
   beforeMount: `window.go.app.App.ListExtensions = async () => [{ id: 'contacts', name: 'Contacts', version: '1.0', description: 'Address book', author: 'x', enabled: true, capabilities: ['contacts.read', 'ui.rail-tab', 'future.thing'] }]`,
 }, async (page) => {
-  const dialog = await openSettings(page)
+  const dialog = await ui.openSettings(page)
   await dialog.getByRole('tab', { name: 'Extensions', exact: true }).click()
   await dialog.getByText('Read your contacts', { exact: true }).waitFor()
   await dialog.getByText('Add a tab to the side bar', { exact: true }).waitFor()
@@ -132,7 +126,7 @@ test('Extension cards describe capabilities in plain words', ui.run({
 test('Empty contact sources explain what a source is', ui.run({
   beforeMount: `window.go.app.App.GetContactSources = async () => []; window.go.app.App.GetContactSourceErrors = async () => []`,
 }, async (page) => {
-  const dialog = await openSettings(page)
+  const dialog = await ui.openSettings(page)
   await dialog.getByRole('tab', { name: 'Contacts', exact: true }).click()
   await dialog.getByText(/A contact source is an address book/).waitFor()
   await dialog.getByRole('button', { name: 'Add Contact Source', exact: true }).waitFor()
@@ -140,7 +134,7 @@ test('Empty contact sources explain what a source is', ui.run({
 
 // Item 5: a help line adds information beyond its label.
 test('Circle and accent help lines do not repeat their labels', ui.run({}, async (page) => {
-  const dialog = await openSettings(page)
+  const dialog = await ui.openSettings(page)
   const text = await dialog.innerText()
   assert.ok(!/Show colored circles with sender initials in the/.test(text))
   assert.ok(text.includes("Each circle holds the sender's initials."))

@@ -23,7 +23,7 @@ const sentFakes = `
 `
 
 test('Sent copy policy ignores a slower folder reply for an earlier mailbox', ui.run({ beforeMount: sentFakes }, async (page) => {
-  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  await ui.openSettings(page)
   await page.getByRole('tab', { name: 'Accounts', exact: true }).click()
   await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
   const account = page.getByRole('dialog', { name: 'Edit Account', exact: true })
@@ -112,7 +112,7 @@ test('Google client note shows no client when the lookup fails', ui.run({ accoun
 test('General settings persist after one change each', ui.run({
   allow: ['SetAccentBarUnread', 'SetAccentUnreadStyle', 'SetAlwaysLoadImages', 'SetAlwaysShowMessageCheckbox', 'SetAutostart', 'SetChatAutoAdvance', 'SetChatCombineSenders', 'SetChatDisplayStyle', 'SetChatIncludeQuote', 'SetChatNotifyPriorityOnly', 'SetChatReadingWidth', 'SetChatRichStyle', 'SetChatSendKey', 'SetChatShowLowGroup', 'SetComposerFormat', 'SetComposerMode', 'SetDarkComposerBody', 'SetDarkMailContent', 'SetLanguage', 'SetMailtoMode', 'SetMarkAsReadDelay', 'SetMessageListDensity', 'SetNativeTitleBar', 'SetReadReceiptResponsePolicy', 'SetRunBackground', 'SetShowMessageListCircles', 'SetShowMessageListProfilePics', 'SetShowMessagePreview', 'SetShowTitleBar', 'SetShowViewerCircles', 'SetSpellcheckEnabled', 'SetSpellcheckLanguages', 'SetStartHidden', 'SetThemeMode'],
 }, async (page) => {
-  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  await ui.openSettings(page)
   const dialog = page.getByRole('dialog', { name: 'Settings', exact: true })
   await dialog.getByRole('button', { name: /Select density|Standard|Compact/ }).first().click()
   await page.getByRole('option', { name: 'Compact', exact: true }).click()

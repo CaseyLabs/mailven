@@ -5,6 +5,7 @@
   import AccountSection from './AccountSection.svelte'
   import UnifiedInboxSection from './UnifiedInboxSection.svelte'
   import SidebarActions from './SidebarActions.svelte'
+  import AppNav from '$lib/components/kit/AppNav.svelte'
   import SidebarSyncFooter from './SidebarSyncFooter.svelte'
   import SidebarEmptyState from './SidebarEmptyState.svelte'
   import {
@@ -87,7 +88,6 @@
     onUnifiedFolderSelect?: (accountId: string, folderId: string, folderPath: string, folderName: string, folderType: string) => void
     onUnifiedInboxSelect?: () => void
     onMessagesMoved?: () => void
-    onCompose?: () => void
     onSearch?: () => void
     selectedAccountId?: string | null
     selectedFolderId?: string | null
@@ -103,7 +103,6 @@
     onUnifiedFolderSelect,
     onUnifiedInboxSelect,
     onMessagesMoved,
-    onCompose,
     onSearch,
     selectedAccountId = null,
     selectedFolderId = null,
@@ -374,8 +373,10 @@
     </div>
   {/if}
 
+  <div class="pt-2"><AppNav /></div>
+
   <!-- Account List -->
-  <div class="flex-1 overflow-y-auto scrollbar-thin py-2" bind:this={scrollContainer}>
+  <div class="flex-1 overflow-y-auto scrollbar-thin pb-2" bind:this={scrollContainer}>
     {#if accountStore.loading}
       <div class="flex items-center justify-center py-8">
         <Icon icon="mdi:loading" class="w-6 h-6 animate-spin text-muted-foreground" />
@@ -384,7 +385,7 @@
       <!-- Empty State -->
       <SidebarEmptyState onAddAccount={openAddAccount} />
     {:else}
-      {#if onCompose && onSearch}<SidebarActions {onCompose} {onSearch} />{/if}
+      {#if onSearch}<SidebarActions {onSearch} />{/if}
 
       <!-- Unified Inbox Section (only show if more than 1 account) -->
       {#if accountStore.accounts.length > 1}

@@ -33,7 +33,6 @@
     --input: 219 28% 88%;                  /* nord4 */
     --ring: 213 40% 40%;                   /* matches --primary */
     /* Pane surfaces: a subtle tone step from rail to conversation pane. */
-    --surface-rail:    220 12% 90%;
     --surface-sidebar: 220 12% 93%;
     --surface-list:    220 14% 96%;
     --surface-content: 220 14% 98%;
@@ -87,7 +86,6 @@
     --input: 220 17% 36%;                  /* nord3 */
     --ring: 193 43% 67%;                   /* nord8 */
     /* Pane surfaces: a subtle tone step from rail to conversation pane. */
-    --surface-rail:    220 10% 15%;
     --surface-sidebar: 220 10% 18%;
     --surface-list:    220 10% 20.5%;
     --surface-content: 220 10% 22%;

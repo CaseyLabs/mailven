@@ -26,7 +26,7 @@ const fakes = `
 
 for (const accounts of ['expanded', 'collapsed']) {
   test(`Check Google setup renders each state and recovers after Enable (Accounts ${accounts})`, ui.run({ accounts, beforeMount: fakes }, async page => {
-    await page.getByRole('button', { name: 'Settings', exact: true }).click()
+    await ui.openSettings(page)
     await page.getByRole('tab', { name: 'Accounts', exact: true }).click()
     await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
     await page.getByRole('tab', { name: 'Identity', exact: true }).click()

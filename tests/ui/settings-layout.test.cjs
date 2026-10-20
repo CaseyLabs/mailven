@@ -3,17 +3,10 @@ const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
 const audit = require('./ui-audit.cjs')
 
-const openSettings = async (page) => {
-  const back = page.getByRole('button', { name: /^Back/ }).first()
-  if (await back.isVisible().catch(() => false)) await back.click()
-  await page.getByRole('button', { name: 'Settings', exact: true }).click()
-  return page.getByRole('dialog', { name: 'Settings', exact: true })
-}
-
 // Every tab label fits its trigger and no two triggers overlap, at any window width.
 for (const width of [1400, 900, 700, 560]) {
   test(`Settings tab labels fit without overlapping at ${width}px`, ui.run({ width }, async (page) => {
-    const dialog = await openSettings(page)
+    const dialog = await ui.openSettings(page)
     const tabs = await dialog.getByRole('tab').evaluateAll((els) => els.map((el) => {
       const r = el.getBoundingClientRect()
       return { name: el.textContent.trim(), fits: el.scrollWidth <= el.clientWidth, left: r.left, right: r.right, top: r.top, bottom: r.bottom }
@@ -32,7 +25,7 @@ for (const width of [1400, 900, 700, 560]) {
 // The tab content grows with the window instead of staying a fixed 350 px box, and the dialog stays on screen.
 for (const height of [600, 800, 1000]) {
   test(`Settings content uses the window height (${height}px)`, ui.run({ height }, async (page) => {
-    const dialog = await openSettings(page)
+    const dialog = await ui.openSettings(page)
     const box = await dialog.boundingBox()
     assert.ok(box.y >= 0 && box.y + box.height <= height, `dialog ${box.y}..${box.y + box.height} leaves the ${height}px window`)
     const content = await dialog.getByRole('tabpanel').evaluate((el) => el.parentElement.clientHeight)
@@ -42,7 +35,7 @@ for (const height of [600, 800, 1000]) {
 
 // Mark-as-read delay is a named choice in words, not an unlabeled number field with a "-1 = manual" legend.
 test('Mark as read delay offers named choices', ui.run({}, async (page) => {
-  const dialog = await openSettings(page)
+  const dialog = await ui.openSettings(page)
   const trigger = dialog.getByRole('button', { name: 'When I open a message, mark it as read', exact: true })
   assert.equal((await trigger.innerText()).trim(), 'After 1 second')
   await trigger.click()
@@ -55,7 +48,7 @@ test('Mark as read delay offers named choices', ui.run({}, async (page) => {
 
 // Switches take their setting's name from its label; a generic "Toggle on/off" name used to hide it.
 test('Settings switches are named after their setting', ui.run({}, async (page) => {
-  const dialog = await openSettings(page)
+  const dialog = await ui.openSettings(page)
   const switches = {
     General: ['Dark mail content', 'Accent for unread messages', 'Run in background'],
     Composer: ['Check spelling', 'English (UK)', 'Default Reply-To: Personal — alex@example.com'],
@@ -95,7 +88,7 @@ A.GetSentPolicy = async () => ({ route, destinations: [{ accountId: 'acc1', fold
 A.GetSubmissionCopies = async () => [{ attemptId: 'a', messageId: '<stable@example.com>', accountId: 'acc1', folderPath: 'Sent', mode: 'append', state: 'unknown', evidence: '' }];
 `
 test('Account section prose does not split words', ui.run({ beforeMount: sentPolicyFakes }, async (page) => {
-  const dialog = await openSettings(page)
+  const dialog = await ui.openSettings(page)
   await dialog.getByRole('tab', { name: 'Accounts', exact: true }).click()
   await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
   const account = page.getByRole('dialog', { name: 'Edit Account', exact: true })

@@ -23,7 +23,7 @@ const fakes = `
 
 for (const accounts of ['expanded', 'collapsed']) {
   test(`rollback reports sync request state (Accounts ${accounts})`, ui.run({ accounts, beforeMount: fakes }, async page => {
-    await page.getByRole('button', { name: 'Settings', exact: true }).click()
+    await ui.openSettings(page)
     await page.getByRole('tab', { name: 'Accounts', exact: true }).click()
     await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
     await page.getByRole('tab', { name: 'Server', exact: true }).click()
@@ -45,7 +45,7 @@ for (const accounts of ['expanded', 'collapsed']) {
 }
 
 test('rollback explains when no sync was requested', ui.run({ beforeMount: fakes }, async page => {
-  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  await ui.openSettings(page)
   await page.getByRole('tab', { name: 'Accounts', exact: true }).click()
   await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
   await page.getByRole('tab', { name: 'Server', exact: true }).click()
@@ -72,7 +72,7 @@ const sharedFakes = `
 
 for (const accounts of ['expanded', 'collapsed']) {
   test(`linked shared mailbox offers shared API consent (Accounts ${accounts})`, ui.run({ accounts, beforeMount: sharedFakes }, async page => {
-    await page.getByRole('button', { name: 'Settings', exact: true }).click()
+    await ui.openSettings(page)
     await page.getByRole('tab', { name: 'Accounts', exact: true }).click()
     await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
     await page.getByRole('tab', { name: 'Identity', exact: true }).click()

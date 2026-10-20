@@ -32,7 +32,7 @@ const tiers = ['primary', 'secondary', 'tertiary']
 // others'-bubble fill (muted), the selected chat row, and my bubbles (whose
 // text is always primary).
 const fills = {
-  'surface-rail': tiers, 'surface-sidebar': tiers, 'surface-list': tiers, 'surface-content': tiers,
+  'surface-sidebar': tiers, 'surface-list': tiers, 'surface-content': tiers,
   muted: tiers, selected: tiers, 'bubble-own': ['primary'],
 }
 // Field placeholder text, drawn on the field surface (--background) and the content pane.

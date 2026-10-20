@@ -92,7 +92,6 @@
   --height-header: 3.8125rem;
 
   /* Pane surfaces and text tiers: raw HSL triples (themes override them). */
-  --color-surface-rail: hsl(var(--surface-rail));
   --color-surface-sidebar: hsl(var(--surface-sidebar));
   --color-surface-list: hsl(var(--surface-list));
   --color-surface-content: hsl(var(--surface-content));

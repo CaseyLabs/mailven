@@ -96,7 +96,7 @@ Full architectural rationale lives in `context/EXTENSION_ARCHITECTURE.md` (an Ae
 | A type or interface ALL extensions might consume | `internal/core/api/v1/` |
 | Shared host-side scaffolding (registry, broker, wrappers) | `internal/extensions/` |
 | **Generic backend utility extensions are allowed to import** | `internal/kit/<area>/` |
-| Host-owned UI used by the rail/dialog (not extension-specific) | `frontend/src/lib/components/rail/`, etc. |
+| Host-owned UI used by the sidebar navigation/dialogs (not extension-specific) | `frontend/src/lib/components/kit/AppNav.svelte`, `frontend/src/lib/components/settings/`, etc. |
 
 **`internal/kit/` — shared extension-facing building blocks.** Backend analog of the frontend `lib/components/kit/`. Modules under `internal/kit/*` are generic, extension-agnostic (no extension-specific naming or behavior) and may be imported directly from extension code — they're carved out from the otherwise blanket "extensions can't import `internal/*`" rule. Today's only member is [`internal/kit/davutil`](../internal/kit/davutil), which holds the `XMLFixTransport` and the `NewHTTPClient(timeout)` builder both `internal/carddav` and the calendar extension use to normalize WebDAV ETag / lastmodified server quirks. Add a new `internal/kit/<area>/` when two consumers need the same primitive and one of them is an extension.
 
@@ -1239,7 +1239,7 @@ Extension-relevant subset. Many other `App.*` methods exist for mail-side concer
 | `App.IsExtensionEnabled(name string) (bool, error)` | Read the extension's enabled flag |
 | `App.SetExtensionEnabled(name string, enabled bool) error` | Write the enabled flag (frontend triggers from Settings UI) |
 | `App.LogFrontend(level, message string)` | Bridge for frontend logging — appears in the same zerolog stream as backend logs with `component=frontend`. Levels: `debug|info|warn|error`. Unknown levels fall through to info. |
-| `App.ListEnabledExtensions() ([]string, error)` | All currently-enabled extension names (iterates `settings.AllExtensionKeys`). The frontend rail always renders (it also holds the app Settings button); extension tabs appear for each enabled extension after always-on Mail. |
+| `App.ListEnabledExtensions() ([]string, error)` | All currently-enabled extension names (iterates `settings.AllExtensionKeys`). The sidebar navigation (`AppNav`) lists always-on Mail first, then a view for each enabled extension. |
 | `App.ListExtensionRailTabs() ([]v1.RailTabRequest, error)` | Rail tabs for currently-enabled extensions only. Source: [`app/extension_ui.go`](../app/extension_ui.go). |
 | `App.ListAccountSetupHooksForProvider(provider string) ([]v1.AccountSetupHookRequest, error)` | Hooks matching a provider, returned regardless of enable state (hooks are the discovery surface that enables an extension). Called by `AccountDialog.svelte` after a new account is created. |
 | `App.ListExtensions() ([]app.ExtensionInfo, error)` | Full extension listing for Settings → Extensions tab. Returns manifest fields + current `enabled` state per extension. Iterates `a.knownExtensions`. Source: [`app/extension_ui.go`](../app/extension_ui.go). |
@@ -1328,7 +1328,7 @@ Mailven's testing style is integration-flavored: a real SQLite at `t.TempDir()` 
 
 | Area | Path |
 |---|---|
-| Extension rail (host UI) | [`frontend/src/lib/components/rail/`](../frontend/src/lib/components/rail) |
+| Sidebar navigation (host view switcher) | [`frontend/src/lib/components/kit/AppNav.svelte`](../frontend/src/lib/components/kit/AppNav.svelte) |
 | Settings → Extensions tab (host UI) | [`frontend/src/lib/components/settings/ExtensionsTab.svelte`](../frontend/src/lib/components/settings/ExtensionsTab.svelte) |
 | Contacts extension components | [`extensions/contacts/frontend/components/`](../extensions/contacts/frontend/components) |
 | Contacts extension stores | [`extensions/contacts/frontend/stores/`](../extensions/contacts/frontend/stores) |
@@ -1444,7 +1444,7 @@ The default is `'mail'`. Switching does NOT clear mail selection (folder/thread 
 
 ### Rail-tab component contract
 
-Rail tabs are declared by the backend (`coreapi.RailTabRequest`); the frontend renders them via [`ExtensionRail.svelte`](../frontend/src/lib/components/rail/ExtensionRail.svelte). Each tab needs:
+Rail tabs are declared by the backend (`coreapi.RailTabRequest`); the frontend lists them as views at the top of every sidebar, [`AppNav.svelte`](../frontend/src/lib/components/kit/AppNav.svelte). Each tab needs:
 
 - `extensionId` — the canonical extension name (must match `settings.AllExtensionKeys`)
 - `label` — display string (no i18n keys yet — Phase 2a uses plain English)
@@ -1504,7 +1504,7 @@ Extensions need to look and behave like the rest of Mailven — same keys, same 
 
 ### The 1-for-1 rule
 
-Every kit primitive (`Avatar`, `PaneLayout`, `ListPane`, `ListRow`, `ListHeader`, `ResponsiveSidebarToggle`, `PaneResizeHandle`, `SidebarFrame`, `SourceSidebar`, `SourceItem`, `SidebarAddItem`, `DetailPane`, `ConfirmDialog`, `ColorPicker`, `OAuthCredsSlotEditor`, `ServerCertificatePrompt`, …) is a behavioral replica of how the equivalent functionality works in mail today: same key bindings, same focus semantics, same scroll-into-view, same edge-case behavior. The backwards-compat test: **if mail were ever refactored to consume the kit, the user should see zero difference**. If you can't pass that test on a kit primitive you're writing, you've diverged.
+Every kit primitive (`Avatar`, `PaneLayout`, `ListPane`, `ListRow`, `ListHeader`, `ResponsiveSidebarToggle`, `AppNav`, `PaneResizeHandle`, `SidebarFrame`, `SourceSidebar`, `SourceItem`, `SidebarAddItem`, `DetailPane`, `ConfirmDialog`, `ColorPicker`, `OAuthCredsSlotEditor`, `ServerCertificatePrompt`, …) is a behavioral replica of how the equivalent functionality works in mail today: same key bindings, same focus semantics, same scroll-into-view, same edge-case behavior. The backwards-compat test: **if mail were ever refactored to consume the kit, the user should see zero difference**. If you can't pass that test on a kit primitive you're writing, you've diverged.
 
 **Greenfield exception (R25).** Some kit primitives have no mail equivalent — Calendar's `DetailOverlay`, for example, since mail's viewer is a flex-chain pane, not a fixed overlay. Per [`EXT_RULES.md` R25](./EXT_RULES.md), kit is an extension-driven SDK; when mail has no counterpart, the primitive is designed cleanly from the consumer's needs. The 1-for-1 rule applies to primitives that DO have a mail counterpart (`SidebarAddItem` ↔ mail's "+ Add Account" inline button, `ConfirmDialog` ↔ mail's confirms, etc.). Greenfield primitives are still bound by the kit's general conventions: theme tokens, density-aware sizing, layout-store responsive handling, `shortcuts.ts` predicates for keys, and **no imports from mail's `components/{list,sidebar,viewer}/` namespace**.
 
@@ -1769,7 +1769,7 @@ Read-only shell — no keyboard ownership. Header is fixed; body scrolls. Empty-
 ```
 
 The canonical wrapper for kit-based 3-column extension panes. Provides:
-- A `relative` + `overflow-hidden` positioning context that anchors the kit primitives' `responsive-sidebar-overlay` / `responsive-viewer-overlay` and **clips their off-screen hit-test regions so sibling components (notably `ExtensionRail`) remain clickable in narrow mode**. The `overflow-hidden` is load-bearing — without it the off-screen sidebar's leftward translation leaks into the rail's column.
+- A `relative` + `overflow-hidden` positioning context that anchors the kit primitives' `responsive-sidebar-overlay` / `responsive-viewer-overlay` and **clips their off-screen hit-test regions so sibling layout outside the pane remains clickable in narrow mode**. The `overflow-hidden` is load-bearing — without it the off-screen sidebar's leftward translation leaks outside the pane.
 - The narrow-mode `responsive-scrim` rendered as a sibling overlay; click dismisses the sidebar.
 
 Zero props. Just compose your three kit-based panes inside. Extensions don't import the layout store, manage scrim state, or wire pane-class merging — that's all internal.
@@ -1814,6 +1814,12 @@ Does **not** own:
 ```
 
 Zero-prop drop-in `mdi:dock-left` icon button that fires `toggleActiveSidebar()` (layout store). In narrow mode it opens or closes the slide-in sidebar overlay; in full and medium modes it collapses or expands the active view's sidebar. The collapse state is persisted per rail id in `UIState.collapsedSidebars`, and `SidebarFrame` hides itself (staying mounted) while collapsed, so extensions built on `SidebarFrame` / `SourceSidebar` get collapsing for free. Auto-included inside `ListHeader`; mount it directly only when an extension renders its own custom toolbar (as Calendar's `ViewSwitcher` does).
+
+#### `AppNav` — view switching and Settings
+
+[`frontend/src/lib/components/kit/AppNav.svelte`](../frontend/src/lib/components/kit/AppNav.svelte)
+
+Zero-prop labeled rows at the top of every sidebar; there is no separate navigation rail. It lists Mail and each registered rail tab (switching the active view, marked `aria-current`), then Settings (`setAppSettingsOpen` in `appSettings.svelte.ts`; `App.svelte` mounts the one Settings dialog). Auto-included at the top of `SidebarFrame`; mail's `Sidebar` renders it too. In the narrow overlay a choice closes the sidebar first.
 
 #### `PaneResizeHandle` — column resize handle
 

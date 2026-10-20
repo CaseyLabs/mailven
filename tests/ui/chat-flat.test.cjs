@@ -49,7 +49,7 @@ describe('chat flat transcript', () => {
   }))
 
   it('settings choose the style and save it', ui.run({ allow: SETTINGS_SAVE }, async (page) => {
-    await page.getByRole('button', { name: 'Settings', exact: true }).click()
+    await ui.openSettings(page)
     await page.getByRole('tab', { name: 'Chat' }).click()
     await page.getByRole('button', { name: 'Message style' }).click()
     await page.getByRole('option', { name: 'Flat' }).click()

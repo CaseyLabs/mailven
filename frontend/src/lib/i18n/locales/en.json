@@ -38,7 +38,6 @@
   },
   "sidebar": {
     "compose": "Compose",
-    "newMessage": "New message",
     "searchChats": "Search",
     "allInboxes": "All Inboxes",
     "accountsTitle": "Accounts",
@@ -1183,6 +1182,11 @@
     "flatpakOpenAlternative": "Alternatively, without any further configurations, you can click on \"Show in Folder\" instead to show the folder that the file is located in so that you can open it from there.",
     "flatpakSaveAllDescription": "Saving all attachments at once does not work properly in Flatpak without home directory access. For this feature to work, grant Mailven access to your home directory by running the following in your terminal, then restart Mailven:",
     "flatpakSaveAllAlternative": "Alternatively, without any further configurations, you can save attachments one at a time — saving a single attachment works without extra permissions."
+  },
+  "appNav": {
+    "label": "Views",
+    "mail": "Mail",
+    "settingsNeedAttention": "Needs attention"
   },
   "aria": {
     "windowControls": "Window controls",

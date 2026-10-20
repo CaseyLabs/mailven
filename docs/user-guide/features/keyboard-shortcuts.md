@@ -21,8 +21,8 @@ These work anywhere in the application (unless you're typing in a text field).
 | `Ctrl+S` | Focus search bar |
 | `Ctrl+Shift+A` | Sync all accounts |
 | `Ctrl+Shift+S` | Sync selected folder |
-| `Ctrl+Tab` | Switch to next extension on the rail (Mail / Contacts / ...) |
-| `` Ctrl+` `` | Switch to previous extension on the rail |
+| `Ctrl+Tab` | Switch to the next view in the sidebar (Mail / Contacts / ...) |
+| `` Ctrl+` `` | Switch to the previous view in the sidebar |
 | `Ctrl+Shift+B` | Hide/show the left sidebar of the current view |
 
 ### Pane Navigation
@@ -155,8 +155,8 @@ NAVIGATION
   Alt + H/J/K/L       Vim-style: pane (H/L) or folder (J/K)
   Alt(L) + Alt(R)     Brings context menu up for the focused folder
   Alt + Enter         Expand/collapse account
-  Ctrl + Tab          Switch to next extension on rail
-  Ctrl + `            Switch to previous extension on rail
+  Ctrl + Tab          Switch to next view
+  Ctrl + `            Switch to previous view
   Arrow Keys / HJKL   Navigate within focused pane
   Enter               Open conversation / Expand account
   Space               Toggle checkbox / Expand account
@@ -230,7 +230,7 @@ This lets you quickly act on single messages or perform bulk operations.
 
 ## Extensions
 
-Extension shortcuts only fire when the corresponding extension is the active rail pane (selected via `Ctrl+Tab` / `` Ctrl+` ``). They never trigger while Mail is active — so shortcuts that overlap with Mail's (like `Ctrl+N`, `Ctrl+Shift+A`, `Ctrl+Shift+S`) are unambiguous: the active rail decides which handler runs. For example, `Ctrl+Shift+A` syncs accounts in Mail, syncs all calendar sources in Calendar, and syncs all contact sources in Contacts.
+Extension shortcuts only fire when the corresponding extension is the active view (selected via `Ctrl+Tab` / `` Ctrl+` ``). They never trigger while Mail is active — so shortcuts that overlap with Mail's (like `Ctrl+N`, `Ctrl+Shift+A`, `Ctrl+Shift+S`) are unambiguous: the active rail decides which handler runs. For example, `Ctrl+Shift+A` syncs accounts in Mail, syncs all calendar sources in Calendar, and syncs all contact sources in Contacts.
 
 Pane-local navigation (Up/Down/J/K, Enter, Space, Alt+H/L for pane cycling, Alt+Up/Down for sidebar) uses the same kit-shared predicates Mail does — they're listed per-extension below for completeness, but they're not extension-specific re-implementations.
 
@@ -261,7 +261,7 @@ Pane-local navigation (Up/Down/J/K, Enter, Space, Alt+H/L for pane cycling, Alt+
 |----------|--------|
 | `Ctrl+N` | Open the new-event composer |
 | `Ctrl+R` | Sync all calendar sources |
-| `Ctrl+Shift+A` | Sync all calendar sources (same chord as Mail's "sync all accounts" — fires whichever handler matches the active rail) |
+| `Ctrl+Shift+A` | Sync all calendar sources (same chord as Mail's "sync all accounts" — fires whichever handler matches the active view) |
 | `F` | Toggle focus mode for the selected event |
 
 > The calendar sidebar uses checkbox toggles per calendar (not single-select navigation), so it doesn't follow the kit's `J`/`K` row-cycling pattern. Clicking a checkbox or row in the sidebar toggles visibility.
@@ -290,7 +290,7 @@ Mirrors mail's "Folder Navigation" shortcuts. These fire regardless of which con
 |----------|--------|
 | `E` | Edit the currently-focused contact |
 | `Ctrl+N` | Open the new-contact dialog (pre-targeted to the sidebar-focused addressbook; falls back to local when the focused source isn't writable) |
-| `Ctrl+Shift+A` | Sync all contact sources (same chord as Mail's "sync all accounts" — fires whichever handler matches the active rail) |
+| `Ctrl+Shift+A` | Sync all contact sources (same chord as Mail's "sync all accounts" — fires whichever handler matches the active view) |
 | `Ctrl+Shift+S` | Sync the contact source currently focused in the sidebar (no-op with warning toast when a built-in entry like "All" / "Local" is focused) |
 
 > Within a focused pane, `Up`/`K` and `Down`/`J` cycle rows (contact list, sidebar sources) and `Enter` opens / activates — same kit predicates Mail's list and folder tree use.

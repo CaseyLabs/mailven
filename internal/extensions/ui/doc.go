@@ -4,7 +4,7 @@
 // the Wails-bound List* methods in app/extension_ui.go.
 //
 // Phase 2a wires the two registrations that have real consumers in v0.3.x:
-// RegisterRailTab (rendered by ExtensionRail.svelte) and RegisterAccountSetupHook
+// RegisterRailTab (listed as a view in AppNav.svelte) and RegisterAccountSetupHook
 // (rendered by AccountDialog.svelte after a new account is created). The
 // other three registration types (settings tab, context menu, inbox view)
 // accept registrations but no consumer reads them yet — they are reserved

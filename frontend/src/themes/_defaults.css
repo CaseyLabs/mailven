@@ -25,7 +25,6 @@
    [data-theme="..."] block (see docs/UI_TOKENS.md). */
 @layer base {
   :root {
-    --surface-rail:    var(--muted) / 0.3;
     --surface-sidebar: var(--muted) / 0.3;
     --surface-list:    var(--background);
     --surface-content: var(--background);

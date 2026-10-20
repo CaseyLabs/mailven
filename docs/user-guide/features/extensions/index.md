@@ -36,9 +36,9 @@ The Contacts and Calendar extensions are currently in **ALPHA**. Expect rough ed
 1. Go to **Settings → Extensions**
 2. Toggle the extension on
 
-## The Rail
+## Switching Views
 
-With no extensions enabled, Mailven looks exactly like a plain email client. Enable at least one extension and a navigation **rail** appears on the left edge of the window. The rail has a button for Mail plus one button for each enabled extension — click a button to switch between them. Disable every extension and the rail disappears again.
+The top of each sidebar (the Accounts column in Mail) lists **Mail** plus each enabled extension, then **Settings**; the current view is highlighted. Click one to switch. If the sidebar is collapsed, open it with the sidebar button at the left of the list header. With no extensions enabled, Mail is the only view and Mailven looks exactly like a plain email client.
 
 ## Google & Microsoft Credentials
 

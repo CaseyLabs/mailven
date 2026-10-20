@@ -6,7 +6,7 @@ sidebar_position: 6
 
 Configure Mailven to work the way you prefer.
 
-Access settings by clicking the **gear icon** at the bottom of the far-left rail, below Mail and any enabled extensions (Contacts, Calendar).
+Open settings with **Settings** at the top of the sidebar (the Accounts column in Mail, and the Contacts and Calendar sidebars), below Mail and any enabled extensions. If the sidebar is collapsed, open it with the sidebar button at the left of the list header.
 
 ## General Tab
 ---
