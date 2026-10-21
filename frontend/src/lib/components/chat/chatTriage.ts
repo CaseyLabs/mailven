@@ -19,6 +19,8 @@ export interface TriageChat {
 // Triage handlers a chat row calls, implemented by ChatList.
 export interface ChatRowActions {
   onArchive: () => void
+  // Marks the chat read when it has unread messages, else unread.
+  onToggleRead: () => void
   onPin: () => void
   onSnooze: (until: Date) => void
   onUnsnooze: () => void

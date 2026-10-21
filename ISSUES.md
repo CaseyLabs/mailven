@@ -18,6 +18,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [MAINT — Maintenance and documentation](#maint): [D2](#d2)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
+- [DS — Reading-first redesign](#ds): [UI17](#ui17)
 
 <a id="send"></a>
 
@@ -567,6 +568,21 @@ Project: [AI](PLAN.md#ai).
 Project: [WAILS](PLAN.md#wails).
 
 All future Wails work is deferred by owner decision on 2026-10-14 until the official stable Wails v3 release; owner selection is still required afterward. No verified issue recorded. Proposed research questions and risks remain in [the assessment brief](docs/PLAN-migration.md); do not turn them into confirmed defects.
+
+<a id="ds"></a>
+
+## DS — Reading-first redesign
+
+Project: [DS](PLAN.md#ds).
+
+<a id="ui17"></a>
+
+### UI17 — Chat row quick actions are nested inside the option
+
+- **Owner / milestone:** [DS](PLAN.md#ds) / found during [DS-2](PLAN.md#ds-2).
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Location / problem:** `frontend/src/lib/components/chat/ChatRow.svelte`, the `[data-row-actions]` group. The Archive, Mark as read/unread and Snooze buttons sit inside the row's `role="option"`, whose children ARIA treats as presentational, so a screen reader may fold their names into the option or skip them. Keyboard users reach them by Tab (covered by `tests/ui/chat-row.test.cjs`); the same actions stay available through the row's context menu and the list shortcuts.
+- **Evidence / closure:** found by review on 2026-10-20; no assistive-technology run, and the UI suite has no axe audit. Close by restructuring the list so the actions are not owned by the option (for example a grid with row and cell roles, or actions outside the option tied by `aria-controls`), checked with a screen reader or an axe `nested-interactive` rule.
 
 ## Recurring problems
 

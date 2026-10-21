@@ -89,10 +89,10 @@ There are currently 3 different accent markers that you can choose from:
 
 Control how compact the message list appears:
 
-- **Micro** - Minimal spacing, maximum messages visible
-- **Compact** - Reduced spacing
-- **Standard** - Default balanced spacing
-- **Large** - More spacing for easier reading
+- **Standard** - Default: two-line rows, 64 pixels tall
+- **Compact** - Tighter two-line rows, 52 pixels tall
+- **Micro** - Same as Compact
+- **Large** - Same as Standard
 
 ### Auto-Mark as Read
 

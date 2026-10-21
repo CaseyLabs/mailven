@@ -12,7 +12,7 @@
   import { ContextMenuItem } from '$lib/components/ui/context-menu'
   import { contactPhotos } from '$lib/stores/contactPhotos.svelte'
   import { getLayoutMode } from '$lib/stores/layout.svelte'
-  import { getMessageListDensity, getShowMessagePreview, type MessageListDensity } from '$lib/stores/settings.svelte'
+  import { getMessageListDensity, getShowMessagePreview } from '$lib/stores/settings.svelte'
   import type { ChatItem, ChatPerson } from '$lib/stores/chat.svelte'
   import ChatSnoozeMenu from './ChatSnoozeMenu.svelte'
   import { canToggleSenderChat, displayName, displaySubject, rowPeople } from './chatFormat'
@@ -76,34 +76,18 @@
     return extra > 0 ? `${names} ${$_('chat.andMore', { values: { count: extra } })}` : names
   })
 
-  // Per density: avatar px, vertical padding class, and the size class and
-  // line height (px) of the lines under the 22 px name line. Without previews,
-  // rows come out at 32 (micro), 52 (compact), 72 (standard) and 80 (large) px.
-  interface DensityStyle { avatar: number; pad: string; line: string; lineHeight: number }
-  const DENSITY: Record<MessageListDensity, DensityStyle> = {
-    micro: { avatar: 24, pad: 'py-1', line: 'text-body', lineHeight: 22 },
-    compact: { avatar: 32, pad: 'py-1.5', line: 'text-meta', lineHeight: 18 },
-    standard: { avatar: 44, pad: 'py-3.5', line: 'text-compact', lineHeight: 20 },
-    large: { avatar: 48, pad: 'py-4', line: 'text-body', lineHeight: 22 },
-  }
-  const NAME_LINE_HEIGHT = 22
-  const LINE_COUNT = { single: 0, double: 1, triple: 2 }
-
-  const hasUnread = $derived(chat.unreadCount > 0)
+  // Two lines (name and time; subject and preview) in a fixed-height tile:
+  // 64 px, or 52 px at compact. Micro maps to compact and large to the
+  // default; the stored density values are unchanged.
   const density = $derived(getMessageListDensity())
-  const ds = $derived(DENSITY[density])
+  const compact = $derived(density === 'compact' || density === 'micro')
+  const rowPx = $derived(compact ? 52 : 64)
+  const avatarPx = $derived(compact ? 32 : 36)
+  const hasUnread = $derived(chat.unreadCount > 0)
   // Search results always show the matching text.
   const showPreview = $derived(getShowMessagePreview() || !!chat.highlightedSnippet)
-  // single: name, subject and time on one line (micro, no search match).
-  // double: name line, then subject (with the preview inline at micro and
-  // compact, where search matches land).
-  // triple: name, subject, preview on their own lines.
-  const layout = $derived<'single' | 'double' | 'triple'>(
-    density === 'micro' && !chat.highlightedSnippet ? 'single'
-      : showPreview && (density === 'standard' || density === 'large') ? 'triple' : 'double'
-  )
-  // The content box: the taller of the avatar and the text lines.
-  const intrinsicHeight = $derived(Math.max(ds.avatar, NAME_LINE_HEIGHT + LINE_COUNT[layout] * ds.lineHeight))
+  // Rings that must blend into the row's fill (paired avatar, account dot).
+  const fillRing = $derived(selected ? 'ring-surface-selected' : 'ring-surface group-hover/row:ring-surface-hover group-focus-within/row:ring-surface-hover')
   const time = $derived(formatListDate(chat.latestDate))
   const snoozeTime = $derived(chat.snoozedUntil ? formatSnoozedUntil(chat.snoozedUntil) : '')
 
@@ -159,32 +143,27 @@
 {/snippet}
 
 {#snippet statusIcons()}
-  <span class="flex items-center gap-1 shrink-0 text-muted-foreground" aria-hidden="true">
+  <span class="flex items-center gap-1 shrink-0 text-fg-tertiary" aria-hidden="true">
     {#if chat.isEncrypted}<Icon icon="mdi:lock" class="w-3.5 h-3.5" />{/if}
     {#if chat.hasAttachments}<Icon icon="mdi:paperclip" class="w-3.5 h-3.5" />{/if}
     {#if chat.isPinned && !inPinned}<Icon icon="mdi:pin" class="w-3.5 h-3.5" />{/if}
   </span>
 {/snippet}
 
-{#snippet subjectLine()}
-  <span class="flex-1 min-w-0 truncate {ds.line} text-fg-secondary {hasUnread ? 'font-medium' : ''}">
-    <!-- Chat search highlights the subject with its prefixes already dropped. -->
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
-    {#if chat.highlightedSubject}{@html chat.highlightedSubject}{:else}{subject}{/if}
-    {#if layout === 'double' && showPreview}<span class="text-fg-tertiary"> — {@render previewText('')}</span>{/if}
-  </span>
-{/snippet}
-
-{#snippet previewText(cls: string)}
-  <span class="{cls} {ds.line} text-fg-tertiary">
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
-    {#if chat.highlightedSnippet}{@html chat.highlightedSnippet}{:else}{chat.snippet}{/if}
-  </span>
-{/snippet}
-
-{#snippet avatar(p: ChatPerson | undefined, size: number)}
+{#snippet avatar(p: ChatPerson | undefined, size: number, initials?: 1)}
   {@const photo = p ? contactPhotos.get(p.email) : undefined}
-  <Avatar email={p?.email || chat.threadId} name={p?.name} {size} photoData={photo?.data} photoMediaType={photo?.mediaType} />
+  <Avatar email={p?.email || chat.threadId} name={p?.name} {size} {initials} photoData={photo?.data} photoMediaType={photo?.mediaType} />
+{/snippet}
+
+{#snippet quickAction(label: string, icon: string, run: () => void)}
+  <button
+    type="button"
+    class="inline-flex items-center justify-center w-7 h-7 rounded-md text-fg-tertiary hover:text-fg-primary hover:bg-surface-raised focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus"
+    aria-label={label}
+    title={label}
+    tabindex={selected ? 0 : -1}
+    onclick={(e) => { e.stopPropagation(); run() }}
+  ><Icon icon={icon} class="w-4 h-4" /></button>
 {/snippet}
 
 <MessageContextMenu
@@ -207,25 +186,28 @@
     aria-label={ariaLabel}
     tabindex="-1"
     data-chat-row
+    data-unread={hasUnread || undefined}
     draggable={getLayoutMode() !== 'narrow'}
     data-density={density}
-    style:contain-intrinsic-size="auto {intrinsicHeight}px"
-    class="chat-row relative flex items-center {density === 'micro' ? 'gap-2' : 'gap-3'} px-3 {ds.pad} mx-1.5 my-1.5 rounded-lg cursor-pointer outline-hidden transition-colors {selected ? 'bg-selected text-foreground group-data-[focused]/list:ring-2 group-data-[focused]/list:ring-inset group-data-[focused]/list:ring-ring' : 'hover:bg-muted/50'}"
+    style:height="{rowPx}px"
+    style:contain-intrinsic-size="auto {rowPx}px"
+    class="chat-row group/row relative flex items-center gap-3 px-3 mx-2 my-0.5 rounded-md cursor-pointer outline-hidden transition-colors duration-[80ms] motion-reduce:transition-none {selected ? 'bg-surface-selected text-fg-primary group-data-[focused]/list:ring-2 group-data-[focused]/list:ring-inset group-data-[focused]/list:ring-focus' : 'hover:bg-surface-hover focus-within:bg-surface-hover'}"
     onclick={onSelect}
-    onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect() } }}
+    onkeydown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSelect() } }}
     ondragstart={handleDragStart}
   >
-    <!-- Avatar: one person, or two stacked for a group -->
-    <div class="relative shrink-0" style:width="{ds.avatar}px" style:height="{ds.avatar}px" aria-hidden="true">
+    <!-- Avatar: one person, or an overlapping pair for a group. The front
+         circle is ringed in the row's own fill. -->
+    <div class="relative shrink-0" style:width="{avatarPx}px" style:height="{avatarPx}px" aria-hidden="true">
       {#if people.length > 1}
-        <div class="absolute top-0 left-0">{@render avatar(people[0], Math.round(ds.avatar * 0.6))}</div>
-        <div class="absolute bottom-0 right-0 rounded-full ring-2 ring-background">{@render avatar(people[1], Math.round(ds.avatar * 0.6))}</div>
+        <div class="absolute top-0 left-0">{@render avatar(people[0], 20, 1)}</div>
+        <div class="absolute bottom-0 right-0 rounded-full ring-2 {fillRing}">{@render avatar(people[1], 20, 1)}</div>
       {:else}
-        {@render avatar(people[0], ds.avatar)}
+        {@render avatar(people[0], avatarPx)}
       {/if}
       {#if showAccount && chat.accountColor}
         <span
-          class="absolute -bottom-0.5 -left-0.5 rounded-full ring-2 ring-background {ds.avatar < 36 ? 'w-2 h-2' : 'w-3 h-3'}"
+          class="absolute -bottom-0.5 -left-0.5 w-2.5 h-2.5 rounded-full ring-2 {fillRing}"
           style="background-color: {chat.accountColor}"
           title={chat.accountName}
         ></span>
@@ -233,45 +215,53 @@
     </div>
 
     <div class="flex-1 min-w-0">
-      <!-- People + time (+ subject on one line when single) -->
+      <!-- Line one: people and time -->
       <div class="flex items-baseline gap-2">
-        <span class="min-w-0 truncate text-body text-fg-primary {layout === 'single' ? 'max-w-[45%] shrink-0' : 'flex-1'} {hasUnread ? 'font-semibold' : 'font-medium'}">{title}</span>
-        {#if layout === 'single'}
-          {@render subjectLine()}
-          {@render statusIcons()}
-        {/if}
-        <span class="shrink-0 text-meta tabular-nums text-fg-tertiary">{time}</span>
+        <span class="flex-1 min-w-0 truncate text-fg-primary {hasUnread ? 'text-ui-name-strong' : 'text-ui-name'}" data-row-name>{title}</span>
+        <span class="shrink-0 text-ui-meta tabular-nums text-fg-tertiary group-hover/row:invisible group-focus-within/row:invisible">{time}</span>
       </div>
-      {#if layout !== 'single'}
-        <!-- Subject (one line), with the status icons when the latest line is hidden -->
-        <div class="flex items-center gap-1.5">
-          {@render subjectLine()}
-          {#if layout !== 'triple'}{@render statusIcons()}{/if}
-        </div>
-      {/if}
-      {#if layout === 'triple'}
-        <!-- Latest line + status icons -->
-        <div class="flex items-center gap-1.5">
-          {@render previewText('flex-1 min-w-0 truncate')}
-          {@render statusIcons()}
-        </div>
-      {/if}
+      <!-- Line two: subject, preview, status icons and the status slot -->
+      <div class="flex items-center gap-1.5">
+        <span class="flex-1 min-w-0 truncate text-ui-small {hasUnread ? 'text-fg-primary' : 'text-fg-secondary'}">
+          <!-- Chat search highlights the subject with its prefixes already dropped. -->
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
+          {#if chat.highlightedSubject}{@html chat.highlightedSubject}{:else}{subject}{/if}
+          {#if showPreview}
+            <span class={hasUnread ? 'text-fg-secondary' : 'text-fg-tertiary'} data-row-preview> — <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
+              {#if chat.highlightedSnippet}{@html chat.highlightedSnippet}{:else}{chat.snippet}{/if}</span>
+          {/if}
+        </span>
+        {@render statusIcons()}
+        <!-- Status glyph: one slot, kept even when empty so rows align.
+             Unread under a higher-priority glyph shows as a small dot on its corner. -->
+        <span class="relative flex items-center justify-center w-4 shrink-0 group-hover/row:invisible group-focus-within/row:invisible" data-row-status={status ?? undefined} aria-hidden="true">
+          {#if status === 'sending'}
+            <span title={$_('chat.sending')}><Icon icon="mdi:loading" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
+          {:else if status === 'snoozed'}
+            <span title={$_('chat.snoozedUntil', { values: { time: snoozeTime } })}><Icon icon="mdi:alarm-snooze" class="w-4 h-4 text-fg-tertiary" /></span>
+          {:else if status === 'unread'}
+            <span class="w-2 h-2 rounded-full bg-accent"></span>
+          {/if}
+          {#if hasUnread && status !== 'unread'}
+            <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-accent ring-1 {fillRing}" data-row-unread></span>
+          {/if}
+        </span>
+      </div>
     </div>
 
-    <!-- Status glyph: one slot at the right edge, kept even when empty so rows align.
-         Unread under a higher-priority glyph shows as a small dot on its corner. -->
-    <span class="relative flex items-center justify-center w-4 shrink-0" data-row-status={status ?? undefined} aria-hidden="true">
-      {#if status === 'sending'}
-        <span title={$_('chat.sending')}><Icon icon="mdi:loading" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
-      {:else if status === 'snoozed'}
-        <span title={$_('chat.snoozedUntil', { values: { time: snoozeTime } })}><Icon icon="mdi:alarm-snooze" class="w-4 h-4 text-fg-tertiary" /></span>
-      {:else if status === 'unread'}
-        <span class="w-2 h-2 rounded-full bg-primary"></span>
-      {/if}
-      {#if hasUnread && status !== 'unread'}
-        <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-primary ring-1 ring-background" data-row-unread></span>
-      {/if}
-    </span>
+    <!-- Quick actions replace the time and status slot on hover and when one
+         has focus. The group spans both lines so it masks them cleanly, inset
+         2 px to keep the focus ring. Tab reaches the selected row's actions. -->
+    <div
+      class="absolute inset-y-0.5 right-0.5 pl-2 pr-1.5 flex items-center gap-0.5 rounded-r-md opacity-0 pointer-events-none group-hover/row:opacity-100 group-hover/row:pointer-events-auto group-focus-within/row:opacity-100 group-focus-within/row:pointer-events-auto {selected ? 'bg-surface-selected' : 'bg-surface-hover'}"
+      role="group"
+      aria-label={$_('chat.quickActions')}
+      data-row-actions
+    >
+      {@render quickAction($_('viewer.archive'), 'mdi:archive-outline', actions.onArchive)}
+      {@render quickAction(hasUnread ? $_('viewer.markAsRead') : $_('viewer.markAsUnread'), hasUnread ? 'mdi:email-open-outline' : 'mdi:email-mark-as-unread', actions.onToggleRead)}
+      {@render quickAction($_('chat.snooze'), 'mdi:alarm-snooze', () => void openSnooze())}
+    </div>
 
     {#if snoozeMounted}
       <!-- Hidden anchor so the snooze menu opens at the row's top-right. -->

@@ -1,7 +1,17 @@
-/* Avatar circle utility classes — read the --avatar-N tint and ink aliases
-   (_defaults.css maps the fourteen slots onto the eight DS pairs). Used by
-   getAvatarColor() in conversation/message components. The fill is opaque, so
-   stacked group avatars do not show through each other. */
+/* Avatar circle utility classes. Kit Avatar picks one of the eight DS tints
+   (avatarTint.ts). The fill is opaque, so stacked group avatars do not show
+   through each other. */
+.avatar-sand  { background-color: hsl(var(--avatar-sand)); color: hsl(var(--avatar-sand-ink)); }
+.avatar-olive { background-color: hsl(var(--avatar-olive)); color: hsl(var(--avatar-olive-ink)); }
+.avatar-sage  { background-color: hsl(var(--avatar-sage)); color: hsl(var(--avatar-sage-ink)); }
+.avatar-teal  { background-color: hsl(var(--avatar-teal)); color: hsl(var(--avatar-teal-ink)); }
+.avatar-slate { background-color: hsl(var(--avatar-slate)); color: hsl(var(--avatar-slate-ink)); }
+.avatar-iris  { background-color: hsl(var(--avatar-iris)); color: hsl(var(--avatar-iris-ink)); }
+.avatar-mauve { background-color: hsl(var(--avatar-mauve)); color: hsl(var(--avatar-mauve-ink)); }
+.avatar-clay  { background-color: hsl(var(--avatar-clay)); color: hsl(var(--avatar-clay-ink)); }
+
+/* Legacy slots kept for custom themes that set --avatar-1…14
+   (_defaults.css maps them onto the eight DS pairs). */
 .avatar-1  { background-color: hsl(var(--avatar-1)); color: hsl(var(--avatar-1-ink)); }
 .avatar-2  { background-color: hsl(var(--avatar-2)); color: hsl(var(--avatar-2-ink)); }
 .avatar-3  { background-color: hsl(var(--avatar-3)); color: hsl(var(--avatar-3-ink)); }

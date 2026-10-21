@@ -1,11 +1,9 @@
 <script lang="ts">
-  // Avatar circle — colored initials with consistent color hash from email.
-  // Uses the SAME theme classes (.avatar-1 .. .avatar-14) defined in
-  // frontend/src/themes/_utilities.css that the mail UI uses, so the palette
-  // matches mail automatically (and stays matched even though the JS is
-  // duplicated — see project_extension_sdk_pattern memory for rationale).
+  // Avatar circle — tinted initials, the tint hashed from the email (see
+  // avatarTint.ts), so a seed renders the same tint wherever it appears.
 
   import { getInitials } from '$lib/utils/initials'
+  import { avatarTint } from './avatarTint'
 
   interface Props {
     /** Email address used as the color-hash seed. */
@@ -22,26 +20,18 @@
     photoData?: string
     /** Photo media type (e.g. "image/jpeg"). Required alongside photoData. */
     photoMediaType?: string
+    /** Maximum initials shown. Defaults to one at 20 px or smaller, else two;
+     *  pass 1 for overlapping pairs. */
+    initials?: 1 | 2
   }
 
-  const { email, name, density = 'standard', size, photoData, photoMediaType }: Props = $props()
+  const { email, name, density = 'standard', size, photoData, photoMediaType, initials }: Props = $props()
 
   // Photo rendering state: true when we have data+media-type AND the img loaded
   // successfully. On error (broken base64, unsupported MIME, etc.), falls back
   // to initials.
   let photoFailed = $state(false)
   const showPhoto = $derived(!!photoData && !!photoMediaType && !photoFailed)
-
-  // DJB2-style hash. Same hash as mail's sender avatar colours
-  // (see `_utilities.css`) so an extension's contact and a mail
-  // sender with the same email render the same color.
-  function colorClass(seed: string): string {
-    let hash = 0
-    for (let i = 0; i < seed.length; i++) {
-      hash = seed.charCodeAt(i) + ((hash << 5) - hash)
-    }
-    return `avatar-${(Math.abs(hash) % 14) + 1}`
-  }
 
   // Density → pixel size table. Tuned to match mail UI's density visual weight.
   const DENSITY_SIZE: Record<NonNullable<Props['density']>, number> = {
@@ -53,13 +43,14 @@
 
   const px = $derived(size ?? DENSITY_SIZE[density])
   const fontPx = $derived(Math.round(px * 0.4))
-  const cls = $derived(colorClass(email || ''))
+  const tint = $derived(avatarTint(email || ''))
   // Shared with mail so a contact and a sender with the same name match.
-  const text = $derived(getInitials(name || email))
+  const text = $derived(getInitials(name || email).slice(0, initials ?? (px <= 20 ? 1 : 2)))
 </script>
 
 <div
-  class="rounded-full shrink-0 inline-flex items-center justify-center font-medium overflow-hidden {showPhoto ? '' : cls}"
+  class="rounded-full shrink-0 inline-flex items-center justify-center font-medium overflow-hidden {showPhoto ? '' : `avatar-${tint}`}"
+  data-avatar-tint={showPhoto ? undefined : tint}
   style:width="{px}px"
   style:height="{px}px"
   style:font-size="{fontPx}px"

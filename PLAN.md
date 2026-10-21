@@ -15,11 +15,11 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
 | [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [1](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
-| [DS — Reading-first redesign](#ds) | active | P3 | 0 | DS-1 done (tokens and fonts, 2026-10-20); DS-2–5 independent, await owner selection; DS-6 last |
+| [DS — Reading-first redesign](#ds) | active | P3 | [1](ISSUES.md#ds) | DS-1 and DS-2 done (tokens and fonts; avatar tints and chat rows, 2026-10-20); DS-3–5 independent, await owner selection; DS-6 last |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
-**Remaining nondeferred scope:** DS-2–6 await owner selection; SEND-2 requires separately authorized live verification. Completed milestones are not selectable work.
+**Remaining nondeferred scope:** DS-3–6 await owner selection; SEND-2 requires separately authorized live verification. Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
@@ -29,9 +29,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**No active milestone.** The last completed milestone is [DS-1](#ds-1) (warm tokens, type and bundled fonts, done 2026-10-20 on branch `fix/gracious-hopper-d65040`; [validation](docs/validation/ds-1.md)). The branch is not yet landed.
+**Active:** none. [DS-2](#ds-2) is done (2026-10-20, branch `feat/ds-2`, not yet landed); [DS-1](#ds-1) is done and landed on `main`.
 
-**Next recommended:** [DS-2](#ds-2) (avatar tints and chat rows) after the DS-1 branch lands; DS-3 to DS-5 are equally eligible and independent. Each needs owner selection.
+**Next recommended:** [DS-3](#ds-3) (reading-first thread messages), once the owner selects it; DS-4 and DS-5 are equally eligible. Checkpoint: [design plan Progress](docs/plans/reading-redesign.md#progress).
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -625,9 +625,9 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 ## DS — Reading-first redesign
 
 - **Objective / outcome:** Make Mailven read like a calm chat app. Warm neutral surfaces, one muted terracotta accent kept for the primary action, unread state and focus, Inter for the interface and Literata for message bodies, and WCAG AA in both themes. It changes visuals and hierarchy only: no flows, bindings, settings keys or keyboard shortcuts change. It supersedes UIX's Nord palette and bubble default.
-- **Status / proposed priority:** active / P3. DS-1 done 2026-10-20; the owner selects each later milestone.
+- **Status / proposed priority:** active / P3. DS-1 and DS-2 done 2026-10-20; the owner selects each later milestone.
 - **Dependencies / blockers:** DS-1 first (tokens and fonts); DS-2–5 independent; DS-6 last. Downloading the font files (DS-1) and removing icon packages (DS-5) need owner approval.
-- **Issues:** none.
+- **Issues:** [UI17](ISSUES.md#ui17).
 - **Technical references:** [design plan](docs/plans/reading-redesign.md), [design system](https://claude.ai/artifact/UwQS72qVnHhLuxpkU1sVbc), [UI_TOKENS](docs/UI_TOKENS.md), [EXT_RULES](docs/EXT_RULES.md), [UI tests](tests/ui/README.md).
 
 Each milestone's scope, acceptance and validation are in the [design plan's milestone table](docs/plans/reading-redesign.md#milestones).
@@ -644,9 +644,9 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 
 ### DS-2 — Avatar tints and chat rows
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1.
+- **Status / proposed priority:** done 2026-10-20 (owner-selected; base `58bac3d`, branch `feat/ds-2`; [validation](docs/validation/ds-2.md)). Native WebKitGTK rendering was not checked (recorded unrun). **Dependencies / gates:** DS-1 (done).
 - **Scope:** kit `Avatar` with eight tints chosen by `% 8`; `ChatRow` at 64/52 px with the unread treatment and hover actions.
-- **Issues:** none.
+- **Issues:** [UI17](ISSUES.md#ui17) (quick actions nested inside the option; open, low).
 
 <a id="ds-3"></a>
 

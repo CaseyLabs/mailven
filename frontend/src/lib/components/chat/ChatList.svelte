@@ -28,7 +28,7 @@
   import { type ChatGroup, isChatGroupExpanded, isChatGroupShowingFewer, toggleChatGroupExpanded, toggleChatGroupShowFewer } from '$lib/stores/uiState.svelte'
   import { SyncFolder } from '../../../../wailsjs/go/app/App'
   import { canToggleSenderChat, GROUP_FEWER_CAP, rowPeople, trimGroup } from './chatFormat'
-  import { archiveChat, deleteMessagesPermanently, markChatUnread, type ChatRowActions, pinChat, setSenderChat, setSenderLow, snoozeChat, trashMessages, unsnoozeChat } from './chatTriage'
+  import { archiveChat, deleteMessagesPermanently, markChatUnread, markChatsRead, type ChatRowActions, pinChat, setSenderChat, setSenderLow, snoozeChat, trashMessages, unsnoozeChat } from './chatTriage'
   import type { folder } from '../../../../wailsjs/go/models'
 
   interface Props {
@@ -309,6 +309,7 @@
   function rowActions(c: ChatItem): ChatRowActions {
     return {
       onArchive: () => void archive(c),
+      onToggleRead: () => void (c.unreadCount > 0 ? markChatsRead([c]) : markChatUnread(c.messageIds)),
       onPin: () => void pinChat(c, !c.isPinned, reloadAfterUndo),
       onSnooze: (until) => void snooze(c, until),
       onUnsnooze: () => void unsnoozeChat(c, reloadAfterUndo),

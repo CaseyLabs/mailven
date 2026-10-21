@@ -78,9 +78,24 @@ header height as Mail.
 **Avatars.** Eight muted tint and ink pairs: `--avatar-<tint>` and
 `--avatar-<tint>-ink` for sand, olive, sage, teal, slate, iris, mauve and clay
 (values in `built-in.css`). The fourteen pre-DS slots `--avatar-1…14` alias
-them in order, repeating after eight, and `.avatar-N` (`_utilities.css`) fills
-with the tint and writes the ink. Ink on its tint reaches 6.4:1 in Light and
-7.6:1 in Dark.
+them in order, repeating after eight. Kit `Avatar` picks the tint with
+`avatarTint()` (`kit/avatarTint.ts`: djb2 over the lower-cased address, mod 8)
+and renders `.avatar-<tint>` (`_utilities.css`: tint fill, ink text) with
+`data-avatar-tint`, so an address keeps one tint in every view and theme. It
+shows one initial at 20 px and below or when `initials={1}` (overlapping
+pairs), else two. The legacy `.avatar-1…14` classes remain for custom themes
+but kit `Avatar` no longer reads them. Ink on its tint reaches 6.4:1 in Light
+and 7.6:1 in Dark.
+
+**Rows.** `ChatRow` is a fixed-height tile (`h-row` 64 px; 52 px at compact,
+which micro maps to; large uses 64) inset 8 px with `radius-md`. Hover fills
+`surface-hover`, selected fills `surface-selected` with no ring, and the active
+row of a focused list adds a 2 px inset `focus` ring. Unread is a 600 name
+(`ui-name-strong`), a `text-secondary` preview and the 8 px `accent` dot. The
+quick actions (Archive, Mark as read/unread, Snooze) replace the time and dot
+on hover and focus-within; their group spans both lines on the row fill. A
+group thread shows two 20 px avatars, the front one ringed in the row fill, so
+both initials stay visible.
 
 **Elevation.** `shadow-1` (resting cards), `shadow-2` (anchored composer,
 menus, popovers, tooltips) and `shadow-3` (dialogs) read `--elevation-1…3`,
@@ -170,7 +185,8 @@ the two 22 px header lines.
 Some pixel budgets are computed from line heights, so update them when the
 type scale changes: `--height-header`, `PILL_PX`/`MORE_PX`/`BAND_PX` in
 Calendar's `MonthView.svelte` (`MORE_PX` is 17 px since the "+N more" line
-became `ui-meta`), the row heights in `ChatRow.svelte`, the one-line event
+became `ui-meta`), the fixed row heights in `ChatRow.svelte` (two 20 + 18 px
+lines in 64 or 52 px), the one-line event
 blocks in `TimelineView.svelte`, and the default size shown by the composer
 and signature toolbars.
 
@@ -197,7 +213,7 @@ DS name; DS-6 removes aliases nothing uses any more and records the rest here.
 | `--primary-foreground`, `--accent-foreground`, `--destructive-foreground` | `on-accent` |
 | `--ring` | `focus` |
 | `--destructive` | `danger` |
-| `--avatar-1…14` | the eight `--avatar-<tint>` pairs, in order |
+| `--avatar-1…14` | the eight `--avatar-<tint>` pairs, in order (kit `Avatar` reads `.avatar-<tint>` since DS-2) |
 | `--radius` | `radius-lg` |
 | `--composer-placeholder` | `text-tertiary`'s Light value on white and paper bodies, its Dark value on the dark body |
 

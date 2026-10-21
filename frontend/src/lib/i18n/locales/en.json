@@ -205,6 +205,7 @@
     "retry": "Retry",
     "editReply": "Edit",
     "snoozeMenu": "Snooze...",
+    "quickActions": "Quick actions",
     "snoozePickDate": "Pick date...",
     "snoozePickTitle": "Snooze until",
     "snoozePickDescription": "The chat comes back to the list at this time.",
