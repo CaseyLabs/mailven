@@ -19,27 +19,40 @@
     ...restProps
   }: Props = $props()
 
-  const baseStyles = 'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
+  // Heights come from the control tokens (28/32/36). Rings sit 2px off the
+  // button and show on keyboard focus only. Disabled controls fade, the one
+  // place opacity is allowed to dim a control.
+  const baseStyles = 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-ui-label font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
 
+  // Only primary is filled with the accent. Danger is text-coloured and never filled.
+  const primary = 'bg-primary text-primary-foreground hover:bg-accent-hover'
+  const danger = 'text-danger hover:bg-danger/10'
   const variants: Record<ButtonVariant, string> = {
-    default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-    destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-    outline: 'border border-input bg-background hover:bg-surface-hover hover:text-foreground',
-    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-    ghost: 'hover:bg-surface-hover hover:text-foreground',
+    default: primary,
+    primary,
+    secondary: 'border border-border-control bg-transparent text-foreground hover:bg-surface-hover',
+    tonal: 'bg-accent-soft text-accent-text hover:bg-accent-soft/70',
+    ghost: 'text-foreground hover:bg-surface-hover',
+    danger,
+    destructive: danger,
+    icon: 'text-foreground hover:bg-surface-hover',
+    outline: 'border border-border-control bg-transparent text-foreground hover:bg-surface-hover',
     link: 'text-primary underline-offset-4 hover:underline',
   }
 
   const sizes: Record<ButtonSize, string> = {
-    default: 'h-10 px-4 py-2',
-    sm: 'h-9 rounded-md px-3',
-    lg: 'h-11 rounded-md px-8',
-    icon: 'h-10 w-10',
+    default: 'h-control px-4',
+    control: 'h-control px-4',
+    sm: 'h-control-sm px-3',
+    'control-sm': 'h-control-sm px-3',
+    lg: 'h-control-lg px-6',
+    'control-lg': 'h-control-lg px-6',
+    icon: 'h-control w-8 px-0',
   }
 </script>
 
 <button
-  class={cn(baseStyles, variants[variant], sizes[size], className)}
+  class={cn(baseStyles, variants[variant], variant === 'icon' && size === 'default' ? sizes.icon : sizes[size], className)}
   {...restProps}
 >
   {#if children}

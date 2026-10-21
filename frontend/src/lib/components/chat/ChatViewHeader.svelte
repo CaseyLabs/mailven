@@ -111,48 +111,48 @@
 {#snippet extraItems()}
   {#if forwardInMenu}
     <ContextMenuItem onSelect={onForward}>
-      <Icon icon="mdi:share" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:share-2" class="mr-2 h-4 w-4" />
       {$_('viewer.forward')}
     </ContextMenuItem>
   {/if}
   {#if canTriage}
     <!-- Deferred so the context menu closes before the snooze dropdown opens. -->
     <ContextMenuItem onSelect={() => setTimeout(() => snoozeMenu?.open())}>
-      <Icon icon="mdi:alarm-snooze" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:alarm-clock" class="mr-2 h-4 w-4" />
       {$_('chat.snoozeMenu')}
     </ContextMenuItem>
     <ContextMenuItem onSelect={onPin}>
-      <Icon icon={isPinned ? 'mdi:pin-off-outline' : 'mdi:pin-outline'} class="mr-2 h-4 w-4" />
+      <Icon icon={isPinned ? 'lucide:pin-off' : 'lucide:pin'} class="mr-2 h-4 w-4" />
       {isPinned ? $_('chat.unpin') : $_('chat.pin')}
     </ContextMenuItem>
   {/if}
   {#if senderInMenu}
     <ContextMenuItem onSelect={onToggleSenderLow}>
-      <Icon icon={isLowPriority ? 'mdi:account-arrow-up-outline' : 'mdi:newspaper-variant-outline'} class="mr-2 h-4 w-4" />
+      <Icon icon={isLowPriority ? 'lucide:user-round-plus' : 'lucide:newspaper'} class="mr-2 h-4 w-4" />
       {isLowPriority ? $_('chat.moveSenderToPriority') : $_('chat.moveSenderToLow')}
     </ContextMenuItem>
     {#if onToggleSenderChat && canToggleSenderChat(senderEmail, folderType)}
       <ContextMenuItem onSelect={onToggleSenderChat}>
-        <Icon icon={senderEmail ? 'mdi:call-split' : 'mdi:account-multiple-outline'} class="mr-2 h-4 w-4" />
+        <Icon icon={senderEmail ? 'lucide:split' : 'lucide:users'} class="mr-2 h-4 w-4" />
         {senderEmail ? $_('chat.splitSender') : $_('chat.combineSender')}
       </ContextMenuItem>
     {/if}
   {/if}
 {/snippet}
 
-<header bind:clientWidth={width} class="flex min-h-header border-b border-divider">
+<header bind:clientWidth={width} class="flex min-h-header">
   <!-- Centred like the stream and reply box, so wide panes line up. The equal
        outer columns keep the title centred; the actions sit to its left. -->
-  <div class="mx-auto w-full max-w-(--chat-column) grid grid-cols-[1fr_minmax(0,auto)_1fr] items-center gap-3 px-3 py-2">
+  <div class="mx-auto w-full max-w-(--chat-stream) grid grid-cols-[1fr_minmax(0,auto)_1fr] items-center gap-3 px-3 py-2">
     <div class="flex items-center gap-2">
       {#if showBackButton}
-        {@render iconButton('mdi:arrow-left', $_('responsive.back'), () => onBack?.())}
+        {@render iconButton('lucide:arrow-left', $_('responsive.back'), () => onBack?.())}
       {/if}
       {#if onCompose && !narrow}<ComposeButton {compact} onclick={onCompose} />{/if}
-      <ToolbarButton icon="mdi:archive-outline" label={$_('viewer.archive')} {compact} onclick={onArchive} />
+      <ToolbarButton icon="lucide:archive" label={$_('viewer.archive')} {compact} onclick={onArchive} />
       <ToolbarButton
         ghost
-        icon={isTrash ? 'mdi:delete-forever' : 'mdi:delete-outline'}
+        icon={isTrash ? 'lucide:trash-2' : 'lucide:trash-2'}
         label={$_('viewer.delete')}
         title={$_(isTrash ? 'viewer.deletePermanently' : 'viewer.delete')}
         {compact}
@@ -172,7 +172,7 @@
         extraItems={forwardInMenu || canTriage ? extraItems : undefined}
       >
         <span bind:this={menuAnchor} class="inline-flex shrink-0">
-          {@render iconButton('mdi:dots-horizontal', $_('chat.moreActions'), openMenu)}
+          {@render iconButton('lucide:ellipsis', $_('chat.moreActions'), openMenu)}
         </span>
       </MessageContextMenu>
       {#if canTriage}
@@ -185,7 +185,7 @@
       <h2 class="min-w-0 flex"><ChatPeopleMenu {people} {title} {onComposeTo} /></h2>
       {#if snoozeLabel}
         <span class="shrink-0 inline-flex items-center gap-1 text-xs text-fg-secondary">
-          <Icon icon="mdi:alarm-snooze" class="w-3.5 h-3.5" />{$_('chat.snoozedUntil', { values: { time: snoozeLabel } })}
+          <Icon icon="lucide:alarm-clock" class="w-3.5 h-3.5" />{$_('chat.snoozedUntil', { values: { time: snoozeLabel } })}
         </span>
       {/if}
     </div>

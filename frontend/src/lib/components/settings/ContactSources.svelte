@@ -125,19 +125,19 @@
 
 <div class="space-y-4">
   <h3 class="text-sm font-medium flex items-center gap-2">
-    <Icon icon="mdi:contacts-outline" class="w-4 h-4" />
+    <Icon icon="lucide:contact-round" class="w-4 h-4" />
     {$_('contactSource.title')}
   </h3>
 
   {#if contactSourcesStore.loading}
     <div class="flex items-center justify-center py-4">
-      <Icon icon="mdi:loading" class="w-5 h-5 animate-spin text-muted-foreground" />
+      <Icon icon="lucide:loader-circle" class="w-5 h-5 animate-spin text-muted-foreground" />
     </div>
   {:else if contactSourcesStore.sources.length === 0}
     <div class="text-sm text-muted-foreground py-4 text-center">
       <p class="mb-3">{$_('contactSource.noSources')}</p>
       <Button size="sm" onclick={openAdd}>
-        <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
         {$_('contactSource.addSource')}
       </Button>
     </div>
@@ -149,7 +149,7 @@
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-2">
               <Icon
-                icon={source.type === 'google' ? 'mdi:google' : source.type === 'microsoft' ? 'mdi:microsoft' : 'mdi:card-account-details'}
+                icon={source.type === 'google' ? 'simple-icons:google' : source.type === 'microsoft' ? 'simple-icons:microsoft' : 'lucide:contact'}
                 class="w-5 h-5 {source.enabled ? 'text-primary' : 'text-muted-foreground'}"
               />
               <div>
@@ -171,7 +171,7 @@
           <!-- Error display -->
           {#if source.last_error}
             <div class="flex items-start gap-2 p-2 bg-destructive/10 rounded text-sm min-w-0">
-              <Icon icon="mdi:alert-circle" class="w-4 h-4 text-destructive shrink-0 mt-0.5" />
+              <Icon icon="lucide:circle-alert" class="w-4 h-4 text-destructive shrink-0 mt-0.5" />
               <div class="flex-1 min-w-0">
                 <div class="text-destructive font-medium">{$_('contactSource.syncFailed')}</div>
                 <div class="text-xs text-muted-foreground wrap-anywhere max-h-24 overflow-y-auto">{source.last_error}</div>
@@ -188,9 +188,9 @@
               disabled={syncingSourceId === source.id || forceSyncingSourceId === source.id}
             >
               {#if syncingSourceId === source.id}
-                <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+                <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
               {:else}
-                <Icon icon="mdi:sync" class="w-4 h-4 mr-1" />
+                <Icon icon="lucide:refresh-cw" class="w-4 h-4 mr-1" />
               {/if}
               {source.last_error ? $_('common.retry') : $_('common.sync')}
             </Button>
@@ -202,18 +202,18 @@
               title={$_('contactSource.forceSync')}
             >
               {#if forceSyncingSourceId === source.id}
-                <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+                <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
               {:else}
-                <Icon icon="mdi:refresh-auto" class="w-4 h-4 mr-1" />
+                <Icon icon="lucide:refresh-ccw-dot" class="w-4 h-4 mr-1" />
               {/if}
               {$_('contactSource.forceSync')}
             </Button>
             <Button size="sm" variant="ghost" onclick={() => openEdit(source)}>
-              <Icon icon="mdi:pencil" class="w-4 h-4 mr-1" />
+              <Icon icon="lucide:pencil" class="w-4 h-4 mr-1" />
               {$_('common.edit')}
             </Button>
             <Button size="sm" variant="ghost" class="text-destructive hover:text-destructive" onclick={() => handleDelete(source)}>
-              <Icon icon="mdi:delete" class="w-4 h-4 mr-1" />
+              <Icon icon="lucide:trash-2" class="w-4 h-4 mr-1" />
               {$_('common.delete')}
             </Button>
           </div>
@@ -222,7 +222,7 @@
 
       <!-- Add button -->
       <Button size="sm" variant="outline" class="w-full" onclick={openAdd}>
-        <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
         {$_('contactSource.addSource')}
       </Button>
     </div>

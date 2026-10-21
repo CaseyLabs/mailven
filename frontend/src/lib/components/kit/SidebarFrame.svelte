@@ -33,7 +33,7 @@
     /** The scrollable body content. Required. */
     body: Snippet
     /** Optional sticky bottom strip. Consumer owns the strip's chrome
-     *  (border-t, padding, content); SidebarFrame just pins it with shrink-0. */
+     *  (padding, content; no rule); SidebarFrame just pins it with shrink-0. */
     footer?: Snippet
     /** Bindable ref to the outer <aside>. SourceSidebar binds this for its
      *  tabindex-based keyboard nav + focus-slot integration. */
@@ -85,7 +85,7 @@
   role="navigation"
   aria-label={label ?? title ?? $_('kit.sidebar')}
   tabindex={focusable ? 0 : undefined}
-  class="{resizable ? '' : 'w-60'} shrink-0 flex flex-col pt-3 border-r border-divider outline-hidden {narrow ? 'bg-background' : 'bg-surface-sidebar'} {narrow ? 'responsive-sidebar-overlay' : ''} {overlayVisible ? 'responsive-sidebar-visible' : ''} {isSidebarHidden() ? 'hidden' : ''} {extraClass}"
+  class="{resizable ? '' : 'w-60'} shrink-0 flex flex-col pt-3 outline-hidden bg-background {narrow ? 'responsive-sidebar-overlay' : ''} {overlayVisible ? 'responsive-sidebar-visible' : ''} {isSidebarHidden() ? 'hidden' : ''} {extraClass}"
   style:width={resizable ? `${width}px` : undefined}
   {onkeydown}
   {onfocus}
@@ -97,8 +97,9 @@
       class="flex items-center gap-2 px-4 py-2 mb-2 text-sm text-muted-foreground hover:text-foreground"
       onclick={hideSidebar}
       aria-label={$_('common.back')}
+      title={$_('common.back')}
     >
-      <Icon icon="mdi:arrow-left" class="w-4 h-4" />
+      <Icon icon="lucide:arrow-left" class="w-4 h-4" />
       <span>{$_('common.back')}</span>
     </button>
   {/if}

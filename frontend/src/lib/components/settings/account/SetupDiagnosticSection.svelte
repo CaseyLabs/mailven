@@ -46,7 +46,7 @@
   onDestroy(() => { if (busy) void CancelSetupDiagnostic(runId).catch(() => {}) })
 </script>
 <section class="space-y-3 border-t border-border pt-4" aria-label={$_('setupDiagnostic.title')}>
-  <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="mdi:stethoscope" class="w-4 h-4" />{$_('setupDiagnostic.title')}</h3>
+  <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="lucide:stethoscope" class="w-4 h-4" />{$_('setupDiagnostic.title')}</h3>
   <p class="text-xs text-muted-foreground">{$_('setupDiagnostic.guidance')}</p>
   <NamedSelect label={$_('setupDiagnostic.from')} value={selectedFrom} options={identities.map(i => ({ value: i.email, label: i.email }))} placeholder={$_('setupDiagnostic.chooseIdentity')} disabled={busy} onValueChange={(v) => { from = v }} />
   <NamedSelect label={$_('setupDiagnostic.route')} value="imap-smtp" options={[{ value: 'imap-smtp', label: $_('setupDiagnostic.existingRoute') }]} disabled />

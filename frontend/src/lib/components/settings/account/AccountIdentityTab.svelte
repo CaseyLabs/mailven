@@ -240,7 +240,7 @@
   <div class="flex items-center justify-between">
     <div>
       <h3 class="text-sm font-medium flex items-center gap-2">
-        <Icon icon="mdi:email-multiple-outline" class="w-4 h-4" />
+        <Icon icon="lucide:mails" class="w-4 h-4" />
         {$_('identity.emailAddresses')}
       </h3>
       <p class="text-xs text-muted-foreground mt-1">
@@ -248,18 +248,18 @@
       </p>
     </div>
     <Button size="sm" onclick={handleAddIdentity}>
-      <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+      <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
       {$_('identity.addEmailAddress')}
     </Button>
   </div>
 
   {#if loading}
     <div class="flex items-center justify-center py-8">
-      <Icon icon="mdi:loading" class="w-6 h-6 animate-spin text-muted-foreground" />
+      <Icon icon="lucide:loader-circle" class="w-6 h-6 animate-spin text-muted-foreground" />
     </div>
   {:else if identities.length === 0}
     <div class="text-center py-8 text-muted-foreground">
-      <Icon icon="mdi:email-outline" class="w-12 h-12 mx-auto mb-2 opacity-50" />
+      <Icon icon="lucide:mail" class="w-12 h-12 mx-auto mb-2 opacity-50" />
       <p>{$_('identity.noEmailAddresses')}</p>
     </div>
   {:else}
@@ -302,7 +302,7 @@
               {identity.name}
             </div>
             <div class="text-xs text-muted-foreground truncate mt-0.5">
-              <Icon icon="mdi:signature-text" class="w-3 h-3 inline-block mr-1" />
+              <Icon icon="lucide:signature" class="w-3 h-3 inline-block mr-1" />
               {getSignaturePreview(identity)}
             </div>
           </div>
@@ -316,7 +316,7 @@
               class="h-8 w-8 p-0"
               title={$_('common.edit')}
             >
-              <Icon icon="mdi:pencil" class="w-4 h-4" />
+              <Icon icon="lucide:pencil" class="w-4 h-4" />
             </Button>
             <Button
               variant="ghost"
@@ -327,9 +327,9 @@
               title={identity.isDefault ? $_('identity.cannotDeleteDefaultTitle') : $_('common.delete')}
             >
               {#if deletingId === identity.id}
-                <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+                <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
               {:else}
-                <Icon icon="mdi:delete" class="w-4 h-4" />
+                <Icon icon="lucide:trash-2" class="w-4 h-4" />
               {/if}
             </Button>
           </div>
@@ -354,7 +354,7 @@
     <div class="flex items-center justify-between">
       <div>
         <h3 class="text-sm font-medium flex items-center gap-2">
-          <Icon icon="mdi:email-multiple-outline" class="w-4 h-4" />
+          <Icon icon="lucide:mails" class="w-4 h-4" />
           {$_('identity.sharedMailboxes')}
         </h3>
         <p class="text-xs text-muted-foreground mt-1">
@@ -362,14 +362,14 @@
         </p>
       </div>
       <Button size="sm" onclick={() => showAddSharedMailbox = true}>
-        <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
         {$_('identity.addSharedMailbox')}
       </Button>
     </div>
 
     {#if sharedMailboxLoading}
       <div class="flex items-center justify-center py-6">
-        <Icon icon="mdi:loading" class="w-5 h-5 animate-spin text-muted-foreground" />
+        <Icon icon="lucide:loader-circle" class="w-5 h-5 animate-spin text-muted-foreground" />
       </div>
     {:else if sharedMailboxes.length === 0}
       <div class="text-center py-6 text-muted-foreground">
@@ -379,7 +379,7 @@
       <div class="space-y-2">
         {#each sharedMailboxes as mailbox (mailbox.id)}
           <div class="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-surface-hover/50 transition-colors group">
-            <Icon icon="mdi:email-outline" class="w-4 h-4 text-muted-foreground shrink-0" />
+            <Icon icon="lucide:mail" class="w-4 h-4 text-muted-foreground shrink-0" />
             <div class="flex-1 min-w-0">
               <div class="font-medium text-sm truncate">{mailbox.email}</div>
               {#if mailbox.name && mailbox.name !== mailbox.email}
@@ -394,7 +394,7 @@
                 class="h-8 w-8 p-0"
                 title={$_('common.edit')}
               >
-                <Icon icon="mdi:pencil" class="w-4 h-4" />
+                <Icon icon="lucide:pencil" class="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
@@ -403,7 +403,7 @@
                 class="h-8 w-8 p-0 text-destructive hover:text-destructive"
                 title={$_('common.delete')}
               >
-                <Icon icon="mdi:delete" class="w-4 h-4" />
+                <Icon icon="lucide:trash-2" class="w-4 h-4" />
               </Button>
             </div>
           </div>
@@ -445,7 +445,7 @@
         disabled={!sharedMailboxEmail.trim() || addingSharedMailbox}
       >
         {#if addingSharedMailbox}
-          <Icon icon="mdi:loading" class="w-4 h-4 animate-spin mr-1" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin mr-1" />
         {/if}
         {$_('common.add')}
       </Button>

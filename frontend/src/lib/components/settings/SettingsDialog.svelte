@@ -336,7 +336,7 @@
 
     {#if loading}
       <div class="flex items-center justify-center py-8">
-        <Icon icon="mdi:loading" class="w-6 h-6 animate-spin text-muted-foreground" />
+        <Icon icon="lucide:loader-circle" class="w-6 h-6 animate-spin text-muted-foreground" />
       </div>
     {:else}
       <Tabs.Root bind:value={activeTab} class="w-full">
@@ -463,7 +463,7 @@
           </Button>
           <Button onclick={handleSave} disabled={saving}>
             {#if saving}
-              <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+              <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
             {/if}
             {$_('common.save')}
           </Button>

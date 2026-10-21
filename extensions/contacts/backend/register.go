@@ -46,7 +46,7 @@ func (e *Extension) Register(core coreapi.Core) (coreapi.Unregister, error) {
 	unregRail, err := core.UI().RegisterRailTab(coreapi.RailTabRequest{
 		ExtensionID: e.manifest.ID,
 		Label:       e.manifest.Name,
-		Icon:        "mdi:account-multiple",
+		Icon:        "lucide:users",
 		Component:   "ContactsPane",
 		Order:       10,
 	})

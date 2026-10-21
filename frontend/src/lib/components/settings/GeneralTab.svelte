@@ -150,7 +150,7 @@
   <!-- Display Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:format-size" class="w-4 h-4" />
+      <Icon icon="lucide:a-large-small" class="w-4 h-4" />
       {$_('settingsGeneral.display')}
     </h3>
 
@@ -382,7 +382,7 @@
   <!-- Mark as Read Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:email-open-outline" class="w-4 h-4" />
+      <Icon icon="lucide:mail-open" class="w-4 h-4" />
       {$_('settingsGeneral.markAsRead')}
     </h3>
 

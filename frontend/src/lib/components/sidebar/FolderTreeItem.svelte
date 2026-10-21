@@ -33,15 +33,15 @@
 
   // Folder type to icon mapping
   const folderIcons: Record<string, string> = {
-    inbox: 'mdi:inbox',
-    sent: 'mdi:send',
-    drafts: 'mdi:file-document-edit-outline',
-    trash: 'mdi:delete-outline',
-    archive: 'mdi:archive-outline',
-    spam: 'mdi:alert-octagon-outline',
-    starred: 'mdi:star-outline',
-    all: 'mdi:email-multiple-outline',
-    folder: 'mdi:folder-outline',
+    inbox: 'lucide:inbox',
+    sent: 'lucide:send',
+    drafts: 'lucide:file-pen',
+    trash: 'lucide:trash-2',
+    archive: 'lucide:archive',
+    spam: 'lucide:octagon-alert',
+    starred: 'lucide:star',
+    all: 'lucide:mails',
+    folder: 'lucide:folder',
   }
 
   function getFolderIcon(type: string): string {
@@ -127,9 +127,8 @@
 {#if tree.folder}
   <FolderContextMenu {accountId} folderId={tree.folder.id}>
     <button
-      class="w-full flex items-center gap-2 px-3 min-h-control text-sm rounded-md transition-colors {isFolderSelected(tree.folder.id)
-        ? 'bg-primary/10 text-primary font-medium'
-        : 'text-fg-secondary hover:bg-muted/50'} {isDragOver ? 'ring-2 ring-primary ring-inset' : ''}"
+      class="nav-item text-body {isDragOver ? 'ring-2 ring-focus ring-inset' : ''}"
+      data-selected={isFolderSelected(tree.folder.id)}
       data-sidebar-item="folder"
       data-folder-id={tree.folder.id}
       data-has-children={hasChildren ? 'true' : undefined}
@@ -141,7 +140,7 @@
     >
       <Icon
         icon={getFolderIcon(tree.folder.type)}
-        class="w-4 h-4 shrink-0"
+        class="w-4 h-4"
       />
       <span class="truncate text-left">{tree.folder.name}</span>
       {#if hasChildren}
@@ -150,13 +149,15 @@
           class="shrink-0 flex items-center justify-center size-7 -my-1 rounded hover:bg-muted"
           role="button"
           tabindex="-1"
+          aria-label={$_(isCollapsed ? 'sidebar.expandFolder' : 'sidebar.collapseFolder')}
+          title={$_(isCollapsed ? 'sidebar.expandFolder' : 'sidebar.collapseFolder')}
           onclick={(e: MouseEvent) => {
             e.stopPropagation()
             onToggleCollapse?.(tree.folder!.id)
           }}
         >
           <Icon
-            icon={isCollapsed ? 'mdi:chevron-right' : 'mdi:chevron-down'}
+            icon={isCollapsed ? 'lucide:chevron-right' : 'lucide:chevron-down'}
             class="w-4 h-4 text-muted-foreground"
           />
         </span>

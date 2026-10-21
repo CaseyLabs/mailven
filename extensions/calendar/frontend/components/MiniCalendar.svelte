@@ -141,7 +141,7 @@
     title={$_('calendar.viewSwitcher.pickDate')}
   >
     <h2 class="text-sm font-semibold text-foreground truncate">{title}</h2>
-    <Icon icon="mdi:chevron-down" class="w-4 h-4 text-muted-foreground shrink-0" />
+    <Icon icon="lucide:chevron-down" class="w-4 h-4 text-muted-foreground shrink-0" />
   </Popover.Trigger>
   <Popover.Portal>
     <Popover.Content
@@ -164,7 +164,7 @@
           aria-label={$_('calendar.viewSwitcher.prev')}
           onclick={() => page(-1)}
         >
-          <Icon icon="mdi:chevron-left" class="w-4 h-4 text-muted-foreground" />
+          <Icon icon="lucide:chevron-left" class="w-4 h-4 text-muted-foreground" />
         </button>
         <button
           type="button"
@@ -185,7 +185,7 @@
           aria-label={$_('calendar.viewSwitcher.next')}
           onclick={() => page(1)}
         >
-          <Icon icon="mdi:chevron-right" class="w-4 h-4 text-muted-foreground" />
+          <Icon icon="lucide:chevron-right" class="w-4 h-4 text-muted-foreground" />
         </button>
       </div>
 

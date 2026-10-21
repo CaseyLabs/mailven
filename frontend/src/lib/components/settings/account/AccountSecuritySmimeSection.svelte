@@ -15,8 +15,8 @@
     class="w-full flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
     onclick={() => s.smimeCollapsed = !s.smimeCollapsed}
   >
-    <Icon icon={s.smimeCollapsed ? 'mdi:chevron-right' : 'mdi:chevron-down'} class="w-4 h-4 shrink-0" />
-    <Icon icon="mdi:shield-lock-outline" class="w-4 h-4" />
+    <Icon icon={s.smimeCollapsed ? 'lucide:chevron-right' : 'lucide:chevron-down'} class="w-4 h-4 shrink-0" />
+    <Icon icon="lucide:shield-ellipsis" class="w-4 h-4" />
     {$_('security.smime')}
     {#if s.certificates.length > 0}
       <span class="text-ui-meta px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">{$_('security.certsCount', { values: { count: s.certificates.length } })}</span>
@@ -30,7 +30,7 @@
     <div class="flex items-center justify-between">
       <h4 class="text-xs font-medium text-muted-foreground uppercase tracking-wider">{$_('security.yourCertificates')}</h4>
       <Button variant="outline" size="sm" onclick={() => handlePickAndImport(s)}>
-        <Icon icon="mdi:certificate" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:badge-check" class="w-4 h-4 mr-1" />
         {$_('security.importP12')}
       </Button>
     </div>
@@ -43,9 +43,9 @@
           <div class="flex items-start gap-3 p-3 rounded-md border border-border bg-card">
             <div class="shrink-0 mt-0.5">
               {#if cert.isExpired}
-                <Icon icon="mdi:certificate-outline" class="w-5 h-5 text-destructive" />
+                <Icon icon="lucide:badge-check" class="w-5 h-5 text-destructive" />
               {:else}
-                <Icon icon="mdi:certificate" class="w-5 h-5 text-green-600 dark:text-green-400" />
+                <Icon icon="lucide:badge-check" class="w-5 h-5 text-green-600 dark:text-green-400" />
               {/if}
             </div>
             <div class="flex-1 min-w-0">
@@ -72,11 +72,11 @@
             <div class="flex items-center gap-1 shrink-0">
               {#if !cert.isDefault}
                 <Button variant="ghost" size="sm" onclick={() => handleSetDefault(s, cert.id)} title={$_('security.setAsDefault')}>
-                  <Icon icon="mdi:star-outline" class="w-4 h-4" />
+                  <Icon icon="lucide:star" class="w-4 h-4" />
                 </Button>
               {/if}
               <Button variant="ghost" size="sm" onclick={() => handleDeleteCert(s, cert.id)} title={$_('security.removeCertificate')}>
-                <Icon icon="mdi:delete-outline" class="w-4 h-4 text-destructive" />
+                <Icon icon="lucide:trash-2" class="w-4 h-4 text-destructive" />
               </Button>
             </div>
           </div>
@@ -152,7 +152,7 @@
     <div class="flex items-center justify-between">
       <h4 class="text-xs font-medium text-muted-foreground uppercase tracking-wider">{$_('security.recipientCertificates')}</h4>
       <Button variant="outline" size="sm" onclick={() => handlePickRecipientCert(s)}>
-        <Icon icon="mdi:certificate" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:badge-check" class="w-4 h-4 mr-1" />
         {$_('security.importButton')}
       </Button>
     </div>
@@ -162,7 +162,7 @@
       <div class="space-y-2">
         {#each s.senderCerts as cert (cert.id)}
           <div class="flex items-center gap-3 p-2 rounded-md border border-border">
-            <Icon icon="mdi:account-key-outline" class="w-4 h-4 text-muted-foreground shrink-0" />
+            <Icon icon="lucide:user-round-cog" class="w-4 h-4 text-muted-foreground shrink-0" />
             <div class="flex-1 min-w-0">
               <span class="text-sm truncate block">{cert.email}</span>
               <span class="text-xs text-muted-foreground truncate block">{cert.subject}</span>
@@ -171,7 +171,7 @@
               {formatDate(cert.lastSeenAt)}
             </span>
             <Button variant="ghost" size="sm" onclick={() => handleDeleteSenderCert(s, cert.id)} title={$_('security.removeButton')}>
-              <Icon icon="mdi:close" class="w-3.5 h-3.5" />
+              <Icon icon="lucide:x" class="w-3.5 h-3.5" />
             </Button>
           </div>
         {/each}

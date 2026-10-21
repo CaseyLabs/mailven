@@ -156,7 +156,7 @@
         ></div>
         <input
           type="text"
-          class="flex-1 h-8 px-2 text-sm bg-background border border-border rounded focus:outline-hidden focus:ring-2 focus:ring-primary/50 font-mono"
+          class="flex-1 h-8 px-2 text-sm bg-background border border-border rounded focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 font-mono"
           placeholder="#000000"
           value={hexInput}
           oninput={handleHexInput}

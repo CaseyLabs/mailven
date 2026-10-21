@@ -20,7 +20,8 @@ describe('chat reader view', () => {
       assert.equal(await msg.locator('iframe').count(), 0, 'no full HTML body')
       await msg.getByRole('heading', { name: 'Ten autumn hikes' }).waitFor()
       assert.match(await reader.innerText(), /Coastal paths and a ridge walk this week\.[\s\S]*Boots/)
-      assert.equal(await msg.locator('.bg-muted [data-chat-reader]').count(), 1, 'an incoming reader message sits in a bubble')
+      assert.equal(await msg.locator('.bg-muted [data-chat-reader], .bg-bubble-own [data-chat-reader]').count(), 0, 'no bubble background')
+      assert.match(await reader.evaluate((el) => getComputedStyle(el).fontFamily), /Literata/, 'the reader view reads in Literata')
 
       // Remote images are blocked until loaded; the alt text stands in.
       assert.equal(await reader.locator('img').count(), 0, 'remote image blocked')
@@ -63,7 +64,7 @@ describe('chat reader view', () => {
     assert.equal(await msg.locator('[data-chat-reader]').count(), 0, 'the reader view is replaced')
   }))
 
-  it('flat mode shows the reader without a bubble', ui.run({ beforeMount: `${readerFake}\n{ window.go.app.App.GetChatDisplayStyle = async () => 'flat' }` }, async (page) => {
+  it('flat mode shows the same reader view', ui.run({ beforeMount: `${readerFake}\n{ window.go.app.App.GetChatDisplayStyle = async () => 'flat' }` }, async (page) => {
     const msg = bubble(page, 'trip-5')
     await msg.locator('[data-chat-reader]').waitFor()
     assert.equal(await msg.locator('.bg-muted [data-chat-reader], .bg-bubble-own [data-chat-reader]').count(), 0, 'no bubble background')

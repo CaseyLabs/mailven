@@ -27,7 +27,7 @@
 {#if showReceipt && thread.readReceiptPolicy === 'ask'}
   <div class="flex flex-wrap items-center justify-between gap-2 px-3 py-2 border rounded-md text-sm {TONES.info}">
     <span class="flex items-center gap-2">
-      <Icon icon="mdi:email-check-outline" class="w-4 h-4 shrink-0" />
+      <Icon icon="lucide:mail-check" class="w-4 h-4 shrink-0" />
       {$_('viewer.readReceiptRequested')}
     </span>
     <span class="flex items-center gap-2">
@@ -36,7 +36,7 @@
         disabled={sending}
         onclick={() => thread.sendReadReceipt(msg)}
       >
-        {#if sending}<Icon icon="mdi:loading" class="w-3 h-3 animate-spin" />{:else}{$_('viewer.sendReceipt')}{/if}
+        {#if sending}<Icon icon="lucide:loader-circle" class="w-3 h-3 animate-spin" />{:else}{$_('viewer.sendReceipt')}{/if}
       </button>
       <button class="px-3 py-1 text-xs font-medium rounded hover:bg-info/20 transition-colors" onclick={() => thread.ignoreReadReceipt(msg)}>
         {$_('viewer.ignoreReceipt')}
@@ -45,7 +45,7 @@
   </div>
 {:else if showReceipt && thread.readReceiptPolicy === 'always' && sending}
   <div class="flex items-center gap-2 px-3 py-2 border rounded-md text-sm {TONES.ok}">
-    <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+    <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
     {$_('viewer.sendingReadReceipt')}
   </div>
 {/if}

@@ -86,7 +86,7 @@
         onclick={() => (findATimeOpen = true)}
         disabled={disabled}
       >
-        <Icon icon="mdi:clock-search-outline" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:history" class="w-4 h-4 mr-1" />
         {$_('calendar.attendees.findATime')}
       </Button>
     {/if}

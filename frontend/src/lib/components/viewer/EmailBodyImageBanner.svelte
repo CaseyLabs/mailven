@@ -23,7 +23,7 @@
         title={$_('viewer.remoteImagesBlocked')}
         onclick={onLoadImages}
       >
-        <Icon icon="mdi:image-off-outline" class="w-3.5 h-3.5 shrink-0" />
+        <Icon icon="lucide:image-off" class="w-3.5 h-3.5 shrink-0" />
         {$_('viewer.loadImages')}
       </button>
 
@@ -34,16 +34,16 @@
             title={$_('viewer.alwaysLoad')}
             aria-label={$_('viewer.alwaysLoad')}
           >
-            <Icon icon="mdi:chevron-down" class="w-3.5 h-3.5" />
+            <Icon icon="lucide:chevron-down" class="w-3.5 h-3.5" />
           </DropdownMenu.Trigger>
           <DropdownMenu.Content align="end">
             <div class="px-2 py-1.5 text-xs font-medium text-muted-foreground">{$_('viewer.alwaysLoad')}</div>
             <DropdownMenu.Item onSelect={onAlwaysLoadDomain}>
-              <Icon icon="mdi:domain" class="w-4 h-4 mr-2" />
+              <Icon icon="lucide:building-2" class="w-4 h-4 mr-2" />
               {$_('viewer.forDomain', { values: { domain: extractDomain(fromEmail) || 'this domain' } })}
             </DropdownMenu.Item>
             <DropdownMenu.Item onSelect={onAlwaysLoadSender}>
-              <Icon icon="mdi:account" class="w-4 h-4 mr-2" />
+              <Icon icon="lucide:user" class="w-4 h-4 mr-2" />
               {$_('viewer.forSender', { values: { email: fromEmail } })}
             </DropdownMenu.Item>
           </DropdownMenu.Content>

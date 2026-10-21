@@ -85,10 +85,10 @@
       <AlertDialog.Action
         onclick={handleConfirm}
         disabled={loading}
-        class={variant === 'destructive' ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' : ''}
+        variant={variant === 'destructive' ? 'danger' : 'default'}
       >
         {#if loading}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
         {/if}
         {confirmLabel}
       </AlertDialog.Action>

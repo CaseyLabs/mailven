@@ -140,7 +140,7 @@ export function createComposerEditor(
     content: '',
     editorProps: {
       attributes: {
-        class: 'composer-editor focus:outline-hidden min-h-[200px] p-3',
+        class: 'composer-editor focus-visible:outline-hidden min-h-[200px] p-3',
         // Disable native webview spellcheck; the Spellcheck extension renders
         // its own (consistent, multi-language) squiggles in this surface.
         spellcheck: 'false',

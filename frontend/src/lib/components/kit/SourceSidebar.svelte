@@ -147,7 +147,7 @@
 
     {#each sections as section, sIdx (sIdx)}
       {#if section.heading}
-        <div class="mx-4 mt-4 mb-1 text-meta font-semibold text-fg-tertiary">
+        <div class="mx-4 mt-4 mb-1 text-ui-section text-fg-secondary">
           {section.heading}
         </div>
       {/if}

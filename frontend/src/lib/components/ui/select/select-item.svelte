@@ -34,7 +34,7 @@
   {#snippet children({ selected })}
     <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       {#if selected}
-        <Icon icon="mdi:check" class="h-4 w-4" />
+        <Icon icon="lucide:check" class="h-4 w-4" />
       {/if}
     </span>
     {label || value}

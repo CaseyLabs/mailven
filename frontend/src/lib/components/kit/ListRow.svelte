@@ -40,7 +40,7 @@
 <div
   role="option"
   aria-selected={selected}
-  class="flex items-center w-full {PADDING[density]} border-b border-border text-left transition-colors cursor-pointer select-none {selected
+  class="flex items-center w-full {PADDING[density]} text-left transition-colors cursor-pointer select-none {selected
     ? 'bg-primary/20'
     : 'hover:bg-muted/50'}"
   onclick={handleClick}

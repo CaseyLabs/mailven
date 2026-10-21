@@ -182,7 +182,7 @@
   <!-- Read Receipts Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:email-check-outline" class="w-4 h-4" />
+      <Icon icon="lucide:mail-check" class="w-4 h-4" />
       {$_('settingsGeneral.readReceipts')}
     </h3>
 
@@ -212,7 +212,7 @@
   <!-- Spellcheck Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:spellcheck" class="w-4 h-4" />
+      <Icon icon="lucide:spell-check" class="w-4 h-4" />
       {$_('spellcheck.title')}
     </h3>
 
@@ -258,7 +258,7 @@
   <AccountAddressDefaults
     kind="replyto"
     title={$_('settings.defaultReplyTo')}
-    icon="mdi:reply"
+    icon="lucide:reply"
     help={$_('settings.defaultReplyToHelp')}
     placeholder="replies@example.com"
     single
@@ -271,7 +271,7 @@
   <AccountAddressDefaults
     kind="cc"
     title={$_('settings.defaultCc')}
-    icon="mdi:email-multiple-outline"
+    icon="lucide:mails"
     help={$_('settings.defaultCcHelp')}
     placeholder="boss@example.com"
   />
@@ -283,7 +283,7 @@
   <AccountAddressDefaults
     kind="bcc"
     title={$_('settings.defaultBcc')}
-    icon="mdi:email-plus-outline"
+    icon="lucide:mail-plus"
     help={$_('settings.defaultBccHelp')}
     placeholder="crm@example.com"
   />

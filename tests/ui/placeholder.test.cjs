@@ -8,7 +8,7 @@ const ui = require('./harness.cjs')
 // --fg-placeholder aliases text-tertiary (the design system's placeholder tier), so it equals fg-tertiary.
 // The probe copies the classes of the app's Input; screenshots land in test-results/ui/.
 const inputClass = fs.readFileSync(path.join(__dirname, '../../frontend/src/lib/components/ui/input/input.svelte'), 'utf8')
-  .match(/'(flex h-10[^']*)'/)[1]
+  .match(/'(flex h-control[^']*)'/)[1]
 
 for (const theme of ['dark', 'light']) {
   for (const accounts of ['expanded', 'collapsed']) {

@@ -66,12 +66,11 @@
   }
 </script>
 
-<div class="px-2 py-1">
+<div class="py-1">
   <!-- Unified Inbox Header -->
   <div
-    class="w-full flex items-center gap-2 px-2 min-h-control rounded-md transition-colors cursor-pointer {isUnifiedSelected
-      ? 'bg-primary/10 text-primary'
-      : 'hover:bg-muted/50'}"
+    class="nav-item cursor-pointer"
+    data-selected={isUnifiedSelected}
     data-sidebar-item="unified"
   >
     <!-- Expand/Collapse Toggle -->
@@ -79,11 +78,12 @@
       class="flex items-center justify-center size-7 -ml-1 hover:bg-muted rounded transition-colors"
       onclick={(e) => { e.stopPropagation(); toggleExpanded() }}
       aria-label={$_('sidebar.allInboxes')}
+      title={$_('sidebar.allInboxes')}
       aria-expanded={expanded}
     >
       <Icon
-        icon={expanded ? 'mdi:chevron-down' : 'mdi:chevron-right'}
-        class="w-4 h-4 text-muted-foreground"
+        icon={expanded ? 'lucide:chevron-down' : 'lucide:chevron-right'}
+        class="w-4 h-4 text-fg-tertiary"
       />
     </button>
 
@@ -93,10 +93,10 @@
       onclick={handleUnifiedClick}
     >
       <!-- Inbox Icon -->
-      <Icon icon="mdi:inbox-multiple" class="w-4 h-4 shrink-0" />
+      <Icon icon="lucide:inbox" class="w-4 h-4 shrink-0 text-fg-tertiary" />
 
       <!-- Label -->
-      <span class="flex-1 text-left text-sm font-medium truncate">{$_('sidebar.allInboxes')}</span>
+      <span class="flex-1 text-left text-body truncate">{$_('sidebar.allInboxes')}</span>
 
       <!-- Unread Badge -->
       {#if unifiedUnreadCount > 0}
@@ -114,9 +114,8 @@
         {#if acc.inbox}
           <FolderContextMenu accountId={acc.account.id} folderId={acc.inbox.id}>
             <button
-              class="w-full flex items-center gap-2 px-2 min-h-control rounded-md text-sm transition-colors {isAccountInboxSelected(acc.account.id, acc.inbox.id)
-                ? 'bg-primary/10 text-primary'
-                : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'}"
+              class="nav-item text-body"
+              data-selected={isAccountInboxSelected(acc.account.id, acc.inbox.id)}
               data-sidebar-item="unified-account"
               data-folder-id={acc.inbox.id}
               onclick={() => handleAccountInboxClick(acc)}

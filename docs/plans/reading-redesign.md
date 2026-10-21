@@ -77,7 +77,7 @@ Several milestones touch `frontend/src/lib/components/kit/**`, so read [EXT_RULE
 
 ## Risks and open questions
 
-- **Bubble setting:** UIX-6 made bubbles the default with flat as an option. DS makes left-aligned blocks the look. Recommendation: keep `chat_display_style` and its stored values, so no binding or settings change is needed. Restyle `flat` into the DS message block and make it the rendering for both values, or keep a restyled bubble variant if the owner wants it. The owner decides this when DS-3 is selected.
+- **Bubble setting:** UIX-6 made bubbles the default with flat as an option. DS makes left-aligned blocks the look. Recommendation: keep `chat_display_style` and its stored values, so no binding or settings change is needed. Restyle `flat` into the DS message block and make it the rendering for both values, or keep a restyled bubble variant if the owner wants it. Decided 2026-10-20: both values render as the DS message block (see Decision Log).
 - **Accent rename:** shadcn `--accent` is used as a hover grey across `ui/` components. If an alias collides with the new `accent`, colours change silently, so DS-1 renames the usages before defining the new token.
 - **Danger near accent:** errors always carry an icon and a sentence, and destructive buttons are never filled (decision 6).
 - **Row height:** going from 72 to 64 px rows and mapping micro to compact changes list density. Keep the setting's stored values.
@@ -103,8 +103,39 @@ Several milestones touch `frontend/src/lib/components/kit/**`, so read [EXT_RULE
   - [x] Docs: `docs/UI_TOKENS.md` (Avatars, Rows, pixel budgets, alias table), settings guide Message Density, `docs/validation/ds-2.md`, PLAN DS-2/Progress, ISSUES UI17.
   - [x] Checks: `project-check.py --base 58bac3d` with the contrast check (whitespace, docs, frontend lint/check/build, `make test-ui` 198 pass, contrast pass); visual check in both themes and Accounts states plus Contacts; independent acceptance 10/10. Native WebKitGTK recorded unrun.
 
+- [x] DS-3 (done 2026-10-20; owner-selected; branch `feat/ds-3`, base `4498f08`; [validation](../validation/ds-3.md)). Bubble-setting gate cleared by owner decision (Decision Log).
+  - [x] Context read: milestone row, artifact `implementation.md`/`decisions.md`/`tokens.json`, lifecycle and validation docs.
+  - [x] Message block: `ChatBubble.svelte` rewritten (avatar column, "You"/sender + time header, Literata `read-body` at `max-w-(--measure)`, mono for laid-out plain text via `chat/chatReading.ts` `looksPreformatted`); hover actions extracted to `ChatMessageActions.svelte`; `ChatPendingBubble.svelte` matches the block; `--bubble-own`/`--chat-bubble`/`MINE_BUBBLE_GUTTER` removed (contrast pair dropped).
+  - [x] Folds: `ChatFoldToggle.svelte` (pill, `aria-expanded`/`aria-controls`) for quoted text (quote + signature, one toggle) and details (From/To/Cc/Bcc/Date); opening holds position via `holdPosition`. `ChatReaderMessage.svelte` uses the same toggle and the reading face.
+  - [x] Stream: `--chat-stream` = `--thread-column` (Narrow = Standard, Wide 54rem); `ChatCompactRow.svelte` restyled (UIX-5 rules unchanged); "New" divider (`data-new-divider`, `role="separator"`, `accent-text`) after the day label above the first unread message.
+  - [x] Paper card: `EmailBody.svelte` `paper` prop; `buildIframeContent` takes the page colour (`getPaperHsl()`); the card shows in dark mode when HTML displays light.
+  - [x] Docs: UI_TOKENS (Message block, Reading width), email-management and settings guides, `en.json` (`chat.you`, details/divider keys, two descriptions).
+  - [x] Tests: new `tests/ui/chat-folds.test.cjs` (folds, position hold, 68ch at three widths, mono, paper card and its absence, New divider); `chat-flat`, `chat-presentation`, `chat-reader`, `chat-secure`, `logic` updated. Lint 0 errors; `svelte-check` 0/0; chat suites pass.
+  - [x] Checks: `project-check.py --base 4498f08` with the contrast check (all ten pass, `make test-ui` 210 pass); the UI audit exempts controls under their scroller's sticky heading (`ui-audit-rules.test.cjs`); visual check in both themes and Accounts states moved "Show details" into the hover actions; independent acceptance passes. Native WebKitGTK newsletter rendering recorded unrun.
+- [x] DS-4 (done 2026-10-21, [validation](../validation/ds-4.md); owner-selected 2026-10-21; branch `feat/ds-3`, base `8f75d9c`).
+  - [x] `ChatComposer.svelte`: raised card in the `--chat-stream` column, one "Reply to {names}" line until focused, draft kept when collapsed, collapse deferred until the pointer is released; `--chat-column` retired.
+  - [x] `ui/button` (heights 28/32/36, variants primary/secondary/tonal/ghost/danger/icon with the old names kept), `AlertDialog` Action/Cancel at 36 px with a `danger` variant, `ToolbarButton`/`ComposeButton` tonal, inputs 32 px with `border-control`, menus and popovers `radius-lg` + `shadow-2` with no border, `focus:` → `focus-visible:` on controls.
+  - [x] Tests: new `tests/ui/chat-composer-card.test.cjs` (4 pass); `chat-compose`, `chat-flat`, `placeholder` locators updated deliberately. Contrast pairs for danger and accent-text on raised added.
+  - [x] Checks: `project-check.py --base 8f75d9c` with the contrast check, all ten pass (`make test-ui` 214 pass); visual check in dark with Accounts expanded; independent acceptance check (see validation).
+- [x] DS-5 (done 2026-10-21, [validation](../validation/ds-5.md); owner-selected 2026-10-21 with "DS-5: sidebar states and Lucide icons"; branch `feat/ds-3`, base `170a67a`).
+  - [x] All `mdi:` references (145 files: `frontend/src`, `extensions/**` incl. the Calendar/Contacts rail icon in Go, tests, `docs/EXTENSIONS.md`) mapped to Lucide; brand marks to `simple-icons:`. No `heroicons:` uses remained. Packages and `iconify-offline.ts` collections kept (owner approval needed to drop them).
+  - [x] `.nav-item` shared states in `_utilities.css`; applied to `AppNav`, `SourceItem`, `FolderTreeItem`, `UnifiedInboxSection`; account headers `ui-section`; sidebar on `bg`, dividers removed (`App.svelte`, `SidebarFrame`, `SidebarFooter`, `Sidebar.svelte`, `AppNav`); global 1.75 stroke.
+  - [x] New `tests/ui/icon-gate.test.cjs` and `tests/ui/sidebar-states.test.cjs`; `app-nav`, `sidebar-actions`, `sidebar-focus`, `viewer-focus` pass.
+  - [x] Review fixes: tooltips and labels on icon-only sidebar controls; Add account, Calendar rows and Add calendar on `.nav-item`; Contacts/Calendar headings `ui-section`; the SourceSidebar selected option rings while its `<aside>` has keyboard focus. `sidebar-states` covers all four states, icon-only labels and the Contacts/Calendar items (8 pass).
+  - [x] Checks: `project-check.py --base 170a67a` with the contrast check (`make test-ui` 223 pass); visual check in both themes and Accounts states plus Contacts and Calendar; independent acceptance (see validation).
+- [x] DS-6 (done 2026-10-21, [validation](../validation/ds-6.md); owner-selected 2026-10-21 with the bare continuation prompt; branch `feat/ds-3`, base `b320317`). Completes DS.
+  - [x] `tests/ui/visual-matrix.test.cjs`: Mail, Contacts, Calendar, Settings x both themes x Accounts expanded/collapsed at 1400 px plus the 700 px layout, each with the UI audit and a 12 px text floor (24 cases).
+  - [x] Global reduced-motion rule in `app.css`, pinned by a matrix test.
+  - [x] Cleanup: remaining pane/row dividers removed, Avatar initials floored at 12 px, unused aliases removed; UI_TOKENS lists the remaining aliases; `contrast-check.mjs` uses DS names.
+  - [x] Screenshots retaken at 1040x740 (`ss-webmail-thread.png` reviewed, unchanged); CHANGELOG, README alt text, settings guide and `docs/EXTENSIONS.md` updated; independent acceptance failed two doc criteria, both fixed (see validation).
+
 ## Decision Log
 
+- 2026-10-21 (DS-6): the `--avatar-1…14` slots, `.avatar-1…14` classes, `--surface-sidebar`, `--selected` and `--bubble-own` had no users and are removed, superseding the DS-2 note that kept them. A custom theme that sets them still parses; the values are ignored.
+- 2026-10-20 (DS-3, owner): in dark mode the paper card shows whenever HTML mail displays light (Dark mail content off, or the per-message light toggle); darkened HTML takes the theme. No settings change.
+- 2026-10-20 (DS-3, owner): one "Show quoted text" fold covers both quoted history and the signature; splitting them is [UI18](../../ISSUES.md#ui18).
+- 2026-10-20 (DS-3): "older messages collapse to one line" is met by the UIX-5 "N earlier messages" row, restyled with its rules unchanged. The details fold is a button in each message's hover and focus actions: a visible pill under every message crowded short chats in the visual check. `--chat-stream` equals `--thread-column` (720px), so Narrow and Standard share the stream width while text keeps the 68ch measure. The 68ch measure applies to text bodies and reader content; sender-styled HTML keeps its own layout within the 720px stream.
+- 2026-10-20 (DS-3, owner): keep `chat_display_style` and its stored values (`bubbles`, `flat`), so no settings or binding change. Both values render as the one left-aligned DS message block, and your own messages are labelled "You". No restyled bubble variant.
 - 2026-10-20 (DS-2): kit Avatar now reads the named `.avatar-<tint>` classes, so a custom theme's `--avatar-1…14` values no longer tint avatars; the legacy classes and aliases stay so such themes still parse. The hash moved to `kit/avatarTint.ts` so tests and other kit users can share it (R25: generic seed naming, no mail terms).
 
 - 2026-10-20 (DS-1, owner): field placeholders follow the design system and use `text-tertiary`; `--fg-placeholder` becomes its alias, superseding UI13's separate dimmer tier. `placeholder.test.cjs` changes deliberately from "dimmer than tertiary" to "equals tertiary, dimmer than entered text".
@@ -113,6 +144,8 @@ Several milestones touch `frontend/src/lib/components/kit/**`, so read [EXT_RULE
 
 ## Surprises & Discoveries
 
+- DS-4: `--chat-column` is retired; the header and composer use `--chat-stream`, so the Narrow reading width no longer narrows them.
+- DS-4: collapsing the composer on `:focus-within` shrank the card on mousedown and made a click on Undo miss; collapse now waits for the pointer to be released.
 - Components use `text-primary` (accent) as a text colour in 54 files, and on hover and accent-tint fills terracotta `accent` reaches only 4.16:1. The design system draws accent text in `accent-text`, so `app.css` redefines the `text-primary` utility to `accent-text` while `--primary` stays the fill. Tailwind 4 drops an `@utility text-primary` override; a rule in `@layer utilities` replaces the generated one. Hover variants (`hover:text-primary`) still use `--primary`.
 - The design system's implementation map names `themes/app.css`, but the shared tokens live in `frontend/src/app.css`, with theme values in `frontend/src/themes/built-in.css` and `_defaults.css`.
 - The sidebar navigation from `eeed8d0` (kit `AppNav`) already replaced the rail, so DS-5 restyles that sidebar rather than the old rail.

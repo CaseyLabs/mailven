@@ -1,7 +1,7 @@
 // Headless README shots and Accounts-column crops. See "Playwright checks" in SKILL.md.
 // Usage: node headless-shot.js <outdir>   (dev server on :34115, DISPLAY not needed)
-// Writes the README shots <outdir>/ss.png (1040x660, dark), ss-light.png (1040x690, light, Accounts collapsed)
-// and ss-narrow.png (480x750, single-pane layout), ss-webmail.png (1040x690, the generic webmail mock
+// Writes the README shots <outdir>/ss.png (1040x740, dark), ss-light.png (1040x740, light, Accounts collapsed)
+// and ss-narrow.png (480x750, single-pane layout), ss-webmail.png (1040x740, the generic webmail mock
 // in webmail-mock.html, for the README comparison), ss-webmail-thread.png (480x750, the dark
 // webmail thread mock in webmail-thread-mock.html, beside ss-narrow.png), plus <outdir>/vc-<theme>-<expanded|collapsed>.png (title bar + sidebar).
 const path = require('path')
@@ -13,8 +13,10 @@ const toggleOf = (p) => p.locator('[title="Hide sidebar"],[aria-label="Hide side
 // Scroll the open chat to its top so the shot starts at the subject heading, not a clipped bubble.
 const scrollChatToTop = (p) => p.evaluate(() => { document.querySelector('.flex-1.min-h-0.overflow-y-auto.scrollbar-thin').scrollTop = 0 })
 ;(async () => {
-  await withFakePage({ width: 1040, height: 660 }, async (p) => {
-    await p.mouse.move(1039, 659)
+  await withFakePage({ width: 1040, height: 740 }, async (p) => {
+    await p.waitForTimeout(1200)
+    await scrollChatToTop(p)
+    await p.mouse.move(1039, 739)
     await p.waitForTimeout(600)
     await p.screenshot({ path: `${out}/ss.png` })
     // Theme x Accounts-column check. Dev builds force dark, so set data-theme by hand for light.
@@ -29,11 +31,11 @@ const scrollChatToTop = (p) => p.evaluate(() => { document.querySelector('.flex-
     }
   })
   // The heights end the chat between messages once it is scrolled to the top.
-  await withFakePage({ width: 1040, height: 690 }, async (p) => {
+  await withFakePage({ width: 1040, height: 740 }, async (p) => {
     await p.evaluate(() => document.documentElement.setAttribute('data-theme', 'light'))
     await p.waitForTimeout(800)
     await scrollChatToTop(p)
-    await p.mouse.move(1039, 689)
+    await p.mouse.move(1039, 739)
     await p.waitForTimeout(300)
     await p.screenshot({ path: `${out}/ss-light.png` })
   })
@@ -46,7 +48,7 @@ const scrollChatToTop = (p) => p.evaluate(() => { document.querySelector('.flex-
   })
   const browser = await launch()
   try {
-    const p = await browser.newPage({ viewport: { width: 1040, height: 690 } })
+    const p = await browser.newPage({ viewport: { width: 1040, height: 740 } })
     await p.goto('file://' + path.join(__dirname, 'webmail-mock.html'))
     await p.screenshot({ path: `${out}/ss-webmail.png` })
     const t = await browser.newPage({ viewport: { width: 480, height: 750 } })

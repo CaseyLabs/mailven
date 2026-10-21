@@ -88,9 +88,9 @@
         <li class="space-y-1">
           <div class="flex items-center gap-2 text-sm font-medium">
             {#if row.syncing}
-              <Icon icon="mdi:refresh" class="w-4 h-4 shrink-0 animate-spin text-muted-foreground" />
+              <Icon icon="lucide:refresh-cw" class="w-4 h-4 shrink-0 animate-spin text-muted-foreground" />
             {:else}
-              <Icon icon="mdi:alert-circle" class="w-4 h-4 shrink-0 text-destructive" />
+              <Icon icon="lucide:circle-alert" class="w-4 h-4 shrink-0 text-destructive" />
             {/if}
             <span class="truncate">{row.name}</span>
           </div>

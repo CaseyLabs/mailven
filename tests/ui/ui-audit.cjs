@@ -9,7 +9,7 @@
 //   clipped-text      text cut off by an overflow:hidden/clip ancestor without ellipsis or line clamp
 //   offscreen-text    text outside the window and not inside a scroll container
 //   clipped-control   a control partly cut off by a non-scrolling ancestor or the window
-//   covered-control   another element sits on top of a visible control's centre
+//   covered-control   another element sits on top of a visible control's centre; a sticky heading of the control's own scroller counts as scrolled away
 //   hidden-focusable  a keyboard-focusable control inside aria-hidden content
 //   no-name           an interactive accessibility node without an accessible name
 //   contrast          text below 4.5:1 (3:1 for large text) against its resolved background
@@ -113,6 +113,10 @@ const browserHelpers = () => {
     }
     return layers.reverse().reduce((base, layer) => over(layer, base), [255, 255, 255, 1])
   }
+  const stickyAncestor = (el) => {
+    for (let e = el; e && e !== document.body; e = e.parentElement) if (getComputedStyle(e).position === 'sticky') return e
+    return null
+  }
   // A fixed or absolute layer covering at least half the window is an intentional overlay (responsive viewer, scrim).
   const layer = (el) => {
     const area = document.documentElement.clientWidth * document.documentElement.clientHeight
@@ -191,6 +195,9 @@ const browserHelpers = () => {
       if (!hit || el === hit || el.contains(hit) || hit.contains(el)) continue
       if ((hit.closest('label') && hit.closest('label').control === el) || hit.closest('[role=tooltip]')) continue
       if (modal && !modal.contains(el)) continue
+      // Under a sticky heading of its own scroller the control has scrolled out of view, like a partly scrolled one.
+      const sticky = stickyAncestor(hit)
+      if (sticky && sticky.parentElement?.contains(el)) continue
       if (hit.closest(overlay) && !el.closest(overlay)) continue
       // Below a large positioned layer (scrim, responsive viewer, drawer) controls are intentionally covered.
       const stack = document.elementsFromPoint(box.left + box.width / 2, box.top + box.height / 2)

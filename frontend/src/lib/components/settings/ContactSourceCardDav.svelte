@@ -33,7 +33,7 @@
           class="flex-1"
           onclick={() => s.setCardDavAuth('password')}
         >
-          <Icon icon="mdi:key" class="w-4 h-4 mr-2" />
+          <Icon icon="lucide:key-round" class="w-4 h-4 mr-2" />
           {$_('contactSource.authPassword')}
         </Button>
         <Button
@@ -43,7 +43,7 @@
           class="flex-1"
           onclick={() => s.setCardDavAuth('oauth')}
         >
-          <Icon icon="mdi:shield-key-outline" class="w-4 h-4 mr-2" />
+          <Icon icon="lucide:shield-ellipsis" class="w-4 h-4 mr-2" />
           {$_('contactSource.authOAuth')}
         </Button>
       </div>
@@ -69,7 +69,7 @@
       <Label>{$_('contactSource.oauthAccount')}</Label>
       {#if s.loadingCustomAccounts}
         <div class="flex items-center justify-center py-3">
-          <Icon icon="mdi:loading" class="w-5 h-5 animate-spin text-muted-foreground" />
+          <Icon icon="lucide:loader-circle" class="w-5 h-5 animate-spin text-muted-foreground" />
         </div>
       {:else if s.customOAuthAccounts.length === 0}
         <p class="text-xs text-muted-foreground">{$_('contactSource.noCustomAccounts')}</p>
@@ -87,7 +87,7 @@
             >
               <div class="w-4 h-4 border border-border rounded flex items-center justify-center {s.selectedCustomAccountId === acc.accountId ? 'bg-primary border-primary' : ''}">
                 {#if s.selectedCustomAccountId === acc.accountId}
-                  <Icon icon="mdi:check" class="w-3 h-3 text-primary-foreground" />
+                  <Icon icon="lucide:check" class="w-3 h-3 text-primary-foreground" />
                 {/if}
               </div>
               <div class="flex-1 min-w-0">
@@ -128,10 +128,10 @@
     disabled={s.discovering || !s.url || (s.cardDavIsOAuth ? !s.selectedCustomAccountId : (!s.username || !s.password))}
   >
     {#if s.discovering}
-      <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+      <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
       {$_('contactSource.discovering')}
     {:else}
-      <Icon icon="mdi:connection" class="w-4 h-4 mr-2" />
+      <Icon icon="lucide:plug" class="w-4 h-4 mr-2" />
       {s.hasDiscovered ? $_('contactSource.reDiscover') : $_('contactSource.connectDiscover')}
     {/if}
   </Button>
@@ -154,7 +154,7 @@
           >
             <div class="w-4 h-4 border border-border rounded flex items-center justify-center {s.selectedAddressbooks.has(ab.path) ? 'bg-primary border-primary' : ''}">
               {#if s.selectedAddressbooks.has(ab.path)}
-                <Icon icon="mdi:check" class="w-3 h-3 text-primary-foreground" />
+                <Icon icon="lucide:check" class="w-3 h-3 text-primary-foreground" />
               {/if}
             </div>
             <div class="flex-1 min-w-0">

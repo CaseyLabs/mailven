@@ -20,7 +20,7 @@
     disabled={!s.editAccount}
   >
     <Icon
-      icon={s.showFolderMapping ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+      icon={s.showFolderMapping ? 'lucide:chevron-down' : 'lucide:chevron-right'}
       class="w-4 h-4"
     />
     {$_('account.folderMapping')}
@@ -37,7 +37,7 @@
 
       {#if s.loadingFolders}
         <div class="flex items-center gap-2 text-sm text-muted-foreground">
-          <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
           {$_('account.loadingFolders')}
         </div>
       {:else if s.availableFolders.length === 0}

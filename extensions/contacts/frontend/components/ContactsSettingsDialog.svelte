@@ -174,7 +174,7 @@
               <div class="flex items-center justify-between gap-3 rounded-md border border-border p-3">
                 <div class="flex items-center gap-3 min-w-0">
                   <Icon
-                    icon={source.type === 'google' ? 'mdi:google' : source.type === 'microsoft' ? 'mdi:microsoft' : 'mdi:server'}
+                    icon={source.type === 'google' ? 'simple-icons:google' : source.type === 'microsoft' ? 'simple-icons:microsoft' : 'lucide:server'}
                     class="w-5 h-5 text-muted-foreground shrink-0"
                   />
                   <div class="min-w-0">
@@ -195,7 +195,7 @@
                         onclick={() => openWriteAccessPicker(source)}
                         disabled={pendingWriteAccess[source.id]}
                       >
-                        <Icon icon="mdi:refresh" class="w-4 h-4 mr-1" />
+                        <Icon icon="lucide:refresh-cw" class="w-4 h-4 mr-1" />
                         {$_('contacts.settings.reauthorizeWriteAccess')}
                       </Button>
                     {/if}
@@ -206,7 +206,7 @@
                       disabled={pendingWriteAccess[source.id]}
                     >
                       {#if pendingWriteAccess[source.id]}
-                        <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+                        <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
                       {/if}
                       {$_('contacts.settings.disableWriteAccess')}
                     </Button>
@@ -218,7 +218,7 @@
                     disabled={pendingWriteAccess[source.id]}
                   >
                     {#if pendingWriteAccess[source.id]}
-                      <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+                      <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
                     {/if}
                     {$_('contacts.settings.enableWriteAccess')}
                   </Button>

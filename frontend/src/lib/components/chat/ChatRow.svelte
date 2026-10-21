@@ -121,22 +121,22 @@
 </script>
 
 {#snippet extraItems()}
-  <ContextMenuItem onSelect={actions.onArchive}><Icon icon="mdi:archive-outline" class="mr-2 h-4 w-4" />{$_('viewer.archive')}</ContextMenuItem>
+  <ContextMenuItem onSelect={actions.onArchive}><Icon icon="lucide:archive" class="mr-2 h-4 w-4" />{$_('viewer.archive')}</ContextMenuItem>
   <ContextMenuItem onSelect={actions.onPin}>
-    <Icon icon={chat.isPinned ? 'mdi:pin-off-outline' : 'mdi:pin-outline'} class="mr-2 h-4 w-4" />{chat.isPinned ? $_('chat.unpin') : $_('chat.pin')}
+    <Icon icon={chat.isPinned ? 'lucide:pin-off' : 'lucide:pin'} class="mr-2 h-4 w-4" />{chat.isPinned ? $_('chat.unpin') : $_('chat.pin')}
   </ContextMenuItem>
   <!-- Opens the row's snooze menu once the context menu has closed. -->
-  <ContextMenuItem onSelect={() => setTimeout(() => void openSnooze())}><Icon icon="mdi:alarm-snooze" class="mr-2 h-4 w-4" />{$_('chat.snoozeMenu')}</ContextMenuItem>
+  <ContextMenuItem onSelect={() => setTimeout(() => void openSnooze())}><Icon icon="lucide:alarm-clock" class="mr-2 h-4 w-4" />{$_('chat.snoozeMenu')}</ContextMenuItem>
   {#if chat.snoozedUntil}
-    <ContextMenuItem onSelect={actions.onUnsnooze}><Icon icon="mdi:alarm-off" class="mr-2 h-4 w-4" />{$_('chat.unsnooze')}</ContextMenuItem>
+    <ContextMenuItem onSelect={actions.onUnsnooze}><Icon icon="lucide:bell-off" class="mr-2 h-4 w-4" />{$_('chat.unsnooze')}</ContextMenuItem>
   {/if}
   <ContextMenuItem onSelect={actions.onToggleSenderLow}>
-    <Icon icon={chat.isLowPriority ? 'mdi:account-arrow-up-outline' : 'mdi:newspaper-variant-outline'} class="mr-2 h-4 w-4" />
+    <Icon icon={chat.isLowPriority ? 'lucide:user-round-plus' : 'lucide:newspaper'} class="mr-2 h-4 w-4" />
     {chat.isLowPriority ? $_('chat.moveSenderToPriority') : $_('chat.moveSenderToLow')}
   </ContextMenuItem>
   {#if canToggleSenderChat(chat.senderEmail, folderType)}
     <ContextMenuItem onSelect={actions.onToggleSenderChat}>
-      <Icon icon={chat.senderEmail ? 'mdi:call-split' : 'mdi:account-multiple-outline'} class="mr-2 h-4 w-4" />
+      <Icon icon={chat.senderEmail ? 'lucide:split' : 'lucide:users'} class="mr-2 h-4 w-4" />
       {chat.senderEmail ? $_('chat.splitSender') : $_('chat.combineSender')}
     </ContextMenuItem>
   {/if}
@@ -144,9 +144,9 @@
 
 {#snippet statusIcons()}
   <span class="flex items-center gap-1 shrink-0 text-fg-tertiary" aria-hidden="true">
-    {#if chat.isEncrypted}<Icon icon="mdi:lock" class="w-3.5 h-3.5" />{/if}
-    {#if chat.hasAttachments}<Icon icon="mdi:paperclip" class="w-3.5 h-3.5" />{/if}
-    {#if chat.isPinned && !inPinned}<Icon icon="mdi:pin" class="w-3.5 h-3.5" />{/if}
+    {#if chat.isEncrypted}<Icon icon="lucide:lock" class="w-3.5 h-3.5" />{/if}
+    {#if chat.hasAttachments}<Icon icon="lucide:paperclip" class="w-3.5 h-3.5" />{/if}
+    {#if chat.isPinned && !inPinned}<Icon icon="lucide:pin" class="w-3.5 h-3.5" />{/if}
   </span>
 {/snippet}
 
@@ -236,9 +236,9 @@
              Unread under a higher-priority glyph shows as a small dot on its corner. -->
         <span class="relative flex items-center justify-center w-4 shrink-0 group-hover/row:invisible group-focus-within/row:invisible" data-row-status={status ?? undefined} aria-hidden="true">
           {#if status === 'sending'}
-            <span title={$_('chat.sending')}><Icon icon="mdi:loading" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
+            <span title={$_('chat.sending')}><Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
           {:else if status === 'snoozed'}
-            <span title={$_('chat.snoozedUntil', { values: { time: snoozeTime } })}><Icon icon="mdi:alarm-snooze" class="w-4 h-4 text-fg-tertiary" /></span>
+            <span title={$_('chat.snoozedUntil', { values: { time: snoozeTime } })}><Icon icon="lucide:alarm-clock" class="w-4 h-4 text-fg-tertiary" /></span>
           {:else if status === 'unread'}
             <span class="w-2 h-2 rounded-full bg-accent"></span>
           {/if}
@@ -258,9 +258,9 @@
       aria-label={$_('chat.quickActions')}
       data-row-actions
     >
-      {@render quickAction($_('viewer.archive'), 'mdi:archive-outline', actions.onArchive)}
-      {@render quickAction(hasUnread ? $_('viewer.markAsRead') : $_('viewer.markAsUnread'), hasUnread ? 'mdi:email-open-outline' : 'mdi:email-mark-as-unread', actions.onToggleRead)}
-      {@render quickAction($_('chat.snooze'), 'mdi:alarm-snooze', () => void openSnooze())}
+      {@render quickAction($_('viewer.archive'), 'lucide:archive', actions.onArchive)}
+      {@render quickAction(hasUnread ? $_('viewer.markAsRead') : $_('viewer.markAsUnread'), hasUnread ? 'lucide:mail-open' : 'lucide:mail', actions.onToggleRead)}
+      {@render quickAction($_('chat.snooze'), 'lucide:alarm-clock', () => void openSnooze())}
     </div>
 
     {#if snoozeMounted}

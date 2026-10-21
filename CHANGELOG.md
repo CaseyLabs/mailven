@@ -6,20 +6,22 @@ Mailven is an independent email client derived from [Aerion](https://github.com/
 
 **Features carried over from the fork**
 
-- Chat-style mail: threads as chat bubbles with quoted history and signatures hidden, and a docked reply box at the bottom of each conversation
+- Chat-style mail: threads as chats with quoted history and signatures hidden, and a docked reply box at the bottom of each conversation
 - Keyboard triage: archive, pin, snooze and mark unread
 - A Low priority split for newsletters and other bulk mail
 - Sender chats that combine all of one sender's threads into one conversation (pin, snooze, sender priority and sender chats are stored locally and are not synced)
 
 **Visual refinement**
 
-- Calmer chat list: roomy, airy density-aware rows (micro, compact, standard, large), sentence-case group labels, a quieter list header with an accent Compose button, and a soft warm tint on the selected chat and on your own bubbles
+- Calmer chat list: roomy, airy density-aware rows (micro, compact, standard, large), sentence-case group labels, a quieter list header with an accent Compose button, and a soft neutral fill on the selected chat
 - Warm, calm palette: warm neutral surfaces in Light and Dark with one muted terracotta accent for the primary action, unread state and focus; every text pair meets WCAG AA
 - Bundled Inter for the interface and Literata for reading, so text looks the same on every system and no font is fetched from the network; no interface text is smaller than 12 px
 - Easier-to-read text: one size step larger throughout the app
 - Clearer hierarchy: contrast-checked primary, secondary and tertiary text, and a tonal step between the Accounts column, chat list and conversation pane in Dark and Light
 - No left navigation rail: Mail, enabled extensions and Settings are labeled options at the top of each view's sidebar, so with the sidebar collapsed the chat list sits at the window's left edge; the Accounts column drops its New message action (Compose stays in the list header)
-- Conversation pane polish: messages span the whole pane (theirs on the left, yours on the right), a Reading width setting (Narrow, Standard, Wide) for how wide bubbles grow, and larger message text
+- Reading-first conversations: every message is a left-aligned block with its avatar, the sender and time, and your own messages labelled "You"; text is set in Literata at a comfortable 68-character measure; quoted text, signatures and details fold behind quiet toggles; a "New" divider marks the first unread message; in Dark, sender-styled HTML mail shows on a soft light card; the Reading width setting (Narrow, Standard, Wide) still applies
+- A composer card anchored to the bottom of the conversation, collapsed to a one-line reply bar until focused; one filled button per view; Lucide icons throughout and sidebar items that share the chat list's hover, selected and focus states; muted avatar tints; no divider lines between panes or rows
+- Nothing animates when the system asks for reduced motion
 - Design tokens documented in `docs/UI_TOKENS.md`; `make lint` checks text contrast
 
 **Migration to Mailven**

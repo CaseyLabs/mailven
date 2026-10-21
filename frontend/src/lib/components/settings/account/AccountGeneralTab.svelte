@@ -79,7 +79,7 @@
   <!-- Account Identification -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:account-circle-outline" class="w-4 h-4" />
+      <Icon icon="lucide:circle-user" class="w-4 h-4" />
       {$_('account.accountIdentification')}
     </h3>
 
@@ -129,7 +129,7 @@
   <!-- Credentials -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:key-outline" class="w-4 h-4" />
+      <Icon icon="lucide:key-round" class="w-4 h-4" />
       {$_('account.credentials')}
     </h3>
 
@@ -169,9 +169,9 @@
           <div class="flex items-center gap-3">
             <div class="shrink-0 w-10 h-10 rounded-full {reauthorizeSuccess ? 'bg-green-500/20' : 'bg-primary/10'} flex items-center justify-center transition-colors">
               {#if reauthorizeSuccess}
-                <Icon icon="mdi:check-circle" class="w-5 h-5 text-green-500" />
+                <Icon icon="lucide:circle-check" class="w-5 h-5 text-green-500" />
               {:else}
-                <Icon icon="mdi:shield-check" class="w-5 h-5 text-primary" />
+                <Icon icon="lucide:shield-check" class="w-5 h-5 text-primary" />
               {/if}
             </div>
             <div class="flex-1">
@@ -195,10 +195,10 @@
                 disabled={reauthorizing}
               >
                 {#if reauthorizing}
-                  <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+                  <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
                   {$_('account.authorizing')}
                 {:else}
-                  <Icon icon="mdi:refresh" class="w-4 h-4 mr-2" />
+                  <Icon icon="lucide:refresh-cw" class="w-4 h-4 mr-2" />
                   {$_('account.reauthorize')}
                 {/if}
               </Button>
@@ -242,7 +242,7 @@
   <!-- Sync Settings -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:sync" class="w-4 h-4" />
+      <Icon icon="lucide:refresh-cw" class="w-4 h-4" />
       {$_('account.syncSettings')}
     </h3>
 

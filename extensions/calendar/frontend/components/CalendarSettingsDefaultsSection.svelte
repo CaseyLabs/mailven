@@ -80,7 +80,7 @@
       <h3 class="text-sm font-semibold text-foreground">
         {$_('calendar.settings.defaultsSection')}
       </h3>
-      <Icon icon={expanded ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="w-4 h-4 text-muted-foreground" />
+      <Icon icon={expanded ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-4 h-4 text-muted-foreground" />
     </button>
     {#if expanded}
     <div class="space-y-2 px-3 pb-3 pt-1">

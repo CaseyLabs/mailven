@@ -25,5 +25,5 @@
   {#if children}
     {@render children()}
   {/if}
-  <Icon icon="mdi:chevron-right" class="ml-auto h-4 w-4" />
+  <Icon icon="lucide:chevron-right" class="ml-auto h-4 w-4" />
 </ContextMenuPrimitive.SubTrigger>

@@ -8,7 +8,7 @@
 
 | A typical cluttered webmail inbox | The same mail in Mailven |
 | --- | --- |
-| ![A generic webmail inbox crowded with category tabs, labels, a sponsored row, a notification banner and a storage meter, with each conversation squeezed into one line](docs/ss-webmail.png) | ![Mailven in the light theme with the Accounts column collapsed, showing the same conversations as chats and the trip chat open as message bubbles](docs/ss-light.png) |
+| ![A generic webmail inbox crowded with category tabs, labels, a sponsored row, a notification banner and a storage meter, with each conversation squeezed into one line](docs/ss-webmail.png) | ![Mailven in the light theme with the Accounts column collapsed, showing the same conversations as chats and the trip chat open as left-aligned messages](docs/ss-light.png) |
 
 | A typical webmail thread | The same thread in Mailven |
 | --- | --- |

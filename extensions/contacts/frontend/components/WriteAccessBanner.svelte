@@ -76,13 +76,13 @@
   function providerIcon(type: string): string {
     switch (type) {
       case 'google':
-        return 'mdi:google'
+        return 'simple-icons:google'
       case 'microsoft':
-        return 'mdi:microsoft'
+        return 'simple-icons:microsoft'
       case 'carddav':
-        return 'mdi:server'
+        return 'lucide:server'
     }
-    return 'mdi:account-multiple-outline'
+    return 'lucide:users'
   }
 
   function providerLabel(type: string): string {
@@ -101,7 +101,7 @@
 {#if rows.length > 0}
   <div class="border-b border-border bg-muted/40 px-3 py-2">
     <div class="flex items-center gap-2 mb-2 text-xs text-muted-foreground">
-      <Icon icon="mdi:lock-outline" class="w-3.5 h-3.5" />
+      <Icon icon="lucide:lock" class="w-3.5 h-3.5" />
       <span>{$_('contacts.writeAccessBanner.title')}</span>
     </div>
     <div class="flex flex-wrap gap-2">
@@ -120,7 +120,7 @@
             disabled={pendingEnable[source.id]}
           >
             {#if pendingEnable[source.id]}
-              <Icon icon="mdi:loading" class="w-3.5 h-3.5 mr-1 animate-spin" />
+              <Icon icon="lucide:loader-circle" class="w-3.5 h-3.5 mr-1 animate-spin" />
             {/if}
             {$_('contacts.writeAccessBanner.enableButton')}
           </Button>

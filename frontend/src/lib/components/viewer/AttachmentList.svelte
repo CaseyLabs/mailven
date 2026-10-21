@@ -170,17 +170,17 @@
   }
 
   function getFileIcon(contentType: string): string {
-    if (contentType.startsWith('image/')) return 'mdi:file-image'
-    if (contentType.startsWith('video/')) return 'mdi:file-video'
-    if (contentType.startsWith('audio/')) return 'mdi:file-music'
-    if (contentType === 'application/pdf') return 'mdi:file-pdf-box'
-    if (contentType.includes('word') || contentType === 'application/msword') return 'mdi:file-word'
-    if (contentType.includes('excel') || contentType === 'application/vnd.ms-excel') return 'mdi:file-excel'
-    if (contentType.includes('powerpoint') || contentType === 'application/vnd.ms-powerpoint') return 'mdi:file-powerpoint'
-    if (contentType.includes('zip') || contentType.includes('compressed')) return 'mdi:folder-zip'
-    if (contentType === 'text/plain') return 'mdi:file-document-outline'
-    if (contentType === 'text/html') return 'mdi:language-html5'
-    return 'mdi:file'
+    if (contentType.startsWith('image/')) return 'lucide:file-image'
+    if (contentType.startsWith('video/')) return 'lucide:file-video'
+    if (contentType.startsWith('audio/')) return 'lucide:file-music'
+    if (contentType === 'application/pdf') return 'lucide:file-text'
+    if (contentType.includes('word') || contentType === 'application/msword') return 'lucide:file-text'
+    if (contentType.includes('excel') || contentType === 'application/vnd.ms-excel') return 'lucide:file-spreadsheet'
+    if (contentType.includes('powerpoint') || contentType === 'application/vnd.ms-powerpoint') return 'lucide:presentation'
+    if (contentType.includes('zip') || contentType.includes('compressed')) return 'lucide:file-archive'
+    if (contentType === 'text/plain') return 'lucide:file-text'
+    if (contentType === 'text/html') return 'lucide:code-xml'
+    return 'lucide:file'
   }
 
   function formatSize(bytes: number): string {
@@ -199,7 +199,7 @@
   <div class="space-y-2">
     {#each encryptedAttachments as att (att.filename)}
       {@const isDownloading = downloadingIds.has(att.filename)}
-      <div class="flex items-center gap-3 p-2 rounded-md border border-divider bg-muted/30 hover:bg-muted/50 transition-colors group">
+      <div class="flex items-center gap-3 p-2 rounded-md bg-surface-hover hover:bg-surface-selected transition-colors group">
         <div class="shrink-0 w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center">
           <Icon icon={getFileIcon(att.contentType)} class="w-5 h-5 text-primary" />
         </div>
@@ -214,7 +214,7 @@
         <div class="flex items-center gap-1 shrink-0">
           {#if isDownloading}
             <div class="p-2">
-              <Icon icon="mdi:loading" class="w-4 h-4 animate-spin text-muted-foreground" />
+              <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin text-muted-foreground" />
             </div>
           {:else}
             <button
@@ -222,14 +222,14 @@
               title={$_('attachment.open')}
               onclick={() => handleEncryptedOpen(att)}
             >
-              <Icon icon="mdi:open-in-new" class="w-4 h-4 text-muted-foreground" />
+              <Icon icon="lucide:external-link" class="w-4 h-4 text-muted-foreground" />
             </button>
             <button
               class="p-2 rounded-md hover:bg-muted transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-focus-within:opacity-100"
               title={$_('attachment.download')}
               onclick={() => handleEncryptedDownload(att)}
             >
-              <Icon icon="mdi:download" class="w-4 h-4 text-muted-foreground" />
+              <Icon icon="lucide:download" class="w-4 h-4 text-muted-foreground" />
             </button>
           {/if}
         </div>
@@ -243,10 +243,10 @@
         disabled={savingAll}
       >
         {#if savingAll}
-          <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
           {$_('attachment.saving')}
         {:else}
-          <Icon icon="mdi:download-multiple" class="w-4 h-4" />
+          <Icon icon="lucide:download" class="w-4 h-4" />
           {$_('attachment.saveAll', { values: { count: encryptedAttachments.length } })}
         {/if}
       </button>
@@ -256,7 +256,7 @@
   <div class="space-y-2">
     {#each attachments as att (att.id)}
       {@const isDownloading = downloadingIds.has(att.id)}
-      <div class="flex items-center gap-3 p-2 rounded-md border border-divider bg-muted/30 hover:bg-muted/50 transition-colors group">
+      <div class="flex items-center gap-3 p-2 rounded-md bg-surface-hover hover:bg-surface-selected transition-colors group">
         <div class="shrink-0 w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center">
           <Icon icon={getFileIcon(att.contentType)} class="w-5 h-5 text-primary" />
         </div>
@@ -271,7 +271,7 @@
         <div class="flex items-center gap-1 shrink-0">
           {#if isDownloading}
             <div class="p-2">
-              <Icon icon="mdi:loading" class="w-4 h-4 animate-spin text-muted-foreground" />
+              <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin text-muted-foreground" />
             </div>
           {:else}
             <button
@@ -279,14 +279,14 @@
               title={$_('attachment.open')}
               onclick={() => handleOpen(att)}
             >
-              <Icon icon="mdi:open-in-new" class="w-4 h-4 text-muted-foreground" />
+              <Icon icon="lucide:external-link" class="w-4 h-4 text-muted-foreground" />
             </button>
             <button
               class="p-2 rounded-md hover:bg-muted transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-focus-within:opacity-100"
               title={$_('attachment.download')}
               onclick={() => handleDownload(att)}
             >
-              <Icon icon="mdi:download" class="w-4 h-4 text-muted-foreground" />
+              <Icon icon="lucide:download" class="w-4 h-4 text-muted-foreground" />
             </button>
           {/if}
         </div>
@@ -300,10 +300,10 @@
         disabled={savingAll}
       >
         {#if savingAll}
-          <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
           {$_('attachment.saving')}
         {:else}
-          <Icon icon="mdi:download-multiple" class="w-4 h-4" />
+          <Icon icon="lucide:download" class="w-4 h-4" />
           {$_('attachment.saveAll', { values: { count: attachments.length } })}
         {/if}
       </button>

@@ -63,7 +63,7 @@
         <!-- Header -->
         <div class="flex items-center gap-3 px-6 pt-6 pb-4">
           <div class="flex items-center justify-center w-10 h-10 rounded-full bg-yellow-500/10">
-            <Icon icon="mdi:shield-alert-outline" class="w-6 h-6 text-yellow-500" />
+            <Icon icon="lucide:shield-alert" class="w-6 h-6 text-yellow-500" />
           </div>
           <div>
             <h2 class="text-lg font-semibold">{$_('certificate.title')}</h2>

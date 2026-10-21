@@ -325,16 +325,16 @@
 <div class="flex flex-col h-full {isFlashing ? 'pane-focus-flash' : ''}">
   {#if !threadId || (!thread.conversation && !thread.loading && !thread.error)}
     <div class="flex flex-col items-center justify-center flex-1 text-muted-foreground">
-      <Icon icon="mdi:chat-outline" class="w-16 h-16 mb-4" />
+      <Icon icon="lucide:message-square" class="w-16 h-16 mb-4" />
       <p class="text-lg">{$_('chat.selectChat')}</p>
     </div>
   {:else if thread.loading && !thread.conversation}
     <div class="flex items-center justify-center h-full">
-      <Icon icon="mdi:loading" class="w-8 h-8 animate-spin text-muted-foreground" />
+      <Icon icon="lucide:loader-circle" class="w-8 h-8 animate-spin text-muted-foreground" />
     </div>
   {:else if thread.error}
     <div class="flex flex-col items-center justify-center h-full text-center px-4">
-      <Icon icon="mdi:alert-circle-outline" class="w-12 h-12 text-destructive mb-3" />
+      <Icon icon="lucide:circle-alert" class="w-12 h-12 text-destructive mb-3" />
       <p class="text-destructive mb-2">{thread.error}</p>
       <button class="mt-2 text-sm text-primary hover:underline" onclick={() => thread.reload()}>{$_('viewer.tryAgain')}</button>
     </div>

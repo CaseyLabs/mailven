@@ -153,15 +153,15 @@
   })
 
   const folderIcons: Record<string, string> = {
-    inbox: 'mdi:inbox',
-    sent: 'mdi:send',
-    drafts: 'mdi:file-document-edit-outline',
-    trash: 'mdi:delete-outline',
-    archive: 'mdi:archive-outline',
-    spam: 'mdi:alert-octagon-outline',
-    all: 'mdi:email-multiple-outline',
-    starred: 'mdi:star-outline',
-    folder: 'mdi:folder-outline',
+    inbox: 'lucide:inbox',
+    sent: 'lucide:send',
+    drafts: 'lucide:file-pen',
+    trash: 'lucide:trash-2',
+    archive: 'lucide:archive',
+    spam: 'lucide:octagon-alert',
+    all: 'lucide:mails',
+    starred: 'lucide:star',
+    folder: 'lucide:folder',
   }
 
   function getFolderIcon(type: string): string {
@@ -206,7 +206,7 @@
 
     <!-- Search input -->
     <div class="relative">
-      <Icon icon="mdi:magnify" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <Icon icon="lucide:search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <input
         bind:this={searchInput}
         bind:value={searchQuery}
@@ -242,7 +242,7 @@
     >
       {#if foldersLoading}
         <div class="flex items-center gap-2 p-3 text-muted-foreground text-sm">
-          <Icon icon="mdi:loading" class="h-4 w-4 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="h-4 w-4 animate-spin" />
           {$_('common.loading')}
         </div>
       {:else if displayFolders().length === 0}

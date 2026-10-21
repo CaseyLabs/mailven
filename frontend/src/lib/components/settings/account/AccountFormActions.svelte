@@ -15,7 +15,7 @@
       : 'bg-destructive/10 border border-destructive/20'}"
   >
     <Icon
-      icon={s.testResult.success ? 'mdi:check-circle' : 'mdi:alert-circle'}
+      icon={s.testResult.success ? 'lucide:circle-check' : 'lucide:circle-alert'}
       class="w-5 h-5 shrink-0 mt-0.5 {s.testResult.success
         ? 'text-green-500'
         : 'text-destructive'}"
@@ -39,9 +39,9 @@
     disabled={s.testing || s.submitting}
   >
     {#if s.testing}
-      <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+      <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
     {:else}
-      <Icon icon="mdi:connection" class="w-4 h-4 mr-2" />
+      <Icon icon="lucide:plug" class="w-4 h-4 mr-2" />
     {/if}
     {$_('account.testConnection')}
   </Button>
@@ -52,7 +52,7 @@
     </Button>
     <Button type="submit" disabled={s.submitting || s.testing}>
       {#if s.submitting}
-        <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+        <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
       {/if}
       {s.editAccount ? $_('common.saveChanges') : $_('account.addAccount')}
     </Button>

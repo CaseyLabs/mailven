@@ -77,7 +77,7 @@
       ],
       editorProps: {
         attributes: {
-          class: 'plaintext-editor focus:outline-hidden font-mono text-sm p-3 min-h-full whitespace-pre-wrap',
+          class: 'plaintext-editor focus-visible:outline-hidden font-mono text-sm p-3 min-h-full whitespace-pre-wrap',
           spellcheck: 'false',
         },
       },

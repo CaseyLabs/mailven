@@ -24,9 +24,9 @@
   }: Props = $props()
 
   const variantStyles: Record<Variant, { icon: string; color: string }> = {
-    info: { icon: 'mdi:information-outline', color: 'text-primary' },
-    warning: { icon: 'mdi:alert-outline', color: 'text-yellow-500' },
-    error: { icon: 'mdi:alert-circle-outline', color: 'text-destructive' },
+    info: { icon: 'lucide:info', color: 'text-primary' },
+    warning: { icon: 'lucide:triangle-alert', color: 'text-yellow-500' },
+    error: { icon: 'lucide:circle-alert', color: 'text-destructive' },
   }
 
   function handleOk() {

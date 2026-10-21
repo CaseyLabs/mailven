@@ -39,7 +39,7 @@
       <h3 class="text-sm font-semibold text-foreground">
         {$_('calendar.settings.localCalendarsSection')}
       </h3>
-      <Icon icon={expanded ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="w-4 h-4 text-muted-foreground" />
+      <Icon icon={expanded ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-4 h-4 text-muted-foreground" />
     </button>
     {#if expanded}
     <div class="space-y-2 px-3 pb-3 pt-1">
@@ -66,7 +66,7 @@
           onclick={() => { onDelete(cal) }}
           aria-label={$_('calendar.common.delete')}
         >
-          <Icon icon="mdi:delete-outline" class="w-3.5 h-3.5" />
+          <Icon icon="lucide:trash-2" class="w-3.5 h-3.5" />
         </Button>
       </div>
     {/each}
@@ -77,7 +77,7 @@
       class="mt-2"
       onclick={() => { onAdd() }}
     >
-      <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+      <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
       {$_('calendar.settings.addLocalCalendar')}
     </Button>
     </div>

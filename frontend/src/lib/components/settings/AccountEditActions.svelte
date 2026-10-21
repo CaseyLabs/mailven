@@ -27,7 +27,7 @@
     </Button>
     <Button onclick={onSave} disabled={saving}>
       {#if saving}
-        <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+        <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
       {/if}
       {$_('common.saveChanges')}
     </Button>

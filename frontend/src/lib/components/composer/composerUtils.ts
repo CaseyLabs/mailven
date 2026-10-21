@@ -28,16 +28,16 @@ export function formatFileSize(bytes: number): string {
  * Get icon name for file type based on MIME type
  */
 export function getFileIcon(contentType: string): string {
-  if (contentType.startsWith('image/')) return 'mdi:file-image'
-  if (contentType.startsWith('video/')) return 'mdi:file-video'
-  if (contentType.startsWith('audio/')) return 'mdi:file-music'
-  if (contentType === 'application/pdf') return 'mdi:file-pdf-box'
-  if (contentType.includes('spreadsheet') || contentType.includes('excel')) return 'mdi:file-excel'
-  if (contentType.includes('document') || contentType.includes('word')) return 'mdi:file-word'
-  if (contentType.includes('presentation') || contentType.includes('powerpoint')) return 'mdi:file-powerpoint'
-  if (contentType.includes('zip') || contentType.includes('compressed') || contentType.includes('archive')) return 'mdi:folder-zip'
-  if (contentType.startsWith('text/')) return 'mdi:file-document'
-  return 'mdi:file'
+  if (contentType.startsWith('image/')) return 'lucide:file-image'
+  if (contentType.startsWith('video/')) return 'lucide:file-video'
+  if (contentType.startsWith('audio/')) return 'lucide:file-music'
+  if (contentType === 'application/pdf') return 'lucide:file-text'
+  if (contentType.includes('spreadsheet') || contentType.includes('excel')) return 'lucide:file-spreadsheet'
+  if (contentType.includes('document') || contentType.includes('word')) return 'lucide:file-text'
+  if (contentType.includes('presentation') || contentType.includes('powerpoint')) return 'lucide:presentation'
+  if (contentType.includes('zip') || contentType.includes('compressed') || contentType.includes('archive')) return 'lucide:file-archive'
+  if (contentType.startsWith('text/')) return 'lucide:file-text'
+  return 'lucide:file'
 }
 
 /**

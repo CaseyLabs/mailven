@@ -25,12 +25,14 @@ npm install --prefix ~/.cache/mailven-upnote-ui --no-save playwright@1.63.0
 | File | Covers |
 | --- | --- |
 | `ui-quality.test.cjs` | Audit matrix: light/dark × 1400/900/700 px × Accounts expanded/collapsed × previews on/off, plus flat-mode and reader-view variants |
+| `ui-audit-rules.test.cjs` | Self-checks of audit rules on probe pages: a control scrolled under its scroller's sticky heading is not a `covered-control`, a plain cover is |
 | `sidebar-focus.test.cjs` | Mail and shared extension sidebars reject focus while closed at narrow widths; opening, closing and resizing preserve interaction |
 | `viewer-focus.test.cjs` | Mail and shared detail-pane viewers reject focus while closed at medium and narrow widths; opening, Back, thread focus mode and resizing preserve interaction |
 | `logic.test.cjs` | Pure chat logic (`chatFormat.ts`, `chatSnooze.ts`): reply recipients and default mode, reply identity, bubble grouping, subject headings, list groups, snooze presets |
-| `chat-reader.test.cjs` | Rich mail in the reader view: sanitized blocks in a bubble or flat, blocked remote images and Load images, links through the app, Show more/less, Show original, the card setting (fake in `reader-fake.cjs`) |
-| `chat-secure.test.cjs` | Signed and decrypted mail as chat bubbles with their badges from faked S/MIME and PGP view results, Show original, Original layout, failed decryption |
-| `chat-presentation.test.cjs` | Incoming/outgoing bubbles and sender runs, quoted text and signature, sender chats with several subjects, combine/split with Undo |
+| `chat-reader.test.cjs` | Rich mail in the reader view: sanitized blocks in the message block (both styles), blocked remote images and Load images, links through the app, Show more/less, Show original, the card setting (fake in `reader-fake.cjs`) |
+| `chat-secure.test.cjs` | Signed and decrypted mail as chat text with their badges from faked S/MIME and PGP view results, Show original, Original layout, failed decryption |
+| `chat-presentation.test.cjs` | Left-aligned message blocks, "You" on my messages and sender runs, quoted text and signature, sender chats with several subjects, combine/split with Undo |
+| `chat-folds.test.cjs` | DS-3 reading: quoted-text fold and the details button in the message actions (Enter/Space, `aria-expanded`, position hold), the 68ch Literata measure at each reading width, mono for laid-out plain text, the dark-mode paper card and the "New" divider |
 | `inbox-triage.test.cjs` | Pin, snooze, archive, read/unread, the automatic Low priority group, sender priority overrides, Undo |
 | `chat-compose.test.cjs` | Reply vs Reply All, draft autosave and restore, undo-send, reply identity, a refused reply (ISSUES.md R1) |
 | `mail-api-migration.test.cjs` | Rollback pending state, confirmation cancellation, protocol route display, and both sync-request report outcomes |

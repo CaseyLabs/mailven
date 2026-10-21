@@ -204,7 +204,7 @@
       <div class="flex items-center gap-2 flex-wrap">
         <h4 class="font-medium text-foreground">{label}</h4>
         {#if loading}
-          <Icon icon="mdi:loading" class="w-3.5 h-3.5 animate-spin text-muted-foreground" />
+          <Icon icon="lucide:loader-circle" class="w-3.5 h-3.5 animate-spin text-muted-foreground" />
         {:else if statusBadgeKind() === 'custom'}
           <span class="text-xs px-2 py-0.5 rounded bg-primary/15 text-primary">{$_('kit.oauth.custom')}</span>
         {:else if statusBadgeKind() === 'aerion'}
@@ -268,7 +268,7 @@
                an inline error message. Pushed to the left via mr-auto so
                it's visually separated from Save on the right. -->
           <Button size="sm" variant="outline" class="mr-auto border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive" onclick={clearSavedCustom} disabled={saving}>
-            <Icon icon="mdi:delete-outline" class="w-4 h-4 mr-1" />
+            <Icon icon="lucide:trash-2" class="w-4 h-4 mr-1" />
             {$_('kit.oauth.clearCustom')}
           </Button>
         {:else}
@@ -277,7 +277,7 @@
         {/if}
         <Button size="sm" onclick={save} disabled={saving}>
           {#if saving}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
           {/if}
           {$_('common.save')}
         </Button>

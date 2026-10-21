@@ -39,7 +39,7 @@
     header,
     body,
     emptyState,
-    emptyIcon = 'mdi:tray-arrow-down',
+    emptyIcon = 'lucide:inbox',
     emptyText,
   }: Props = $props()
 
@@ -72,7 +72,7 @@
         a visible overlay and no back button.
   -->
   {#if overlay || (!empty && header)}
-    <header class="flex items-center gap-3 px-4 py-3 min-h-header border-b border-divider">
+    <header class="flex items-center gap-3 px-4 py-3 min-h-header">
       {#if overlay}
         <button
           type="button"
@@ -80,7 +80,7 @@
           onclick={hideViewer}
           aria-label={$_('common.back')}
         >
-          <Icon icon="mdi:arrow-left" class="w-5 h-5 text-muted-foreground" />
+          <Icon icon="lucide:arrow-left" class="w-5 h-5 text-muted-foreground" />
         </button>
       {/if}
       {#if !empty && header}

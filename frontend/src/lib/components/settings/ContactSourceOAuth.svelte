@@ -35,7 +35,7 @@
     <!-- New OAuth source -->
     {#if s.loadingAccounts}
       <div class="flex items-center justify-center py-8">
-        <Icon icon="mdi:loading" class="w-6 h-6 animate-spin text-muted-foreground" />
+        <Icon icon="lucide:loader-circle" class="w-6 h-6 animate-spin text-muted-foreground" />
       </div>
     {:else}
       <!-- Link existing account section -->
@@ -55,7 +55,7 @@
               >
                 <div class="w-4 h-4 border border-border rounded flex items-center justify-center {s.selectedAccountId === account.accountId ? 'bg-primary border-primary' : ''}">
                   {#if s.selectedAccountId === account.accountId}
-                    <Icon icon="mdi:check" class="w-3 h-3 text-primary-foreground" />
+                    <Icon icon="lucide:check" class="w-3 h-3 text-primary-foreground" />
                   {/if}
                 </div>
                 <div class="flex-1 min-w-0">
@@ -64,7 +64,7 @@
                 </div>
                 {#if !account.hasContactScope}
                   <span class="text-xs text-amber-500 flex items-center gap-1">
-                    <Icon icon="mdi:alert" class="w-3 h-3" />
+                    <Icon icon="lucide:triangle-alert" class="w-3 h-3" />
                     {$_('contactSource.reauthNeeded')}
                   </span>
                 {/if}
@@ -91,7 +91,7 @@
 
         {#if s.oauthInProgress}
           <div class="p-4 border border-border rounded-lg text-center space-y-2">
-            <Icon icon="mdi:loading" class="w-8 h-8 animate-spin text-primary mx-auto" />
+            <Icon icon="lucide:loader-circle" class="w-8 h-8 animate-spin text-primary mx-auto" />
             <p class="text-sm text-muted-foreground">
               {$_('contactSource.waitingForSignIn')}
             </p>
@@ -102,7 +102,7 @@
                 onclick={s.handleCopyOAuthLink}
               >
                 {s.oauthLinkCopied ? $_('account.linkCopied') : $_('viewer.copyLink')}
-                <Icon icon={s.oauthLinkCopied ? 'mdi:check' : 'mdi:content-copy'} class="w-3.5 h-3.5" />
+                <Icon icon={s.oauthLinkCopied ? 'lucide:check' : 'lucide:copy'} class="w-3.5 h-3.5" />
               </button>
             {/if}
             <Button variant="ghost" size="sm" onclick={() => {
@@ -115,7 +115,7 @@
           </div>
         {:else if s.oauthEmail}
           <div class="p-3 border border-green-500/30 bg-green-500/10 rounded-lg flex items-center gap-3">
-            <Icon icon="mdi:check-circle" class="w-5 h-5 text-green-500" />
+            <Icon icon="lucide:circle-check" class="w-5 h-5 text-green-500" />
             <div class="flex-1">
               <div class="text-sm font-medium">{$_('contactSource.signedInAs')}</div>
               <div class="text-sm text-muted-foreground">{s.oauthEmail}</div>
@@ -133,7 +133,7 @@
             class="w-full"
             onclick={() => handleStartOAuth(s)}
           >
-            <Icon icon={s.sourceType === 'google' ? 'mdi:google' : 'mdi:microsoft'} class="w-4 h-4 mr-2" />
+            <Icon icon={s.sourceType === 'google' ? 'simple-icons:google' : 'simple-icons:microsoft'} class="w-4 h-4 mr-2" />
             {$_('contactSource.signInProvider', { values: { provider: s.sourceType === 'google' ? 'Google' : 'Microsoft' } })}
           </Button>
         {/if}

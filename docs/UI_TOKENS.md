@@ -69,7 +69,7 @@ Roles:
   `--warning` and the `-foreground` status tints stay in `_status.css`.
 
 The pane utilities keep their pre-DS names until their components migrate:
-`bg-surface-sidebar` (Accounts column), `bg-surface-list` (chat and Contacts
+`bg-background` (Accounts column), `bg-surface-list` (chat and Contacts
 lists) and `bg-surface-content` (conversation pane, Calendar views). The
 narrow layout's sidebar overlay keeps `bg-background`; the viewer overlay uses
 `bg-surface-content`. Contacts and Calendar use the same surface tokens and
@@ -77,14 +77,14 @@ header height as Mail.
 
 **Avatars.** Eight muted tint and ink pairs: `--avatar-<tint>` and
 `--avatar-<tint>-ink` for sand, olive, sage, teal, slate, iris, mauve and clay
-(values in `built-in.css`). The fourteen pre-DS slots `--avatar-1…14` alias
-them in order, repeating after eight. Kit `Avatar` picks the tint with
+(values in `built-in.css`). Kit `Avatar` picks the tint with
 `avatarTint()` (`kit/avatarTint.ts`: djb2 over the lower-cased address, mod 8)
 and renders `.avatar-<tint>` (`_utilities.css`: tint fill, ink text) with
 `data-avatar-tint`, so an address keeps one tint in every view and theme. It
 shows one initial at 20 px and below or when `initials={1}` (overlapping
-pairs), else two. The legacy `.avatar-1…14` classes remain for custom themes
-but kit `Avatar` no longer reads them. Ink on its tint reaches 6.4:1 in Light
+pairs), else two, and never sets text under 12 px. The pre-DS `--avatar-1…14`
+slots and `.avatar-1…14` classes were removed in DS-6 (nothing read them since
+DS-2), so a custom theme's values for them have no effect. Ink on its tint reaches 6.4:1 in Light
 and 7.6:1 in Dark.
 
 **Rows.** `ChatRow` is a fixed-height tile (`h-row` 64 px; 52 px at compact,
@@ -142,8 +142,9 @@ editors still offer smaller sizes for the user's own message text.
 
 Pre-DS sizes stay until their components move to the DS styles:
 `app.css` raises Tailwind's `text-xs`, `text-sm` and `text-base` one pixel (to
-13, 15 and 17 px), and the role tokens below follow them. Chat bubbles use
-16 px, and the composer editor and email body default to 15 px.
+13, 15 and 17 px), and the role tokens below follow them. Chat message text
+uses `read-body` (see [Message block](#message-block)), and the composer editor
+and HTML email body default to 15 px.
 
 | Token | Utility | Role | Default | Used in |
 |---|---|---|---|---|
@@ -151,7 +152,7 @@ Pre-DS sizes stay until their components move to the DS styles:
 | `--text-body` | `text-body` | Body and list text | 15 px / 22 px (`text-sm`) | `ChatRow`, `ChatViewHeader` |
 | `--text-title` | `text-title` | Pane and dialog titles | 17 px / 24 px (`text-base`) | Not yet used; `text-base` is equivalent |
 | `--text-caption` | `text-caption` | Chips and small notes | 12 px, no line height | `ChatBubble`, calendar day headers and attendee notes |
-| `--text-compact` | `text-compact` | One step below body: quoted text, Standard-density list subjects | 14 px / 20 px | `ChatBubble`, `ChatRow` |
+| `--text-compact` | `text-compact` | One step below body: Standard-density list subjects | 14 px / 20 px | `ChatRow` |
 
 ## Spacing, radius and sizes
 
@@ -192,17 +193,24 @@ and signature toolbars.
 
 ## Aliases
 
-The pre-DS names resolve to DS tokens in `_defaults.css`. New code uses the
-DS name; DS-6 removes aliases nothing uses any more and records the rest here.
+The pre-DS names resolve to DS tokens in `_defaults.css`, except `--radius`
+and `--composer-placeholder`, which `app.css` defines. New code uses the
+DS name. DS-6 removed the aliases nothing used (`--surface-sidebar`,
+`--selected`, `--bubble-own`, `--avatar-1…14`, the `.avatar-1…14` classes and
+the `bg-selected` and `bg-surface-sidebar` utilities); the table lists the ones
+that remain, because components or custom themes still draw with them.
+
+**Remaining aliases (recorded at DS-6):** exactly the rows below. Each is still
+read by a component or by custom themes that predate the design system, so none
+is removed until the owner retires those themes.
 
 | Pre-DS name (utility) | DS token |
 |---|---|
-| `--background` (`bg-background`), `--surface-sidebar` | `bg` |
+| `--background` (`bg-background`) | `bg` |
 | `--surface-list` | `surface` |
 | `--surface-content` | `surface-reading` |
 | `--card`, `--popover` | `surface-raised` |
 | `--muted`, `--secondary` | `surface-hover` |
-| `--selected`, `--bubble-own` | `surface-selected` (`--bubble-own` has no DS role; own messages stop being bubbles in DS-3) |
 | `--foreground`, `--fg-primary`, `--card-foreground`, `--popover-foreground`, `--secondary-foreground` | `text-primary` |
 | `--muted-foreground`, `--fg-secondary` | `text-secondary` |
 | `--fg-tertiary`, `--fg-placeholder` | `text-tertiary` |
@@ -213,7 +221,6 @@ DS name; DS-6 removes aliases nothing uses any more and records the rest here.
 | `--primary-foreground`, `--accent-foreground`, `--destructive-foreground` | `on-accent` |
 | `--ring` | `focus` |
 | `--destructive` | `danger` |
-| `--avatar-1…14` | the eight `--avatar-<tint>` pairs, in order (kit `Avatar` reads `.avatar-<tint>` since DS-2) |
 | `--radius` | `radius-lg` |
 | `--composer-placeholder` | `text-tertiary`'s Light value on white and paper bodies, its Dark value on the dark body |
 
@@ -227,7 +234,7 @@ was unused and is gone; unread uses `accent`.
 `node tools/contrast-check.mjs` (also in `make lint` and CI) checks, in both
 themes, every pair of the design system's contrast table and the pre-DS aliases
 components still draw with: every `--fg-*` tier on each pane surface, the
-hover fill (`--muted`) and the selected row, primary text on `--bubble-own`,
+hover fill (`--muted`) and the selected row,
 `--fg-placeholder` on fields and the content pane, text on `--destructive` and
 `--ring` on the background. Before it checks, it proves itself: each pair,
 made to fail by giving its foreground the background's value, must be
@@ -269,10 +276,55 @@ placeholder uses the composer-scoped `--composer-placeholder` in `app.css`
 ## Reading width
 
 Reading width is not a token: `data-reading-width` on `<html>` (the "Reading
-width" chat setting) selects the plain variables `--chat-column` (Narrow 52 /
-Standard 60 / Wide 72 rem, the centred column for bubbles, pending sends and
-day separators), `--chat-bubble` (30 / 36 / 44 rem, the widest a bubble grows,
-never past 75% of the column) and `--chat-stream` (46 / 46 / 54 rem, the
-centred column for email cards and full bodies) in `app.css`. Inside the chat
-column (24 px side padding) their messages sit on the left, mine on the right;
-the conversation header and the composer sit in the same centred column.
+width" chat setting) selects the plain variables `--chat-stream` (Narrow and
+Standard `thread-column` 720 px, Wide 54 rem: the centred column for message
+blocks, pending sends, day separators, the "New" divider, email cards and full
+bodies, the conversation header and the anchored composer) in `app.css`. Text inside a message is
+capped at `measure` (68ch) at every width, so the setting changes how wide
+HTML layouts and cards can grow, not the line length.
+
+## Message block
+
+Every message (both stored `chat_display_style` values, `bubbles` and `flat`)
+is one left-aligned block in `--chat-stream` with 16 px side padding:
+
+- A 32 px avatar column (`w-8`, the avatar only on a run's first message), then
+  a header of the sender in `ui-name-strong` (`You` on my messages, marked
+  `data-mine`), the time in `ui-meta` `text-tertiary` and security badges.
+  Runs start 24 px apart; follow-ups 4 px.
+- Plain text: Literata `read-body` (16 / 26) in `text-primary`, capped at
+  `measure`. Text laid out with spaces (tables, box drawing; `chatReading.ts`)
+  uses `font-mono` `text-mono` instead. Readable-text mail (`ChatReaderMessage`)
+  uses the same face and measure, headings in Literata 600.
+- Quoted fold (`ChatFoldToggle`): a quiet 24 px pill in `surface-hover` with
+  `ui-meta` `text-secondary`, `aria-expanded` and `aria-controls`. "Show quoted
+  text" covers quoted history and the signature (`read-quote`, `text-secondary`,
+  a 2 px `border-subtle` rule). Opening a fold keeps its toggle in place.
+- Hover and focus actions (`ChatMessageActions`) sit over the top-right corner
+  on `surface-raised` with `shadow-1`; keyboard focus draws the inset `focus`
+  outline. Their "Show details" button (`aria-expanded`) lists From, To, Cc, Bcc
+  and the date in `ui-meta`, so short messages carry no pill.
+- Paper card: in a dark theme, HTML mail that is not darkened (Dark mail content
+  off, or switched to light) renders on `paper` with `radius-lg` and `shadow-1`,
+  and the mail document's own background is `paper`, not white. Darkened mail,
+  plain text and light themes take the theme surface.
+- The "New" divider above the first message that was unread on open is a
+  `role="separator"` row in `ui-section` `accent-text` with an `accent-text`
+  hairline.
+- Older read messages compact into the one-line "N earlier messages" row
+  (UIX-5 rules unchanged), `radius-md`, `ui-meta`, `surface-hover` on hover.
+
+## Buttons, menus and the composer
+
+- `ui/button` heights are `control-sm` 28 px (`size="sm"`), `control` 32 px (default) and `control-lg` 36 px (`size="lg"`: Send and the dialog confirm in `AlertDialog.Action`). Variants: `primary` (alias `default`, the only accent fill; one per view), `secondary` and `outline` (1px `border-control`), `tonal` (`accent-soft` fill, `accent-text`; "New message"), `ghost`, `danger` (alias `destructive`: `danger` text with a tinted hover, never filled) and `icon`. `ToolbarButton` has the same `primary` and `tonal` fills.
+- Inputs and select triggers are 32 px with a 1px `border-control`. Menus and popovers (`dropdown-menu`, `context-menu`, `select`) use `surface-raised` (`popover`), `radius-lg` and `shadow-2`, with no border.
+- Focus on controls is `focus-visible:` only; buttons keep a 2px ring offset, text fields none. Menu items keep `focus:` because the menu moves focus to the highlighted item.
+- `ChatComposer` is a `surface-raised` card (`radius-xl`, `shadow-2`) in the `--chat-stream` column at the bottom of the thread. Without focus inside it, it is one "Reply to …" line (`data-composer-card`; the Expand button and toolbar are hidden). Focus, including the reply shortcut, expands it, and blur collapses it with the draft intact. The "Reply to:" chip row stays below the card.
+- Disabled controls fade with `opacity-50`, the one place the contrast table does not apply (WCAG 1.4.3 exempts them); enabled pairs are in `tools/contrast-check.mjs`.
+
+## Sidebar items and icons
+
+- Every sidebar item (the app nav, mail folders and the unified inbox, Add account, kit `SourceItem` in Contacts, Calendar's calendar rows and Add calendar) uses `.nav-item` from `themes/_utilities.css`: `nav-height` 32 px, inset 8 px, `radius-md`, `fg-secondary` text, `surface-hover` on hover and an inset 2px `focus` ring on `:focus-visible`. Selected is `surface-selected` with `fg-primary` and weight 500, set by `aria-current="page"`, `aria-selected="true"` or `data-selected="true"`; it is never accent. Kit `SourceSidebar` keeps DOM focus on its `<aside>` and moves selection with the keys, so while the `<aside>` has `:focus-visible` the selected option carries the ring. Icons rest on `fg-tertiary` and lift to `fg-secondary` when selected.
+- Counts are plain `ui-meta` text with no pill. Account headers and Contacts and Calendar section headings use `ui-section`. Icon-only sidebar controls carry both `title` and `aria-label` (`tests/ui/sidebar-states.test.cjs` checks the mail sidebar). The sidebar sits on `bg` with no divider rule between panes or groups (spacing separates them).
+- Icons are Lucide (`lucide:`) at 16 px. A global rule in `_utilities.css` draws them at a 1.75 stroke (Iconify inlines 2). Provider marks use `simple-icons:` or `logos:` and nothing else does.
+- `tests/ui/icon-gate.test.cjs` fails on any `mdi:` or `heroicons:` reference except `frontend/src/lib/iconify-offline.ts`. That file still loads both collections so a third-party extension that names one keeps rendering; removing `@iconify-json/mdi` and `@iconify-json/heroicons` is a dependency change that needs owner approval.

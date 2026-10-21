@@ -59,7 +59,7 @@
 
   {#if loading}
     <div class="flex items-center justify-center py-6">
-      <Icon icon="mdi:loading" class="w-5 h-5 animate-spin text-muted-foreground" />
+      <Icon icon="lucide:loader-circle" class="w-5 h-5 animate-spin text-muted-foreground" />
     </div>
   {:else if extensions.length === 0}
     <p class="text-sm text-muted-foreground">{$_('settings.extensionsNone')}</p>
@@ -102,7 +102,7 @@
                   onclick={() => openExtensionSettings(ext.id)}
                   title="Edit extension settings"
                 >
-                  <Icon icon="mdi:cog" class="w-4 h-4 mr-1" />
+                  <Icon icon="lucide:settings" class="w-4 h-4 mr-1" />
                   Edit
                 </Button>
               {/if}
@@ -113,7 +113,7 @@
                 onclick={() => toggle(ext)}
               >
                 {#if togglingId === ext.id}
-                  <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+                  <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
                 {/if}
                 {ext.enabled ? $_('settings.extensionsDisable') : $_('settings.extensionsEnable')}
               </Button>

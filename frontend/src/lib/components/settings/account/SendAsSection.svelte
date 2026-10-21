@@ -54,13 +54,13 @@
   <div class="flex items-center justify-between">
     <div>
       <h3 class="text-sm font-medium flex items-center gap-2">
-        <Icon icon="mdi:google" class="w-4 h-4" />
+        <Icon icon="simple-icons:google" class="w-4 h-4" />
         {$_('identity.sendAsTitle')}
       </h3>
       <p class="text-xs text-muted-foreground mt-1">{$_('identity.sendAsHelp')}</p>
     </div>
     <Button size="sm" variant="outline" onclick={refresh} disabled={refreshing}>
-      <Icon icon={refreshing ? 'mdi:loading' : 'mdi:refresh'} class="w-4 h-4 mr-1 {refreshing ? 'animate-spin' : ''}" />
+      <Icon icon={refreshing ? 'lucide:loader-circle' : 'lucide:refresh-cw'} class="w-4 h-4 mr-1 {refreshing ? 'animate-spin' : ''}" />
       {$_('identity.sendAsRefresh')}
     </Button>
   </div>
@@ -80,7 +80,7 @@
             {/if}
           </div>
           <Button size="sm" onclick={() => add(alias)} disabled={addingEmail !== null}>
-            <Icon icon={addingEmail === alias.email ? 'mdi:loading' : 'mdi:plus'} class="w-4 h-4 mr-1 {addingEmail === alias.email ? 'animate-spin' : ''}" />
+            <Icon icon={addingEmail === alias.email ? 'lucide:loader-circle' : 'lucide:plus'} class="w-4 h-4 mr-1 {addingEmail === alias.email ? 'animate-spin' : ''}" />
             {$_('identity.sendAsAdd')}
           </Button>
         </div>

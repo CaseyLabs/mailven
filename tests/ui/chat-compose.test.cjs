@@ -10,7 +10,7 @@ const ui = require('./harness.cjs')
 const composerFakes = fs.readFileSync(path.resolve(__dirname, '../../.agents/skills/run-mailven/composer-fakes.js'), 'utf8')
 const withComposer = (extra = '') => `${composerFakes}\nwindow.__installComposerFakes(window)\n${extra}`
 
-const box = (page) => page.getByPlaceholder('Type a reply...')
+const box = (page) => page.locator('[data-chat-composer] textarea')
 // The whole composer (card and chip row): the chip row's controls and the in-card sender both live inside it.
 const replyLine = (page) => page.locator('[data-chat-composer]')
 const log = (page) => page.evaluate(() => window.__log.join(' | '))
@@ -44,7 +44,8 @@ describe('chat compose', () => {
       A.GetIdentities = async (acc) => [...await ids(acc), { id: 'id-shop', accountId: acc, email: 'alex.shop@example.com', name: 'Alex Morgan', isDefault: false }]
       A.ChatReplyFrom = async () => 'alex.shop@example.com' }`),
   }, async (page) => {
-    const card = box(page).locator('xpath=ancestor::div[contains(@class,"rounded-2xl")][1]')
+    const card = box(page).locator('xpath=ancestor::div[@data-composer-card][1]')
+    await box(page).focus() // the toolbar, with the sender, shows once focus is inside the card
     await card.getByText('from alex.shop@example.com').waitFor()
     for (const name of ['Attach files', 'Send', 'Open in full composer']) assert.equal(await card.getByRole('button', { name: new RegExp(name, 'i') }).count(), 1, `${name} sits in the card`)
     const [cardBox, chipBox] = await Promise.all([card.boundingBox(), page.getByText('2 recipients').boundingBox()])
@@ -115,6 +116,7 @@ describe('chat compose', () => {
       A.GetIdentities = async (acc) => [...await ids(acc), { id: 'id-shop', accountId: acc, email: 'alex.shop@example.com', name: 'Alex Morgan', isDefault: false }]
       A.ChatReplyFrom = async () => 'alex.shop@example.com' }`),
   }, async (page) => {
+    await box(page).focus()
     await replyLine(page).getByText('from alex.shop@example.com').waitFor()
     assert.deepEqual(await argsOf(page, 'ChatReplyFrom'), [['trip-5']], 'with several identities the backend resolves the alias once')
   }))

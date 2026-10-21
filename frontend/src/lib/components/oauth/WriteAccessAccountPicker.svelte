@@ -119,11 +119,11 @@
     <div class="mt-2 space-y-2 max-h-[40vh] overflow-y-auto pr-1">
       {#if loading}
         <div class="flex items-center justify-center py-6">
-          <Icon icon="mdi:loading" class="w-6 h-6 animate-spin text-muted-foreground" />
+          <Icon icon="lucide:loader-circle" class="w-6 h-6 animate-spin text-muted-foreground" />
         </div>
       {:else if contexts.length === 0}
         <div class="flex flex-col items-center gap-2 py-6 text-center">
-          <Icon icon="mdi:account-alert-outline" class="w-8 h-8 text-muted-foreground" />
+          <Icon icon="lucide:user-round-x" class="w-8 h-8 text-muted-foreground" />
           <p class="text-sm text-foreground">
             {$_('oauth.writeAccessPicker.emptyHeading', { values: { provider: providerLabel } })}
           </p>
@@ -160,7 +160,7 @@
       {#if contexts.length > 0}
         <Button onclick={confirm} disabled={granting || !selected}>
           {#if granting}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
           {/if}
           {$_('oauth.writeAccessPicker.continue')}
         </Button>

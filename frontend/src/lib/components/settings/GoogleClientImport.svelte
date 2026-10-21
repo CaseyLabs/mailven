@@ -56,7 +56,7 @@
   <div class="flex items-center justify-between gap-3 flex-wrap">
     <p class="text-sm text-muted-foreground flex-1 min-w-0">{$_('oauthImport.help')}</p>
     <Button type="button" size="sm" variant="outline" onclick={() => { open = !open; error = '' }} aria-expanded={open}>
-      <Icon icon="mdi:file-import-outline" class="w-4 h-4 mr-1" />
+      <Icon icon="lucide:file-input" class="w-4 h-4 mr-1" />
       {$_('oauthImport.button')}
     </Button>
   </div>
@@ -76,7 +76,7 @@
     <div class="mt-3 flex justify-end">
       <Button type="button" size="sm" onclick={chooseFile} disabled={busy || selected.length === 0}>
         {#if busy}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
         {/if}
         {$_('oauthImport.chooseFile')}
       </Button>

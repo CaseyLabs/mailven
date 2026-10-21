@@ -125,7 +125,7 @@
   {#if s.isDraggingOver}
     <div class="absolute inset-0 bg-primary/10 flex items-center justify-center pointer-events-none z-10">
       <div class="bg-background border-2 border-dashed border-primary rounded-lg px-8 py-6 text-center">
-        <Icon icon="mdi:attachment" class="w-12 h-12 text-primary mx-auto mb-2" />
+        <Icon icon="lucide:paperclip" class="w-12 h-12 text-primary mx-auto mb-2" />
         <p class="text-lg font-medium">{$_('composer.dropToAttach')}</p>
       </div>
     </div>

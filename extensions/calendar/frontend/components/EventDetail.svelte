@@ -315,7 +315,7 @@
       {#if isWritable}
         <div class="flex items-center gap-2 mt-3">
           <Button variant="outline" size="sm" onclick={startEdit}>
-            <Icon icon="mdi:pencil" class="w-3.5 h-3.5 mr-1" />
+            <Icon icon="lucide:pencil" class="w-3.5 h-3.5 mr-1" />
             {$_('calendar.detail.editButton')}
           </Button>
           <Button
@@ -324,7 +324,7 @@
             class="text-destructive hover:text-destructive"
             onclick={startDelete}
           >
-            <Icon icon="mdi:delete-outline" class="w-3.5 h-3.5 mr-1" />
+            <Icon icon="lucide:trash-2" class="w-3.5 h-3.5 mr-1" />
             {$_('calendar.detail.deleteButton')}
           </Button>
         </div>

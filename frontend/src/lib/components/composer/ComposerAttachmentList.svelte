@@ -35,7 +35,7 @@
             class="ml-1 p-0.5 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
             title={$_('attachment.removeAttachment')}
           >
-            <Icon icon="mdi:close" class="w-3.5 h-3.5" />
+            <Icon icon="lucide:x" class="w-3.5 h-3.5" />
           </button>
         </div>
       {/each}

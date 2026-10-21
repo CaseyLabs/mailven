@@ -330,15 +330,15 @@
     <!-- Reply actions (single message only) -->
     {#if isSingleMessage}
       <ContextMenuItem onSelect={handleReply}>
-        <Icon icon="mdi:reply" class="mr-2 h-4 w-4" />
+        <Icon icon="lucide:reply" class="mr-2 h-4 w-4" />
         {$_('contextMenu.reply')}
       </ContextMenuItem>
       <ContextMenuItem onSelect={handleReplyAll}>
-        <Icon icon="mdi:reply-all" class="mr-2 h-4 w-4" />
+        <Icon icon="lucide:reply-all" class="mr-2 h-4 w-4" />
         {$_('contextMenu.replyAll')}
       </ContextMenuItem>
       <ContextMenuItem onSelect={handleForward}>
-        <Icon icon="mdi:share" class="mr-2 h-4 w-4" />
+        <Icon icon="lucide:share-2" class="mr-2 h-4 w-4" />
         {$_('contextMenu.forward')}
       </ContextMenuItem>
       <ContextMenuSeparator />
@@ -347,16 +347,16 @@
     <!-- Move/Delete actions -->
     {#if !hideArchive}
       <ContextMenuItem onSelect={handleArchive}>
-        <Icon icon="mdi:archive-outline" class="mr-2 h-4 w-4" />
+        <Icon icon="lucide:archive" class="mr-2 h-4 w-4" />
         {$_('contextMenu.archive')}
       </ContextMenuItem>
     {/if}
     <ContextMenuItem onSelect={handleDelete}>
-      <Icon icon={isTrashFolder ? 'mdi:delete-forever' : 'mdi:delete-outline'} class="mr-2 h-4 w-4" />
+      <Icon icon={isTrashFolder ? 'lucide:trash-2' : 'lucide:trash-2'} class="mr-2 h-4 w-4" />
       {$_(isTrashFolder ? 'contextMenu.deletePermanently' : 'contextMenu.delete')}
     </ContextMenuItem>
     <ContextMenuItem onSelect={onSpam ?? handleSpam}>
-      <Icon icon={isSpamFolder ? 'mdi:email-check-outline' : 'mdi:alert-octagon-outline'} class="mr-2 h-4 w-4" />
+      <Icon icon={isSpamFolder ? 'lucide:mail-check' : 'lucide:octagon-alert'} class="mr-2 h-4 w-4" />
       {$_(isSpamFolder ? 'contextMenu.markAsNotSpam' : 'contextMenu.markAsSpam')}
     </ContextMenuItem>
 
@@ -364,13 +364,13 @@
 
     <!-- Move to folder picker -->
     <ContextMenuItem onSelect={openMoveTo}>
-      <Icon icon="mdi:folder-move-outline" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:folder-input" class="mr-2 h-4 w-4" />
       {$_('contextMenu.moveTo')}
     </ContextMenuItem>
 
     <!-- Copy to folder picker -->
     <ContextMenuItem onSelect={openCopyTo}>
-      <Icon icon="mdi:content-copy" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:copy" class="mr-2 h-4 w-4" />
       {$_('contextMenu.copyTo')}
     </ContextMenuItem>
 
@@ -379,14 +379,14 @@
     <!-- Flag actions -->
     <ContextMenuItem onSelect={handleToggleStar}>
       <Icon
-        icon={isStarred ? 'mdi:star' : 'mdi:star-outline'}
+        icon={isStarred ? 'lucide:star' : 'lucide:star'}
         class="mr-2 h-4 w-4 {isStarred ? 'text-yellow-500' : ''}"
       />
       {$_(isStarred ? 'contextMenu.removeStar' : 'contextMenu.star')}
     </ContextMenuItem>
     <ContextMenuItem onSelect={onToggleRead ?? handleToggleRead}>
       <Icon
-        icon={isRead ? 'mdi:email-outline' : 'mdi:email-open-outline'}
+        icon={isRead ? 'lucide:mail' : 'lucide:mail-open'}
         class="mr-2 h-4 w-4"
       />
       {$_(isRead ? 'contextMenu.markAsUnread' : 'contextMenu.markAsRead')}

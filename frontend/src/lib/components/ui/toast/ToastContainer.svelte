@@ -73,7 +73,7 @@
         onclick={() => (expanded = false)}
         aria-label={$_('aria.collapseToasts')}
       >
-        <Icon icon="mdi:chevron-up" class="w-4 h-4" />
+        <Icon icon="lucide:chevron-up" class="w-4 h-4" />
       </button>
     </div>
   {/if}

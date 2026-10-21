@@ -50,15 +50,15 @@
       <Tabs.Root value={s.sourceType} onValueChange={s.handleTabChange} class="mt-4">
         <Tabs.List class="grid w-full grid-cols-3">
           <Tabs.Trigger value="carddav" class="flex items-center gap-1.5">
-            <Icon icon="mdi:card-account-details" class="w-4 h-4" />
+            <Icon icon="lucide:contact" class="w-4 h-4" />
             CardDAV
           </Tabs.Trigger>
           <Tabs.Trigger value="google" class="flex items-center gap-1.5">
-            <Icon icon="mdi:google" class="w-4 h-4" />
+            <Icon icon="simple-icons:google" class="w-4 h-4" />
             Google
           </Tabs.Trigger>
           <Tabs.Trigger value="microsoft" class="flex items-center gap-1.5">
-            <Icon icon="mdi:microsoft" class="w-4 h-4" />
+            <Icon icon="simple-icons:microsoft" class="w-4 h-4" />
             Microsoft
           </Tabs.Trigger>
         </Tabs.List>
@@ -89,7 +89,7 @@
         disabled={s.saving || !s.canSave()}
       >
         {#if s.saving}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
         {/if}
         {s.editSource ? $_('contactSource.update') : $_('common.add')}
       </Button>

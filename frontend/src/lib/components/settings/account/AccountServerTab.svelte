@@ -163,7 +163,7 @@
   <!-- Incoming Mail (IMAP) -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:email-receive-outline" class="w-4 h-4" />
+      <Icon icon="lucide:inbox" class="w-4 h-4" />
       {$_('account.incomingMail')}
     </h3>
 
@@ -331,7 +331,7 @@
   <!-- Check for New Mail -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:refresh" class="w-4 h-4" />
+      <Icon icon="lucide:refresh-cw" class="w-4 h-4" />
       {$_('account.syncOptions')}
     </h3>
 

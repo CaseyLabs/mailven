@@ -29,7 +29,7 @@
             aria-label={`${removeLabel}: ${word}`}
             onclick={() => onRemove(word)}
           >
-            <Icon icon="mdi:close" class="w-4 h-4" />
+            <Icon icon="lucide:x" class="w-4 h-4" />
           </button>
         </div>
       {/each}

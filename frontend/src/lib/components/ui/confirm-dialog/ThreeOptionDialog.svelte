@@ -117,7 +117,7 @@
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 {option1Variant === 'destructive' ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' : 'bg-primary text-primary-foreground hover:bg-primary/90'}"
         >
           {#if loading === 'option1'}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {option1Label}
         </button>
@@ -130,7 +130,7 @@
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 {option2Variant === 'destructive' ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' : 'bg-primary text-primary-foreground hover:bg-primary/90'}"
         >
           {#if loading === 'option2'}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {option2Label}
         </button>

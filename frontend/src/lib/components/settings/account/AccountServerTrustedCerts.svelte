@@ -81,10 +81,10 @@
       onclick={handleTrustedCertsToggle}
     >
       <Icon
-        icon={showTrustedCerts ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+        icon={showTrustedCerts ? 'lucide:chevron-down' : 'lucide:chevron-right'}
         class="w-4 h-4"
       />
-      <Icon icon="mdi:shield-lock-outline" class="w-4 h-4" />
+      <Icon icon="lucide:shield-ellipsis" class="w-4 h-4" />
       {$_('account.trustedCertificates')}
     </button>
 
@@ -96,7 +96,7 @@
 
         {#if loadingCerts}
           <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
             {$_('account.loadingCerts')}
           </div>
         {:else if trustedCerts.length === 0}
@@ -109,7 +109,7 @@
               <div class="flex items-start justify-between gap-3 rounded-lg border bg-muted/30 p-3">
                 <div class="space-y-1 min-w-0">
                   <div class="flex items-center gap-2">
-                    <Icon icon="mdi:shield-check-outline" class="w-4 h-4 text-muted-foreground shrink-0" />
+                    <Icon icon="lucide:shield-check" class="w-4 h-4 text-muted-foreground shrink-0" />
                     <span class="text-sm font-medium truncate">{cert.subject}</span>
                   </div>
                   <div class="text-xs text-muted-foreground space-y-0.5 pl-6">

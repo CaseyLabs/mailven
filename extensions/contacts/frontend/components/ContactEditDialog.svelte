@@ -249,7 +249,7 @@
 
     {#if conflict}
       <div role="alert" class="mt-2 flex items-start gap-2 rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-700 dark:text-amber-300">
-        <Icon icon="mdi:alert" class="w-4 h-4 mt-0.5 shrink-0" />
+        <Icon icon="lucide:triangle-alert" class="w-4 h-4 mt-0.5 shrink-0" />
         <span>{$_('contacts.edit.conflict')}</span>
       </div>
     {/if}
@@ -279,7 +279,7 @@
       <Button variant="ghost" onclick={close} disabled={saving}>{$_('contacts.common.cancel')}</Button>
       <Button onclick={save} disabled={saving || !recordID}>
         {#if saving}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
         {/if}
         {$_('contacts.common.save')}
       </Button>

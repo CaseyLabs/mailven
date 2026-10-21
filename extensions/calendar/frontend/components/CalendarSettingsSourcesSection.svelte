@@ -229,7 +229,7 @@
       <h3 class="text-sm font-semibold text-foreground">
         {$_('calendar.settings.sourcesSection')}
       </h3>
-      <Icon icon={expanded ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="w-4 h-4 text-muted-foreground" />
+      <Icon icon={expanded ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-4 h-4 text-muted-foreground" />
     </button>
     {#if expanded}
     <div class="space-y-2 px-3 pb-3 pt-1">
@@ -271,7 +271,7 @@
                   title={$_('calendar.settings.renameTitle')}
                   aria-label={$_('calendar.settings.renameTitle')}
                 >
-                  <Icon icon="mdi:pencil-outline" class="w-3.5 h-3.5" />
+                  <Icon icon="lucide:pencil" class="w-3.5 h-3.5" />
                 </Button>
               </div>
             {/if}
@@ -314,9 +314,9 @@
               class="h-8"
             >
               {#if syncingSourceID === src.id}
-                <Icon icon="mdi:loading" class="w-3.5 h-3.5 animate-spin" />
+                <Icon icon="lucide:loader-circle" class="w-3.5 h-3.5 animate-spin" />
               {:else}
-                <Icon icon="mdi:sync" class="w-3.5 h-3.5" />
+                <Icon icon="lucide:refresh-cw" class="w-3.5 h-3.5" />
               {/if}
               <span class="ml-1">{$_('calendar.settings.syncNow')}</span>
             </Button>
@@ -330,9 +330,9 @@
               title={$_('calendar.settings.forceResync')}
             >
               {#if forceSyncing && forceTarget?.id === src.id}
-                <Icon icon="mdi:loading" class="w-3.5 h-3.5 animate-spin" />
+                <Icon icon="lucide:loader-circle" class="w-3.5 h-3.5 animate-spin" />
               {:else}
-                <Icon icon="mdi:refresh-auto" class="w-3.5 h-3.5" />
+                <Icon icon="lucide:refresh-ccw-dot" class="w-3.5 h-3.5" />
               {/if}
             </Button>
 
@@ -342,7 +342,7 @@
               class="h-8 text-destructive hover:text-destructive"
               onclick={() => { onDelete(src) }}
             >
-              <Icon icon="mdi:delete-outline" class="w-3.5 h-3.5" />
+              <Icon icon="lucide:trash-2" class="w-3.5 h-3.5" />
             </Button>
           </div>
         </div>
@@ -355,7 +355,7 @@
         </div>
         {#if src.lastError}
           <div class="flex items-start gap-1 text-xs text-destructive min-w-0" title={src.lastError}>
-            <Icon icon="mdi:alert-circle" class="w-3 h-3 shrink-0 mt-0.5" />
+            <Icon icon="lucide:circle-alert" class="w-3 h-3 shrink-0 mt-0.5" />
             <span class="truncate">{src.lastError}</span>
           </div>
         {/if}
@@ -400,10 +400,10 @@
             title={$_('calendar.settings.organizerEmailReprobeTitle')}
           >
             {#if reprobingSourceID === src.id}
-              <Icon icon="mdi:loading" class="w-3.5 h-3.5 animate-spin" />
+              <Icon icon="lucide:loader-circle" class="w-3.5 h-3.5 animate-spin" />
             {/if}
             {#if reprobingSourceID !== src.id}
-              <Icon icon="mdi:cloud-search-outline" class="w-3.5 h-3.5" />
+              <Icon icon="lucide:search" class="w-3.5 h-3.5" />
             {/if}
           </Button>
         </div>
@@ -433,7 +433,7 @@
         size="sm"
         onclick={() => { onAddCalDAV() }}
       >
-        <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
         {$_('calendar.sidebar.addSource')}
       </Button>
       <Button
@@ -441,7 +441,7 @@
         size="sm"
         onclick={() => { onAddGoogle() }}
       >
-        <Icon icon="mdi:google" class="w-4 h-4 mr-1" />
+        <Icon icon="simple-icons:google" class="w-4 h-4 mr-1" />
         {$_('calendar.settings.addGoogle')}
       </Button>
       <Button
@@ -449,7 +449,7 @@
         size="sm"
         onclick={() => { onAddMicrosoft() }}
       >
-        <Icon icon="mdi:microsoft-outlook" class="w-4 h-4 mr-1" />
+        <Icon icon="simple-icons:microsoftoutlook" class="w-4 h-4 mr-1" />
         {$_('calendar.settings.addOutlook')}
       </Button>
     </div>

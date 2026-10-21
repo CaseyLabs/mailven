@@ -18,7 +18,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [MAINT — Maintenance and documentation](#maint): [D2](#d2)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
-- [DS — Reading-first redesign](#ds): [UI17](#ui17)
+- [DS — Reading-first redesign](#ds): [UI17](#ui17), [UI18](#ui18)
 
 <a id="send"></a>
 
@@ -584,8 +584,26 @@ Project: [DS](PLAN.md#ds).
 - **Location / problem:** `frontend/src/lib/components/chat/ChatRow.svelte`, the `[data-row-actions]` group. The Archive, Mark as read/unread and Snooze buttons sit inside the row's `role="option"`, whose children ARIA treats as presentational, so a screen reader may fold their names into the option or skip them. Keyboard users reach them by Tab (covered by `tests/ui/chat-row.test.cjs`); the same actions stay available through the row's context menu and the list shortcuts.
 - **Evidence / closure:** found by review on 2026-10-20; no assistive-technology run, and the UI suite has no axe audit. Close by restructuring the list so the actions are not owned by the option (for example a grid with row and cell roles, or actions outside the option tied by `aria-controls`), checked with a screen reader or an axe `nested-interactive` rule.
 
+<a id="ui18"></a>
+
+### UI18 — Signatures share the quoted-text fold
+
+- **Owner / milestone:** [DS](PLAN.md#ds) / deferred from [DS-3](PLAN.md#ds-3) by owner decision.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Location / problem:** `frontend/src/lib/components/chat/ChatBubble.svelte`. The design system folds quoted history and the signature separately, but the chat text extraction returns them together in `chat.quoted`, so one "Show quoted text" toggle opens both. A reader who wants only the signature (for a phone number) also gets the full quoted history.
+- **Evidence / closure:** owner chose one fold on 2026-10-20 ([Decision Log](docs/plans/reading-redesign.md#decision-log)). Close by splitting the signature from the quoted part in the backend chat extraction and adding a "Show signature" fold, with a test in `tests/ui/chat-folds.test.cjs`.
+
+<a id="ui19"></a>
+
+### UI19 — Source sidebar options have no listbox owner
+
+- **Owner / milestone:** [DS](PLAN.md#ds) / found during [DS-5](PLAN.md#ds-5).
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Location / problem:** `frontend/src/lib/components/kit/SourceSidebar.svelte` and `kit/SourceItem.svelte`. Items are `role="option"` with `aria-selected`, but their focusable container is the `role="navigation"` `<aside>` from `SidebarFrame`, not a `role="listbox"`, and the container sets no `aria-activedescendant`. A screen reader may not announce the selected source as the keys move it. Since DS-5 the selected option is ringed visually while the `<aside>` has keyboard focus.
+- **Evidence / closure:** found by review on 2026-10-21; predates DS-5; no assistive-technology run. Close by wrapping the items in a `role="listbox"` that owns them with `aria-activedescendant` (or by switching to buttons with `aria-current`), checked with a screen reader or an axe `aria-required-parent` rule, with `sidebar-focus` and `sidebar-states` still passing.
+
 ## Recurring problems
 
 Track environment/tooling symptoms, workaround and count here; on a second occurrence or a costly first occurrence, promote the solution into applicable guidance and remove the tally.
 
-- **UI harness theme race** (1 occurrence, 2026-10-20). Under full `make test-ui` load, a test without a `ready` selector can fail with `expected the app to apply the dark theme, got null`: `tests/ui/harness.cjs` reads `data-theme` immediately after `page.goto` without waiting for it. Seen once on `Google sign-in names its client, hides Username, and keeps checklist ticks`, which then passed 5 of 5 alone (`node tests/ui/run.mjs google-add-account`). Workaround: rerun the suite. Fix: wait for `data-theme` in the harness before checking it.
+- **UI harness theme race** (2 occurrences, 2026-10-20 and 2026-10-21 in DS-6's full check, same test, passed 4 of 4 alone). Under full `make test-ui` load, a test without a `ready` selector can fail with `expected the app to apply the dark theme, got null`: `tests/ui/harness.cjs` reads `data-theme` immediately after `page.goto` without waiting for it. Seen on `Google sign-in names its client, hides Username, and keeps checklist ticks`, which then passed 5 of 5 alone (`node tests/ui/run.mjs google-add-account`). Workaround: rerun the suite. Fix: wait for `data-theme` in the harness before checking it.

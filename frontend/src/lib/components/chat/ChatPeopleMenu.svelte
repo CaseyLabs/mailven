@@ -44,7 +44,7 @@
     {#if addresses.length}
       <DropdownMenu.Separator />
       <DropdownMenu.Item onSelect={() => void copyAll()}>
-        <Icon icon="mdi:content-copy" class="mr-2 h-4 w-4" />
+        <Icon icon="lucide:copy" class="mr-2 h-4 w-4" />
         {$_('chat.copyAddresses')}
       </DropdownMenu.Item>
     {/if}

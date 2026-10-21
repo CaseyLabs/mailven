@@ -58,23 +58,23 @@ func (f *Folder) CanDelete() bool {
 func (f *Folder) Icon() string {
 	switch f.Type {
 	case TypeInbox:
-		return "mdi:inbox"
+		return "lucide:inbox"
 	case TypeSent:
-		return "mdi:send"
+		return "lucide:send"
 	case TypeDrafts:
-		return "mdi:file-document-edit"
+		return "lucide:file-pen"
 	case TypeTrash:
-		return "mdi:delete"
+		return "lucide:trash-2"
 	case TypeSpam:
-		return "mdi:alert-octagon"
+		return "lucide:octagon-alert"
 	case TypeArchive:
-		return "mdi:archive"
+		return "lucide:archive"
 	case TypeAll:
-		return "mdi:email-multiple"
+		return "lucide:mails"
 	case TypeStarred:
-		return "mdi:star"
+		return "lucide:star"
 	default:
-		return "mdi:folder"
+		return "lucide:folder"
 	}
 }
 

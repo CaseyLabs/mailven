@@ -10,26 +10,51 @@
 .avatar-mauve { background-color: hsl(var(--avatar-mauve)); color: hsl(var(--avatar-mauve-ink)); }
 .avatar-clay  { background-color: hsl(var(--avatar-clay)); color: hsl(var(--avatar-clay-ink)); }
 
-/* Legacy slots kept for custom themes that set --avatar-1…14
-   (_defaults.css maps them onto the eight DS pairs). */
-.avatar-1  { background-color: hsl(var(--avatar-1)); color: hsl(var(--avatar-1-ink)); }
-.avatar-2  { background-color: hsl(var(--avatar-2)); color: hsl(var(--avatar-2-ink)); }
-.avatar-3  { background-color: hsl(var(--avatar-3)); color: hsl(var(--avatar-3-ink)); }
-.avatar-4  { background-color: hsl(var(--avatar-4)); color: hsl(var(--avatar-4-ink)); }
-.avatar-5  { background-color: hsl(var(--avatar-5)); color: hsl(var(--avatar-5-ink)); }
-.avatar-6  { background-color: hsl(var(--avatar-6)); color: hsl(var(--avatar-6-ink)); }
-.avatar-7  { background-color: hsl(var(--avatar-7)); color: hsl(var(--avatar-7-ink)); }
-.avatar-8  { background-color: hsl(var(--avatar-8)); color: hsl(var(--avatar-8-ink)); }
-.avatar-9  { background-color: hsl(var(--avatar-9)); color: hsl(var(--avatar-9-ink)); }
-.avatar-10 { background-color: hsl(var(--avatar-10)); color: hsl(var(--avatar-10-ink)); }
-.avatar-11 { background-color: hsl(var(--avatar-11)); color: hsl(var(--avatar-11-ink)); }
-.avatar-12 { background-color: hsl(var(--avatar-12)); color: hsl(var(--avatar-12-ink)); }
-.avatar-13 { background-color: hsl(var(--avatar-13)); color: hsl(var(--avatar-13-ink)); }
-.avatar-14 { background-color: hsl(var(--avatar-14)); color: hsl(var(--avatar-14-ink)); }
-
 /* Dark theme mark (highlight) override. Applies to every theme whose CSS
    block declares `color-scheme: dark` — applyTheme() mirrors that into the
    `.dark` class on <html>, so this single selector covers all dark themes. */
 .dark mark {
   background-color: hsl(var(--primary) / 0.35);
 }
+
+/* DS-5: Lucide at 1.75 stroke everywhere. Iconify inlines stroke-width="2"
+   on the icon group; a CSS rule wins over that presentation attribute. */
+svg g[stroke-width="2"] { stroke-width: 1.75; }
+
+/* DS-5: sidebar and kit navigation items share the row states of ChatRow:
+   hover fill, neutral selected fill, inset focus ring. Selected is carried by
+   aria-current, aria-selected or data-selected so every sidebar marks it the
+   same way. Icons rest on fg-tertiary and lift when selected. Counts inside
+   an item are plain ui-meta text, not pills. Unlayered like the avatar classes:
+   this file loads before Tailwind declares its layers, so a layer here would
+   rank below preflight. It sets box-shadow only on :focus-visible, so the
+   folder drag-over ring still shows. */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: calc(100% - 1rem);
+  min-height: var(--height-nav);
+  margin-inline: 0.5rem;
+  padding-inline: 0.75rem;
+  border-radius: var(--radius-md);
+  color: hsl(var(--fg-secondary));
+  text-align: left;
+  transition: background-color 80ms;
+}
+.nav-item > svg { color: hsl(var(--fg-tertiary)); flex-shrink: 0; }
+.nav-item:hover { background-color: hsl(var(--surface-hover)); color: hsl(var(--fg-primary)); }
+.nav-item:focus-visible { outline: none; box-shadow: inset 0 0 0 2px hsl(var(--focus)); }
+/* Kit SourceSidebar keeps DOM focus on its <aside> and moves selection with the keys; ring the selected option. */
+aside:focus-visible .nav-item[role="option"][aria-selected="true"] { box-shadow: inset 0 0 0 2px hsl(var(--focus)); }
+.nav-item[aria-current="page"],
+.nav-item[aria-selected="true"],
+.nav-item[data-selected="true"] {
+  background-color: hsl(var(--surface-selected));
+  color: hsl(var(--fg-primary));
+  font-weight: 500;
+}
+.nav-item[aria-current="page"] > svg,
+.nav-item[aria-selected="true"] > svg,
+.nav-item[data-selected="true"] > svg { color: hsl(var(--fg-secondary)); }
+@media (prefers-reduced-motion: reduce) { .nav-item { transition: none; } }

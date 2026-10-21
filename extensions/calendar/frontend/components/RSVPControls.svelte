@@ -56,7 +56,7 @@
     disabled={disabled || working}
     onclick={() => rsvp('ACCEPTED')}
   >
-    <Icon icon="mdi:check" class="w-4 h-4 mr-1" />
+    <Icon icon="lucide:check" class="w-4 h-4 mr-1" />
     {$_('calendar.attendees.accept')}
   </Button>
   <Button
@@ -65,7 +65,7 @@
     disabled={disabled || working}
     onclick={() => rsvp('TENTATIVE')}
   >
-    <Icon icon="mdi:help" class="w-4 h-4 mr-1" />
+    <Icon icon="lucide:circle-help" class="w-4 h-4 mr-1" />
     {$_('calendar.attendees.tentative')}
   </Button>
   <Button
@@ -74,7 +74,7 @@
     disabled={disabled || working}
     onclick={() => rsvp('DECLINED')}
   >
-    <Icon icon="mdi:close" class="w-4 h-4 mr-1" />
+    <Icon icon="lucide:x" class="w-4 h-4 mr-1" />
     {$_('calendar.attendees.decline')}
   </Button>
 </div>

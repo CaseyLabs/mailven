@@ -163,7 +163,9 @@ const iframeScript = `
     `
 
 // Builds the srcdoc for the sandboxed body iframe. CSP, styles and script are verbatim.
-export function buildIframeContent(html: string, applyDarken: boolean, imagesBlocked: boolean): string {
+// `page` is the document background when not darkened: white, or the paper
+// colour when the body sits on a paper card in a dark UI.
+export function buildIframeContent(html: string, applyDarken: boolean, imagesBlocked: boolean, page = 'white'): string {
   const processedHtml = processHtml(html, imagesBlocked)
   const imgSrc = imagesBlocked ? "'self' data:" : '* data:'
 
@@ -203,7 +205,7 @@ export function buildIframeContent(html: string, applyDarken: boolean, imagesBlo
       margin: 0; padding: 0;
       font-family: system-ui, sans-serif;
       font-size: 15px; line-height: 1.5;
-      color: #1a1a0a; background-color: white;
+      color: #1a1a0a; background-color: ${applyDarken ? 'white' : page};
       overflow-x: auto; word-wrap: break-word;
       scrollbar-width: none; /* Firefox */
       -ms-overflow-style: none; /* IE/Edge */

@@ -1,7 +1,7 @@
 <script lang="ts">
-  // Primary "Compose" call to action, shared by the chat list header and the
-  // conversation header. Filled with the accent, the one bold colour in the
-  // list header.
+  // "New message" call to action, shared by the chat list header and the
+  // conversation header. Tonal (accent-soft), so the composer's Send stays the
+  // only filled accent button.
   import { _ } from '$lib/i18n'
   import ToolbarButton from './ToolbarButton.svelte'
 
@@ -13,4 +13,4 @@
   let { onclick, compact = false }: Props = $props()
 </script>
 
-<ToolbarButton icon="mdi:pencil" label={$_('sidebar.compose')} primary {compact} {onclick} />
+<ToolbarButton icon="lucide:pencil" label={$_('sidebar.compose')} tonal {compact} {onclick} />

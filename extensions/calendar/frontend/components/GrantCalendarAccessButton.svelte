@@ -20,7 +20,7 @@
     size?: 'default' | 'sm'
     class?: string
     title?: string
-    /** Show the provider logo (mdi:google / mdi:microsoft) before the label. */
+    /** Show the provider logo (simple-icons:google / simple-icons:microsoft) before the label. */
     providerIcon?: boolean
     onSuccess?: () => void | Promise<void>
     onError?: (message: string) => void
@@ -41,7 +41,7 @@
     onError,
   }: Props = $props()
 
-  const iconName = $derived(provider === 'google' ? 'mdi:google' : 'mdi:microsoft')
+  const iconName = $derived(provider === 'google' ? 'simple-icons:google' : 'simple-icons:microsoft')
 
   let granting = $state(false)
 

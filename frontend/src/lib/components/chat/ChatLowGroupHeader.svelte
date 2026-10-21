@@ -51,12 +51,12 @@
     aria-expanded={expanded}
     onclick={() => toggleChatGroupExpanded('low')}
   >
-    <Icon icon={expanded ? 'mdi:chevron-down' : 'mdi:chevron-right'} class="w-4 h-4 shrink-0" />
-    <Icon icon="mdi:newspaper-variant-outline" class="w-4 h-4 shrink-0" />
+    <Icon icon={expanded ? 'lucide:chevron-down' : 'lucide:chevron-right'} class="w-4 h-4 shrink-0" />
+    <Icon icon="lucide:newspaper" class="w-4 h-4 shrink-0" />
     <span class="truncate text-meta font-normal">{$_('chat.lowPriorityGroup', { values: { count: chatList.lowCount } })}</span>
   </button>
   <div class="flex items-center gap-0.5 pr-1.5 shrink-0">
-    {@render action('mdi:email-open-multiple-outline', $_('chat.markAllLowRead'), markAllRead)}
-    {@render action('mdi:archive-arrow-down-outline', $_('chat.archiveAllLow'), archiveAll)}
+    {@render action('lucide:mails', $_('chat.markAllLowRead'), markAllRead)}
+    {@render action('lucide:archive', $_('chat.archiveAllLow'), archiveAll)}
   </div>
 </div>

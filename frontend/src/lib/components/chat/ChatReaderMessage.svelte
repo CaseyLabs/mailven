@@ -9,6 +9,7 @@
   import { _ } from '$lib/i18n'
   import { AddImageAllowlist } from '../../../../wailsjs/go/app/App'
   import type { message } from '../../../../wailsjs/go/models'
+  import ChatFoldToggle from './ChatFoldToggle.svelte'
   import EmailBodyImageBanner from '$lib/components/viewer/EmailBodyImageBanner.svelte'
   import { extractDomain } from '$lib/components/viewer/emailBodyHtml'
   import { isImageAllowedSync, refreshImageAllowlist } from '$lib/stores/imageAllowlist.svelte'
@@ -21,12 +22,11 @@
     // Content ID → data URL of a decrypted message's embedded pictures.
     inlineAttachments?: Record<string, string>
     fromEmail: string
-    flat: boolean
     onOpenLink: (url: string) => void
     onImagesLoaded: () => void
   }
 
-  let { blocks: rawBlocks, inlineAttachments, fromEmail, flat, onOpenLink, onImagesLoaded }: Props = $props()
+  let { blocks: rawBlocks, inlineAttachments, fromEmail, onOpenLink, onImagesLoaded }: Props = $props()
 
   // Blocks shown before "Show more"; a fold must hide more than a couple.
   const FOLD_AT = 8
@@ -102,13 +102,13 @@
   {#if showImages || !isRemote(block.src)}
     <img src={block.src} alt={block.alt ?? ''} referrerpolicy="no-referrer" loading="lazy" class="block max-w-full h-auto rounded-lg" />
   {:else if block.alt}
-    <span class="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-      <Icon icon="mdi:image-outline" class="w-4 h-4 shrink-0" aria-hidden="true" />{block.alt}
+    <span class="inline-flex items-center gap-1.5 font-ui text-ui-meta text-fg-secondary">
+      <Icon icon="lucide:image" class="w-4 h-4 shrink-0" aria-hidden="true" />{block.alt}
     </span>
   {/if}
 {/snippet}
 
-<div class="{flat ? 'px-1 py-0.5' : 'px-3.5 py-2.5'} flex flex-col gap-2 text-[1rem] leading-[1.45] wrap-anywhere" data-chat-reader>
+<div class="flex flex-col gap-3 max-w-(--measure) font-read text-read-body text-fg-primary wrap-anywhere" data-chat-reader>
   {#if hasRemoteImages && !showImages}
     <!-- pr-16 keeps the button clear of the message's hover actions in the corner. -->
     <div class="pr-16 -mb-2">
@@ -129,27 +129,22 @@
         {@render image(block)}
       {/if}
     {:else if block.kind === 'heading'}
-      <p class="text-[1.0625rem] font-semibold leading-snug whitespace-pre-line" role="heading" aria-level={3}>{@render spans(block)}</p>
+      <p class="text-[1.125rem] leading-7 font-semibold whitespace-pre-line" role="heading" aria-level={3}>{@render spans(block)}</p>
     {:else if block.kind === 'item'}
       <p class="flex gap-2 whitespace-pre-line"><span aria-hidden="true">•</span><span class="min-w-0">{@render spans(block)}</span></p>
     {:else if isAction(block)}
       <a
         href={block.spans![0].href}
-        class="self-start inline-flex items-center gap-1 rounded-full border border-border px-3 py-1 text-sm font-medium text-primary hover:bg-foreground/5 transition-colors"
+        class="self-start inline-flex items-center gap-1 rounded-full border border-border-control px-3 py-1 font-ui text-ui-label text-primary hover:bg-surface-hover transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         onclick={(e) => open(e, block.spans![0].href!)}
-      >{plain(block)}<Icon icon="mdi:open-in-new" class="w-3.5 h-3.5" aria-hidden="true" /></a>
+      >{plain(block)}<Icon icon="lucide:external-link" class="w-3.5 h-3.5" aria-hidden="true" /></a>
     {:else}
       <p class="whitespace-pre-line">{@render spans(block)}</p>
     {/if}
   {/each}
   {#if foldable}
-    <button
-      class="self-start inline-flex items-center gap-1 text-sm text-primary hover:underline rounded focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
-      aria-expanded={expanded}
-      onclick={() => (expanded = !expanded)}
-    >
-      {expanded ? $_('chat.readerShowLess') : $_('chat.readerShowMore')}
-      <Icon icon={expanded ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="w-4 h-4" aria-hidden="true" />
-    </button>
+    <div class="font-ui">
+      <ChatFoldToggle open={expanded} showLabel={$_('chat.readerShowMore')} hideLabel={$_('chat.readerShowLess')} onToggle={() => (expanded = !expanded)} />
+    </div>
   {/if}
 </div>

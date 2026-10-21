@@ -365,7 +365,7 @@
 
       {#if s.errorMessage}
         <div bind:this={s.errorRef} class="flex items-start gap-2 p-2 bg-destructive/10 rounded text-sm">
-          <Icon icon="mdi:alert-circle" class="w-4 h-4 text-destructive shrink-0 mt-0.5" />
+          <Icon icon="lucide:circle-alert" class="w-4 h-4 text-destructive shrink-0 mt-0.5" />
           <div class="text-xs text-destructive wrap-break-word">{s.errorMessage}</div>
         </div>
       {/if}
@@ -376,7 +376,7 @@
         {$_('calendar.common.cancel')}
       </Button>
       <Button onclick={() => s.handleSave()} disabled={s.submitting || s.writableCalendars.length === 0}>
-        {#if s.submitting}<Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />{/if}
+        {#if s.submitting}<Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />{/if}
         {$_('calendar.common.save')}
       </Button>
     </div>

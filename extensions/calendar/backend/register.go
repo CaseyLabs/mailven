@@ -42,7 +42,7 @@ func (e *Extension) Register(core coreapi.Core) (coreapi.Unregister, error) {
 	unregRail, err := core.UI().RegisterRailTab(coreapi.RailTabRequest{
 		ExtensionID: e.manifest.ID,
 		Label:       e.manifest.Name,
-		Icon:        "mdi:calendar-month",
+		Icon:        "lucide:calendar",
 		Component:   "CalendarPane",
 		Order:       20,
 	})

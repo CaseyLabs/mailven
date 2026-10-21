@@ -41,7 +41,7 @@
   <!-- Background Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:application-cog-outline" class="w-4 h-4" />
+      <Icon icon="lucide:app-window" class="w-4 h-4" />
       {$_('settingsGeneral.background')}
     </h3>
 
@@ -85,7 +85,7 @@
   <!-- Startup Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:power" class="w-4 h-4" />
+      <Icon icon="lucide:power" class="w-4 h-4" />
       {$_('settingsGeneral.startup')}
     </h3>
 

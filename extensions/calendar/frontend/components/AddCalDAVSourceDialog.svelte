@@ -272,7 +272,7 @@
               disabled={submitting}
               onclick={() => (authMethod = 'password')}
             >
-              <Icon icon="mdi:key" class="w-4 h-4 mr-2" />
+              <Icon icon="lucide:key-round" class="w-4 h-4 mr-2" />
               {$_('calendar.add.authPassword')}
             </Button>
             <Button
@@ -283,7 +283,7 @@
               disabled={submitting}
               onclick={() => (authMethod = 'oauth')}
             >
-              <Icon icon="mdi:shield-key-outline" class="w-4 h-4 mr-2" />
+              <Icon icon="lucide:shield-ellipsis" class="w-4 h-4 mr-2" />
               {$_('calendar.add.authOAuth')}
             </Button>
           </div>
@@ -308,7 +308,7 @@
             <Label>{$_('calendar.add.oauthAccountLabel')}</Label>
             {#if loadingAccounts}
               <div class="flex items-center justify-center py-3">
-                <Icon icon="mdi:loading" class="w-5 h-5 animate-spin text-muted-foreground" />
+                <Icon icon="lucide:loader-circle" class="w-5 h-5 animate-spin text-muted-foreground" />
               </div>
             {:else if customOAuthAccounts.length === 0}
               <p class="text-xs text-muted-foreground">{$_('calendar.add.noCustomAccounts')}</p>
@@ -326,7 +326,7 @@
                   >
                     <div class="w-4 h-4 border border-border rounded flex items-center justify-center {selectedAccountId === acc.accountId ? 'bg-primary border-primary' : ''}">
                       {#if selectedAccountId === acc.accountId}
-                        <Icon icon="mdi:check" class="w-3 h-3 text-primary-foreground" />
+                        <Icon icon="lucide:check" class="w-3 h-3 text-primary-foreground" />
                       {/if}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -380,7 +380,7 @@
 
         {#if lastError !== ''}
           <div class="flex items-start gap-2 p-2 bg-destructive/10 rounded text-sm min-w-0">
-            <Icon icon="mdi:alert-circle" class="w-4 h-4 text-destructive shrink-0 mt-0.5" />
+            <Icon icon="lucide:circle-alert" class="w-4 h-4 text-destructive shrink-0 mt-0.5" />
             <div class="flex-1 min-w-0">
               <!-- Guidance messages (organizer email needed/invalid, missing
                    fields) skip the "Couldn't connect" title + credentials
@@ -403,7 +403,7 @@
         </Button>
         <Button onclick={submit} disabled={submitting}>
           {#if submitting}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
             {$_('calendar.add.submitting')}
           {:else}
             {$_('calendar.add.submit')}

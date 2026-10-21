@@ -36,7 +36,7 @@
   <Label>{$_('contacts.edit.urls')}</Label>
   {#if infoMessage}
     <p class="text-xs text-muted-foreground mb-2" role="note">
-      <Icon icon="mdi:information-outline" class="inline w-3.5 h-3.5 mr-0.5" />
+      <Icon icon="lucide:info" class="inline w-3.5 h-3.5 mr-0.5" />
       {infoMessage}
     </p>
   {/if}
@@ -63,13 +63,13 @@
           disabled={disabled}
           aria-label={$_('contacts.edit.removeUrl')}
         >
-          <Icon icon="mdi:close" class="w-4 h-4" />
+          <Icon icon="lucide:x" class="w-4 h-4" />
         </Button>
       </div>
     {/each}
   </div>
   <Button variant="outline" size="sm" onclick={add} disabled={disabled} class="mt-2">
-    <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+    <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
     {$_('contacts.edit.addUrl')}
   </Button>
 </div>

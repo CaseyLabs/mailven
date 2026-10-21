@@ -82,6 +82,12 @@ export function getChromeBgHsl(): string {
   return bg ? `hsl(${bg})` : '#000'
 }
 
+// The paper card colour as `hsl(...)`, for a light body shown in a dark UI.
+export function getPaperHsl(): string {
+  const paper = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()
+  return paper ? `hsl(${paper})` : 'white'
+}
+
 // Per-theme dark-mail saturation override. <1 desaturates the inverted
 // email surface to cancel out the warm/red chromatic shift that partial
 // invert + hue-rotate(180deg) leaves on the residual chromaticity of

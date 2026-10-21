@@ -42,7 +42,8 @@
   }
 
   const px = $derived(size ?? DENSITY_SIZE[density])
-  const fontPx = $derived(Math.round(px * 0.4))
+  // 12px floor (DS-6): a single initial at 20px is 12px, two initials start at 24px and fit.
+  const fontPx = $derived(Math.max(12, Math.round(px * 0.4)))
   const tint = $derived(avatarTint(email || ''))
   // Shared with mail so a contact and a sender with the same name match.
   const text = $derived(getInitials(name || email).slice(0, initials ?? (px <= 20 ? 1 : 2)))

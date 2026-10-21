@@ -16,7 +16,7 @@
     onclick: () => void
   }
 
-  const { label, icon = 'mdi:plus', onclick }: Props = $props()
+  const { label, icon = 'lucide:plus', onclick }: Props = $props()
 </script>
 
 <div class="px-3 py-2">

@@ -2,7 +2,7 @@
    Warm neutral surfaces and one muted terracotta accent, kept for the primary
    action, unread state and focus. Each value is a raw HSL triple of the
    design-system hex shown beside it. The pre-DS names (--background, --fg-*,
-   --primary, --avatar-1…14 and the rest) are aliases in _defaults.css.
+   --primary and the rest) are aliases in _defaults.css.
    tools/contrast-check.mjs checks every text, focus and boundary pair. */
 @layer base {
   /* Light */

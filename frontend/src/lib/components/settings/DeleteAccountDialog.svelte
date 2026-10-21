@@ -73,7 +73,7 @@
 
     {#if error}
       <div class="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-        <Icon icon="mdi:alert-circle" class="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+        <Icon icon="lucide:circle-alert" class="w-5 h-5 text-destructive shrink-0 mt-0.5" />
         <p class="text-sm text-destructive">{error}</p>
       </div>
     {/if}
@@ -85,10 +85,10 @@
       <AlertDialog.Action
         onclick={handleDelete}
         disabled={deleting}
-        class="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+        variant="danger"
       >
         {#if deleting}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
         {/if}
         {$_('account.deleteAccount')}
       </AlertDialog.Action>

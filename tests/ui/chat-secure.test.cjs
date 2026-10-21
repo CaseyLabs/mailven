@@ -1,5 +1,5 @@
 // Signed and decrypted mail (UIX-8): the chat shows the chat text from the S/MIME or PGP view result as a
-// bubble with its security badge, not the full body. Original layout and Show original keep the full body,
+// text block with its security badge, not the full body. Original layout and Show original keep the full body,
 // and a failed decryption still shows its banner.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
@@ -34,11 +34,11 @@ const lastId = (page) => page.locator('[data-message-id]').last().getAttribute('
 
 describe('signed and encrypted mail in chat', () => {
   for (const accounts of ['expanded', 'collapsed']) {
-    it(`signed mail shows as a chat bubble with its badge (Accounts ${accounts})`, ui.run({ accounts, beforeMount: signed }, async (page) => {
+    it(`signed mail shows as chat text with its badge (Accounts ${accounts})`, ui.run({ accounts, beforeMount: signed }, async (page) => {
       const msg = bubble(page, await lastId(page))
       await msg.getByText('See you at the trailhead.').waitFor()
       assert.equal(await msg.locator('iframe').count(), 0, 'no full HTML body')
-      assert.equal(await msg.locator('.bg-muted, .bg-bubble-own').count() > 0, true, 'renders in a bubble')
+      assert.equal(await msg.locator('[data-message-text]').count(), 1, 'renders as chat text')
       await msg.locator('[title="Signed by ana@example.com with S/MIME"]').waitFor()
       assert.doesNotMatch(await msg.innerText(), /old plan/, 'quoted history hidden')
       await msg.getByRole('button', { name: 'Show quoted text' }).click()
@@ -46,7 +46,7 @@ describe('signed and encrypted mail in chat', () => {
     }))
   }
 
-  it('decrypted mail shows as a chat bubble; Show original shows it in full', ui.run({ beforeMount: decrypted }, async (page) => {
+  it('decrypted mail shows as chat text; Show original shows it in full', ui.run({ beforeMount: decrypted }, async (page) => {
     const msg = bubble(page, await lastId(page))
     await msg.getByText('See you at the trailhead.').waitFor()
     assert.equal(await msg.locator('iframe').count(), 0, 'no full body')
@@ -55,14 +55,14 @@ describe('signed and encrypted mail in chat', () => {
     await msg.getByRole('button', { name: 'Message actions' }).click()
     await page.getByRole('menuitem', { name: 'Show original' }).click()
     await msg.locator('iframe').waitFor()
-    assert.equal(await msg.getByRole('button', { name: 'Show quoted text' }).count(), 0, 'the chat bubble is replaced')
+    assert.equal(await msg.getByRole('button', { name: 'Show quoted text' }).count(), 0, 'the chat text is replaced')
   }))
 
   it('decrypted attachment-only mail shows just its attachments', ui.run({ beforeMount: attachmentOnly }, async (page) => {
     const msg = bubble(page, await lastId(page))
     await msg.getByText('route-plan.pdf').waitFor()
     assert.equal(await msg.locator('iframe').count(), 0, 'no empty full body')
-    assert.equal(await msg.locator('.bg-muted.rounded-bl-md, .bg-bubble-own.rounded-br-md').count(), 0, 'no empty bubble')
+    assert.equal(await msg.locator('[data-message-text]').count(), 0, 'no empty text block')
   }))
 
   it('Original layout keeps signed mail in full', ui.run({ beforeMount: `${signed}\n${originalLayout}` }, async (page) => {

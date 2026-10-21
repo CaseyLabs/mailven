@@ -75,7 +75,7 @@
   <div class="flex items-center justify-between gap-3 flex-wrap">
     <p class="text-sm text-muted-foreground flex-1 min-w-0">{$_('googleGuide.help')}</p>
     <Button type="button" size="sm" variant="outline" onclick={() => { open = !open }} aria-expanded={open}>
-      <Icon icon="mdi:format-list-checks" class="w-4 h-4 mr-1" />
+      <Icon icon="lucide:list-checks" class="w-4 h-4 mr-1" />
       {$_('googleGuide.button')}
     </Button>
   </div>
@@ -106,14 +106,14 @@
                 {/each}
               </ul>
               <Button type="button" size="sm" variant="outline" onclick={copyScopes}>
-                <Icon icon="mdi:content-copy" class="w-4 h-4 mr-1" />
+                <Icon icon="lucide:copy" class="w-4 h-4 mr-1" />
                 {$_('googleGuide.copyScopes')}
               </Button>
             {/if}
             {#if link}
               <div class="flex items-center gap-2 flex-wrap">
                 <Button type="button" size="sm" variant="outline" onclick={() => openLink(link.url)}>
-                  <Icon icon="mdi:open-in-new" class="w-4 h-4 mr-1" />
+                  <Icon icon="lucide:external-link" class="w-4 h-4 mr-1" />
                   {$_(`googleGuide.step.${id}.open`)}
                 </Button>
                 <span class="text-xs text-muted-foreground">

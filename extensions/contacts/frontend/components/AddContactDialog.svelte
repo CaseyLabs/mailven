@@ -386,7 +386,7 @@
       <Button variant="ghost" onclick={close} disabled={saving}>{$_('contacts.common.cancel')}</Button>
       <Button onclick={save} disabled={saving}>
         {#if saving}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
         {/if}
         {$_('contacts.common.save')}
       </Button>

@@ -24,7 +24,7 @@
 <div class="space-y-6">
   {#if s.loading}
     <div class="flex items-center justify-center py-8">
-      <Icon icon="mdi:loading" class="w-6 h-6 animate-spin text-muted-foreground" />
+      <Icon icon="lucide:loader-circle" class="w-6 h-6 animate-spin text-muted-foreground" />
     </div>
   {:else}
     <AccountSecurityPgpSection {s} />

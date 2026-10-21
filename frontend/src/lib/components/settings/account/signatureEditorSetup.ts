@@ -105,7 +105,7 @@ export function createSignatureEditor(opts: SignatureEditorOptions): Editor {
     content: opts.content,
     editorProps: {
       attributes: {
-        class: 'signature-editor focus:outline-hidden min-h-[100px] p-3',
+        class: 'signature-editor focus-visible:outline-hidden min-h-[100px] p-3',
       },
       // Handle paste events for images
       handlePaste: (view, event) => {

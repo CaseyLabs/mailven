@@ -360,7 +360,7 @@
 <div class="flex flex-col h-full {isFlashing ? 'pane-focus-flash' : ''}">
   <!-- Header: title and close button for the narrow-layout overlay -->
   {#if showBackButton}
-    <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-border">
+    <div class="flex items-center justify-between gap-2 px-4 py-3">
       <h2 class="text-body font-semibold text-fg-primary">{$_('sidebar.accountsTitle')}</h2>
       <button
         class="p-2 rounded-md hover:bg-muted transition-colors shrink-0"
@@ -368,7 +368,7 @@
         aria-label={$_('aria.closeSidebar')}
         onclick={onBack}
       >
-        <Icon icon="mdi:close" class="w-5 h-5 text-muted-foreground" />
+        <Icon icon="lucide:x" class="w-5 h-5 text-muted-foreground" />
       </button>
     </div>
   {/if}
@@ -379,7 +379,7 @@
   <div class="flex-1 overflow-y-auto scrollbar-thin pb-2" bind:this={scrollContainer}>
     {#if accountStore.loading}
       <div class="flex items-center justify-center py-8">
-        <Icon icon="mdi:loading" class="w-6 h-6 animate-spin text-muted-foreground" />
+        <Icon icon="lucide:loader-circle" class="w-6 h-6 animate-spin text-muted-foreground" />
       </div>
     {:else if accountStore.accounts.length === 0}
       <!-- Empty State -->
@@ -398,7 +398,7 @@
           onSelectUnified={handleUnifiedInboxSelect}
           onSelectAccountInbox={handleAccountInboxSelect}
         />
-        <div class="border-b border-border mx-3 my-1"></div>
+        <div class="h-2" aria-hidden="true"></div>
       {/if}
 
       {#each accountStore.accounts as accWithFolders (accWithFolders.account.id)}
@@ -430,12 +430,12 @@
       {/each}
 
       <!-- Add Account Button -->
-      <div class="px-3 py-2">
+      <div class="py-2">
         <button
-          class="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors"
+          class="nav-item text-body"
           onclick={openAddAccount}
         >
-          <Icon icon="mdi:plus" class="w-4 h-4" />
+          <Icon icon="lucide:plus" class="w-4 h-4" />
           <span>{$_('sidebar.addAccount')}</span>
         </button>
       </div>

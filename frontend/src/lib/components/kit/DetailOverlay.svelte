@@ -103,7 +103,7 @@
           aria-label={$_('common.back')}
           title={$_('common.back')}
         >
-          <Icon icon="mdi:arrow-left" class="w-5 h-5 text-muted-foreground" />
+          <Icon icon="lucide:arrow-left" class="w-5 h-5 text-muted-foreground" />
         </button>
       {/if}
       <span class="flex-1 min-w-0 truncate text-sm font-medium text-foreground">
@@ -117,7 +117,7 @@
         title={$_(focused ? 'kit.exitFocus' : 'kit.enterFocus')}
       >
         <Icon
-          icon={focused ? 'mdi:fullscreen-exit' : 'mdi:fullscreen'}
+          icon={focused ? 'lucide:minimize' : 'lucide:maximize'}
           class="w-5 h-5 text-muted-foreground"
         />
       </button>
@@ -128,7 +128,7 @@
         aria-label={$_('common.close')}
         title={$_('common.close')}
       >
-        <Icon icon="mdi:close" class="w-5 h-5 text-muted-foreground" />
+        <Icon icon="lucide:x" class="w-5 h-5 text-muted-foreground" />
       </button>
     </div>
 

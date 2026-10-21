@@ -111,13 +111,12 @@
 
       {#each sections as section (section.source.id)}
         <div class="mb-3">
-          <div class="px-4 mb-1 text-meta font-semibold text-fg-tertiary truncate">
+          <div class="px-4 mb-1 text-ui-section text-fg-secondary truncate">
             {section.source.name}
           </div>
           {#each section.calendars as cal (cal.id)}
             <div
-              class="group flex items-center gap-2 mx-2 px-2 py-1.5 rounded-md cursor-pointer text-sm
-                     hover:bg-muted/40 transition-colors"
+              class="group nav-item text-body cursor-pointer"
               role="button"
               tabindex="0"
               onclick={() => toggleVisibility(cal)}
@@ -140,7 +139,7 @@
                 style:background-color={calendarSources.colorOf(cal.id)}
                 aria-hidden="true"
               ></span>
-              <span class="flex-1 min-w-0 truncate text-foreground">{cal.displayName}</span>
+              <span class="flex-1 min-w-0 truncate">{cal.displayName}</span>
             </div>
           {/each}
         </div>
@@ -167,24 +166,24 @@
       {#snippet trailing()}
         {#if stuckWrites.items.length > 0}
           <button
-            class="flex items-center gap-1 p-1 rounded text-destructive hover:bg-muted/40"
+            class="flex items-center gap-1 p-1 rounded text-destructive hover:bg-surface-hover"
             title={stuckLabel}
             onclick={() => { showStuckWrites = true }}
             type="button"
             aria-label={stuckLabel}
           >
-            <Icon icon="mdi:cloud-alert-outline" class="w-4 h-4" />
+            <Icon icon="lucide:cloud-alert" class="w-4 h-4" />
             <span>{stuckWrites.items.length}</span>
           </button>
         {/if}
         <button
-          class="p-1 rounded hover:bg-muted/40"
+          class="p-1 rounded hover:bg-surface-hover"
           title={$_('calendar.sidebar.settings')}
           onclick={() => onOpenSettings?.()}
           type="button"
           aria-label={$_('calendar.sidebar.settings')}
         >
-          <Icon icon="mdi:cog-outline" class="w-4 h-4" />
+          <Icon icon="lucide:settings" class="w-4 h-4" />
         </button>
       {/snippet}
     </SidebarFooter>

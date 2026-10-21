@@ -25,14 +25,14 @@
     aria-expanded={expanded}
     onclick={onToggle}
   >
-    <Icon icon="mdi:newspaper-variant-outline" class="w-5 h-5 mt-0.5 shrink-0 text-muted-foreground" />
+    <Icon icon="lucide:newspaper" class="w-5 h-5 mt-0.5 shrink-0 text-muted-foreground" />
     <span class="flex-1 min-w-0">
       <!-- pr-16 keeps the title row clear of the bubble's hover actions. -->
       <span class="flex items-center gap-2 pr-16">
         <span class="flex-1 min-w-0 text-sm font-medium text-foreground truncate">{subject || $_('viewer.noSubject')}</span>
         <span class="shrink-0 flex items-center gap-1 text-xs text-primary">
           {expanded ? $_('chat.collapseMessage') : $_('chat.expandMessage')}
-          <Icon icon={expanded ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="w-4 h-4" />
+          <Icon icon={expanded ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-4 h-4" />
         </span>
       </span>
       {#if !expanded && shortPreview}

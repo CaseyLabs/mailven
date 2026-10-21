@@ -81,10 +81,10 @@
       onclick={handleFolderMappingToggle}
     >
       <Icon
-        icon={showFolderMapping ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+        icon={showFolderMapping ? 'lucide:chevron-down' : 'lucide:chevron-right'}
         class="w-4 h-4"
       />
-      <Icon icon="mdi:folder-cog-outline" class="w-4 h-4" />
+      <Icon icon="lucide:folder-cog" class="w-4 h-4" />
       {$_('account.folderMapping')}
     </button>
 
@@ -96,7 +96,7 @@
 
         {#if loadingFolders}
           <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
             {$_('account.loadingFolders')}
           </div>
         {:else if availableFolders.length === 0}

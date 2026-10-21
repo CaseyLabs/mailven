@@ -79,21 +79,21 @@
 
   <ContextMenuContent>
     <ContextMenuItem onSelect={handleMarkAllRead}>
-      <Icon icon="mdi:email-check-outline" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:mail-check" class="mr-2 h-4 w-4" />
       {$_('contextMenu.markAllAsRead')}
     </ContextMenuItem>
     <ContextMenuItem onSelect={handleMarkAllUnread}>
-      <Icon icon="mdi:email-outline" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:mail" class="mr-2 h-4 w-4" />
       {$_('contextMenu.markAllAsUnread')}
     </ContextMenuItem>
     <ContextMenuSeparator />
     <ContextMenuItem onSelect={() => handleSyncFolder(false)}>
-      <Icon icon="mdi:refresh" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:refresh-cw" class="mr-2 h-4 w-4" />
       {$_('messageList.syncFolder')}
     </ContextMenuItem>
     <ContextMenuSeparator />
     <ContextMenuItem onSelect={() => handleSyncFolder(true)}>
-      <Icon icon="mdi:refresh-auto" class="mr-2 h-4 w-4" />
+      <Icon icon="lucide:refresh-ccw-dot" class="mr-2 h-4 w-4" />
       {$_('messageList.forceResync')}
     </ContextMenuItem>
   </ContextMenuContent>

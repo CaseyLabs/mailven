@@ -11,7 +11,7 @@ const contactsFake = `
 {
   const A = window.go.app.App
   A.ListEnabledExtensions = async () => ['contacts']
-  A.ListExtensionRailTabs = async () => [{ extensionId: 'contacts', label: 'Contacts', icon: 'mdi:account-multiple', order: 10 }]
+  A.ListExtensionRailTabs = async () => [{ extensionId: 'contacts', label: 'Contacts', icon: 'lucide:users', order: 10 }]
   A.Contacts_ListContactsForBrowse = async (q, src, limit, offset) => offset > 0 ? [] :
     [{ id: 'c-priya', name: 'Priya Shah', emails: ['Priya@Example.net'], sourceId: 'local' }]
 }

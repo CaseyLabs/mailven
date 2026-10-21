@@ -25,25 +25,25 @@ type Translate = (key: string, options?: { values?: Record<string, string> }) =>
 
 // status → [tone, icon, i18n key]; keys taking {email} or {keyId} get them filled in.
 const SMIME: Record<string, [Tone, string, string]> = {
-  signed: ['ok', 'mdi:shield-check', 'viewer.smimeSignedBy'],
-  unknown_signer: ['warn', 'mdi:shield-alert', 'viewer.smimeUnknownSigner'],
-  self_signed: ['warn', 'mdi:shield-alert', 'viewer.smimeSelfSigned'],
-  revocation_unchecked: ['warn', 'mdi:shield-alert', 'viewer.smimeRevocationUnchecked'],
-  revocation_unknown: ['warn', 'mdi:shield-alert', 'viewer.smimeRevocationUnknown'],
-  revoked_cert: ['bad', 'mdi:shield-off', 'viewer.smimeRevokedCert'],
-  expired_cert: ['bad', 'mdi:shield-off', 'viewer.smimeExpiredCert'],
-  signer_mismatch: ['warn', 'mdi:shield-alert', 'viewer.smimeSignerMismatch'],
-  invalid: ['bad', 'mdi:shield-off', 'viewer.smimeInvalid'],
-  decrypt_failed: ['bad', 'mdi:lock-off', 'viewer.smimeDecryptFailed'],
+  signed: ['ok', 'lucide:shield-check', 'viewer.smimeSignedBy'],
+  unknown_signer: ['warn', 'lucide:shield-alert', 'viewer.smimeUnknownSigner'],
+  self_signed: ['warn', 'lucide:shield-alert', 'viewer.smimeSelfSigned'],
+  revocation_unchecked: ['warn', 'lucide:shield-alert', 'viewer.smimeRevocationUnchecked'],
+  revocation_unknown: ['warn', 'lucide:shield-alert', 'viewer.smimeRevocationUnknown'],
+  revoked_cert: ['bad', 'lucide:shield-off', 'viewer.smimeRevokedCert'],
+  expired_cert: ['bad', 'lucide:shield-off', 'viewer.smimeExpiredCert'],
+  signer_mismatch: ['warn', 'lucide:shield-alert', 'viewer.smimeSignerMismatch'],
+  invalid: ['bad', 'lucide:shield-off', 'viewer.smimeInvalid'],
+  decrypt_failed: ['bad', 'lucide:shield-x', 'viewer.smimeDecryptFailed'],
 }
 const PGP: Record<string, [Tone, string, string]> = {
-  signed: ['ok', 'mdi:key-check', 'viewer.pgpSignedBy'],
-  unknown_key: ['warn', 'mdi:key-alert', 'viewer.pgpUnknownKey'],
-  expired_key: ['warn', 'mdi:key-alert', 'viewer.pgpExpiredKey'],
-  revoked_key: ['bad', 'mdi:key-remove', 'viewer.pgpRevokedKey'],
-  signer_mismatch: ['warn', 'mdi:key-alert', 'viewer.pgpSignerMismatch'],
-  invalid: ['bad', 'mdi:key-remove', 'viewer.pgpInvalid'],
-  decrypt_failed: ['bad', 'mdi:lock-off', 'viewer.pgpDecryptFailed'],
+  signed: ['ok', 'lucide:key-round', 'viewer.pgpSignedBy'],
+  unknown_key: ['warn', 'lucide:key-round', 'viewer.pgpUnknownKey'],
+  expired_key: ['warn', 'lucide:key-round', 'viewer.pgpExpiredKey'],
+  revoked_key: ['bad', 'lucide:key-round', 'viewer.pgpRevokedKey'],
+  signer_mismatch: ['warn', 'lucide:key-round', 'viewer.pgpSignerMismatch'],
+  invalid: ['bad', 'lucide:key-round', 'viewer.pgpInvalid'],
+  decrypt_failed: ['bad', 'lucide:shield-x', 'viewer.pgpDecryptFailed'],
 }
 
 export function securityStatus(msg: messageModels.Message, thread: ChatThread, t: Translate): SecurityLine[] {
@@ -52,8 +52,8 @@ export function securityStatus(msg: messageModels.Message, thread: ChatThread, t
 
   // S/MIME: on-view result for S/MIME messages, cached status otherwise.
   const sm = thread.smimeResults[msg.id]
-  if (thread.smimeLoading.has(msg.id)) out.push({ tone: 'muted', icon: 'mdi:loading', text: t('viewer.processingSMIME'), spin: true })
-  if (sm?.smimeEncrypted) out.push({ tone: 'info', icon: 'mdi:lock-check', text: t('viewer.smimeEncryptedWith'), badge: true })
+  if (thread.smimeLoading.has(msg.id)) out.push({ tone: 'muted', icon: 'lucide:loader-circle', text: t('viewer.processingSMIME'), spin: true })
+  if (sm?.smimeEncrypted) out.push({ tone: 'info', icon: 'lucide:lock-keyhole', text: t('viewer.smimeEncryptedWith'), badge: true })
   const smStatus = msg.hasSMIME ? sm?.smimeStatus : msg.smimeStatus
   const smEntry = smStatus ? SMIME[smStatus] : undefined
   if (smEntry) {
@@ -62,8 +62,8 @@ export function securityStatus(msg: messageModels.Message, thread: ChatThread, t
   }
 
   const pg = thread.pgpResults[msg.id]
-  if (thread.pgpLoading.has(msg.id)) out.push({ tone: 'muted', icon: 'mdi:loading', text: t('viewer.processingPGP'), spin: true })
-  if (pg?.pgpEncrypted) out.push({ tone: 'info', icon: 'mdi:lock-check', text: t('viewer.pgpEncryptedWith'), badge: true })
+  if (thread.pgpLoading.has(msg.id)) out.push({ tone: 'muted', icon: 'lucide:loader-circle', text: t('viewer.processingPGP'), spin: true })
+  if (pg?.pgpEncrypted) out.push({ tone: 'info', icon: 'lucide:lock-keyhole', text: t('viewer.pgpEncryptedWith'), badge: true })
   const pgEntry = pg?.pgpStatus ? PGP[pg.pgpStatus] : undefined
   if (pgEntry) {
     const values = { email: pg!.pgpSignerEmail || unknown, keyId: pg!.pgpSignerKeyId || '' }

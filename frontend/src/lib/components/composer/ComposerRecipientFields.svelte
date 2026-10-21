@@ -15,7 +15,7 @@
   <span class="text-sm text-muted-foreground w-16">{$_('composer.from')}:</span>
   <div class="flex-1">
     <Select.Root value={s.selectedIdentityId} onValueChange={(v) => handleIdentityChange(s, v)}>
-      <Select.Trigger class="h-8 px-0 border-0 bg-transparent shadow-none focus:ring-0">
+      <Select.Trigger class="h-8 px-0 border-0 bg-transparent shadow-none focus-visible:ring-0">
         <Select.Value placeholder={$_('composer.selectIdentity')}>
           {#if s.selectedIdentityId}
             {@const identity = s.identities.find(i => i.id === s.selectedIdentityId)}
@@ -136,7 +136,7 @@
     bind:value={s.subject}
     type="text"
     placeholder={$_('composer.subject')}
-    class="flex-1 bg-transparent text-sm focus:outline-hidden"
+    class="flex-1 bg-transparent text-sm focus-visible:outline-hidden"
     onkeydown={(e) => {
       // Tab skips security rows + toolbar and goes directly to body
       if (e.key === 'Tab' && !e.shiftKey) {

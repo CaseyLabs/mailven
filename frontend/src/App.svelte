@@ -209,7 +209,7 @@
     <!-- Sidebar (Folder List) -->
     <aside
       inert={getLayoutMode() === 'narrow' && getResponsiveView() !== 'sidebar'}
-      class="{getLayoutMode() === 'narrow' ? `responsive-sidebar-overlay w-72 border-r border-divider bg-background ${getResponsiveView() === 'sidebar' ? 'responsive-sidebar-visible' : ''}` : 'shrink-0 border-r border-divider bg-surface-sidebar'} {mailSidebarHidden ? 'hidden' : ''}"
+      class="{getLayoutMode() === 'narrow' ? `responsive-sidebar-overlay w-72 bg-background ${getResponsiveView() === 'sidebar' ? 'responsive-sidebar-visible' : ''}` : 'shrink-0 bg-background'} {mailSidebarHidden ? 'hidden' : ''}"
       style="{getLayoutMode() !== 'narrow' ? `width: ${sidebarWidth}px` : ''}"
       role="presentation"
       onclick={() => handlePaneClick('sidebar')}
@@ -257,7 +257,7 @@
     <!-- Chat List -->
     <section
       bind:this={messageListContainerRef}
-      class="{isResponsive() ? 'flex-1 min-w-0' : 'pane-list-resizable'} border-r border-divider bg-surface-list"
+      class="{isResponsive() ? 'flex-1 min-w-0' : 'pane-list-resizable'} bg-surface-list"
       style="{getLayoutMode() === 'full' ? `width: ${listWidth}px` : ''}"
       role="presentation"
       data-pane="messageList"

@@ -1,5 +1,5 @@
-// Chat presentation in the open chat: incoming/outgoing bubbles and sender runs, quoted text and signatures
-// behind the "⋯" marker, the sticky subject heading, subject headings in a sender chat, and combining/splitting sender chats.
+// Chat presentation in the open chat: left-aligned message blocks and sender runs ("You" on mine), quoted text
+// and signatures behind the "Show quoted text" fold, the sticky subject heading, subject headings in a sender chat, and combining/splitting sender chats.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
@@ -32,17 +32,19 @@ const senderFake = `{ const A = window.go.app.App, get = A.GetSenderChat
   } }`
 
 describe('chat presentation', () => {
-  it('incoming and outgoing bubbles grouped by sender', ui.run({}, async (page) => {
+  it('incoming and outgoing message blocks grouped by sender', ui.run({}, async (page) => {
     await bubble(page, 'trip-5').waitFor()
     const ids = await page.locator('[role="article"][data-message-id]').evaluateAll((els) => els.map((e) => e.dataset.messageId))
     assert.deepEqual(ids, ['trip-0', 'trip-1', 'trip-2', 'trip-3', 'trip-4', 'trip-5'], 'messages render oldest first')
     for (const [id, mine] of [['trip-0', false], ['trip-1', true], ['trip-2', false], ['trip-3', true], ['trip-5', false]]) {
-      assert.equal(await bubble(page, id).locator('.bg-bubble-own').count(), mine ? 1 : 0, `${id} ${mine ? 'is' : 'is not'} an outgoing bubble`)
-      assert.equal(await bubble(page, id).locator('.bg-muted').count(), mine ? 0 : 1, `${id} ${mine ? 'is not' : 'is'} an incoming bubble`)
+      assert.equal(await bubble(page, id).getAttribute('data-mine') !== null, mine, `${id} ${mine ? 'is' : 'is not'} mine`)
     }
     assert.match(await bubble(page, 'trip-0').innerText(), /Priya Shah/, 'an incoming run starts with the sender name')
     assert.match(await bubble(page, 'trip-2').innerText(), /Sam Rivera/, 'a different sender starts a new run')
-    assert.doesNotMatch(await bubble(page, 'trip-1').innerText(), /Alex Morgan/, 'outgoing bubbles do not name me')
+    assert.doesNotMatch(await bubble(page, 'trip-1').innerText(), /Alex Morgan/, 'my messages do not show my name')
+    assert.equal(await bubble(page, 'trip-1').locator('.text-ui-name-strong').innerText(), 'You', 'my messages are labelled You')
+    const lefts = await page.locator('[role="article"][data-message-id]').evaluateAll((els) => els.map((e) => Math.round(e.querySelector('[aria-hidden="true"].w-8').getBoundingClientRect().left)))
+    assert.equal(new Set(lefts).size, 1, `every message is left-aligned in one column: ${lefts}`)
     assert.doesNotMatch(await bubble(page, 'trip-5').innerText(), /Priya Shah/, 'a same-sender follow-up joins the run without a name')
   }))
 
@@ -65,7 +67,7 @@ describe('chat presentation', () => {
     assert.equal(top, 'Weekend trip to the coast', 'the heading paints over the messages scrolling under it')
   }))
 
-  it('quoted text and signature hide behind the marker', ui.run({ beforeMount: quotedFake }, async (page) => {
+  it('quoted text and signature hide behind the fold', ui.run({ beforeMount: quotedFake }, async (page) => {
     const last = bubble(page, 'trip-5')
     await last.waitFor()
     assert.match(await last.innerText(), /Booking the cabin tonight\./)

@@ -245,7 +245,7 @@
       tabindex="-1"
       title={$_('editor.bold')}
     >
-      <Icon icon="mdi:format-bold" class="w-5 h-5" />
+      <Icon icon="lucide:bold" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="1" />
   </div>
@@ -259,7 +259,7 @@
       tabindex="-1"
       title={$_('editor.italic')}
     >
-      <Icon icon="mdi:format-italic" class="w-5 h-5" />
+      <Icon icon="lucide:italic" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="2" />
   </div>
@@ -273,7 +273,7 @@
       tabindex="-1"
       title={$_('editor.underline')}
     >
-      <Icon icon="mdi:format-underline" class="w-5 h-5" />
+      <Icon icon="lucide:underline" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="3" />
   </div>
@@ -287,7 +287,7 @@
       tabindex="-1"
       title={$_('editor.strikethrough')}
     >
-      <Icon icon="mdi:format-strikethrough" class="w-5 h-5" />
+      <Icon icon="lucide:strikethrough" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="4" />
   </div>
@@ -305,7 +305,7 @@
       tabindex="-1"
       title={$_('editor.textColor')}
     >
-      <Icon icon="mdi:format-color-text" class="w-5 h-5" />
+      <Icon icon="lucide:baseline" class="w-5 h-5" />
       <div
         class="w-4 h-1 rounded-sm"
         style="background-color: {currentColor || '#000000'}"
@@ -351,7 +351,7 @@
       tabindex="-1"
       title={$_('editor.alignLeft')}
     >
-      <Icon icon="mdi:format-align-left" class="w-5 h-5" />
+      <Icon icon="lucide:align-left" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="7" />
   </div>
@@ -365,7 +365,7 @@
       tabindex="-1"
       title={$_('editor.alignCenter')}
     >
-      <Icon icon="mdi:format-align-center" class="w-5 h-5" />
+      <Icon icon="lucide:align-center" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="8" />
   </div>
@@ -379,7 +379,7 @@
       tabindex="-1"
       title={$_('editor.alignRight')}
     >
-      <Icon icon="mdi:format-align-right" class="w-5 h-5" />
+      <Icon icon="lucide:align-right" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="9" />
   </div>
@@ -396,7 +396,7 @@
       tabindex="-1"
       title={$_('editor.bulletList')}
     >
-      <Icon icon="mdi:format-list-bulleted" class="w-5 h-5" />
+      <Icon icon="lucide:list" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="a" />
   </div>
@@ -410,7 +410,7 @@
       tabindex="-1"
       title={$_('editor.numberedList')}
     >
-      <Icon icon="mdi:format-list-numbered" class="w-5 h-5" />
+      <Icon icon="lucide:list-ordered" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="b" />
   </div>
@@ -425,7 +425,7 @@
       tabindex="-1"
       title={$_('editor.quote')}
     >
-      <Icon icon="mdi:format-quote-close" class="w-5 h-5" />
+      <Icon icon="lucide:quote" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="c" />
   </div>
@@ -439,7 +439,7 @@
       class:opacity-50={isPlainTextMode}
       tabindex="-1"
     >
-      <Icon icon="mdi:link" class="w-5 h-5" />
+      <Icon icon="lucide:link" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="d" />
   </div>
@@ -452,7 +452,7 @@
       class:opacity-50={isPlainTextMode}
       tabindex="-1"
     >
-      <Icon icon="mdi:image" class="w-5 h-5" />
+      <Icon icon="lucide:image" class="w-5 h-5" />
     </button>
     <EditorHintBadge show={hintMode && !isPlainTextMode} label="e" />
   </div>
@@ -469,7 +469,7 @@
       tabindex="-1"
       title={isPlainTextMode ? $_('editor.switchToRichText') : $_('editor.switchToPlainText')}
     >
-      <Icon icon={isPlainTextMode ? 'mdi:format-text' : 'mdi:text'} class="w-5 h-5" />
+      <Icon icon={isPlainTextMode ? 'lucide:type' : 'lucide:text'} class="w-5 h-5" />
       <span class="hidden sm:inline">{isPlainTextMode ? $_('editor.richText') : $_('editor.plainText')}</span>
     </button>
     <EditorHintBadge show={hintMode} label="f" />

@@ -10,16 +10,16 @@
 
   // Computed draft status indicator
   let draftStatusIcon = $derived.by(() => {
-    if (s.saveStatus === 'saving') return 'mdi:loading'
-    if (s.saveStatus === 'error') return 'mdi:alert-circle'
+    if (s.saveStatus === 'saving') return 'lucide:loader-circle'
+    if (s.saveStatus === 'error') return 'lucide:circle-alert'
     if (s.saveStatus !== 'saved' || !s.lastSavedAt) return ''
     if (s.encryptMessage || s.pgpEncryptMessage) {
-      return s.syncStatus === 'synced' ? 'mdi:lock-check' : 'mdi:lock'
+      return s.syncStatus === 'synced' ? 'lucide:lock-keyhole' : 'lucide:lock'
     }
     switch (s.syncStatus) {
-      case 'synced': return 'mdi:cloud-check'
-      case 'pending': return 'mdi:cloud-upload'
-      case 'failed': return 'mdi:cloud-off-outline'
+      case 'synced': return 'lucide:cloud-check'
+      case 'pending': return 'lucide:cloud-upload'
+      case 'failed': return 'lucide:cloud-off'
       default: return ''
     }
   })
@@ -87,9 +87,9 @@
         title={$_('composer.openInNewWindow')}
       >
         {#if s.poppingOut}
-          <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
         {:else}
-          <Icon icon="mdi:open-in-new" class="w-4 h-4" />
+          <Icon icon="lucide:external-link" class="w-4 h-4" />
         {/if}
       </button>
     {/if}
@@ -105,7 +105,7 @@
         onclick={() => s.countdown.sendNow()}
         class="px-4 py-1.5 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-md transition-colors flex items-center gap-2"
       >
-        <Icon icon="mdi:send" class="w-4 h-4" />
+        <Icon icon="lucide:send" class="w-4 h-4" />
         {$_('composer.sendNow')}
       </button>
     {:else}
@@ -122,13 +122,13 @@
       class="px-4 py-1.5 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
     >
       {#if s.sending}
-        <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+        <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
         {$_('composer.sending')}
       {:else if s.poppingOut}
-        <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+        <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
         {$_('composer.opening')}
       {:else}
-        <Icon icon="mdi:send" class="w-4 h-4" />
+        <Icon icon="lucide:send" class="w-4 h-4" />
         {$_('composer.send')}
       {/if}
     </button>

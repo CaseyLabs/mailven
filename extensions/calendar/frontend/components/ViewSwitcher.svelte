@@ -72,7 +72,7 @@
 
 <!-- Wraps onto a second row when the pane is too narrow, rather than
      clipping the view buttons or the title. -->
-<div class="flex flex-wrap items-center gap-2 px-4 py-3 min-h-header border-b border-divider">
+<div class="flex flex-wrap items-center gap-2 px-4 py-3 min-h-header">
   <!-- Left: view selector + date nav. -->
   <div class="contents">
     <ResponsiveSidebarToggle />
@@ -97,7 +97,7 @@
         aria-label={$_('calendar.viewSwitcher.prev')}
         onclick={() => calendarView.goPrev()}
       >
-        <Icon icon="mdi:chevron-left" class="w-5 h-5 text-muted-foreground" />
+        <Icon icon="lucide:chevron-left" class="w-5 h-5 text-muted-foreground" />
       </button>
       <Button
         size="sm"
@@ -113,7 +113,7 @@
         aria-label={$_('calendar.viewSwitcher.next')}
         onclick={() => calendarView.goNext()}
       >
-        <Icon icon="mdi:chevron-right" class="w-5 h-5 text-muted-foreground" />
+        <Icon icon="lucide:chevron-right" class="w-5 h-5 text-muted-foreground" />
       </button>
     </div>
 
@@ -131,7 +131,7 @@
         variant="outline"
         onclick={() => calendarView.requestNewEvent()}
       >
-        <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
         {$_('calendar.viewSwitcher.newEvent')}
       </Button>
     {/if}
@@ -142,9 +142,9 @@
       disabled={syncing}
     >
       {#if animateSpin}
-        <Icon icon="mdi:loading" class="w-4 h-4 mr-1 animate-spin" />
+        <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-1 animate-spin" />
       {:else}
-        <Icon icon="mdi:sync" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:refresh-cw" class="w-4 h-4 mr-1" />
       {/if}
       {$_('calendar.viewSwitcher.sync')}
     </Button>

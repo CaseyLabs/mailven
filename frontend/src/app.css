@@ -42,7 +42,6 @@
   --color-primary-foreground: hsl(var(--primary-foreground));
 
   --color-divider: hsl(var(--divider, var(--border)));
-  --color-bubble-own: hsl(var(--bubble-own, var(--primary) / 0.2));
 
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
@@ -58,7 +57,6 @@
   --color-warning-foreground: hsl(var(--warning-foreground));
 
   --color-muted: hsl(var(--muted));
-  --color-selected: hsl(var(--selected));
   --color-muted-foreground: hsl(var(--muted-foreground));
 
   /* DS accent (terracotta): primary action, unread state and focus only.
@@ -189,7 +187,6 @@
   --height-header: 3.8125rem;
 
   /* Pane surfaces and text tiers: raw HSL triples (themes override them). */
-  --color-surface-sidebar: hsl(var(--surface-sidebar));
   --color-surface-list: hsl(var(--surface-list));
   --color-surface-content: hsl(var(--surface-content));
   --color-fg-primary: hsl(var(--fg-primary));
@@ -239,18 +236,15 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-/* Chat widths (Settings → Chat → Reading width). Bubbles, pending sends and
-   day separators sit in a centred --chat-column, so on a wide pane my replies
-   stay near theirs instead of drifting to the far edge; --chat-bubble caps
-   how wide a bubble grows (and never more than 75% of the column). Email cards
-   and full email bodies sit in a centred --chat-stream column, so a 600px
-   HTML email fits without horizontal scrolling (it needs about 45.5rem with
-   the avatar and paddings). Plain variables, not @theme tokens: @theme inline
+/* Chat widths (Settings → Chat → Reading width). Message blocks, pending
+   sends, day separators and email bodies sit in a centred --chat-stream
+   column: the design system's thread-column (720px) by default, so a 600px
+   HTML email fits beside the avatar without horizontal scrolling. Text inside
+   is capped at --measure at every width. The header and the anchored composer
+   use the same column. Plain variables, not @theme tokens: @theme inline
    would bake the values into the utilities. */
 :root {
-  --chat-column: 60rem;
-  --chat-bubble: 36rem;
-  --chat-stream: 46rem;
+  --chat-stream: var(--thread-column);
 }
 /* Accent as text: the design system draws accent-coloured text in
    --accent-text, which keeps 4.5:1 on hover and accent-soft fills; --accent
@@ -261,13 +255,7 @@
   }
 }
 
-:root[data-reading-width='narrow'] {
-  --chat-column: 52rem;
-  --chat-bubble: 30rem;
-}
 :root[data-reading-width='wide'] {
-  --chat-column: 72rem;
-  --chat-bubble: 44rem;
   --chat-stream: 54rem;
 }
 
@@ -634,4 +622,16 @@ mark {
   text-decoration: underline wavy #ef4444;
   text-decoration-skip-ink: none;
   text-underline-offset: 2px;
+}
+
+/* Reduced motion: no transition or animation runs (DS-6). The theme fade, fold and slide animations jump to
+   their final state; scroll behaviour is instant. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
 }

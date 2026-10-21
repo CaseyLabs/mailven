@@ -28,5 +28,5 @@
   aria-expanded={narrow ? undefined : !hidden}
   onclick={toggleActiveSidebar}
 >
-  <Icon icon="mdi:dock-left" class="w-5 h-5 text-muted-foreground" />
+  <Icon icon="lucide:panel-left" class="w-5 h-5 text-muted-foreground" />
 </button>

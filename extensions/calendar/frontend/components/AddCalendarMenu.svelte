@@ -64,36 +64,35 @@
   })
 </script>
 
-<div class="px-3 py-2" bind:this={containerRef}>
+<div class="py-2" bind:this={containerRef}>
   <!-- Trigger button: matches mail's SidebarAddItem visual rhythm so the
        calendar sidebar still feels native, with a chevron added on the
        right to telegraph expandability. -->
   <button
     type="button"
-    class="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground
-           hover:text-foreground hover:bg-muted/50 rounded-md transition-colors"
+    class="nav-item text-body"
     onclick={toggle}
     aria-expanded={expanded}
   >
-    <Icon icon="mdi:plus" class="w-4 h-4" />
+    <Icon icon="lucide:plus" class="w-4 h-4" />
     <span class="flex-1 text-left">{$_('calendar.addCalendar.trigger')}</span>
     <Icon
-      icon="mdi:chevron-down"
+      icon="lucide:chevron-down"
       class="w-4 h-4 transition-transform duration-200 {expanded ? 'rotate-180' : ''}"
     />
   </button>
 
   {#if expanded}
-    <div class="mt-1 space-y-0.5">
+    <div class="mt-1 mx-2 space-y-0.5">
       <!-- Local -->
       <button
         type="button"
         class="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground
-               hover:bg-muted/50 rounded-md transition-colors"
+               hover:bg-surface-hover rounded-md transition-colors"
         onclick={pickLocal}
         transition:fly={{ y: -8, duration: 180, delay: 0, easing: cubicOut }}
       >
-        <Icon icon="mdi:laptop" class="w-4 h-4 text-muted-foreground" />
+        <Icon icon="lucide:laptop" class="w-4 h-4 text-muted-foreground" />
         <span class="flex-1 text-left">{$_('calendar.addCalendar.local')}</span>
       </button>
 
@@ -101,11 +100,11 @@
       <button
         type="button"
         class="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground
-               hover:bg-muted/50 rounded-md transition-colors"
+               hover:bg-surface-hover rounded-md transition-colors"
         onclick={pickCalDAV}
         transition:fly={{ y: -8, duration: 180, delay: 40, easing: cubicOut }}
       >
-        <Icon icon="mdi:server-network" class="w-4 h-4 text-muted-foreground" />
+        <Icon icon="lucide:server" class="w-4 h-4 text-muted-foreground" />
         <span class="flex-1 text-left">{$_('calendar.addCalendar.caldav')}</span>
       </button>
 
@@ -113,7 +112,7 @@
       <button
         type="button"
         class="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground
-               hover:bg-muted/50 rounded-md transition-colors"
+               hover:bg-surface-hover rounded-md transition-colors"
         onclick={pickGoogle}
         transition:fly={{ y: -8, duration: 180, delay: 80, easing: cubicOut }}
       >
@@ -125,7 +124,7 @@
       <button
         type="button"
         class="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground
-               hover:bg-muted/50 rounded-md transition-colors"
+               hover:bg-surface-hover rounded-md transition-colors"
         onclick={pickMicrosoft}
         transition:fly={{ y: -8, duration: 180, delay: 120, easing: cubicOut }}
       >

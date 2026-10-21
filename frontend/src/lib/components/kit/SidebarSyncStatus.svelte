@@ -29,13 +29,13 @@
 
 {#snippet content()}
   {#if syncing}
-    <Icon icon="mdi:sync" class="w-4 h-4 shrink-0 animate-spin" />
+    <Icon icon="lucide:refresh-cw" class="w-4 h-4 shrink-0 animate-spin" />
     <span class="truncate">{syncingLabel}</span>
   {:else if errorLabel}
-    <Icon icon="mdi:alert-circle" class="w-4 h-4 shrink-0 text-destructive" />
+    <Icon icon="lucide:circle-alert" class="w-4 h-4 shrink-0 text-destructive" />
     <span class="truncate text-destructive">{errorLabel}</span>
   {:else}
-    <Icon icon="mdi:sync" class="w-4 h-4 shrink-0" />
+    <Icon icon="lucide:refresh-cw" class="w-4 h-4 shrink-0" />
     <span class="truncate">{idleLabel}</span>
   {/if}
 {/snippet}
@@ -44,7 +44,7 @@
   <button
     type="button"
     class="flex items-center gap-2 min-w-0 flex-1 -mx-1 px-1 py-0.5 rounded text-left
-           hover:bg-muted/40 disabled:hover:bg-transparent"
+           hover:bg-surface-hover disabled:hover:bg-transparent"
     onclick={onSync}
     disabled={syncing}
     title={errorDetail}

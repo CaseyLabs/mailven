@@ -262,7 +262,7 @@
         class:bg-muted={activeStates.bold}
         title={$_('editor.bold')}
       >
-        <Icon icon="mdi:format-bold" class="w-4 h-4" />
+        <Icon icon="lucide:bold" class="w-4 h-4" />
       </button>
       <button
         type="button"
@@ -271,7 +271,7 @@
         class:bg-muted={activeStates.italic}
         title={$_('editor.italic')}
       >
-        <Icon icon="mdi:format-italic" class="w-4 h-4" />
+        <Icon icon="lucide:italic" class="w-4 h-4" />
       </button>
       <button
         type="button"
@@ -280,7 +280,7 @@
         class:bg-muted={activeStates.underline}
         title={$_('editor.underline')}
       >
-        <Icon icon="mdi:format-underline" class="w-4 h-4" />
+        <Icon icon="lucide:underline" class="w-4 h-4" />
       </button>
       <button
         type="button"
@@ -289,7 +289,7 @@
         class:bg-muted={activeStates.strike}
         title={$_('editor.strikethrough')}
       >
-        <Icon icon="mdi:format-strikethrough" class="w-4 h-4" />
+        <Icon icon="lucide:strikethrough" class="w-4 h-4" />
       </button>
 
       <SignatureColorPicker
@@ -320,7 +320,7 @@
         class:bg-muted={currentAlign === 'left'}
         title={$_('editor.alignLeft')}
       >
-        <Icon icon="mdi:format-align-left" class="w-4 h-4" />
+        <Icon icon="lucide:align-left" class="w-4 h-4" />
       </button>
       <button
         type="button"
@@ -329,7 +329,7 @@
         class:bg-muted={currentAlign === 'center'}
         title={$_('editor.alignCenter')}
       >
-        <Icon icon="mdi:format-align-center" class="w-4 h-4" />
+        <Icon icon="lucide:align-center" class="w-4 h-4" />
       </button>
       <button
         type="button"
@@ -338,7 +338,7 @@
         class:bg-muted={currentAlign === 'right'}
         title={$_('editor.alignRight')}
       >
-        <Icon icon="mdi:format-align-right" class="w-4 h-4" />
+        <Icon icon="lucide:align-right" class="w-4 h-4" />
       </button>
 
       <!-- Table -->
@@ -350,7 +350,7 @@
         class="p-1.5 rounded hover:bg-muted transition-colors"
         title={$_('editor.insertTable')}
       >
-        <Icon icon="mdi:table" class="w-4 h-4" />
+        <Icon icon="lucide:table" class="w-4 h-4" />
       </button>
       {#if isInTable}
         <button
@@ -359,7 +359,7 @@
           class="p-1.5 rounded hover:bg-muted transition-colors text-destructive"
           title={$_('editor.deleteTable')}
         >
-          <Icon icon="mdi:table-remove" class="w-4 h-4" />
+          <Icon icon="lucide:table" class="w-4 h-4" />
         </button>
       {/if}
 
@@ -372,7 +372,7 @@
         class:bg-muted={activeStates.link}
         title={$_('editor.insertLink')}
       >
-        <Icon icon="mdi:link" class="w-4 h-4" />
+        <Icon icon="lucide:link" class="w-4 h-4" />
       </button>
       {#if activeStates.link}
         <button
@@ -381,7 +381,7 @@
           class="p-1.5 rounded hover:bg-muted transition-colors text-destructive"
           title={$_('editor.removeLink')}
         >
-          <Icon icon="mdi:link-off" class="w-4 h-4" />
+          <Icon icon="lucide:link-2-off" class="w-4 h-4" />
         </button>
       {/if}
 
@@ -393,7 +393,7 @@
         class="p-1.5 rounded hover:bg-muted transition-colors"
         title={$_('editor.insertImageUrl')}
       >
-        <Icon icon="mdi:image-outline" class="w-4 h-4" />
+        <Icon icon="lucide:image" class="w-4 h-4" />
       </button>
       <button
         type="button"
@@ -401,7 +401,7 @@
         class="p-1.5 rounded hover:bg-muted transition-colors"
         title={$_('editor.insertImageFile')}
       >
-        <Icon icon="mdi:image-plus" class="w-4 h-4" />
+        <Icon icon="lucide:image-plus" class="w-4 h-4" />
       </button>
     {/if}
 
@@ -414,7 +414,7 @@
       class:bg-muted={rawHtmlMode}
       title={rawHtmlMode ? $_('editor.visualMode') : $_('editor.htmlMode')}
     >
-      <Icon icon={rawHtmlMode ? 'mdi:eye' : 'mdi:code-tags'} class="w-4 h-4" />
+      <Icon icon={rawHtmlMode ? 'lucide:eye' : 'lucide:code'} class="w-4 h-4" />
     </button>
   </div>
 

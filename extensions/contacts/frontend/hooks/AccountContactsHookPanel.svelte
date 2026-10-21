@@ -61,7 +61,7 @@
 
 <section class="p-4 border border-border rounded-md mb-3 bg-card text-card-foreground">
   <header class="flex items-start gap-3 mb-3">
-    <Icon icon="mdi:account-multiple" width="24" height="24" />
+    <Icon icon="lucide:users" width="24" height="24" />
     <div>
       <h3 class="m-0 mb-1 text-base font-semibold text-foreground">{hook.buttonLabel}</h3>
       {#if hook.description}
@@ -79,14 +79,14 @@
       <Button variant="ghost" onclick={skip} disabled={busy}>{$_('contacts.hook.skip')}</Button>
       <Button onclick={setUp} disabled={busy}>
         {#if busy}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
         {/if}
         {$_('contacts.hook.setUp')}
       </Button>
     </div>
   {:else}
     <div class="flex items-center gap-2 text-primary">
-      <Icon icon="mdi:check-circle" width="20" height="20" />
+      <Icon icon="lucide:circle-check" width="20" height="20" />
       <span class="flex-1">{$_('contacts.hook.completeMessage')}</span>
       <Button variant="ghost" onclick={close}>{$_('contacts.hook.done')}</Button>
     </div>

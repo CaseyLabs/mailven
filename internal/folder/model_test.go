@@ -62,15 +62,15 @@ func TestIcon(t *testing.T) {
 		ftype    Type
 		expected string
 	}{
-		{"Inbox", TypeInbox, "mdi:inbox"},
-		{"Sent", TypeSent, "mdi:send"},
-		{"Drafts", TypeDrafts, "mdi:file-document-edit"},
-		{"Trash", TypeTrash, "mdi:delete"},
-		{"Spam", TypeSpam, "mdi:alert-octagon"},
-		{"Archive", TypeArchive, "mdi:archive"},
-		{"All", TypeAll, "mdi:email-multiple"},
-		{"Starred", TypeStarred, "mdi:star"},
-		{"Folder", TypeFolder, "mdi:folder"},
+		{"Inbox", TypeInbox, "lucide:inbox"},
+		{"Sent", TypeSent, "lucide:send"},
+		{"Drafts", TypeDrafts, "lucide:file-pen"},
+		{"Trash", TypeTrash, "lucide:trash-2"},
+		{"Spam", TypeSpam, "lucide:octagon-alert"},
+		{"Archive", TypeArchive, "lucide:archive"},
+		{"All", TypeAll, "lucide:mails"},
+		{"Starred", TypeStarred, "lucide:star"},
+		{"Folder", TypeFolder, "lucide:folder"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

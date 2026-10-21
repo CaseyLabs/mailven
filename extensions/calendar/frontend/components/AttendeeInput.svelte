@@ -235,7 +235,7 @@
           disabled={disabled}
           aria-label={$_('calendar.attendees.remove')}
         >
-          <Icon icon="mdi:close" class="w-3 h-3" />
+          <Icon icon="lucide:x" class="w-3 h-3" />
         </button>
       </div>
     {/each}

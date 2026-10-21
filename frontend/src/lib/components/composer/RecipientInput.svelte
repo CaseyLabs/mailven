@@ -314,7 +314,7 @@
           class="text-muted-foreground hover:text-foreground"
           type="button"
         >
-          <Icon icon="mdi:close" class="w-3.5 h-3.5" />
+          <Icon icon="lucide:x" class="w-3.5 h-3.5" />
         </button>
       </div>
     {/each}
@@ -334,7 +334,7 @@
       ondrop={(e) => handleDrop(e, recipients.length)}
       type="email"
       {placeholder}
-      class="flex-1 min-w-[150px] bg-transparent text-sm focus:outline-hidden {dropTargetIndex === recipients.length ? 'border-l-2 border-primary' : ''}"
+      class="flex-1 min-w-[150px] bg-transparent text-sm focus-visible:outline-hidden {dropTargetIndex === recipients.length ? 'border-l-2 border-primary' : ''}"
     />
   </div>
 

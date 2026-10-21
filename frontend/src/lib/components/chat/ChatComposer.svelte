@@ -1,9 +1,12 @@
 <script lang="ts">
-  // ChatComposer — the reply box docked under a chat: a rounded card holding the
-  // autosizing text, an Expand button and a toolbar (sender, Attach, Send), with
-  // attachment chips above it and a chip row below ("Reply to:" target | recipient
-  // count | "Topic:" subject). State and saving live in the ChatComposer controller.
+  // ChatComposer — the reply box anchored to the bottom of the thread column: a
+  // raised card holding the autosizing text, an Expand button and a toolbar (sender,
+  // Attach, Send), with attachment chips above it and a chip row below ("Reply to:"
+  // target | recipient count | "Topic:" subject). The card is one "Reply to …" line
+  // until focus is inside it, and collapsing keeps the draft. State and saving live
+  // in the ChatComposer controller.
   import Icon from '@iconify/svelte'
+  import { Button } from '$lib/components/ui/button'
   import { _ } from '$lib/i18n'
   import { toasts } from '$lib/stores/toast'
   import { getChatSendKey } from '$lib/stores/settings.svelte'
@@ -24,6 +27,24 @@
   let { composer, subject = '', from = '', disabled = false, onEscape, onExpand }: Props = $props()
 
   let textarea = $state<HTMLTextAreaElement | null>(null)
+  // Expanded while focus is inside the card. Collapsing waits for the pointer to
+  // be released: a press elsewhere (Undo, a message action) blurs the box on
+  // mousedown, and a card that shrank then would slide the target from under the click.
+  let expanded = $state(false)
+  let pointerDown = false
+  const trackPointer = (down: boolean) => () => { pointerDown = down }
+
+  function onFocusOut(e: FocusEvent) {
+    const card = e.currentTarget as HTMLElement
+    if (card.contains(e.relatedTarget as Node | null)) return
+    if (!pointerDown) {
+      expanded = false
+      return
+    }
+    window.addEventListener('pointerup', () => setTimeout(() => {
+      if (!card.contains(document.activeElement)) expanded = false
+    }), { once: true })
+  }
   const ctrlSends = $derived(getChatSendKey() === 'ctrl-enter')
   const sendHint = $derived(ctrlSends ? $_('chat.sendHintCtrl') : $_('chat.sendHintEnter'))
   const canSend = $derived(!disabled && !composer.isEmpty)
@@ -42,6 +63,8 @@
   // Null while unknown or when a plain reply reaches no one.
   const choices = $derived(composer.choices?.reply.length ? composer.choices : null)
   const replyNames = $derived(choices ? listed(choices.reply.map(displayName), MAX_NAMES) : '')
+  // The collapsed bar reads "Reply to Priya"; before the targets are known it keeps the plain prompt.
+  const placeholder = $derived(replyNames ? $_('chat.replyToPlaceholder', { values: { names: replyNames } }) : $_('chat.typeReply'))
   const sameChoice = $derived.by(() => {
     if (!choices) return true
     const key = (list: { email: string }[]) => list.map((p) => p.email.toLowerCase()).sort().join('\n')
@@ -95,13 +118,16 @@
   <span class="shrink-0" aria-hidden="true">|</span>
 {/snippet}
 
-<div class="w-full border-t border-divider bg-background" data-chat-composer>
-  <div class="mx-auto w-full max-w-(--chat-column) px-6 py-2">
+<svelte:window onpointerdowncapture={trackPointer(true)} onpointerupcapture={trackPointer(false)} onpointercancel={trackPointer(false)} />
+
+<!-- Expanded while focus is inside (typing, the shortcut, Attach, Send); otherwise one line. -->
+<div class="w-full px-3 pb-3 pt-1" data-chat-composer>
+  <div class="mx-auto w-full max-w-(--chat-stream)">
     {#if composer.attachments.length > 0}
       <ul class="flex flex-wrap gap-1.5 mb-2" aria-label={$_('chat.attachments')}>
         {#each composer.attachments as att, i (i)}
           <li class="flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-full bg-muted text-xs max-w-60">
-            <Icon icon="mdi:paperclip" class="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
+            <Icon icon="lucide:paperclip" class="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
             <span class="truncate">{att.filename}</span>
             <span class="text-muted-foreground shrink-0">{sizeLabel(att)}</span>
             <button
@@ -110,19 +136,25 @@
               aria-label={$_('chat.removeAttachmentNamed', { values: { name: att.filename } })}
               onclick={() => composer.removeAttachment(i)}
             >
-              <Icon icon="mdi:close" class="w-3.5 h-3.5" />
+              <Icon icon="lucide:x" class="w-3.5 h-3.5" />
             </button>
           </li>
         {/each}
       </ul>
     {/if}
 
-    <div class="relative rounded-2xl border border-divider focus-within:ring-2 focus-within:ring-ring">
+        <div
+      class="group/card relative rounded-xl bg-surface-raised shadow-2 focus-within:ring-2 focus-within:ring-ring"
+      data-composer-card
+      data-expanded={expanded || undefined}
+      onfocusin={() => (expanded = true)}
+      onfocusout={onFocusOut}
+    >
       <textarea
         bind:this={textarea}
-        class="block w-full max-h-[40vh] resize-none bg-transparent pl-4 pr-10 pt-3 pb-1 text-sm leading-5 focus:outline-none scrollbar-thin"
+        class="block w-full max-h-11 overflow-hidden group-data-[expanded]/card:max-h-[40vh] group-data-[expanded]/card:overflow-auto resize-none bg-transparent pl-4 pr-12 py-3 text-ui-body leading-5 focus-visible:outline-none scrollbar-thin"
         rows="1"
-        placeholder={$_('chat.typeReply')}
+        {placeholder}
         aria-label={$_('viewer.reply')}
         {title}
         spellcheck="true"
@@ -133,28 +165,26 @@
         onblur={() => void composer.flush()}
       ></textarea>
 
-      <button class="absolute top-1.5 right-1.5 p-1.5 rounded-full hover:bg-muted" title={$_('chat.expand')} aria-label={$_('chat.expand')} {disabled} onclick={onExpand}>
-        <Icon icon="mdi:arrow-expand" class="w-4 h-4 text-muted-foreground" />
-      </button>
+      <div class="absolute top-2 right-2 hidden group-data-[expanded]/card:block">
+        <Button variant="icon" size="control-sm" class="w-7 px-0" title={$_('chat.expand')} aria-label={$_('chat.expand')} {disabled} onclick={onExpand}>
+          <Icon icon="lucide:maximize-2" class="w-4 h-4 text-muted-foreground" />
+        </Button>
+      </div>
 
-      <div class="flex items-center justify-end gap-1 px-2 pb-2 pt-1 min-w-0">
+      <div class="flex items-center justify-end gap-2 px-2 pb-2 min-w-0 hidden group-data-[expanded]/card:flex">
         <!-- The sender is resolved by the backend (alias the message reached); the sender review dialog still gates a send. -->
         {#if from}
           <span class="mr-auto min-w-0 truncate px-1.5 text-xs text-fg-tertiary" title={from}>{$_('chat.replyLineFrom', { values: { sender: from } })}</span>
         {/if}
-        <button class="shrink-0 p-1.5 rounded-full hover:bg-muted" title={$_('chat.attach')} aria-label={$_('chat.attach')} {disabled} onclick={attach}>
-          <Icon icon="mdi:paperclip" class="w-5 h-5 text-muted-foreground" />
-        </button>
-        <!-- The wrapper carries the tooltip, which a disabled button may not show. -->
+        <Button variant="icon" size="control" class="shrink-0" title={$_('chat.attach')} aria-label={$_('chat.attach')} {disabled} onclick={attach}>
+          <Icon icon="lucide:paperclip" class="w-4 h-4 text-muted-foreground" />
+        </Button>
+        <!-- The wrapper carries the tooltip, which a disabled button may not show. Send is the only filled button. -->
         <span class="shrink-0" title={`${$_('chat.send')} (${sendHint})`}>
-          <button
-            class="h-8 w-8 rounded-full border flex items-center justify-center transition-colors border-primary bg-primary text-primary-foreground enabled:hover:bg-primary/90 disabled:border-border disabled:bg-transparent disabled:text-muted-foreground disabled:cursor-not-allowed"
-            aria-label={$_('chat.send')}
-            disabled={!canSend}
-            onclick={() => void composer.send()}
-          >
-            <Icon icon="mdi:send" class="w-4 h-4" />
-          </button>
+          <Button variant="primary" size="control-lg" disabled={!canSend} onclick={() => void composer.send()}>
+            <Icon icon="lucide:send" class="w-4 h-4" />
+            <span>{$_('chat.send')}</span>
+          </Button>
         </span>
       </div>
     </div>
@@ -173,7 +203,7 @@
             onclick={() => composer.toggleReplyAll()}
           >
             <span class="truncate">{composer.replyAll ? $_('chat.replyToAll') : replyNames}</span>
-            <Icon icon="mdi:chevron-down" class="w-3.5 h-3.5 shrink-0 self-center" aria-hidden="true" />
+            <Icon icon="lucide:chevron-down" class="w-3.5 h-3.5 shrink-0 self-center" aria-hidden="true" />
           </button>
           {#if composer.replyAll}
             {@render sep()}

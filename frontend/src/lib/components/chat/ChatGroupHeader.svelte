@@ -27,7 +27,7 @@
       aria-expanded={open}
       onclick={onToggle}
     >
-      <Icon icon={open ? 'mdi:chevron-down' : 'mdi:chevron-right'} class="w-3.5 h-3.5 shrink-0" />
+      <Icon icon={open ? 'lucide:chevron-down' : 'lucide:chevron-right'} class="w-3.5 h-3.5 shrink-0" />
       {label}
     </button>
   {/if}

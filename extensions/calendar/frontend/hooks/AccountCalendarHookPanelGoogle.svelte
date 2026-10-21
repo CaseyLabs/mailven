@@ -152,7 +152,7 @@
 
 <section class="p-4 border border-border rounded-md mb-3 bg-card text-card-foreground">
   <header class="flex items-start gap-3 mb-3">
-    <Icon icon="mdi:calendar-month" width="24" height="24" />
+    <Icon icon="lucide:calendar" width="24" height="24" />
     <div>
       <h3 class="m-0 mb-1 text-base font-semibold text-foreground">{hook.buttonLabel}</h3>
       {#if hook.description}
@@ -233,7 +233,7 @@
       <Button variant="ghost" onclick={skip} disabled={busy}>{$_('calendar.hooks.skip')}</Button>
       <Button onclick={setUp} disabled={busy || loading || needsConsent || calendars.length === 0}>
         {#if busy}
-          <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
         {/if}
         {$_('calendar.hooks.setup')}
       </Button>
@@ -242,7 +242,7 @@
 
   {#if done}
     <div class="flex items-center gap-2 text-primary">
-      <Icon icon="mdi:check-circle" width="20" height="20" />
+      <Icon icon="lucide:circle-check" width="20" height="20" />
       <span class="flex-1">{$_('calendar.hooks.completeMessage')}</span>
       <Button variant="ghost" onclick={close}>{$_('calendar.hooks.done')}</Button>
     </div>

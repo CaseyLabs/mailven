@@ -16,8 +16,8 @@
 
   const active = $derived(getActiveExtension())
   const views = $derived([
-    { id: 'mail', icon: 'mdi:email-outline', label: $_('appNav.mail') },
-    ...getRailTabs().map((tab) => ({ id: tab.extensionId, icon: tab.icon || 'mdi:puzzle', label: tab.label })),
+    { id: 'mail', icon: 'lucide:mail', label: $_('appNav.mail') },
+    ...getRailTabs().map((tab) => ({ id: tab.extensionId, icon: tab.icon || 'lucide:puzzle', label: tab.label })),
   ])
 
   function run(action: () => void) {
@@ -25,27 +25,24 @@
     action()
   }
 
-  const rowClass = 'flex items-center gap-2 px-3 py-2 text-left text-body rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden'
-  const idleClass = 'text-fg-secondary hover:bg-muted/50 hover:text-foreground'
 </script>
 
-<div class="flex flex-col gap-0.5 px-3 pb-2" role="group" aria-label={$_('appNav.label')}>
+<div class="flex flex-col gap-0.5 pb-3" role="group" aria-label={$_('appNav.label')}>
   {#each views as view (view.id)}
     <button
-      class="{rowClass} {active === view.id ? 'bg-muted text-foreground font-medium' : idleClass}"
+      class="nav-item text-body"
       aria-current={active === view.id ? 'page' : undefined}
       onclick={() => run(() => setActiveExtension(view.id))}
     >
-      <Icon icon={view.icon} class="w-4 h-4 shrink-0" />
+      <Icon icon={view.icon} class="w-4 h-4" />
       <span class="truncate">{view.label}</span>
     </button>
   {/each}
-  <button class="{rowClass} {idleClass}" onclick={() => run(() => setAppSettingsOpen(true))}>
-    <Icon icon="mdi:cog-outline" class="w-4 h-4 shrink-0" />
+  <button class="nav-item text-body" onclick={() => run(() => setAppSettingsOpen(true))}>
+    <Icon icon="lucide:settings" class="w-4 h-4" />
     <span class="flex-1 truncate">{$_('sidebar.settings')}</span>
     {#if contactSourcesStore.hasErrors}
       <span class="w-2 h-2 bg-destructive rounded-full" aria-label={$_('appNav.settingsNeedAttention')}></span>
     {/if}
   </button>
 </div>
-<div class="border-b border-border mx-3 mb-2"></div>

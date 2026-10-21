@@ -22,7 +22,7 @@
       disabled={s.busy}
       onclick={() => s.search()}
     >
-      <Icon icon={s.busy ? 'mdi:loading' : 'mdi:cloud-search-outline'} class={s.busy ? 'w-4 h-4 animate-spin' : 'w-4 h-4'} />
+      <Icon icon={s.busy ? 'lucide:loader-circle' : 'lucide:search'} class={s.busy ? 'w-4 h-4 animate-spin' : 'w-4 h-4'} />
       {s.busy ? $_('chat.serverSearching') : $_('chat.serverSearch')}
     </button>
     {#if s.doneQuery === chatList.query.trim() && !s.busy}

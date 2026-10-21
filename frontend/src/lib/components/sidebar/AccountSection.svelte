@@ -106,16 +106,15 @@
   <!-- Account Header -->
   <div class="relative group">
     <button
-      class="w-full flex items-center gap-2 px-3 min-h-control text-sm font-medium text-fg-primary hover:bg-muted/50 transition-colors {syncing || error ? 'pr-10' : ''} {isHeaderFocused ? 'bg-muted ring-1 ring-primary/50' : ''}"
+      class="w-[calc(100%-1rem)] mx-2 rounded-md flex items-center gap-2 px-3 min-h-control text-ui-section text-fg-secondary hover:bg-surface-hover hover:text-fg-primary focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus transition-colors {syncing || error ? 'pr-10' : ''} {isHeaderFocused ? 'bg-surface-hover ring-2 ring-inset ring-focus' : ''}"
       data-sidebar-item="account-header"
       data-account-id={acc.id}
       onclick={toggleExpanded}
     >
       <Icon
-        icon={isExpanded ? 'mdi:chevron-down' : 'mdi:chevron-right'}
-        class="w-4 h-4 text-muted-foreground"
+        icon={isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'}
+        class="w-4 h-4 text-fg-tertiary"
       />
-      <Icon icon="mdi:email-outline" class="w-4 h-4" />
       <span class="truncate flex-1 text-left">{acc.name}</span>
       {#if mailApiRoutes.active[acc.id]}
         <span class="text-xs font-normal text-muted-foreground shrink-0" data-testid="route-badge">{$_(`mailApi.${mailApiRouteName(mailApiRoutes.active[acc.id])}`)}</span>
@@ -123,10 +122,10 @@
 
       <!-- pr-10 keeps these clear of the menu button, so the error tooltip stays hoverable. -->
       {#if syncing}
-        <Icon icon="mdi:sync" class="w-4 h-4 animate-spin text-muted-foreground" />
+        <Icon icon="lucide:refresh-cw" class="w-4 h-4 animate-spin text-muted-foreground" />
       {:else if error}
         <span title={error}>
-          <Icon icon="mdi:alert-circle" class="w-4 h-4 text-destructive" />
+          <Icon icon="lucide:circle-alert" class="w-4 h-4 text-destructive" />
         </span>
       {/if}
     </button>
@@ -142,7 +141,7 @@
       aria-haspopup="menu"
       aria-expanded={showMenu}
     >
-      <Icon icon="mdi:dots-vertical" class="w-4 h-4 text-muted-foreground" />
+      <Icon icon="lucide:ellipsis-vertical" class="w-4 h-4 text-muted-foreground" />
     </button>
 
     <!-- Dropdown Menu -->
@@ -159,7 +158,7 @@
           class="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted transition-colors"
           onclick={handleSync}
         >
-          <Icon icon="mdi:sync" class="w-4 h-4" />
+          <Icon icon="lucide:refresh-cw" class="w-4 h-4" />
           <span>{$_('sidebar.syncNow')}</span>
         </button>
         <button
@@ -167,7 +166,7 @@
           class="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted transition-colors"
           onclick={handleEdit}
         >
-          <Icon icon="mdi:pencil-outline" class="w-4 h-4" />
+          <Icon icon="lucide:pencil" class="w-4 h-4" />
           <span>{$_('sidebar.editAccount')}</span>
         </button>
         <div class="my-1 border-t border-border"></div>
@@ -176,7 +175,7 @@
           class="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
           onclick={handleDelete}
         >
-          <Icon icon="mdi:delete-outline" class="w-4 h-4" />
+          <Icon icon="lucide:trash-2" class="w-4 h-4" />
           <span>{$_('sidebar.deleteAccount')}</span>
         </button>
       </div>
@@ -193,7 +192,7 @@
         aria-label={$_('sidebar.syncErrorShowDetails')}
         onclick={onShowSyncError}
       >
-        <Icon icon="mdi:alert-circle" class="w-4 h-4 shrink-0" />
+        <Icon icon="lucide:circle-alert" class="w-4 h-4 shrink-0" />
         <span class="text-xs">{$_('sidebar.syncError')}</span>
       </button>
     </div>
@@ -204,7 +203,7 @@
     <div class="ml-4">
       {#if loading}
         <div class="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
-          <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+          <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
           <span>{$_('sidebar.loadingFolders')}</span>
         </div>
       {:else if folders.length === 0}

@@ -79,7 +79,7 @@
   <!-- Outgoing Mail (SMTP) -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:email-send-outline" class="w-4 h-4" />
+      <Icon icon="lucide:send" class="w-4 h-4" />
       {$_('account.outgoingMail')}
     </h3>
 

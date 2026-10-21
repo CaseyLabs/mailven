@@ -116,9 +116,9 @@ export async function handleCopyOAuthLink(s: AccountFormState) {
 }
 
 export function getOAuthButtonIcon(provider: EmailProvider | null): string {
-  if (!provider) return 'mdi:login'
+  if (!provider) return 'lucide:log-in'
   const oauthType = getOAuthProviderType(provider)
   if (oauthType === 'google') return 'logos:google-icon'
   if (oauthType === 'microsoft') return 'logos:microsoft-icon'
-  return 'mdi:login'
+  return 'lucide:log-in'
 }

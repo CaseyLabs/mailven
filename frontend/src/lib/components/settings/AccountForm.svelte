@@ -58,14 +58,14 @@
           class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
           onclick={() => goBackToProviders(s)}
         >
-          <Icon icon="mdi:arrow-left" class="w-4 h-4" />
+          <Icon icon="lucide:arrow-left" class="w-4 h-4" />
           {$_('account.changeProvider')}
         </button>
       {/if}
 
       {#if s.selectedProvider?.notes}
         <div class="flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-          <Icon icon="mdi:information-outline" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+          <Icon icon="lucide:info" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
           <p class="text-sm text-amber-600 dark:text-amber-400">
             {s.selectedProvider.notesKey ? $_(s.selectedProvider.notesKey) : s.selectedProvider.notes}
           </p>
@@ -82,7 +82,7 @@
         onclick={() => (s.showAdvanced = !s.showAdvanced)}
       >
         <Icon
-          icon={s.showAdvanced ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+          icon={s.showAdvanced ? 'lucide:chevron-down' : 'lucide:chevron-right'}
           class="w-4 h-4"
         />
         {$_('account.advancedSettings')}

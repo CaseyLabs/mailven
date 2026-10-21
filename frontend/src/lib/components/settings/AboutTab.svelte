@@ -58,7 +58,7 @@
 
 <div class="flex flex-col items-center justify-center py-6 space-y-6">
   {#if loading}
-    <Icon icon="mdi:loading" class="w-8 h-8 animate-spin text-muted-foreground" />
+    <Icon icon="lucide:loader-circle" class="w-8 h-8 animate-spin text-muted-foreground" />
   {:else if appInfo}
     <!-- Logo + App Name & Version -->
     <div class="flex flex-col items-center space-y-2">
@@ -91,21 +91,21 @@
         onclick={openWebsite}
         class="flex items-center gap-2 text-sm text-primary hover:underline transition-colors"
       >
-        <Icon icon="mdi:github" class="w-5 h-5" />
+        <Icon icon="simple-icons:github" class="w-5 h-5" />
         <span>{$_('settingsAbout.github')}</span>
       </button>
       <button
         onclick={openPrivacyPolicy}
         class="flex items-center gap-2 text-sm text-primary hover:underline transition-colors"
       >
-        <Icon icon="mdi:shield-account" class="w-5 h-5" />
+        <Icon icon="lucide:shield-user" class="w-5 h-5" />
         <span>{$_('settingsAbout.privacyPolicy')}</span>
       </button>
       <button
         onclick={openTermsOfService}
         class="flex items-center gap-2 text-sm text-primary hover:underline transition-colors"
       >
-        <Icon icon="mdi:file-document" class="w-5 h-5" />
+        <Icon icon="lucide:file-text" class="w-5 h-5" />
         <span>{$_('settingsAbout.termsOfUse')}</span>
       </button>
     </div>

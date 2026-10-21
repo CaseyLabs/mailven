@@ -15,11 +15,11 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
 | [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [1](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
-| [DS — Reading-first redesign](#ds) | active | P3 | [1](ISSUES.md#ds) | DS-1 and DS-2 done (tokens and fonts; avatar tints and chat rows, 2026-10-20); DS-3–5 independent, await owner selection; DS-6 last |
+| [DS — Reading-first redesign](#ds) | done | P3 | [3](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17–19 open (low) |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
-**Remaining nondeferred scope:** DS-3–6 await owner selection; SEND-2 requires separately authorized live verification. Completed milestones are not selectable work.
+**Remaining nondeferred scope:** DS issues UI17–19 (low, independent fixes); SEND-2 requires separately authorized live verification. Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
@@ -29,9 +29,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**Active:** none. [DS-2](#ds-2) is done (2026-10-20, branch `feat/ds-2`, not yet landed); [DS-1](#ds-1) is done and landed on `main`.
+**Active:** none. The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** [DS-3](#ds-3) (reading-first thread messages), once the owner selects it; DS-4 and DS-5 are equally eligible. Checkpoint: [design plan Progress](docs/plans/reading-redesign.md#progress).
+**Next recommended:** none selected. Eligible on owner request: the low DS follow-ups [UI17](ISSUES.md#ui17), [UI18](ISSUES.md#ui18) and [UI19](ISSUES.md#ui19) as independent fixes. SEND-2 still needs separately authorized live verification.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -625,9 +625,9 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 ## DS — Reading-first redesign
 
 - **Objective / outcome:** Make Mailven read like a calm chat app. Warm neutral surfaces, one muted terracotta accent kept for the primary action, unread state and focus, Inter for the interface and Literata for message bodies, and WCAG AA in both themes. It changes visuals and hierarchy only: no flows, bindings, settings keys or keyboard shortcuts change. It supersedes UIX's Nord palette and bubble default.
-- **Status / proposed priority:** active / P3. DS-1 and DS-2 done 2026-10-20; the owner selects each later milestone.
+- **Status / proposed priority:** done 2026-10-21 / P3. DS-1–6 done; UI17–19 stay open as low follow-ups.
 - **Dependencies / blockers:** DS-1 first (tokens and fonts); DS-2–5 independent; DS-6 last. Downloading the font files (DS-1) and removing icon packages (DS-5) need owner approval.
-- **Issues:** [UI17](ISSUES.md#ui17).
+- **Issues:** [UI17](ISSUES.md#ui17), [UI18](ISSUES.md#ui18), [UI19](ISSUES.md#ui19).
 - **Technical references:** [design plan](docs/plans/reading-redesign.md), [design system](https://claude.ai/artifact/UwQS72qVnHhLuxpkU1sVbc), [UI_TOKENS](docs/UI_TOKENS.md), [EXT_RULES](docs/EXT_RULES.md), [UI tests](tests/ui/README.md).
 
 Each milestone's scope, acceptance and validation are in the [design plan's milestone table](docs/plans/reading-redesign.md#milestones).
@@ -652,15 +652,15 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 
 ### DS-3 — Reading-first thread messages
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1; owner decision on the bubble setting.
+- **Status / proposed priority:** done 2026-10-20 (owner-selected; base `4498f08`, branch `feat/ds-3`; [validation](docs/validation/ds-3.md)). Native WebKitGTK newsletter rendering was not checked (recorded unrun). **Dependencies / gates:** DS-1 (done). The bubble-setting gate is cleared: both `chat_display_style` values render as the DS message block ([Decision Log](docs/plans/reading-redesign.md#decision-log)).
 - **Scope:** collapsed message lines; folded quotes, signatures and details; Literata bodies at 68ch; paper card for HTML email in dark mode.
-- **Issues:** none.
+- **Issues:** [UI18](ISSUES.md#ui18) (signature split, deferred).
 
 <a id="ds-4"></a>
 
 ### DS-4 — Anchored composer and controls
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1.
+- **Status / proposed priority:** done 2026-10-21 (owner-selected; base `8f75d9c`, branch `feat/ds-3`; [validation](docs/validation/ds-4.md)). Native WebKitGTK rendering and light-mode, Accounts-collapsed and Contacts/Calendar screenshots were not captured (recorded unrun). **Dependencies / gates:** DS-1 (done).
 - **Scope:** anchored, collapsible `ChatComposer`; button, input and menu sizes and variants.
 - **Issues:** none.
 
@@ -668,15 +668,15 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 
 ### DS-5 — Sidebar states and Lucide icons
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1; removing icon packages needs owner approval.
+- **Status / proposed priority:** done 2026-10-21 ([validation](docs/validation/ds-5.md)); owner-selected 2026-10-21. **Dependencies / gates:** DS-1; removing icon packages needs owner approval, so `@iconify-json/mdi` and `@iconify-json/heroicons` stay installed.
 - **Scope:** sidebar and kit navigation states matching rows; mdi and heroicons replaced with Lucide.
-- **Issues:** none.
+- **Issues:** [UI19](ISSUES.md#ui19) (found during DS-5; predates it).
 
 <a id="ds-6"></a>
 
 ### DS-6 — Visual matrix and screenshots
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DS-1–DS-5.
+- **Status / proposed priority:** done 2026-10-21 (owner-selected; base `b320317`, branch `feat/ds-3`; [validation](docs/validation/ds-6.md)). Native WebKitGTK matrix screenshots were not run (recorded unrun). **Dependencies / gates:** DS-1–DS-5.
 - **Scope:** full visual matrix (both themes, Accounts expanded and collapsed), leftover cleanup, refreshed user-guide and README screenshots, CHANGELOG.
 - **Issues:** none.
 

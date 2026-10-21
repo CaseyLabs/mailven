@@ -26,8 +26,8 @@ The Mailven interface is English only, so there is no language picker. Email con
 Choose your visual theme:
 
 - **System** - Follows your operating system's light/dark preference
-- **Light** - Always use the light theme (Nord Snow Storm colors)
-- **Dark** (Default) - Always use the dark theme (Nord Polar Night colors)
+- **Light** - Always use the light theme (warm neutral surfaces with a terracotta accent)
+- **Dark** (Default) - Always use the dark theme (warm dark surfaces with the same accent)
 
 ### Dark mail content
 
@@ -193,15 +193,15 @@ Options for the chat-style mail list, thread view, and reply box.
 
 ### Message Style
 
-**Bubbles** (default) shows messages in colored speech bubbles. **Flat** shows a plain transcript: no bubbles or avatars, a name and time above each message, and a thin accent line beside your own messages, which stay on the left with everyone else's. Email cards, full bodies, the "N earlier messages" lines and the chat list work the same in both styles.
+**Bubbles** (default) and **Flat** now show the same thread: every message left-aligned with its avatar, the sender's name and time, and your own messages labelled **You**. The setting keeps your choice for a later style.
 
 ### Email Layout
 
-**Readable text** (default) shows all mail as chat content: plain mail as bubbles; newsletters, receipts and long mail as headings, paragraphs, lists, links and pictures without the page layout; and signed mail, and encrypted mail once decrypted, the same way, with its security badge or banner. **Original layout** shows newsletters and long mail as a short card that expands into the original layout, and signed or encrypted mail in full. Either way, **Show original** in a message's ⋯ menu shows that message in full.
+**Readable text** (default) shows all mail as chat content: plain mail as text; newsletters, receipts and long mail as headings, paragraphs, lists, links and pictures without the page layout; and signed mail, and encrypted mail once decrypted, the same way, with its security badge or banner. **Original layout** shows newsletters and long mail as a short card that expands into the original layout, and signed or encrypted mail in full. Either way, **Show original** in a message's ⋯ menu shows that message in full.
 
 ### Reading Width
 
-How wide message bubbles can grow in an open chat: **Narrow**, **Standard** (default) or **Wide**. Messages always use the whole conversation pane, with other people's on the left and yours on the right. **Wide** also widens email cards and full email bodies, which stay wide enough for a 600 px HTML email at every setting.
+How wide the message column can grow in an open chat: **Narrow**, **Standard** (default) or **Wide**. Message text keeps a comfortable line length at every setting; **Wide** widens email cards and full email bodies, which stay wide enough for a 600 px HTML email at every setting. **Narrow** and **Standard** share the same column, which the chat header and reply box follow.
 
 ### Include Quoted History
 

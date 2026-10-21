@@ -1,8 +1,9 @@
 <script lang="ts">
-  // ChatStream — the messages of a chat: day / subject headings, bubbles and
-  // pending replies in a centred --chat-column, all on the left with mine
-  // indented a step; email cards stay in a narrower centred --chat-stream column.
+  // ChatStream — the messages of a chat: day / subject headings, message
+  // blocks and pending replies, left-aligned in a centred --chat-stream column.
+  // A "New" divider sits above the first message that was unread on open.
   // Each subject run is a section whose heading sticks while it scrolls past.
+  import { _ } from '$lib/i18n'
   import ChatBubble from './ChatBubble.svelte'
   import { SvelteSet } from 'svelte/reactivity'
   import ChatCompactRow from './ChatCompactRow.svelte'
@@ -54,6 +55,11 @@
     for (const it of items) if (!it.msg.isRead) keep.add(it.msg.id)
   })
   const sections = $derived(subjectSections(compactItems(items, expanded, keep)))
+  // Only worth a divider when something already read comes before it.
+  const firstNew = $derived.by(() => {
+    const i = items.findIndex((it) => keep.has(it.msg.id))
+    return i > 0 ? items[i].msg.id : null
+  })
 
   function toggle(id: string, el: HTMLElement) {
     const change = () => void (expanded.delete(id) || expanded.add(id))
@@ -64,11 +70,11 @@
 
 {#snippet pending()}
   {#each composer.pendingHere as p, i (p.id)}
-    <ChatPendingBubble pending={p} name={me.name || me.email} groupStart={i === 0 && pendingGroupStart(items.at(-1), me, p.sentAt)} onRetry={() => composer.retry(p.id)} onEdit={() => composer.edit(p.id)} onUndo={() => void composer.undo(p.id)} />
+    <ChatPendingBubble pending={p} groupStart={i === 0 && pendingGroupStart(items.at(-1), me, p.sentAt)} onRetry={() => composer.retry(p.id)} onEdit={() => composer.edit(p.id)} onUndo={() => void composer.undo(p.id)} />
   {/each}
 {/snippet}
 
-<div class="mx-auto w-full max-w-(--chat-column)">
+<div class="w-full">
   {#each sections as section, si (section.id ?? 'lead')}
     <section>
       {#if section.subject !== undefined}<ChatSubjectHeading subject={section.subject} />{/if}
@@ -77,8 +83,17 @@
           <ChatCompactRow count={entry.count} open={entry.open} onToggle={(el) => toggle(entry.id, el)} />
         {:else}
           {@const item = entry.item}
-          {#if item.newDay}
-            <div class="w-full px-6"><ChatDaySeparator date={item.date} tight={item.subject !== undefined} /></div>
+          {#if item.newDay || item.msg.id === firstNew}
+            <!-- One row above the message, so scroll anchoring keeps the day label and divider in view. -->
+            <div class="mx-auto w-full max-w-(--chat-stream) px-4">
+              {#if item.newDay}<ChatDaySeparator date={item.date} tight={item.subject !== undefined} />{/if}
+              {#if item.msg.id === firstNew}
+                <div class="flex items-center gap-2 pt-4 pb-1.5" role="separator" aria-label={$_('chat.newDivider')} data-new-divider>
+                  <span class="shrink-0 text-ui-section text-accent-text">{$_('chat.newDivider')}</span>
+                  <div class="flex-1 h-px bg-accent-text"></div>
+                </div>
+              {/if}
+            </div>
           {/if}
           <ChatBubble
             {item}
@@ -86,6 +101,7 @@
             {accountId}
             {folderId}
             {folderType}
+            {holdPosition}
             onFocusChange={(f) => onFocusChange(item.msg.id, f)}
             {onReply}
             {onComposeToAddress}

@@ -1,7 +1,7 @@
 /* Pre-DS token names, kept as aliases of the DS tokens in built-in.css so
    custom themes and components not yet migrated keep working. A theme may
    override any alias in its own [data-theme="..."] block. The alias map is
-   in docs/UI_TOKENS.md; DS-6 removes the aliases nothing uses any more. */
+   in docs/UI_TOKENS.md; DS-6 removed the aliases nothing used. */
 @layer base {
   :root {
     /* shadcn names. --accent is no longer a hover grey: it is the DS accent
@@ -25,34 +25,14 @@
     --input: var(--border-control);
     --ring: var(--focus);
 
-    /* Mailven pane and row names. --bubble-own has no DS replacement (own
-       messages stop being bubbles in DS-3); it keeps a neutral fill. */
-    --surface-sidebar: var(--bg);
+    /* Mailven pane and row names. */
     --surface-list: var(--surface);
     --surface-content: var(--surface-reading);
-    --selected: var(--surface-selected);
-    --bubble-own: var(--surface-selected);
     --divider: var(--border-subtle);
 
     --fg-primary: var(--text-primary);
     --fg-secondary: var(--text-secondary);
     --fg-tertiary: var(--text-tertiary);
     --fg-placeholder: var(--text-tertiary);
-
-    /* Fourteen avatar slots over the eight DS tint and ink pairs. */
-    --avatar-1: var(--avatar-sand);     --avatar-1-ink: var(--avatar-sand-ink);
-    --avatar-2: var(--avatar-olive);    --avatar-2-ink: var(--avatar-olive-ink);
-    --avatar-3: var(--avatar-sage);     --avatar-3-ink: var(--avatar-sage-ink);
-    --avatar-4: var(--avatar-teal);     --avatar-4-ink: var(--avatar-teal-ink);
-    --avatar-5: var(--avatar-slate);    --avatar-5-ink: var(--avatar-slate-ink);
-    --avatar-6: var(--avatar-iris);     --avatar-6-ink: var(--avatar-iris-ink);
-    --avatar-7: var(--avatar-mauve);    --avatar-7-ink: var(--avatar-mauve-ink);
-    --avatar-8: var(--avatar-clay);     --avatar-8-ink: var(--avatar-clay-ink);
-    --avatar-9: var(--avatar-sand);     --avatar-9-ink: var(--avatar-sand-ink);
-    --avatar-10: var(--avatar-olive);   --avatar-10-ink: var(--avatar-olive-ink);
-    --avatar-11: var(--avatar-sage);    --avatar-11-ink: var(--avatar-sage-ink);
-    --avatar-12: var(--avatar-teal);    --avatar-12-ink: var(--avatar-teal-ink);
-    --avatar-13: var(--avatar-slate);   --avatar-13-ink: var(--avatar-slate-ink);
-    --avatar-14: var(--avatar-iris);    --avatar-14-ink: var(--avatar-iris-ink);
   }
 }

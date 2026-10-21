@@ -32,7 +32,7 @@
             type="password"
             bind:value={s.importPassword}
             placeholder={$_('security.certificatePasswordPlaceholder')}
-            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-hidden focus:ring-2 focus:ring-primary"
+            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
             onkeydown={(e) => { if (e.key === 'Enter') handleImport(s) }}
           />
           <p class="text-xs text-muted-foreground mt-1">{$_('security.certificatePasswordHelp')}</p>
@@ -51,7 +51,7 @@
         </Button>
         <Button onclick={() => handleImport(s)} disabled={s.importing}>
           {#if s.importing}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {$_('security.importButton')}
         </Button>
@@ -73,7 +73,7 @@
         </Button>
         <Button onclick={() => handleImportBER(s)}>
           {#if s.importing}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {$_('security.berConversionConfirm')}
         </Button>
@@ -104,7 +104,7 @@
             type="email"
             bind:value={s.recipientImportEmail}
             placeholder="recipient@example.com"
-            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-hidden focus:ring-2 focus:ring-primary"
+            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
             onkeydown={(e) => { if (e.key === 'Enter') handleImportRecipientCert(s) }}
           />
           <p class="text-xs text-muted-foreground mt-1">{$_('security.recipientEmailHelp')}</p>
@@ -123,7 +123,7 @@
         </Button>
         <Button onclick={() => handleImportRecipientCert(s)} disabled={s.recipientImporting}>
           {#if s.recipientImporting}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {$_('security.importButton')}
         </Button>
@@ -154,7 +154,7 @@
             type="password"
             bind:value={s.pgpImportPassphrase}
             placeholder={$_('security.keyPassphrasePlaceholder')}
-            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-hidden focus:ring-2 focus:ring-primary"
+            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
             onkeydown={(e) => { if (e.key === 'Enter') handleImportPGP(s) }}
           />
           <p class="text-xs text-muted-foreground mt-1">{$_('security.keyPassphraseHelp')}</p>
@@ -173,7 +173,7 @@
         </Button>
         <Button onclick={() => handleImportPGP(s)} disabled={s.pgpImporting}>
           {#if s.pgpImporting}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {$_('security.importButton')}
         </Button>
@@ -204,7 +204,7 @@
             type="email"
             bind:value={s.pgpRecipientImportEmail}
             placeholder="recipient@example.com"
-            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-hidden focus:ring-2 focus:ring-primary"
+            class="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
             onkeydown={(e) => { if (e.key === 'Enter') handleImportPGPRecipientKey(s) }}
           />
           <p class="text-xs text-muted-foreground mt-1">{$_('security.recipientEmailHelpKey')}</p>
@@ -223,7 +223,7 @@
         </Button>
         <Button onclick={() => handleImportPGPRecipientKey(s)} disabled={s.pgpRecipientImporting}>
           {#if s.pgpRecipientImporting}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {$_('security.importButton')}
         </Button>

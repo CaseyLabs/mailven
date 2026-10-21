@@ -44,7 +44,7 @@
     title={$_('chat.snooze')}
     aria-label={$_('chat.snooze')}
   >
-    <Icon icon="mdi:alarm-snooze" class="{hiddenTrigger ? 'size-0' : 'w-5 h-5'} {snoozedUntil ? 'text-primary' : 'text-muted-foreground'}" />
+    <Icon icon="lucide:alarm-clock" class="{hiddenTrigger ? 'size-0' : 'w-5 h-5'} {snoozedUntil ? 'text-primary' : 'text-muted-foreground'}" />
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
     {#each presets as p (p.id)}

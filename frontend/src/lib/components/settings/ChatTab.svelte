@@ -133,7 +133,7 @@
 
   <div class="space-y-4">
     <h3 class="text-sm font-medium flex items-center gap-2">
-      <Icon icon="mdi:inbox-arrow-down-outline" class="w-4 h-4" />
+      <Icon icon="lucide:inbox" class="w-4 h-4" />
       {$_('settingsChat.triage')}
     </h3>
 

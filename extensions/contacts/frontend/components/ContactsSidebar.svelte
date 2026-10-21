@@ -35,15 +35,15 @@
   // Reactive — re-runs when locale changes because $_ is referenced inside.
   const sections = $derived.by(() => {
     const builtins: SidebarItem[] = [
-      { id: '', label: $_('contacts.sidebar.all'), icon: 'mdi:account-multiple' },
-      { id: 'local', label: $_('contacts.sidebar.localAll'), icon: 'mdi:folder-account-outline' },
-      { id: 'local:manual', label: $_('contacts.sidebar.localManual'), icon: 'mdi:account-plus-outline' },
-      { id: 'local:collected', label: $_('contacts.sidebar.localCollected'), icon: 'mdi:email-outline' },
+      { id: '', label: $_('contacts.sidebar.all'), icon: 'lucide:users' },
+      { id: 'local', label: $_('contacts.sidebar.localAll'), icon: 'lucide:folder' },
+      { id: 'local:manual', label: $_('contacts.sidebar.localManual'), icon: 'lucide:user-plus' },
+      { id: 'local:collected', label: $_('contacts.sidebar.localCollected'), icon: 'lucide:mail' },
     ]
     const carddavItems: SidebarItem[] = contactSourcesStore.sources.map(s => ({
       id: s.id,
       label: s.name,
-      icon: 'mdi:server',
+      icon: 'lucide:server',
     }))
     return [
       { items: builtins },
@@ -84,13 +84,13 @@
       {/snippet}
       {#snippet trailing()}
         <button
-          class="p-1 rounded hover:bg-muted/40"
+          class="p-1 rounded hover:bg-surface-hover"
           title={$_('contacts.sidebar.settings')}
           onclick={() => onOpenSettings?.()}
           type="button"
           aria-label={$_('contacts.sidebar.settings')}
         >
-          <Icon icon="mdi:cog-outline" class="w-4 h-4" />
+          <Icon icon="lucide:settings" class="w-4 h-4" />
         </button>
       {/snippet}
     </SidebarFooter>

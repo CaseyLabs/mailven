@@ -197,4 +197,20 @@ describe('account form logic', () => {
     })
     assert.deepEqual(r, ['alex@example.com', 'stale-typed-name'])
   }))
+
+  it('keeps laid-out plain text in mono and prose in the reading face', ui.run(opts, async (page) => {
+    const r = await page.evaluate(async (mod) => {
+      const { looksPreformatted } = await import(mod)
+      return [
+        'See you Saturday.  Bring boots.\nThe ridge is muddy.',
+        'Day        Leg\nSat        Harbour\nSun        Ridge',
+        '+------+------+\n| Day  | Leg  |\n+------+------+',
+        '\u250c\u2500\u2500\u2510\n\u2502 A\u2502\n\u2514\u2500\u2500\u2518',
+        'Name:\tPriya\nRole:\tGuide',
+        'One line   with a gap.\nThen prose.\nMore prose.\nAnd more.\nStill prose.\nThe end.\nReally.',
+        '',
+      ].map(looksPreformatted)
+    }, '/src/lib/components/chat/chatReading.ts')
+    assert.deepEqual(r, [false, true, true, true, true, false, false])
+  }))
 })

@@ -89,7 +89,7 @@
   <div class="flex flex-col gap-1">
     <div class="flex gap-2">
       <Button variant="outline" size="sm" onclick={triggerPhotoPicker} disabled={disabled}>
-        <Icon icon="mdi:image-edit-outline" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:image-up" class="w-4 h-4 mr-1" />
         {$_('contacts.edit.photoChange')}
       </Button>
       {#if photo.data || photo.url}

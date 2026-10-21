@@ -222,7 +222,7 @@ func (e *Extension) Register(core coreapi.Core) (coreapi.Unregister, error) {
     unregRail, err := core.UI().RegisterRailTab(coreapi.RailTabRequest{
         ExtensionID: e.manifest.ID,
         Label:       e.manifest.Name,
-        Icon:        "mdi:account-multiple",
+        Icon:        "lucide:users",
         Component:   "ContactsPane",
         Order:       10,
     })
@@ -1098,7 +1098,7 @@ A vertical icon button on the left activity bar. The rail only renders when 2+ e
 unreg, err := core.UI().RegisterRailTab(coreapi.RailTabRequest{
     ExtensionID: "contacts",
     Label:       "Contacts",
-    Icon:        "mdi:account-multiple",
+    Icon:        "lucide:users",
     Component:   "ContactsPane",   // Svelte component identifier
     Order:       10,
 })
@@ -1448,7 +1448,7 @@ Rail tabs are declared by the backend (`coreapi.RailTabRequest`); the frontend l
 
 - `extensionId` — the canonical extension name (must match `settings.AllExtensionKeys`)
 - `label` — display string (no i18n keys yet — Phase 2a uses plain English)
-- `icon` — iconify identifier (e.g., `mdi:account-multiple`)
+- `icon` — iconify identifier (e.g., `lucide:users`)
 - `component` — Svelte component identifier; App.svelte switches on `extensionId` to pick the matching component to render
 
 ### Slot pattern
@@ -1510,7 +1510,7 @@ Every kit primitive (`Avatar`, `PaneLayout`, `ListPane`, `ListRow`, `ListHeader`
 
 **Practical consequence: read the mail equivalent before implementing a kit primitive.** Don't infer behavior. Don't reach for a generic third-party pattern. Open `ChatList.svelte` / `Sidebar.svelte` / `ChatView.svelte` / the relevant `ui/` host primitive and study how it handles keyboard, focus, scroll, and edge cases. Then match that behavior in the kit.
 
-Visual consistency is also preserved at the **theme layer**. The kit's `Avatar` uses the same `.avatar-1..14` CSS classes (defined in [`frontend/src/themes/_utilities.css`](../frontend/src/themes/_utilities.css)) that mail's avatar uses, so colors match. Same applies to all theme tokens (`bg-muted`, `border-border`, `text-foreground`, `bg-surface-hover`, `text-primary`).
+Visual consistency is also preserved at the **theme layer**. The kit's `Avatar` uses the same named tint classes (`.avatar-sand`, `.avatar-olive` and the rest) (defined in [`frontend/src/themes/_utilities.css`](../frontend/src/themes/_utilities.css)) that mail's avatar uses, so colors match. Same applies to all theme tokens (`bg-muted`, `border-border`, `text-foreground`, `bg-surface-hover`, `text-primary`).
 
 When the host primitive has a bug that affects the kit, **fix it at the host layer** so both benefit. Don't add the fix only to the kit wrapper — that creates drift and silently breaks the 1-for-1 contract. Example: `ui/confirm-dialog/ConfirmDialog.svelte` was missing `dialogGuard` registration (which prevents mail's global key handler from killing Enter/Space activation on dialog buttons). The fix landed on the host primitive, and the kit's thin pass-through inherited it automatically.
 
@@ -1685,10 +1685,10 @@ Lower-level kit primitive owning *only* the visual chrome of an extension sideba
 | Prop | Type | Notes |
 |---|---|---|
 | `label` | `string` | Required. Button text — i18n it at the call site. |
-| `icon` | `string?` | Defaults to `'mdi:plus'`. Any `@iconify/svelte` icon name. |
+| `icon` | `string?` | Defaults to `'lucide:plus'`. Any `@iconify/svelte` icon name. |
 | `onclick` | `() => void` | Required. Invoked on click. |
 
-1-for-1 replica of mail's "+ Add Account" inline button at [`frontend/src/lib/components/sidebar/Sidebar.svelte:606-615`](../frontend/src/lib/components/sidebar/Sidebar.svelte) — same styling (`w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors`), same `px-3 py-2` outer wrapper, same `mdi:plus` default icon.
+1-for-1 replica of mail's "+ Add Account" inline button at [`frontend/src/lib/components/sidebar/Sidebar.svelte:606-615`](../frontend/src/lib/components/sidebar/Sidebar.svelte) — same styling (`w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors`), same `px-3 py-2` outer wrapper, same `lucide:plus` default icon.
 
 **Intended placement**: at the bottom of the scrollable source/account list, BELOW the last source row — NOT in a separate footer strip. The primitive does not draw a divider; pair it with whatever sync-status / settings-cog footer chrome the sidebar already has (Calendar's `CalendarSidebar` is the reference: scrollable list with sources + `SidebarAddItem`, then a separate `border-t` footer with sync indicator + settings cog).
 
@@ -1699,7 +1699,7 @@ Pairs with both manually-rolled sidebars (Calendar's case — `SourceSidebar`'s 
 [`frontend/src/lib/components/kit/DetailPane.svelte`](../frontend/src/lib/components/kit/DetailPane.svelte)
 
 ```svelte
-<DetailPane empty={!contact} emptyIcon="mdi:account-multiple-outline" emptyText="Select a contact.">
+<DetailPane empty={!contact} emptyIcon="lucide:users" emptyText="Select a contact.">
   {#snippet header()}
     <Avatar email={contact.email} name={contact.name} density="large" />
     <h1 class="text-xl font-semibold">{contact.name}</h1>
@@ -1748,7 +1748,7 @@ Read-only shell — no keyboard ownership. Header is fixed; body scrolls. Empty-
 - **Focused desktop** (`focused=true`): `position: fixed; inset:0`. Full-window. Reuses the same component tree; just a class swap with a 200ms ease-out transition.
 - **Responsive** (narrow breakpoint, regardless of `focused`): `position: fixed; inset:0` AND a back button auto-injected at the start of the header (calls `onClose`). Mirrors mail's `MessageViewer` responsive back-button placement.
 
-**Header chrome**: title text in the center; focus toggle (`mdi:fullscreen` / `mdi:fullscreen-exit`) and close (`mdi:close`) buttons on the right.
+**Header chrome**: title text in the center; focus toggle (`lucide:maximize` / `lucide:minimize`) and close (`lucide:x`) buttons on the right.
 
 **Esc handling**: while `open`, a window-level keydown listener intercepts Escape. If `focused=true`, it calls `onToggleFocus` (exits focus, stays open). Otherwise it calls `onClose` (dismisses). `preventDefault` + `stopPropagation` so mail's global handler and dialog handlers don't double-fire.
 
@@ -1813,7 +1813,7 @@ Does **not** own:
 <ResponsiveSidebarToggle />
 ```
 
-Zero-prop drop-in `mdi:dock-left` icon button that fires `toggleActiveSidebar()` (layout store). In narrow mode it opens or closes the slide-in sidebar overlay; in full and medium modes it collapses or expands the active view's sidebar. The collapse state is persisted per rail id in `UIState.collapsedSidebars`, and `SidebarFrame` hides itself (staying mounted) while collapsed, so extensions built on `SidebarFrame` / `SourceSidebar` get collapsing for free. Auto-included inside `ListHeader`; mount it directly only when an extension renders its own custom toolbar (as Calendar's `ViewSwitcher` does).
+Zero-prop drop-in `lucide:panel-left` icon button that fires `toggleActiveSidebar()` (layout store). In narrow mode it opens or closes the slide-in sidebar overlay; in full and medium modes it collapses or expands the active view's sidebar. The collapse state is persisted per rail id in `UIState.collapsedSidebars`, and `SidebarFrame` hides itself (staying mounted) while collapsed, so extensions built on `SidebarFrame` / `SourceSidebar` get collapsing for free. Auto-included inside `ListHeader`; mount it directly only when an extension renders its own custom toolbar (as Calendar's `ViewSwitcher` does).
 
 #### `AppNav` — view switching and Settings
 

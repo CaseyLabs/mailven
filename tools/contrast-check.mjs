@@ -57,6 +57,9 @@ const pairs = (theme) => [
   ['accent', 'surface-selected', UI],
   ['border-control', 'surface-raised', UI],
   ['danger', 'surface-raised', TEXT],
+  ['danger', 'surface', TEXT], // danger buttons and their tinted hover
+  ['danger', 'surface-hover', TEXT],
+  ['accent-text', 'surface-raised', TEXT], // tonal and link buttons in menus and cards
   ['paper-text', 'paper', TEXT],
   // Avatar ink on its tint: the table's floors of 6.4 (Light) and 7.6 (Dark)
   // are rounded to one decimal, so teal's 6.39 meets the 6.4 floor.
@@ -64,8 +67,7 @@ const pairs = (theme) => [
   // Pre-DS aliases still drawn by components: every tier on each pane, the
   // hover fill (--muted) and the selected row; placeholders on fields.
   ...['fg-primary', 'fg-secondary', 'fg-tertiary'].flatMap((fg) =>
-    ['surface-sidebar', 'surface-list', 'surface-content', 'muted', 'selected'].map((bg) => [fg, bg, TEXT])),
-  ['fg-primary', 'bubble-own', TEXT],
+    ['background', 'surface-list', 'surface-content', 'muted', 'surface-selected'].map((bg) => [fg, bg, TEXT])),
   ['fg-placeholder', 'background', TEXT],
   ['fg-placeholder', 'surface-content', TEXT],
   ['destructive-foreground', 'destructive', TEXT],

@@ -24,7 +24,7 @@
     class:bg-muted={open}
     title={$_('editor.textColor')}
   >
-    <Icon icon="mdi:format-color-text" class="w-4 h-4" />
+    <Icon icon="lucide:baseline" class="w-4 h-4" />
     <div
       class="w-3 h-1 rounded-sm"
       style="background-color: {currentColor || '#000000'}"

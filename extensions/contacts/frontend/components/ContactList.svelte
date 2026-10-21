@@ -191,7 +191,7 @@
 </script>
 
 <div
-  class="{resizable ? 'pane-list-resizable' : 'flex-1 min-w-0'} min-h-0 flex flex-col border-r border-divider bg-surface-list"
+  class="{resizable ? 'pane-list-resizable' : 'flex-1 min-w-0'} min-h-0 flex flex-col bg-surface-list"
   style:width={resizable ? `${width}px` : undefined}
 >
   <ListHeader
@@ -201,7 +201,7 @@
   >
     {#snippet search()}
       <div class="flex items-center gap-1 bg-muted rounded-md px-2 flex-1 min-w-0">
-        <Icon icon="mdi:magnify" class="w-4 h-4 text-muted-foreground shrink-0" />
+        <Icon icon="lucide:search" class="w-4 h-4 text-muted-foreground shrink-0" />
         <input
           bind:this={searchInputEl}
           type="text"
@@ -218,7 +218,7 @@
             title={$_('contacts.list.searchClear')}
             type="button"
           >
-            <Icon icon="mdi:close" class="w-4 h-4 text-muted-foreground" />
+            <Icon icon="lucide:x" class="w-4 h-4 text-muted-foreground" />
           </button>
         {/if}
       </div>
@@ -231,7 +231,7 @@
         onclick={toggleSearchFocus}
         type="button"
       >
-        <Icon icon={showSearch ? 'mdi:close' : 'mdi:magnify'} class="w-5 h-5 text-muted-foreground" />
+        <Icon icon={showSearch ? 'lucide:x' : 'lucide:search'} class="w-5 h-5 text-muted-foreground" />
       </button>
       <button
         class="p-2 rounded-md hover:bg-muted transition-colors"
@@ -240,7 +240,7 @@
         type="button"
       >
         <Icon
-          icon={sortOrder === 'name-asc' ? 'mdi:sort-alphabetical-ascending' : 'mdi:sort-alphabetical-descending'}
+          icon={sortOrder === 'name-asc' ? 'lucide:arrow-down-a-z' : 'lucide:arrow-down-z-a'}
           class="w-5 h-5 text-muted-foreground"
         />
       </button>
@@ -251,7 +251,7 @@
           onclick={onAdd}
           type="button"
         >
-          <Icon icon="mdi:plus" class="w-5 h-5 text-muted-foreground" />
+          <Icon icon="lucide:plus" class="w-5 h-5 text-muted-foreground" />
         </button>
       {/if}
     {/snippet}

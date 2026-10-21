@@ -12,7 +12,7 @@
 {#if s.showPGPSignOption || s.showPGPEncryptOption}
   <div class="flex items-center px-4 py-3.5 border-b border-border text-xs {s.securityMode === 'pgp' ? 'bg-muted/50' : ''}">
     <div class="flex items-center gap-1.5">
-      <Icon icon="mdi:lock-outline" class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+      <Icon icon="lucide:lock" class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
       <span class="text-muted-foreground font-medium">PGP</span>
       {#if s.pgpKeyId}
         <span class="text-muted-foreground">|</span>
@@ -41,7 +41,7 @@
 {#if s.showSignOption || s.showEncryptOption}
   <div class="flex items-center px-4 py-3.5 border-b border-border text-xs {s.securityMode === 'smime' ? 'bg-muted/50' : ''}">
     <div class="flex items-center gap-1.5">
-      <Icon icon="mdi:shield-outline" class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+      <Icon icon="lucide:shield" class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
       <span class="text-muted-foreground font-medium">S/MIME</span>
       {#if s.smimeCertFingerprint}
         <span class="text-muted-foreground">|</span>

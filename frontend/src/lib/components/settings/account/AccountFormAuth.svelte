@@ -56,7 +56,7 @@
       {:else if oauthStore.flowState === 'pending'}
         <!-- Waiting for OAuth callback -->
         <div class="flex flex-col items-center gap-3 py-2">
-          <Icon icon="mdi:loading" class="w-8 h-8 animate-spin text-primary" />
+          <Icon icon="lucide:loader-circle" class="w-8 h-8 animate-spin text-primary" />
           <div class="text-center">
             <p class="text-sm font-medium">{$_('account.waitingForAuth')}</p>
             <p class="text-xs text-muted-foreground mt-1">
@@ -70,7 +70,7 @@
               onclick={() => handleCopyOAuthLink(s)}
             >
               {s.oauthLinkCopied ? $_('account.linkCopied') : $_('viewer.copyLink')}
-              <Icon icon={s.oauthLinkCopied ? 'mdi:check' : 'mdi:content-copy'} class="w-3.5 h-3.5" />
+              <Icon icon={s.oauthLinkCopied ? 'lucide:check' : 'lucide:copy'} class="w-3.5 h-3.5" />
             </button>
           {/if}
           <Button
@@ -86,7 +86,7 @@
         <!-- OAuth completed successfully -->
         <div class="flex items-center gap-3 py-2">
           <div class="shrink-0 w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
-            <Icon icon="mdi:check" class="w-5 h-5 text-green-500" />
+            <Icon icon="lucide:check" class="w-5 h-5 text-green-500" />
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-medium text-green-600 dark:text-green-400">
@@ -104,7 +104,7 @@
               oauthStore.reset()
             }}
           >
-            <Icon icon="mdi:refresh" class="w-4 h-4" />
+            <Icon icon="lucide:refresh-cw" class="w-4 h-4" />
           </Button>
         </div>
       {:else if oauthStore.flowState === 'error'}
@@ -112,7 +112,7 @@
         <div class="space-y-3">
           <div class="flex items-start gap-3">
             <div class="shrink-0 w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
-              <Icon icon="mdi:alert" class="w-5 h-5 text-destructive" />
+              <Icon icon="lucide:triangle-alert" class="w-5 h-5 text-destructive" />
             </div>
             <div class="flex-1">
               <p class="text-sm font-medium text-destructive">
@@ -166,7 +166,7 @@
             onclick={() => s.authMethod = 'password'}
             class="flex-1"
           >
-            <Icon icon="mdi:key" class="w-4 h-4 mr-2" />
+            <Icon icon="lucide:key-round" class="w-4 h-4 mr-2" />
             {$_('account.appPassword')}
           </Button>
         </div>
@@ -208,7 +208,7 @@
           onclick={() => s.authMethod = 'password'}
           class="flex-1"
         >
-          <Icon icon="mdi:key" class="w-4 h-4 mr-2" />
+          <Icon icon="lucide:key-round" class="w-4 h-4 mr-2" />
           {$_('account.password')}
         </Button>
         <Button
@@ -218,7 +218,7 @@
           onclick={() => s.authMethod = 'oauth2'}
           class="flex-1"
         >
-          <Icon icon="mdi:shield-key-outline" class="w-4 h-4 mr-2" />
+          <Icon icon="lucide:shield-ellipsis" class="w-4 h-4 mr-2" />
           OAuth
         </Button>
       </div>
@@ -246,7 +246,7 @@
                 disabled={!s.customOAuthIssuer.trim() || s.customOAuthDiscovering || s.customOAuthInputsLocked}
               >
                 {#if s.customOAuthDiscovering}
-                  <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+                  <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
                 {:else}
                   {$_('account.customOAuthDiscover')}
                 {/if}
@@ -257,7 +257,7 @@
               <p class="text-xs text-destructive">{s.customOAuthDiscoverError}</p>
             {:else if s.customOAuthDiscovered}
               <p class="text-xs text-green-600 dark:text-green-400 inline-flex items-center gap-1">
-                <Icon icon="mdi:check" class="w-3.5 h-3.5" />
+                <Icon icon="lucide:check" class="w-3.5 h-3.5" />
                 {$_('account.customOAuthDiscovered')}
               </p>
             {/if}
@@ -307,7 +307,7 @@
             class="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors"
             onclick={() => s.customOAuthManual = !s.customOAuthManual}
           >
-            <Icon icon={s.customOAuthManual ? 'mdi:chevron-down' : 'mdi:chevron-right'} class="w-4 h-4" />
+            <Icon icon={s.customOAuthManual ? 'lucide:chevron-down' : 'lucide:chevron-right'} class="w-4 h-4" />
             {$_('account.customOAuthManual')}
           </button>
           {#if s.customOAuthManual}

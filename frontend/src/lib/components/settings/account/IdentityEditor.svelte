@@ -281,7 +281,7 @@
               id="signatureText"
               bind:value={signatureText}
               placeholder="Plain text version for text-only emails..."
-              class="w-full min-h-[80px] p-3 text-sm bg-background border border-input rounded-md resize-y focus:outline-hidden focus:ring-2 focus:ring-ring font-mono"
+              class="w-full min-h-[80px] p-3 text-sm bg-background border border-input rounded-md resize-y focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring font-mono"
             ></textarea>
             <p class="text-xs text-muted-foreground">
               {$_('identity.plainTextHelp')}
@@ -367,7 +367,7 @@
       <!-- Error message -->
       {#if errors.general}
         <div class="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-          <Icon icon="mdi:alert-circle" class="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+          <Icon icon="lucide:circle-alert" class="w-5 h-5 text-destructive shrink-0 mt-0.5" />
           <p class="text-sm text-destructive">{errors.general}</p>
         </div>
       {/if}
@@ -379,7 +379,7 @@
         </Button>
         <Button type="submit" disabled={saving}>
           {#if saving}
-            <Icon icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+            <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
           {/if}
           {identity ? $_('identity.saveIdentityChanges') : $_('identity.addEmailAddressButton')}
         </Button>

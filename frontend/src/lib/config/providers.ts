@@ -140,7 +140,7 @@ export const providers: EmailProvider[] = [
   {
     id: 'gmx',
     name: 'GMX Mail',
-    icon: 'mdi:email-outline',
+    icon: 'lucide:mail',
     iconSrc: gmxIcon,
     domains: ['gmx.com', 'gmx.net', 'gmx.de'],
     imap: { host: 'imap.gmx.com', port: 993, security: 'tls' },
@@ -150,7 +150,7 @@ export const providers: EmailProvider[] = [
   {
     id: 'mailcom',
     name: 'Mail.com',
-    icon: 'mdi:email-outline',
+    icon: 'lucide:mail',
     iconSrc: mailcomIcon,
     domains: ['mail.com'],
     imap: { host: 'imap.mail.com', port: 993, security: 'tls' },
@@ -161,7 +161,7 @@ export const providers: EmailProvider[] = [
   {
     id: 'custom',
     name: 'Other / Manual',
-    icon: 'mdi:cog-outline',
+    icon: 'lucide:settings',
     domains: [],
     imap: { host: '', port: 993, security: 'tls' },
     smtp: { host: '', port: 587, security: 'starttls' },

@@ -24,7 +24,7 @@
     class="flex items-center gap-2 px-3 py-2 text-left text-body text-fg-secondary hover:bg-muted/50 hover:text-foreground rounded-md transition-colors"
     onclick={run}
   >
-    <Icon icon="mdi:magnify" class="w-4 h-4 shrink-0" />
+    <Icon icon="lucide:search" class="w-4 h-4 shrink-0" />
     <span class="truncate">{$_('sidebar.searchChats')}</span>
   </button>
 </div>

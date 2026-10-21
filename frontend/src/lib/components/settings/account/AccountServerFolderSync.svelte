@@ -87,10 +87,10 @@
       onclick={handleFolderSyncToggle}
     >
       <Icon
-        icon={showFolderSync ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+        icon={showFolderSync ? 'lucide:chevron-down' : 'lucide:chevron-right'}
         class="w-4 h-4"
       />
-      <Icon icon="mdi:folder-sync-outline" class="w-4 h-4" />
+      <Icon icon="lucide:folder-sync" class="w-4 h-4" />
       {$_('account.folderSync')}
     </button>
 
@@ -126,7 +126,7 @@
           {#if !syncAllFolders}
             {#if loadingSyncFolders}
               <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                <Icon icon="mdi:loading" class="w-4 h-4 animate-spin" />
+                <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />
                 {$_('account.loadingFolders')}
               </div>
             {:else}

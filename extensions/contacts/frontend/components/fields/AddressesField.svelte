@@ -52,7 +52,7 @@
             disabled={disabled}
             aria-label={$_('contacts.edit.removeAddress')}
           >
-            <Icon icon="mdi:close" class="w-4 h-4" />
+            <Icon icon="lucide:x" class="w-4 h-4" />
           </Button>
         </div>
         <Input type="text" bind:value={a.street} placeholder={$_('contacts.edit.addressStreet')} disabled={disabled} />
@@ -68,7 +68,7 @@
     {/each}
   </div>
   <Button variant="outline" size="sm" onclick={add} disabled={disabled || atMax} class="mt-2" title={atMax ? maxReason : undefined}>
-    <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+    <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
     {$_('contacts.edit.addAddress')}
   </Button>
 </div>

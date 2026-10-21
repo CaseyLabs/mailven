@@ -188,7 +188,7 @@
     <header class="h-10 flex items-center justify-between bg-muted/50 border-b border-border select-none shrink-0">
       <!-- Drag region - left side with title -->
       <div class="flex-1 flex items-center gap-2 px-3 h-full" style="--wails-draggable: drag">
-        <Icon icon="mdi:email-edit-outline" class="w-5 h-5 text-primary" />
+        <Icon icon="lucide:mail-plus" class="w-5 h-5 text-primary" />
         <span class="text-sm font-medium text-foreground">{windowTitle()}</span>
       </div>
 
@@ -244,14 +244,14 @@
     {#if loading}
       <div class="h-full flex items-center justify-center">
         <div class="flex flex-col items-center gap-3">
-          <Icon icon="mdi:loading" class="w-8 h-8 animate-spin text-primary" />
+          <Icon icon="lucide:loader-circle" class="w-8 h-8 animate-spin text-primary" />
           <span class="text-sm text-muted-foreground">{$_('common.loading')}</span>
         </div>
       </div>
     {:else if error}
       <div class="h-full flex items-center justify-center">
         <div class="flex flex-col items-center gap-3 text-center px-4">
-          <Icon icon="mdi:alert-circle" class="w-12 h-12 text-destructive" />
+          <Icon icon="lucide:circle-alert" class="w-12 h-12 text-destructive" />
           <p class="text-sm text-destructive">{error}</p>
           <button
             onclick={() => CloseWindow()}

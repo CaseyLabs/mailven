@@ -195,7 +195,7 @@
           <h3 class="text-sm font-semibold text-foreground">
             {$_('calendar.settings.timezoneSection')}
           </h3>
-          <Icon icon={expanded.timezone ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="w-4 h-4 text-muted-foreground" />
+          <Icon icon={expanded.timezone ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-4 h-4 text-muted-foreground" />
         </button>
         {#if expanded.timezone}
         <div class="px-3 pb-3 pt-1 space-y-2">
@@ -222,7 +222,7 @@
           <h3 class="text-sm font-semibold text-foreground">
             {$_('calendar.settings.oauthSection')}
           </h3>
-          <Icon icon={expanded.oauth ? 'mdi:chevron-up' : 'mdi:chevron-down'} class="w-4 h-4 text-muted-foreground" />
+          <Icon icon={expanded.oauth ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-4 h-4 text-muted-foreground" />
         </button>
         {#if expanded.oauth}
         <div class="px-3 pb-3 pt-1 space-y-3">

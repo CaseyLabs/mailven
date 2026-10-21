@@ -6,8 +6,9 @@
   import { isImageAllowedSync, refreshImageAllowlist } from '$lib/stores/imageAllowlist.svelte'
   import { setFocusedPane, focusPreviousPane, focusNextPane } from '$lib/stores/keyboard.svelte'
   import EmailBodyImageBanner from './EmailBodyImageBanner.svelte'
-  import { checkForRemoteImages, extractDomain, getChromeBgHsl, linkifyText } from './emailBodyHtml'
+  import { checkForRemoteImages, extractDomain, getChromeBgHsl, getPaperHsl, linkifyText } from './emailBodyHtml'
   import { buildIframeContent } from './emailBodyIframe'
+  import { looksPreformatted } from '$lib/components/chat/chatReading'
   import { _ } from '$lib/i18n'
   import { toasts } from '$lib/stores/toast'
   import { getAlwaysLoadImages, getThemeMode } from '$lib/stores/settings.svelte'
@@ -22,9 +23,11 @@
     onImagesLoaded?: () => void
     encryptedInlineAttachments?: Record<string, string>
     darken?: boolean
+    // Light HTML in a dark UI, on a paper card rather than white.
+    paper?: boolean
   }
 
-  let { messageId, accountId: _accountId, bodyHtml = '', bodyText = '', fromEmail = '', onCompose, onImagesLoaded, encryptedInlineAttachments, darken = false }: Props = $props()
+  let { messageId, accountId: _accountId, bodyHtml = '', bodyText = '', fromEmail = '', onCompose, onImagesLoaded, encryptedInlineAttachments, darken = false, paper = false }: Props = $props()
 
   // State for remote image handling
   let imagesBlocked = $state(true)
@@ -52,11 +55,11 @@
   let hasRemoteImages = $derived(checkForRemoteImages(bodyHtml))
 
   // Outer iframe element bg: matches the dark-mail surface color (derived from
-  // active theme) when darken=true, otherwise white. Reactive to theme changes
+  // active theme) when darken=true, the paper colour on a paper card, otherwise white. Reactive to theme changes
   // via getThemeMode() so the iframe outer color updates when user switches.
   let iframeOuterBg = $derived.by(() => {
     void getThemeMode()
-    return darken ? getChromeBgHsl() : 'white'
+    return darken ? getChromeBgHsl() : paper ? getPaperHsl() : 'white'
   })
 
   // Handle a clicked link URL — routes mailto: to composer, others to system browser.
@@ -305,7 +308,7 @@
     const applyDarken = darken
 
     if (iframeElement && html) {
-      const content = buildIframeContent(html, applyDarken, imagesBlocked)
+      const content = buildIframeContent(html, applyDarken, imagesBlocked, iframeOuterBg)
       iframeElement.srcdoc = content
       iframeReady = false
       lastSentMessageId = null
@@ -407,7 +410,7 @@
     ></iframe>
   {:else if bodyText}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div class="whitespace-pre-wrap font-sans text-sm text-foreground bg-muted/30 rounded-md p-4"
+    <div class="whitespace-pre-wrap wrap-anywhere {looksPreformatted(bodyText) ? 'font-mono text-mono' : 'font-read text-read-body'} text-fg-primary max-w-(--measure)"
       onkeydown={(e) => { if (e.key === 'Enter') { const link = (e.target as HTMLElement).closest('a'); if (link?.href) { e.preventDefault(); handleLinkClick(link.href) } } }}
       onclick={(e) => {
         const link = (e.target as HTMLElement).closest('a')
@@ -445,7 +448,7 @@
           class="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
           onclick={copyTextToClipboard}
         >
-          <Icon icon="mdi:content-copy" class="w-4 h-4" />
+          <Icon icon="lucide:copy" class="w-4 h-4" />
           {$_('viewer.copy')}
         </button>
       {/if}
@@ -454,7 +457,7 @@
           class="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
           onclick={copyLinkToClipboard}
         >
-          <Icon icon="mdi:link-variant" class="w-4 h-4" />
+          <Icon icon="lucide:link-2" class="w-4 h-4" />
           {$_('viewer.copyLink')}
         </button>
       {/if}
@@ -462,7 +465,7 @@
         class="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
         onclick={selectAllInIframe}
       >
-        <Icon icon="mdi:select-all" class="w-4 h-4" />
+        <Icon icon="lucide:square-dashed-mouse-pointer" class="w-4 h-4" />
         {$_('viewer.selectAll')}
       </button>
     </div>

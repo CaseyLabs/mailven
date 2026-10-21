@@ -91,7 +91,7 @@
 
 <DetailPane
   empty={!contact}
-  emptyIcon="mdi:account-multiple-outline"
+  emptyIcon="lucide:users"
   emptyText={$_('contacts.detail.emptyState')}
 >
   {#snippet header()}
@@ -109,7 +109,7 @@
       {#if isWritable}
         <div class="flex items-center gap-1 shrink-0">
           <Button variant="outline" size="sm" onclick={() => { if (contact) onEdit?.(contact) }}>
-            <Icon icon="mdi:pencil" class="w-4 h-4 mr-1" />
+            <Icon icon="lucide:pencil" class="w-4 h-4 mr-1" />
             {$_('contacts.detail.edit')}
           </Button>
           <Button
@@ -118,7 +118,7 @@
             class="text-destructive hover:text-destructive"
             onclick={() => { showDeleteConfirm = true }}
           >
-            <Icon icon="mdi:delete-outline" class="w-4 h-4 mr-1" />
+            <Icon icon="lucide:trash-2" class="w-4 h-4 mr-1" />
             {$_('contacts.common.delete')}
           </Button>
         </div>
@@ -129,7 +129,7 @@
             ? $_('contacts.detail.oauthReadOnlyNote')
             : $_('contacts.detail.cardDAVReadOnlyNote')}
         >
-          <Icon icon="mdi:lock-outline" class="w-4 h-4" />
+          <Icon icon="lucide:lock" class="w-4 h-4" />
           <span>{$_('contacts.detail.readonlyHint')}</span>
         </div>
       {/if}

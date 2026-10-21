@@ -4,9 +4,8 @@
   // DOM focus stays on the parent SourceSidebar container so keyboard
   // nav (J/K/Up/Down) continues working after a click.
   //
-  // Active-row styling mirrors mail's FolderTreeItem (subtle primary-tinted
-  // background + primary text + medium weight) so the two sidebars look
-  // consistent across the app.
+  // Hover, selected and focus states come from the shared .nav-item class
+  // (themes/_utilities.css), the same fills as mail's sidebar and list rows.
 
   import Icon from '@iconify/svelte'
 
@@ -25,13 +24,12 @@
 <div
   role="option"
   aria-selected={active}
-  class="flex items-center gap-2 mx-2 px-3 py-1.5 text-sm rounded-md text-left transition-colors cursor-pointer select-none {active
-    ? 'bg-primary/10 text-primary font-medium'
-    : 'text-foreground hover:bg-muted/50'}"
+  class="nav-item text-body cursor-pointer select-none"
+  data-selected={active}
   onclick={(e) => onclick?.(e)}
 >
   {#if icon}
-    <Icon {icon} class="w-4 h-4 shrink-0" />
+    <Icon {icon} class="w-4 h-4" />
   {/if}
   <span class="truncate">{label}</span>
 </div>

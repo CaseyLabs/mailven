@@ -36,7 +36,7 @@
       title={$_(accountStore.isAnySyncing ? 'sidebar.clickForSyncStatus' : 'sidebar.syncAllAccounts')}
     >
       <Icon
-        icon="mdi:sync"
+        icon="lucide:refresh-cw"
         class="w-4 h-4 shrink-0 {accountStore.isAnySyncing ? 'animate-spin' : ''}"
       />
       <div class="flex-1 min-w-0">

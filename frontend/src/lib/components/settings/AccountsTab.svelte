@@ -69,19 +69,19 @@
 
 <div class="space-y-4">
   <h3 class="text-sm font-medium flex items-center gap-2">
-    <Icon icon="mdi:email-multiple" class="w-4 h-4" />
+    <Icon icon="lucide:mails" class="w-4 h-4" />
     {$_('settingsAccounts.emailAccounts')}
   </h3>
 
   {#if accountStore.loading}
     <div class="flex items-center justify-center py-4">
-      <Icon icon="mdi:loading" class="w-5 h-5 animate-spin text-muted-foreground" />
+      <Icon icon="lucide:loader-circle" class="w-5 h-5 animate-spin text-muted-foreground" />
     </div>
   {:else if regularAccounts.length === 0}
     <div class="text-sm text-muted-foreground py-4 text-center">
       <p class="mb-3">{$_('settingsAccounts.noAccountsConfigured')}</p>
       <Button size="sm" onclick={openAdd}>
-        <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
         {$_('settingsAccounts.addAccount')}
       </Button>
     </div>
@@ -120,7 +120,7 @@
               disabled={index === 0}
               title={$_('settingsAccounts.moveUp')}
             >
-              <Icon icon="mdi:chevron-up" class="w-4 h-4" />
+              <Icon icon="lucide:chevron-up" class="w-4 h-4" />
             </Button>
             <Button
               size="icon"
@@ -130,7 +130,7 @@
               disabled={index === accountStore.accounts.length - 1}
               title={$_('settingsAccounts.moveDown')}
             >
-              <Icon icon="mdi:chevron-down" class="w-4 h-4" />
+              <Icon icon="lucide:chevron-down" class="w-4 h-4" />
             </Button>
           </div>
 
@@ -142,7 +142,7 @@
             onclick={() => openEdit(acc)}
             title={$_('settingsAccounts.editAccount')}
           >
-            <Icon icon="mdi:pencil" class="w-4 h-4" />
+            <Icon icon="lucide:pencil" class="w-4 h-4" />
           </Button>
 
           <!-- Delete button -->
@@ -153,14 +153,14 @@
             onclick={() => openDelete(acc)}
             title={$_('settingsAccounts.deleteAccount')}
           >
-            <Icon icon="mdi:delete-outline" class="w-4 h-4" />
+            <Icon icon="lucide:trash-2" class="w-4 h-4" />
           </Button>
         </div>
       {/each}
 
       <!-- Add button -->
       <Button size="sm" variant="outline" class="w-full" onclick={openAdd}>
-        <Icon icon="mdi:plus" class="w-4 h-4 mr-1" />
+        <Icon icon="lucide:plus" class="w-4 h-4 mr-1" />
         {$_('settingsAccounts.addAccount')}
       </Button>
     </div>

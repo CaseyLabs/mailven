@@ -94,7 +94,7 @@
 
 <div class="@container flex flex-col">
   <!-- Same height as the conversation header, so their bottom edges line up. -->
-  <div class="flex items-center gap-1 min-w-0 min-h-header px-3 border-b border-divider" bind:clientWidth={topRowWidth}>
+  <div class="flex items-center gap-1 min-w-0 min-h-header px-3" bind:clientWidth={topRowWidth}>
     <ResponsiveSidebarToggle />
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
@@ -102,7 +102,7 @@
         aria-label={`${$_('chat.scope')}: ${scopeLabel}`}
       >
         <span class="font-semibold text-foreground truncate">{scopeLabel}</span>
-        <Icon icon="mdi:chevron-down" class="w-4 h-4 shrink-0 text-muted-foreground" />
+        <Icon icon="lucide:chevron-down" class="w-4 h-4 shrink-0 text-muted-foreground" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
@@ -116,13 +116,13 @@
           )}
         >
           <DropdownMenu.Item class={itemClass} onSelect={onUnifiedSelect}>
-            <Icon icon="mdi:check" class="w-4 h-4 {isUnified ? '' : 'invisible'}" />
-            <Icon icon="mdi:inbox-multiple" class="w-4 h-4 text-muted-foreground" />
+            <Icon icon="lucide:check" class="w-4 h-4 {isUnified ? '' : 'invisible'}" />
+            <Icon icon="lucide:inbox" class="w-4 h-4 text-muted-foreground" />
             {$_('chat.allInboxes')}
           </DropdownMenu.Item>
           {#each inboxes as { account, inbox } (account.id)}
             <DropdownMenu.Item class={itemClass} onSelect={() => onInboxSelect(account.id, inbox)}>
-              <Icon icon="mdi:check" class="w-4 h-4 {!isUnified && folderId === inbox.id ? '' : 'invisible'}" />
+              <Icon icon="lucide:check" class="w-4 h-4 {!isUnified && folderId === inbox.id ? '' : 'invisible'}" />
               <span class="w-4 h-4 flex items-center justify-center" aria-hidden="true">
                 <span class="w-2.5 h-2.5 rounded-full" style="background-color: {account.color || 'var(--color-muted-foreground)'}"></span>
               </span>
@@ -132,7 +132,7 @@
           <DropdownMenu.Separator class="-mx-1 my-1 h-px bg-border" />
           <DropdownMenu.Item class={itemClass} onSelect={onBrowseFolders}>
             <span class="w-4 h-4"></span>
-            <Icon icon="mdi:folder-outline" class="w-4 h-4 text-muted-foreground" />
+            <Icon icon="lucide:folder" class="w-4 h-4 text-muted-foreground" />
             {$_('chat.allFolders')}
           </DropdownMenu.Item>
         </DropdownMenu.Content>
@@ -147,14 +147,14 @@
       aria-label={$_('sidebar.syncAllAccounts')}
       onclick={onSync}
     >
-      <Icon icon="mdi:refresh" class="w-5 h-5 text-muted-foreground {syncBusy ? 'animate-spin' : ''}" />
+      <Icon icon="lucide:refresh-cw" class="w-5 h-5 text-muted-foreground {syncBusy ? 'animate-spin' : ''}" />
     </button>
     <div class="ml-1 shrink-0"><ComposeButton compact={compactCompose} onclick={onCompose} /></div>
   </div>
 
   <div class="flex flex-col gap-2 px-3 pt-3">
     <div class="flex items-center gap-1 min-h-control bg-muted rounded-md px-2 focus-within:ring-2 focus-within:ring-ring">
-      <Icon icon="mdi:magnify" class="w-4 h-4 text-muted-foreground shrink-0" />
+      <Icon icon="lucide:search" class="w-4 h-4 text-muted-foreground shrink-0" />
       <input
         bind:this={searchInputRef}
         type="search"
@@ -171,14 +171,13 @@
           aria-label={$_('messageList.clearSearch')}
           onclick={() => { onQuery(''); searchInputRef?.focus() }}
         >
-          <Icon icon="mdi:close" class="w-4 h-4 text-muted-foreground" />
+          <Icon icon="lucide:x" class="w-4 h-4 text-muted-foreground" />
         </button>
       {/if}
     </div>
 
-    <!-- One non-wrapping row; the gap narrows in a narrow pane so every tab still fits.
-         The row's divider is the header's bottom edge. -->
-    <div class="-mx-3 px-3 flex items-center gap-2.5 @[16rem]:gap-4 border-b border-divider text-meta" role="group" aria-label={$_('chat.filters')}>
+    <!-- One non-wrapping row; the gap narrows in a narrow pane so every tab still fits. -->
+    <div class="-mx-3 px-3 flex items-center gap-2.5 @[16rem]:gap-4 text-meta" role="group" aria-label={$_('chat.filters')}>
       {#each filters as f (f.value)}
         {@const active = filter === f.value}
         {@const unavailable = isSearch && !searchSupports(f.value)}

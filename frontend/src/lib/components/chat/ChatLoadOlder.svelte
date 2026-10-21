@@ -23,7 +23,7 @@
       disabled={s.olderBusy}
       onclick={() => s.loadOlder()}
     >
-      <Icon icon={s.olderBusy ? 'mdi:loading' : 'mdi:history'} class={s.olderBusy ? 'w-4 h-4 animate-spin' : 'w-4 h-4'} />
+      <Icon icon={s.olderBusy ? 'lucide:loader-circle' : 'lucide:history'} class={s.olderBusy ? 'w-4 h-4 animate-spin' : 'w-4 h-4'} />
       {s.olderBusy ? $_('chat.loadingOlder') : $_('chat.loadOlder')}
     </button>
     {#if s.olderAdded === 0 && !s.olderBusy}

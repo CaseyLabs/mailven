@@ -11,10 +11,10 @@
   let { toast, onClose }: Props = $props()
 
   const icons = {
-    success: 'mdi:check-circle',
-    error: 'mdi:alert-circle',
-    info: 'mdi:information',
-    warning: 'mdi:alert'
+    success: 'lucide:circle-check',
+    error: 'lucide:circle-alert',
+    info: 'lucide:info',
+    warning: 'lucide:triangle-alert'
   }
 
   const colors = {
@@ -60,7 +60,7 @@
     onclick={onClose}
     aria-label={$_('aria.dismiss')}
   >
-    <Icon icon="mdi:close" class="w-4 h-4 text-muted-foreground" />
+    <Icon icon="lucide:x" class="w-4 h-4 text-muted-foreground" />
   </button>
 </div>
 

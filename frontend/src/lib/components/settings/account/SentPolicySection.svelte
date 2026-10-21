@@ -60,7 +60,7 @@
   }
 </script>
 <section class="space-y-3 border-t border-border pt-4" aria-label={$_('sentPolicy.title')}>
-  <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="mdi:email-arrow-right-outline" class="w-4 h-4" />{$_('sentPolicy.title')}</h3>
+  <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="lucide:send" class="w-4 h-4" />{$_('sentPolicy.title')}</h3>
   <p class="text-xs text-muted-foreground">{$_('sentPolicy.guidance')}</p>
   {#if error}<p role="alert" class="text-sm text-destructive">{error}</p>{/if}
   {#if policy}

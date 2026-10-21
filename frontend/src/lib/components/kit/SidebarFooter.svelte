@@ -1,6 +1,6 @@
 <script lang="ts">
   // SidebarFooter — canonical bottom-strip chrome shared by every sidebar
-  // (mail, calendar, contacts, future extensions). Owns padding, border,
+  // (mail, calendar, contacts, future extensions). Owns padding,
   // font, icon-grid, and crucially the min-height so the strip stays the
   // same rendered size whether the consumer fills 1 or 2 lines of content.
   //
@@ -34,7 +34,7 @@
 </script>
 
 <div
-  class="relative p-3 border-t border-border text-xs text-muted-foreground
+  class="relative p-3 text-xs text-muted-foreground
          flex items-center justify-between gap-2 min-h-[52px]"
 >
   {#if overlay}

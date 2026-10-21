@@ -32,7 +32,7 @@
 <!-- Remote images blocked bar -->
 {#if s.composerImagesBlocked}
   <div class="flex items-center gap-2 px-3 py-2 mx-2 mt-2 rounded-md bg-yellow-500/10 border border-yellow-500/30 text-sm">
-    <Icon icon="mdi:image-off" class="w-4 h-4 text-yellow-600 shrink-0" />
+    <Icon icon="lucide:image-off" class="w-4 h-4 text-yellow-600 shrink-0" />
     <span class="text-yellow-700 dark:text-yellow-400">{$_('viewer.remoteImagesBlocked')}</span>
     <button
       class="ml-auto px-2 py-1 text-xs font-medium rounded bg-yellow-600 text-white hover:bg-yellow-700 transition-colors"
@@ -69,7 +69,7 @@
 <!-- Missing S/MIME cert warning -->
 {#if s.encryptMessage && s.missingCertRecipients.length > 0}
   <div class="flex items-center gap-2 text-xs px-3 py-1.5 bg-amber-50 dark:bg-amber-950/30 border-t border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300">
-    <Icon icon="mdi:alert" class="w-3.5 h-3.5 shrink-0" />
+    <Icon icon="lucide:triangle-alert" class="w-3.5 h-3.5 shrink-0" />
     <span class="flex-1">{$_('composer.noCertFor', { values: { emails: s.missingCertRecipients.join(', ') } })}</span>
     <button onclick={() => handleImportRecipientCert(s)} class="px-2 py-0.5 rounded bg-amber-200 dark:bg-amber-800 hover:bg-amber-300 dark:hover:bg-amber-700 font-medium transition-colors">{$_('composer.import')}</button>
     <button onclick={() => s.encryptMessage = false} class="px-2 py-0.5 rounded hover:bg-amber-200 dark:hover:bg-amber-800 font-medium transition-colors">{$_('common.cancel')}</button>
@@ -79,7 +79,7 @@
 <!-- Missing PGP key warning -->
 {#if s.pgpEncryptMessage && s.missingPGPKeyRecipients.length > 0}
   <div class="flex items-center gap-2 text-xs px-3 py-1.5 bg-amber-50 dark:bg-amber-950/30 border-t border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300">
-    <Icon icon="mdi:alert" class="w-3.5 h-3.5 shrink-0" />
+    <Icon icon="lucide:triangle-alert" class="w-3.5 h-3.5 shrink-0" />
     <span class="flex-1">{$_('composer.noPGPKeyFor', { values: { emails: s.missingPGPKeyRecipients.join(', ') } })}</span>
     <button onclick={() => handleImportRecipientPGPKey(s)} class="px-2 py-0.5 rounded bg-amber-200 dark:bg-amber-800 hover:bg-amber-300 dark:hover:bg-amber-700 font-medium transition-colors">{$_('composer.import')}</button>
     <button onclick={() => s.pgpEncryptMessage = false} class="px-2 py-0.5 rounded hover:bg-amber-200 dark:hover:bg-amber-800 font-medium transition-colors">{$_('common.cancel')}</button>
@@ -92,7 +92,7 @@
     onclick={() => handleAttachFiles(s)}
     class="flex items-center gap-1 hover:text-foreground transition-colors"
   >
-    <Icon icon="mdi:attachment" class="w-4 h-4" />
+    <Icon icon="lucide:paperclip" class="w-4 h-4" />
     {$_('composer.attachFiles')}
   </button>
   {#if s.attachments.length > 0}

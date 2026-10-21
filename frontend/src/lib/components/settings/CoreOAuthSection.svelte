@@ -30,7 +30,7 @@
     aria-expanded={isExpanded}
   >
     <Icon
-      icon={isExpanded ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+      icon={isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'}
       class="w-4 h-4 text-muted-foreground"
     />
     <span class="font-medium text-foreground">OAuth Credentials</span>
