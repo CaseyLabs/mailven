@@ -579,7 +579,7 @@ Project: [DS](PLAN.md#ds).
 
 ### UI17 — Chat row quick actions are nested inside the option
 
-- **Owner / milestone:** [DS](PLAN.md#ds) / found during [DS-2](PLAN.md#ds-2).
+- **Owner / milestone:** [DS](PLAN.md#ds) / found during [DS-2](PLAN.md#ds-2); see also [DSR-2](PLAN.md#dsr-2), which may close it.
 - **Severity / proposed priority / status:** low / P3 / open.
 - **Location / problem:** `frontend/src/lib/components/chat/ChatRow.svelte`, the `[data-row-actions]` group. The Archive, Mark as read/unread and Snooze buttons sit inside the row's `role="option"`, whose children ARIA treats as presentational, so a screen reader may fold their names into the option or skip them. Keyboard users reach them by Tab (covered by `tests/ui/chat-row.test.cjs`); the same actions stay available through the row's context menu and the list shortcuts.
 - **Evidence / closure:** found by review on 2026-10-20; no assistive-technology run, and the UI suite has no axe audit. Close by restructuring the list so the actions are not owned by the option (for example a grid with row and cell roles, or actions outside the option tied by `aria-controls`), checked with a screen reader or an axe `nested-interactive` rule.

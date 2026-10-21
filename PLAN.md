@@ -16,6 +16,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [1](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [DS — Reading-first redesign](#ds) | done | P3 | [3](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17–19 open (low) |
+| [DSR — Reading redesign revision](#dsr) | proposed | P3 | 0 | DSR-1–4 proposed 2026-10-21 from owner review of the DS look; none selected |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
@@ -31,7 +32,7 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 **Active:** none. The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** none selected. Eligible on owner request: the low DS follow-ups [UI17](ISSUES.md#ui17), [UI18](ISSUES.md#ui18) and [UI19](ISSUES.md#ui19) as independent fixes. SEND-2 still needs separately authorized live verification.
+**Next recommended:** none selected. Eligible on owner request: the [DSR](#dsr) revision (DSR-1 first; DSR-1–3 are independent), and the low DS follow-ups [UI17](ISSUES.md#ui17), [UI18](ISSUES.md#ui18) and [UI19](ISSUES.md#ui19) as independent fixes. SEND-2 still needs separately authorized live verification.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -679,6 +680,60 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 - **Status / proposed priority:** done 2026-10-21 (owner-selected; base `b320317`, branch `feat/ds-3`; [validation](docs/validation/ds-6.md)). Native WebKitGTK matrix screenshots were not run (recorded unrun). **Dependencies / gates:** DS-1–DS-5.
 - **Scope:** full visual matrix (both themes, Accounts expanded and collapsed), leftover cleanup, refreshed user-guide and README screenshots, CHANGELOG.
 - **Issues:** none.
+
+<a id="dsr"></a>
+
+## DSR — Reading redesign revision
+
+- **Objective / outcome:** Revise the shipped DS look after owner feedback. Dark mode gets brighter, cooler surfaces with more contrast. The inbox and thread get calmer and less cramped: no account dots, avatars off by default, no hover actions by default, a two-row thread header, and chat-style messages in a left-aligned column. Light mode keeps the DS-1 warm palette, and terracotta stays the accent in both themes.
+- **Status / proposed priority:** proposed 2026-10-21 / P3. No milestone is selected.
+- **Dependencies / blockers:** builds on DS-1–6 (done). DSR-1 is independent; DSR-2 and DSR-3 each add their own settings; DSR-4 comes last.
+- **Issues:** [UI17](ISSUES.md#ui17) (DSR-2 may close it by restructuring the row actions).
+- **Technical references:** [revision design system](https://claude.ai/artifact/8tvJbQiBQYQRhAmxbbWkrz) (token values, final Mail view, Appearance options, screenshots), [DS design plan](docs/plans/reading-redesign.md), [UI_TOKENS](docs/UI_TOKENS.md), [UI tests](tests/ui/README.md).
+
+Owner decisions (2026-10-21), chosen against side-by-side renders of the shipped DS look, a cool "Harbour" proposal and a neutral hybrid:
+
+- Light keeps the DS-1 warm palette. Dark uses Harbour's slate-blue surfaces (`bg` #181e27, `surface-reading` #202836) with the terracotta accent (#e28b6c).
+- Thread header: a toolbar row with icon-and-label actions (Archive, Delete, Snooze, Mark unread, `⋯`, previous and next), then the subject on its own row with "N people · N messages". No sender in the header.
+- Messages: every message is shown expanded, chat style, under day dividers. Only very long threads, where rendering everything would make opening slow, fold their oldest messages into an "N earlier messages" row (the UIX-5 fold); the latest and unread messages never fold. Each sender line reads "Name 12:45 PM to 10 people ▾", with no email address.
+- Literata stays the default body font, and Sans becomes an Appearance option. The column is left-aligned at a 32 px gutter, with 10 px between paragraphs.
+- Inbox: grouped as Pinned and Chats, with no account dots. The selected row is a tinted fill with no outline. Avatars are hidden by default in both the inbox and messages, and hover quick actions are opt-in and off by default, each with an Appearance toggle.
+
+<a id="dsr-1"></a>
+
+### DSR-1 — Brighter dark palette
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** none.
+- **Scope:** dark-theme values in `frontend/src/themes/built-in.css` from the artifact's `tokens.json` (surfaces, borders, text tiers, `accent-soft`; the accent family stays terracotta); light theme unchanged; `tools/contrast-check.mjs` pairs and [UI_TOKENS](docs/UI_TOKENS.md) updated. Token names do not change.
+- **Acceptance:** every contrast-table pair passes in both themes (dark `text-primary` on `surface-reading` ≥ 12:1). Light values are byte-identical. The visual check shows the reading pane as the lightest dark plane.
+- **Validation:** `node tools/contrast-check.mjs`, frontend lint and Svelte/TypeScript check, full UI suite, and the visual check of both themes with Accounts expanded and collapsed.
+
+<a id="dsr-2"></a>
+
+### DSR-2 — Calmer inbox rows
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** none.
+- **Scope:** `ChatRow.svelte` and the list. Remove the account dot (the account name stays in the accessible label and tooltip). Selected rows use the `surface-selected` fill with no outline, and focus keeps its ring. Add two persisted settings, both off by default: avatars in the inbox, and quick actions on hover (with the actions in the context menu and shortcuts whatever the setting). Without avatars, rows are 56 px (compact 48). Keep the Pinned and Chats groups. Appearance gets the two toggles.
+- **Acceptance:** new settings default to off for new and existing profiles and persist across restarts. With both off, rows show no avatar, account dot or hover buttons, and the actions stay reachable by context menu and shortcuts. With them on, rows match DS-2 behaviour. Row heights are covered by a test. `data-chat-row` is unchanged.
+- **Validation:** Go settings tests, the `chat-presentation`, `inbox-triage` and row-state suites, a new settings-default test, frontend lint and check, full UI suite, and the visual check.
+
+<a id="dsr-3"></a>
+
+### DSR-3 — Thread header and chat-style messages
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** none.
+- **Scope:** `ChatViewHeader.svelte`, `ChatSubjectHeading.svelte`, `ChatStream.svelte`, `ChatBubble.svelte` and `ChatDaySeparator.svelte`. A two-row header: labelled toolbar actions (icon-only with tooltips below 1100 px), then the subject at 20/28 600 with people and message counts, with no sender. Every message renders expanded under day dividers. The UIX-5 "N earlier messages" fold applies only above a message-count threshold set by measuring open time on long fixture threads, with a sender line of name, time and "to N people ▾" (expandable recipients, no address). The stream is left-aligned at a 32 px gutter with a 760 px maximum, and paragraphs are 10 px apart. Add two persisted settings: avatars in messages (off by default) and reading font (Serif by default, or Sans).
+- **Acceptance:** the header never wraps the subject into the toolbar at 1100 px and up, and the sender is not in the header. Toolbar buttons keep accessible names at every width. Paragraph spacing is 10 px for plain and simple-HTML bodies. The recipient disclosure works by keyboard with `aria-expanded`. Threads below the threshold show every message with no fold row. Above it, the oldest messages fold and expand on demand, the latest and unread messages stay expanded, and the chosen threshold and its timings are recorded in the validation note. Long threads open at the latest or first unread message without a visible jump. The reading-font and avatar settings apply live and persist. Sender-styled HTML still renders on the paper card. Scroll anchoring and the unread jump still hold.
+- **Validation:** `chat-presentation`, `chat-compaction`, `chat-flat`, `chat-reader`, `chat-anchor` and `chat-folds` suites, plus new header and setting tests, frontend lint and check, full UI suite, and the visual check.
+
+<a id="dsr-4"></a>
+
+### DSR-4 — Visual matrix and docs
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** DSR-1–3.
+- **Scope:** the full visual matrix (Mail, Contacts, Calendar and Settings in both themes, Accounts expanded and collapsed, narrow and standard); retaken `docs/ss*.png` screenshots from synthetic data; user-guide updates for the Appearance options, header and message layout; CHANGELOG.
+- **Acceptance:** every matrix screenshot is reviewed and passes the UI audit and contrast check. Screenshots show no real personal data, and the user guide matches the app.
+- **Validation:** full UI suite, `make lint`, `make test`, `run-mailven` native WebKitGTK screenshots (or recorded as unrun), and `tools/check-doc-links.py`.
 
 <a id="ai"></a>
 
