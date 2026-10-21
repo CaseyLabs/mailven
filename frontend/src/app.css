@@ -1,6 +1,30 @@
 @import './themes.css' layer(base);
 @import 'tailwindcss';
 
+/* Bundled interface and reading faces (SIL OFL 1.1, see
+   assets/fonts/README.md). Nothing is fetched from the network. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./assets/fonts/inter/InterVariable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('./assets/fonts/literata/Literata-opsz-wght.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Literata';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('./assets/fonts/literata/Literata-Italic-opsz-wght.woff2') format('woff2');
+}
+
 @plugin '@tailwindcss/typography';
 
 @source '../../extensions/**/frontend/**/*.{html,js,svelte,ts}';
@@ -37,8 +61,28 @@
   --color-selected: hsl(var(--selected));
   --color-muted-foreground: hsl(var(--muted-foreground));
 
+  /* DS accent (terracotta): primary action, unread state and focus only.
+     The pre-DS shadcn --accent hover grey is now surface-hover. */
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-hover: hsl(var(--accent-hover));
+  --color-accent-text: hsl(var(--accent-text));
+  --color-accent-soft: hsl(var(--accent-soft));
+  --color-on-accent: hsl(var(--on-accent));
+  --color-focus: hsl(var(--focus));
+
+  /* DS surfaces, boundaries, paper and status (see docs/UI_TOKENS.md). */
+  --color-bg: hsl(var(--bg));
+  --color-surface: hsl(var(--surface));
+  --color-surface-reading: hsl(var(--surface-reading));
+  --color-surface-raised: hsl(var(--surface-raised));
+  --color-surface-hover: hsl(var(--surface-hover));
+  --color-surface-selected: hsl(var(--surface-selected));
+  --color-border-subtle: hsl(var(--border-subtle));
+  --color-border-control: hsl(var(--border-control));
+  --color-paper: hsl(var(--paper));
+  --color-paper-text: hsl(var(--paper-text));
+  --color-danger: hsl(var(--danger));
 
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
@@ -46,20 +90,33 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  --color-unread: #2563eb;
   --color-starred: #eab308;
   --color-archived: #6b7280;
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* DS radius scale. */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 999px;
 
+  /* DS elevation: values per theme in built-in.css (--elevation-1…3). */
+  --shadow-1: var(--elevation-1);
+  --shadow-2: var(--elevation-2);
+  --shadow-3: var(--elevation-3);
+
+  /* DS families: ui (Inter) for the interface, read (Literata) for message
+     bodies. --font-sans is Tailwind's default family and an alias of ui. */
+  --font-ui:
+    Inter, 'Inter Variable', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
   --font-sans:
-    system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Helvetica Neue, Arial, sans-serif;
+    Inter, 'Inter Variable', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+  --font-read: Literata, 'Iowan Old Style', Charter, Georgia, serif;
   --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,
-    Courier New, monospace;
+    ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
   /* Tailwind's own small sizes, one pixel up from its defaults (12/14/16)
      so the many text-xs/sm/base uses stay readable on laptop panels. */
@@ -69,8 +126,45 @@
   --text-sm--line-height: 1.375rem;
   --text-base: 1.0625rem;
   --text-base--line-height: 1.5rem;
-  --text-2xs: 0.6875rem;
-  --text-2xs--line-height: 0.875rem;
+
+  /* DS type styles (docs/UI_TOKENS.md). 12px is the floor: nothing smaller.
+     ui-* set the interface, read-* message bodies, mono pre-formatted text. */
+  --text-ui-heading: 1.125rem;
+  --text-ui-heading--line-height: 1.5rem;
+  --text-ui-heading--font-weight: 600;
+  --text-ui-heading--letter-spacing: -0.01em;
+  --text-ui-title: 0.9375rem;
+  --text-ui-title--line-height: 1.25rem;
+  --text-ui-title--font-weight: 600;
+  --text-ui-title--letter-spacing: -0.005em;
+  --text-ui-name-strong: 0.875rem;
+  --text-ui-name-strong--line-height: 1.25rem;
+  --text-ui-name-strong--font-weight: 600;
+  --text-ui-name: 0.875rem;
+  --text-ui-name--line-height: 1.25rem;
+  --text-ui-name--font-weight: 500;
+  --text-ui-body: 0.875rem;
+  --text-ui-body--line-height: 1.25rem;
+  --text-ui-label: 0.8125rem;
+  --text-ui-label--line-height: 1.125rem;
+  --text-ui-label--font-weight: 500;
+  --text-ui-small: 0.8125rem;
+  --text-ui-small--line-height: 1.125rem;
+  --text-ui-meta: 0.75rem;
+  --text-ui-meta--line-height: 1rem;
+  --text-ui-meta--letter-spacing: 0.005em;
+  --text-ui-section: 0.75rem;
+  --text-ui-section--line-height: 1rem;
+  --text-ui-section--font-weight: 600;
+  --text-ui-section--letter-spacing: 0.01em;
+  --text-read-body: 1rem;
+  --text-read-body--line-height: 1.625rem;
+  --text-read-quote: 0.9375rem;
+  --text-read-quote--line-height: 1.5rem;
+  --text-read-small: 0.875rem;
+  --text-read-small--line-height: 1.375rem;
+  --text-mono: 0.8125rem;
+  --text-mono--line-height: 1.25rem;
 
   /* Type roles (see docs/UI_TOKENS.md). meta/body/title match text-xs,
      text-sm and text-base; caption (12px, chips and small notes) has no
@@ -89,6 +183,9 @@
   /* Control and header heights. */
   --height-control-sm: 1.75rem;
   --height-control: 2rem;
+  --height-control-lg: 2.25rem;
+  --height-row: 4rem;
+  --height-nav: 2rem;
   --height-header: 3.8125rem;
 
   /* Pane surfaces and text tiers: raw HSL triples (themes override them). */
@@ -155,6 +252,15 @@
   --chat-bubble: 36rem;
   --chat-stream: 46rem;
 }
+/* Accent as text: the design system draws accent-coloured text in
+   --accent-text, which keeps 4.5:1 on hover and accent-soft fills; --accent
+   itself stays the fill (bg-primary, border-primary). */
+@layer utilities {
+  .text-primary {
+    color: hsl(var(--accent-text));
+  }
+}
+
 :root[data-reading-width='narrow'] {
   --chat-column: 52rem;
   --chat-bubble: 30rem;
@@ -187,8 +293,30 @@
   }
 
   :root {
-    /* Base corner radius behind rounded-lg/md/sm (10/8/6 px). */
-    --radius: 0.625rem;
+    /* Pre-DS base radius; an alias of radius-lg. */
+    --radius: 0.75rem;
+
+    /* DS spacing on a 4px base. Tailwind's p-1…p-12 are the same steps. */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-12: 3rem;
+
+    /* DS fixed sizes. Heights are also Tailwind h-row, h-nav, h-control*. */
+    --size-avatar-lg: 36px;
+    --size-avatar-md: 32px;
+    --size-avatar-sm: 24px;
+    --size-avatar-xs: 20px;
+    --size-icon: 16px;
+    --focus-width: 2px;
+    --sidebar-width: 232px;
+    --list-width: 340px;
+    --thread-column: 720px;
+    --measure: 68ch;
   }
 
   html {
@@ -291,33 +419,34 @@ mark {
   color: hsl(var(--foreground));
 }
 
-/* Force a white message-body surface even in dark mode (default; the user can
-   opt into a dark composer body). Mirrors the viewer's "emails are white
-   regardless of theme" behavior. Applied to the editing-surface container that
-   wraps the TipTap editor + plain-text textarea.
+/* Force a light message-body surface even in dark mode (default; the user can
+   opt into a dark composer body). Mirrors the viewer's paper card for
+   sender-styled mail. Applied to the editing-surface container that wraps the
+   TipTap editor + plain-text textarea.
 
    Rather than recolor each element, we redefine the theme variables for this
-   subtree to a fixed light palette — so every var-based composer style flips
+   subtree to the fixed Light palette — so every var-based composer style flips
    along: base text + list-marker ::before (--foreground), code/pre background
-   (--muted), blockquote (--muted-foreground / --border). Otherwise the white
-   markers/boxes would stay white on the white surface. */
+   (--muted), blockquote (--muted-foreground / --border). Otherwise the light
+   markers/boxes would vanish on the light surface. */
 .composer-body--light {
-  --foreground: 240 6% 10%;        /* near-black text + list markers */
-  --muted: 240 5% 96%;             /* light grey code/pre background */
-  --muted-foreground: 240 4% 40%;  /* readable grey (blockquote) on white */
-  --border: 240 6% 88%;            /* light dividers/borders */
-  background-color: #ffffff;
+  --foreground: var(--paper-text);
+  --muted: 36.9 27.7% 90.8%;            /* Light surface-hover */
+  --muted-foreground: 36.9 8.4% 30.4%;  /* Light text-secondary */
+  --border: 34.3 20% 86.3%;             /* Light border-subtle */
+  background-color: hsl(var(--paper));
   color: hsl(var(--foreground));
 }
 /* Composer placeholder colour. The body is bg-white (Light), dark:bg-zinc-900
-   (Dark) or the forced-light palette, not a theme surface, so --fg-placeholder
-   does not apply; these mirror its Light/Dark values and clear 4.5:1 on each. */
+   (Dark) or the paper palette, not a theme surface, so --fg-placeholder does
+   not apply; these are text-tertiary's Light and Dark values and clear 4.5:1
+   on each. */
 .composer-body,
 .composer-body--light {
-  --composer-placeholder: 220 9% 44%;
+  --composer-placeholder: 34.3 7.5% 36.5%;
 }
 .dark .composer-body {
-  --composer-placeholder: 219 12% 64%;
+  --composer-placeholder: 32 7.6% 61.4%;
 }
 .composer-body--light textarea::placeholder {
   color: hsl(var(--composer-placeholder));

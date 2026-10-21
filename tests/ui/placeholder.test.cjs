@@ -4,7 +4,8 @@ const fs = require('node:fs')
 const path = require('node:path')
 const ui = require('./harness.cjs')
 
-// UI13: an empty field's placeholder uses --fg-placeholder, dimmer than the text tiers and than an entered value.
+// UI13: an empty field's placeholder uses --fg-placeholder, dimmer than an entered value. Since DS-1
+// --fg-placeholder aliases text-tertiary (the design system's placeholder tier), so it equals fg-tertiary.
 // The probe copies the classes of the app's Input; screenshots land in test-results/ui/.
 const inputClass = fs.readFileSync(path.join(__dirname, '../../frontend/src/lib/components/ui/input/input.svelte'), 'utf8')
   .match(/'(flex h-10[^']*)'/)[1]
@@ -40,10 +41,9 @@ for (const theme of ['dark', 'light']) {
         }
       })
       assert.equal(colors.placeholder, colors.token)
-      assert.notEqual(colors.placeholder, colors.tertiary)
-      // Dimmer = closer to the field surface: in Dark darker than tertiary, in Light lighter.
+      assert.equal(colors.placeholder, colors.tertiary)
+      // Dimmer = closer to the field surface: in Dark darker than the value, in Light lighter.
       const dark = theme === 'dark'
-      assert.ok(dark ? colors.lum.placeholder < colors.lum.tertiary : colors.lum.placeholder > colors.lum.tertiary, JSON.stringify(colors))
       assert.ok(dark ? colors.lum.placeholder < colors.lum.value : colors.lum.placeholder > colors.lum.value, JSON.stringify(colors))
       await page.screenshot({ path: path.join(__dirname, `../../test-results/ui/placeholder-${theme}-${accounts}.png`) })
     }))

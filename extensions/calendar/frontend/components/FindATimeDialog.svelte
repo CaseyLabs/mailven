@@ -161,7 +161,7 @@
       {/if}
       {#if !loading && results.length > 0}
         <!-- Header: time labels -->
-        <div class="grid items-center gap-px text-2xs text-muted-foreground" style:grid-template-columns="180px repeat({SLOTS}, minmax(0, 1fr))">
+        <div class="grid items-center gap-px text-ui-meta text-muted-foreground" style:grid-template-columns="180px repeat({SLOTS}, minmax(0, 1fr))">
           <div></div>
           {#each Array(SLOTS) as _, i}
             <div class="text-center">{i % 2 === 0 ? slotLabel(i) : ''}</div>

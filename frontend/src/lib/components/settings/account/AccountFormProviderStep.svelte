@@ -21,7 +21,7 @@
     {#each providers as provider (provider.id)}
       <button
         type="button"
-        class="flex flex-col items-center gap-2 p-4 rounded-lg border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+        class="flex flex-col items-center gap-2 p-4 rounded-lg border border-input bg-background hover:bg-surface-hover hover:text-foreground transition-colors"
         onclick={() => selectProvider(s, provider)}
       >
         {#if provider.iconSrc}

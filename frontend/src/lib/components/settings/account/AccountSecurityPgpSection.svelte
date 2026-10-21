@@ -18,7 +18,7 @@
     <Icon icon="mdi:key-outline" class="w-4 h-4" />
     {$_('security.pgp')}
     {#if s.pgpKeys.length > 0}
-      <span class="text-2xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">{$_('security.keysCount', { values: { count: s.pgpKeys.length } })}</span>
+      <span class="text-ui-meta px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">{$_('security.keysCount', { values: { count: s.pgpKeys.length } })}</span>
     {/if}
   </button>
 
@@ -50,10 +50,10 @@
               <div class="flex items-center gap-2">
                 <span class="text-sm font-medium truncate">{key.email}</span>
                 {#if key.isDefault}
-                  <span class="text-2xs px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">{$_('security.defaultBadge')}</span>
+                  <span class="text-ui-meta px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">{$_('security.defaultBadge')}</span>
                 {/if}
                 {#if key.isExpired}
-                  <span class="text-2xs px-1.5 py-0.5 rounded bg-destructive/10 text-destructive font-medium">{$_('security.expiredBadge')}</span>
+                  <span class="text-ui-meta px-1.5 py-0.5 rounded bg-destructive/10 text-destructive font-medium">{$_('security.expiredBadge')}</span>
                 {/if}
               </div>
               <p class="text-xs text-muted-foreground truncate mt-0.5">{key.userId}</p>
@@ -150,7 +150,7 @@
     >
       <Icon icon={s.keyServersCollapsed ? 'mdi:chevron-right' : 'mdi:chevron-down'} class="w-3.5 h-3.5 shrink-0" />
       {$_('security.keyServersLabel')}
-      <span class="text-2xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">{s.keyServers.length}</span>
+      <span class="text-ui-meta px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">{s.keyServers.length}</span>
     </button>
 
     {#if !s.keyServersCollapsed}
@@ -227,7 +227,7 @@
               <span class="text-sm truncate block">{key.email}</span>
               <span class="text-xs text-muted-foreground truncate block">{key.fingerprint?.slice(-16)} &middot; {key.algorithm}</span>
             </div>
-            <span class="text-2xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium shrink-0">
+            <span class="text-ui-meta px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium shrink-0">
               {key.source}
             </span>
             <span class="text-xs text-muted-foreground shrink-0">

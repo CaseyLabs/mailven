@@ -1,6 +1,6 @@
 # Project roadmap
 
-Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **No active milestone.** The last completed milestone is [MAINT-24](#maint-24) (UI16 composer placeholder contrast, 2026-10-19).
+Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **No active milestone.** The last completed milestone is [DS-1](#ds-1) (warm tokens, type and bundled fonts, 2026-10-20).
 
 ## Portfolio
 
@@ -15,11 +15,11 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
 | [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [1](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
-| [DS — Reading-first redesign](#ds) | proposed | P3 | 0 | DS-1 (tokens and fonts) first; DS-2–5 independent; DS-6 last. Awaiting owner selection |
+| [DS — Reading-first redesign](#ds) | active | P3 | 0 | DS-1 done (tokens and fonts, 2026-10-20); DS-2–5 independent, await owner selection; DS-6 last |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
-**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; no local milestone is open. Completed milestones are not selectable work.
+**Remaining nondeferred scope:** DS-2–6 await owner selection; SEND-2 requires separately authorized live verification. Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
@@ -29,9 +29,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**No active milestone.** The last completed milestone is [MAINT-24](#maint-24) (UI16 composer placeholder contrast, done 2026-10-19 in `2cc98bc`).
+**No active milestone.** The last completed milestone is [DS-1](#ds-1) (warm tokens, type and bundled fonts, done 2026-10-20 on branch `fix/gracious-hopper-d65040`; [validation](docs/validation/ds-1.md)). The branch is not yet landed.
 
-**Next recommended:** none eligible — SEND-2 needs separately authorized live verification; deferred work (SYNC-6, SEND-3/4, WAILS, D2, AI6) stays deferred until the owner selects it.
+**Next recommended:** [DS-2](#ds-2) (avatar tints and chat rows) after the DS-1 branch lands; DS-3 to DS-5 are equally eligible and independent. Each needs owner selection.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -625,7 +625,7 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 ## DS — Reading-first redesign
 
 - **Objective / outcome:** Make Mailven read like a calm chat app. Warm neutral surfaces, one muted terracotta accent kept for the primary action, unread state and focus, Inter for the interface and Literata for message bodies, and WCAG AA in both themes. It changes visuals and hierarchy only: no flows, bindings, settings keys or keyboard shortcuts change. It supersedes UIX's Nord palette and bubble default.
-- **Status / proposed priority:** proposed / P3. No milestone is selected; the owner selects each one.
+- **Status / proposed priority:** active / P3. DS-1 done 2026-10-20; the owner selects each later milestone.
 - **Dependencies / blockers:** DS-1 first (tokens and fonts); DS-2–5 independent; DS-6 last. Downloading the font files (DS-1) and removing icon packages (DS-5) need owner approval.
 - **Issues:** none.
 - **Technical references:** [design plan](docs/plans/reading-redesign.md), [design system](https://claude.ai/artifact/UwQS72qVnHhLuxpkU1sVbc), [UI_TOKENS](docs/UI_TOKENS.md), [EXT_RULES](docs/EXT_RULES.md), [UI tests](tests/ui/README.md).
@@ -636,7 +636,7 @@ Each milestone's scope, acceptance and validation are in the [design plan's mile
 
 ### DS-1 — Warm tokens, type and bundled fonts
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** none; the font download needs owner approval.
+- **Status / proposed priority:** done 2026-10-20 (owner-selected; base `2313bf5`, branch `fix/gracious-hopper-d65040`; [validation](docs/validation/ds-1.md)). Native WebKitGTK font rendering was not checked (recorded unrun). **Dependencies / gates:** none; the owner approved the five font files on 2026-10-20 (Inter v4.1 `InterVariable.woff2`, Literata 3.103 roman and italic `[opsz,wght]` woff2, and both OFL texts).
 - **Scope:** new tokens in `built-in.css`, `_defaults.css` and `app.css` with the old names as aliases; Inter and Literata woff2 under `frontend/src/assets/fonts/`; the 12 px floor; contrast-check pairs; UI_TOKENS update.
 - **Issues:** none.
 

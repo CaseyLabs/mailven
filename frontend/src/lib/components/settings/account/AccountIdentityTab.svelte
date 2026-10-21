@@ -266,7 +266,7 @@
     <div class="space-y-2">
       {#each identities as identity (identity.id)}
         {@const badge = sendAs ? sendAsBadges[sendAs.identities?.[identity.id]] : undefined}
-        <div class="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors group">
+        <div class="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-surface-hover/50 transition-colors group">
           <!-- Default radio button -->
           <button
             type="button"
@@ -378,7 +378,7 @@
     {:else}
       <div class="space-y-2">
         {#each sharedMailboxes as mailbox (mailbox.id)}
-          <div class="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors group">
+          <div class="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-surface-hover/50 transition-colors group">
             <Icon icon="mdi:email-outline" class="w-4 h-4 text-muted-foreground shrink-0" />
             <div class="flex-1 min-w-0">
               <div class="font-medium text-sm truncate">{mailbox.email}</div>

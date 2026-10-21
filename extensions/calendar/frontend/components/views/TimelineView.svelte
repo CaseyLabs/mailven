@@ -230,7 +230,7 @@
     >
       <!-- Left gutter label -->
       <div
-        class="text-2xs text-muted-foreground text-right pr-1 self-center"
+        class="text-ui-meta text-muted-foreground text-right pr-1 self-center"
         style:grid-row={`1 / span ${bandLaneCount}`}
       >
         {$_('calendar.timeline.allDay')}
@@ -264,7 +264,7 @@
       <div class="border-r border-border">
         {#each hourLabels as label, h (h)}
           <div
-            class="flex items-start justify-end pr-1 text-2xs text-muted-foreground border-b border-border/40"
+            class="flex items-start justify-end pr-1 text-ui-meta text-muted-foreground border-b border-border/40"
             style:height={`${HOUR_PX}px`}
           >
             <span class="-translate-y-1/2">{label}</span>
@@ -309,7 +309,7 @@
             {@const oneLine = (dragOff ? dragOff.height : (block.heightPct / 100) * DAY_PX) < 32}
             <button
               type="button"
-              class="absolute rounded text-2xs text-foreground text-left
+              class="absolute rounded text-ui-meta text-foreground text-left
                      px-1 overflow-hidden flex gap-1
                      hover:brightness-110 transition-[filter]"
               class:flex-col={!oneLine}
@@ -337,13 +337,13 @@
               onpointermove={(e) => drag.onBlockHoverMove(block, e)}
               onclick={(e) => drag.onBlockClick(block.instance, e)}
             >
-              <div class="shrink-0 font-mono text-2xs text-muted-foreground {oneLine ? 'leading-[13px]' : 'leading-tight'}">
+              <div class="shrink-0 font-mono text-ui-meta text-muted-foreground {oneLine ? 'leading-[14px]' : 'leading-tight'}">
                 {new Intl.DateTimeFormat(undefined, {
                   hour: '2-digit', minute: '2-digit', hour12: false,
                   timeZone: calendarSettings.effectiveTimezone,
                 }).format(new Date(block.instance.instanceStartUnix * 1000))}
               </div>
-              <div class="min-w-0 max-w-full truncate {oneLine ? 'leading-[13px]' : 'leading-tight'}">
+              <div class="min-w-0 max-w-full truncate {oneLine ? 'leading-[14px]' : 'leading-tight'}">
                 {block.instance.summary || $_('calendar.detail.noTitle')}
               </div>
             </button>

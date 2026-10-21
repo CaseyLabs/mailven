@@ -10,6 +10,10 @@ How this list was produced (ad hoc, 2026-10-11; neither tool is a project depend
 
 ## Bundled data and assets
 
+### Fonts: Inter and Literata
+
+The built app embeds the Inter 4.1 variable font (<https://github.com/rsms/inter>, Copyright The Inter Project Authors) and the Literata 3.103 variable fonts, roman and italic (<https://github.com/googlefonts/literata>, Copyright The Literata Project Authors). Both are licensed under the SIL Open Font License 1.1. The license texts are committed beside the files, in `frontend/src/assets/fonts/inter/OFL.txt` and `frontend/src/assets/fonts/literata/OFL.txt`; versions, sources and checksums are in `frontend/src/assets/fonts/README.md`.
+
 ### Spellcheck dictionaries (en-US, en-GB, en-CA)
 
 The built app embeds gzipped Hunspell dictionaries from the npm packages `dictionary-en` 4.0.0 (en-US), `dictionary-en-gb` 3.0.0 (en-GB) and `dictionary-en-ca` 3.0.0 (en-CA), distributed through <https://github.com/wooorm/dictionaries>. The packages declare `MIT AND BSD`. The data derives from SCOWL and Hunspell word lists (<http://wordlist.sourceforge.net>); their license texts follow verbatim. The `nspell` engine (MIT) loads them.

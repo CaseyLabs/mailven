@@ -1,113 +1,114 @@
-/* Nord — palette per nordtheme.com spec.
-   Single 16-color palette designed for both dark and bright ambiances:
-   - Dark: Polar Night (nord0-3) as bg, Snow Storm (nord4-6) as text
-   - Light: Snow Storm as bg, Polar Night as text
-   Frost (nord7-10) drives accents in both. Avatars use Aurora + Frost (9 colors).
-   Mailven-specific override: --ring matches --primary per Mailven convention. */
+/* Mailven warm theme — values from the DS design system (docs/UI_TOKENS.md).
+   Warm neutral surfaces and one muted terracotta accent, kept for the primary
+   action, unread state and focus. Each value is a raw HSL triple of the
+   design-system hex shown beside it. The pre-DS names (--background, --fg-*,
+   --primary, --avatar-1…14 and the rest) are aliases in _defaults.css.
+   tools/contrast-check.mjs checks every text, focus and boundary pair. */
 @layer base {
-  /* Light (Nord) — Snow Storm bg, Polar Night text. nord10 (darker Frost) as
-     primary for sufficient contrast on light bg. */
+  /* Light */
   :root,
   [data-theme="light"] {
     color-scheme: light;
-    --background: 219 28% 95%;             /* nord6 #ECEFF4 */
-    --foreground: 220 16% 22%;             /* nord0 #2E3440 */
-    --card: 219 28% 95%;                   /* nord6 */
-    --card-foreground: 220 16% 22%;
-    --popover: 219 28% 95%;                /* nord6 */
-    --popover-foreground: 220 16% 22%;
-    --primary: 213 40% 40%;                /* nord10 darkened to 4.5:1 with --primary-foreground and on --selected */
-    --primary-foreground: 219 28% 95%;     /* nord6 */
-    --secondary: 219 27% 92%;              /* nord5 #E5E9F0 */
-    --secondary-foreground: 220 16% 22%;
-    --muted: 220 12% 93%;                  /* near-neutral nord5 */
-    --muted-foreground: 220 17% 36%;       /* nord3 #4C566A */
-    --accent: 219 27% 92%;                 /* nord5 */
-    --accent-foreground: 220 16% 22%;
-    --destructive: 354 39% 56%;            /* nord11 #BF616A — Aurora red */
-    --destructive-foreground: 219 28% 95%; /* nord6 */
-    --border: 219 28% 88%;                 /* nord4 #D8DEE9 */
-    --bubble-own: 214 20% 90.5%;           /* Frost at 18% over surface-content — my bubbles */
-    --selected: 216 18% 90%;               /* Frost at 14% over surface-list — selected chat row */
-    --divider: 220 10% 84%;                /* hairline darker than every pane surface */
-    --input: 219 28% 88%;                  /* nord4 */
-    --ring: 213 40% 40%;                   /* matches --primary */
-    /* Pane surfaces: a subtle tone step from rail to conversation pane. */
-    --surface-sidebar: 220 12% 93%;
-    --surface-list:    220 14% 96%;
-    --surface-content: 220 14% 98%;
-    /* Text tiers: primary > secondary > tertiary, each >= 4.5:1 on every surface. */
-    --fg-primary:   220 16% 22%;            /* nord0 */
-    --fg-secondary: 220 17% 30%;
-    --fg-tertiary:  220 11% 39%;
-    --fg-placeholder: 220 9% 44%;           /* field placeholders: dimmer than tertiary */
-    /* Avatar palette: Aurora (5) + Frost (4). Most colors are lightness 52-73%,
-       dark text gives better contrast than white. */
-    --avatar-1:  354 39% 56%;              /* nord11 red */
-    --avatar-2:  14 51% 63%;               /* nord12 orange #D08770 */
-    --avatar-3:  40 70% 73%;               /* nord13 yellow #EBCB8B */
-    --avatar-4:  92 28% 65%;               /* nord14 green #A3BE8C */
-    --avatar-5:  311 20% 63%;              /* nord15 purple #B48EAD */
-    --avatar-6:  179 25% 65%;              /* nord7 teal #8FBCBB */
-    --avatar-7:  193 43% 67%;              /* nord8 light blue #88C0D0 */
-    --avatar-8:  210 34% 63%;              /* nord9 steel blue #81A1C1 */
-    --avatar-9:  213 32% 52%;              /* nord10 dark blue */
-    --avatar-10: 354 39% 56%;              /* red (repeat) */
-    --avatar-11: 14 51% 63%;               /* orange (repeat) */
-    --avatar-12: 40 70% 73%;               /* yellow (repeat) */
-    --avatar-13: 92 28% 65%;               /* green (repeat) */
-    --avatar-14: 311 20% 63%;              /* purple (repeat) */
+    /* Surfaces. */
+    --bg: 32.7 28.2% 92.4%;               /* #f1ece6 */
+    --surface: 33.3 39.1% 95.5%;          /* #f8f4ef */
+    --surface-reading: 34.3 53.8% 97.5%;  /* #fcf9f5 */
+    --surface-raised: 30 66.7% 98.8%;     /* #fefcfa */
+    --surface-hover: 36.9 27.7% 90.8%;    /* #eee9e1 */
+    --surface-selected: 33.3 26.5% 86.7%; /* #e6ded4 */
+    /* Boundaries: border-subtle for menu separators and quote rails, border-control for inputs. */
+    --border-subtle: 34.3 20% 86.3%;      /* #e3ddd5 */
+    --border-control: 34.7 7.7% 51.6%;    /* #8d857a */
+    /* Text tiers. */
+    --text-primary: 36 13.5% 14.5%;       /* #2a2620 */
+    --text-secondary: 36.9 8.4% 30.4%;    /* #544f47 */
+    --text-tertiary: 34.3 7.5% 36.5%;     /* #645e56 */
+    /* Accent: primary action, unread state and focus. Selection is never accent. */
+    --accent: 14.2 50.9% 45.5%;           /* #af5539 */
+    --accent-hover: 14.5 55.4% 39.6%;     /* #9d482d */
+    --accent-text: 14.6 57.5% 37.8%;      /* #984429 */
+    --on-accent: 34.3 77.8% 98.2%;        /* #fefbf7 */
+    --accent-soft: 15.9 81% 91.8%;        /* #fbe2d9 */
+    --focus: 14.2 50.9% 45.5%;            /* #af5539 */
+    /* Paper: the light card that sender-styled HTML mail renders on in both themes. */
+    --paper: 30 66.7% 98.8%;              /* #fefcfa */
+    --paper-text: 36 13.5% 14.5%;         /* #2a2620 */
+    /* Status. */
+    --danger: 1 52.7% 43.1%;              /* #a83634 */
+    --success: 134.7 33.3% 33.5%;         /* #397247 */
+    /* Avatar tint and ink pairs. */
+    --avatar-sand: 31.5 47.6% 83.5%;      /* #e9d6c1 */
+    --avatar-sand-ink: 33.6 47.2% 24.5%;  /* #5c4221 */
+    --avatar-olive: 64 28% 81%;           /* #dadcc1 */
+    --avatar-olive-ink: 61.5 37.6% 21.4%; /* #4a4b22 */
+    --avatar-sage: 128.2 26.2% 83.5%;     /* #cae0cd */
+    --avatar-sage-ink: 132.4 26.6% 25.1%; /* #2f5136 */
+    --avatar-teal: 178.2 35.5% 81.8%;     /* #c0e1e0 */
+    --avatar-teal-ink: 180 59.2% 20.2%;   /* #155252 */
+    --avatar-slate: 204.9 54.7% 85.3%;    /* #c5ddee */
+    --avatar-slate-ink: 204.2 44.3% 27.5%; /* #274c65 */
+    --avatar-iris: 240 46% 89%;           /* #d6d6f0 */
+    --avatar-iris-ink: 241.7 21.2% 33.3%; /* #444367 */
+    --avatar-mauve: 308.2 31.4% 86.3%;    /* #e7d1e4 */
+    --avatar-mauve-ink: 306 20% 29.4%;    /* #5a3c57 */
+    --avatar-clay: 356.1 49.2% 87.6%;     /* #efd0d2 */
+    --avatar-clay-ink: 356 27% 31%;       /* #643a3d */
+    /* Elevation (Tailwind shadow-1…3); it replaces borders on raised surfaces. */
+    --elevation-1: 0 1px 2px #2a26200f, 0 1px 3px #2a262014;
+    --elevation-2: 0 4px 12px #2a26201a, 0 1px 3px #2a262014;
+    --elevation-3: 0 16px 40px #2a262029, 0 2px 6px #2a262014;
   }
 
-  /* Dark (Nord) — Polar Night bg, Snow Storm text. nord8 (lighter Frost) as
-     primary, the canonical Nord dark accent. */
+  /* Dark */
   [data-theme="dark"] {
     color-scheme: dark;
-    --background: 220 16% 22%;             /* nord0 #2E3440 */
-    --foreground: 219 28% 95%;             /* nord6 #ECEFF4 */
-    --card: 220 16% 22%;                   /* nord0 */
-    --card-foreground: 219 28% 95%;
-    --popover: 220 16% 22%;                /* nord0 */
-    --popover-foreground: 219 28% 95%;
-    --primary: 193 43% 67%;                /* nord8 #88C0D0 — Frost light blue */
-    --primary-foreground: 220 16% 22%;     /* nord0 — dark text on light Frost */
-    --secondary: 222 16% 28%;              /* nord1 #3B4252 */
-    --secondary-foreground: 219 28% 95%;
-    --muted: 222 16% 28%;                  /* nord1 */
-    --muted-foreground: 219 28% 88%;       /* nord4 #D8DEE9 — dimmer than fg (nord6) */
-    --accent: 222 16% 28%;                 /* nord1 */
-    --accent-foreground: 219 28% 95%;
-    --destructive: 354 39% 56%;            /* nord11 #BF616A — Aurora red */
-    --destructive-foreground: 219 28% 95%; /* nord6 */
-    --border: 220 17% 36%;                 /* nord3 #4C566A */
-    --bubble-own: 205 13% 32.5%;           /* Frost at 25% over surface-content — my bubbles */
-    --selected: 209 12% 27%;               /* Frost at 14% over surface-list — selected chat row */
-    --divider: 220 10% 12%;                /* hairline darker than every pane surface */
-    --input: 220 17% 36%;                  /* nord3 */
-    --ring: 193 43% 67%;                   /* nord8 */
-    /* Pane surfaces: a subtle tone step from rail to conversation pane. */
-    --surface-sidebar: 220 10% 18%;
-    --surface-list:    220 10% 20.5%;
-    --surface-content: 220 10% 22%;
-    /* Text tiers: primary > secondary > tertiary, each >= 4.5:1 on every surface. */
-    --fg-primary:   219 28% 95%;            /* nord6 */
-    --fg-secondary: 219 24% 85%;
-    --fg-tertiary:  219 14% 72%;
-    --fg-placeholder: 219 12% 64%;
-    /* Avatar palette: same 9 Aurora + Frost colors as Light (Nord). */
-    --avatar-1:  354 39% 56%;              /* nord11 red */
-    --avatar-2:  14 51% 63%;               /* nord12 orange */
-    --avatar-3:  40 70% 73%;               /* nord13 yellow */
-    --avatar-4:  92 28% 65%;               /* nord14 green */
-    --avatar-5:  311 20% 63%;              /* nord15 purple */
-    --avatar-6:  179 25% 65%;              /* nord7 teal */
-    --avatar-7:  193 43% 67%;              /* nord8 light blue */
-    --avatar-8:  210 34% 63%;              /* nord9 steel blue */
-    --avatar-9:  213 32% 52%;              /* nord10 dark blue */
-    --avatar-10: 354 39% 56%;              /* red (repeat) */
-    --avatar-11: 14 51% 63%;               /* orange (repeat) */
-    --avatar-12: 40 70% 73%;               /* yellow (repeat) */
-    --avatar-13: 92 28% 65%;               /* green (repeat) */
-    --avatar-14: 311 20% 63%;              /* purple (repeat) */
+    /* Surfaces. */
+    --bg: 30 15% 8%;                      /* #171411 */
+    --surface: 34.3 14.3% 9.6%;           /* #1c1915 */
+    --surface-reading: 34.3 12.3% 11.2%;  /* #201d19 */
+    --surface-raised: 38 11% 14%;         /* #282520 */
+    --surface-hover: 30 11.8% 13.3%;      /* #26221e */
+    --surface-selected: 32.7 12.4% 17.5%; /* #322d27 */
+    /* Boundaries: border-subtle for menu separators and quote rails, border-control for inputs. */
+    --border-subtle: 33.3 10.1% 17.5%;    /* #312d28 */
+    --border-control: 34.3 6% 45.5%;      /* #7b756d */
+    /* Text tiers. */
+    --text-primary: 34.3 28% 90.2%;       /* #ede7df */
+    --text-secondary: 32 10.6% 72.4%;     /* #c0b9b1 */
+    --text-tertiary: 32 7.6% 61.4%;       /* #a49d95 */
+    /* Accent: primary action, unread state and focus. Selection is never accent. */
+    --accent: 15.8 67% 65.5%;             /* #e28b6c */
+    --accent-hover: 15.4 76.2% 72%;       /* #ee9d81 */
+    --accent-text: 15.8 76% 70.6%;        /* #ed997b */
+    --on-accent: 16 33.3% 8.8%;           /* #1e130f */
+    --accent-soft: 16.4 35.5% 18.2%;      /* #3f271e */
+    --focus: 15.8 76% 70.6%;              /* #ed997b */
+    /* Paper: the light card that sender-styled HTML mail renders on in both themes. */
+    --paper: 38.2 23.4% 90.8%;            /* #ede9e2 */
+    --paper-text: 36 13.5% 14.5%;         /* #2a2620 */
+    /* Status. */
+    --danger: 3.7 73.7% 70.2%;            /* #eb827b */
+    --success: 132.4 30.9% 63.1%;         /* #84be90 */
+    /* Avatar tint and ink pairs. */
+    --avatar-sand: 31.9 30.8% 20.4%;      /* #443524 */
+    --avatar-sand-ink: 31.6 54.3% 79.4%;  /* #e7ccae */
+    --avatar-olive: 62.7 23.4% 18.4%;     /* #393a24 */
+    --avatar-olive-ink: 63 30% 76%;       /* #d2d4af */
+    --avatar-sage: 130 17.3% 20.4%;       /* #2b3d2e */
+    --avatar-sage-ink: 129.4 30.8% 79.6%; /* #bbdbc0 */
+    --avatar-teal: 177.9 30.5% 18.6%;     /* #213e3d */
+    --avatar-teal-ink: 178.7 40.7% 76.9%; /* #acdcdb */
+    --avatar-slate: 203.6 29.7% 21.8%;    /* #273b48 */
+    --avatar-slate-ink: 205.4 64.8% 82.2%; /* #b4d6ef */
+    --avatar-iris: 240 16% 25%;           /* #36364a */
+    --avatar-iris-ink: 240 56.2% 87.5%;   /* #cdcdf1 */
+    --avatar-mauve: 303.5 14.8% 22.5%;    /* #423141 */
+    --avatar-mauve-ink: 307.7 37.3% 83.7%; /* #e5c6e1 */
+    --avatar-clay: 357.4 19% 23.7%;       /* #483132 */
+    --avatar-clay-ink: 357.3 59.5% 85.5%; /* #f0c4c6 */
+    /* Elevation: dark adds a faint top-light edge, since shadows vanish on dark grounds. */
+    --elevation-1: 0 1px 2px #00000066, 0 0 0 1px #ede7df0f;
+    --elevation-2: 0 6px 16px #00000080, 0 0 0 1px #ede7df14;
+    --elevation-3: 0 20px 48px #000000a6, 0 0 0 1px #ede7df14;
   }
 }

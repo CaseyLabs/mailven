@@ -1,5 +1,6 @@
-/* Theme registry — entry point for the two themes (Light and Dark, both Nord
-   palettes in ./themes/built-in.css) and the shared avatar palette plumbing.
+/* Theme registry — entry point for the two themes (Light and Dark, the warm DS
+   palette in ./themes/built-in.css), the pre-DS aliases (_defaults.css) and
+   the shared status and avatar plumbing.
    "System" is not a stylesheet: theme.svelte.ts resolves it to light or dark.
    Theme ids are registered in internal/settings/store.go,
    frontend/src/lib/stores/settings.svelte.ts (ThemeMode) and

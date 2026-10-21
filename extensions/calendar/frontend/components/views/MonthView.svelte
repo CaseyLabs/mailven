@@ -25,12 +25,12 @@
 
   // Per-cell event count tracks the available cell height (#323). Sizes match
   // the rendered rows: PILL_PX = one EventCard (22px: an 18px text-xs line plus
-  // py-0.5) plus the gap-0.5; MORE_PX = the "+N more" line; BAND_PX = one
-  // multi-day lane; DAY_NUM_PX = the day-number header row; CELL_PAD_PX = the
-  // pill column's pb-1 plus the row's bottom border.
+  // py-0.5) plus the gap-0.5; MORE_PX = the "+N more" line (a 16px text-ui-meta
+  // line plus 1px); BAND_PX = one multi-day lane; DAY_NUM_PX = the day-number
+  // header row; CELL_PAD_PX = the pill column's pb-1 plus the row's bottom border.
   const PILL_PX = 24
   const PILL_GAP_PX = 2
-  const MORE_PX = 15
+  const MORE_PX = 17
   const BAND_PX = 22
   const DAY_NUM_PX = 28
   const CELL_PAD_PX = 5
@@ -313,7 +313,7 @@
                 </div>
               {/each}
               {#if overflow > 0}
-                <span class="pointer-events-none text-2xs text-muted-foreground px-1">
+                <span class="pointer-events-none text-ui-meta text-muted-foreground px-1">
                   {$_('calendar.month.moreEventsHidden', { values: { n: overflow } })}
                 </span>
               {/if}

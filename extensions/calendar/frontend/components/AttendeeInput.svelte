@@ -214,7 +214,7 @@
       >
         <Avatar email={a.email} name={a.cn || a.email} density="compact" size={20} />
         <span class="max-w-48 truncate">{a.cn || a.email}</span>
-        <span class={`rounded px-1.5 py-0.5 text-2xs font-medium ${partStatBadgeClass(a.partStat)}`}>
+        <span class={`rounded px-1.5 py-0.5 text-ui-meta font-medium ${partStatBadgeClass(a.partStat)}`}>
           {$_(partStatBadgeKey(a.partStat))}
         </span>
         <button
@@ -264,8 +264,8 @@
         {#each flattenedSuggestions as s, idx (s.email + '-' + idx)}
           <button
             type="button"
-            class={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-accent ${
-              idx === selectedIndex ? 'bg-accent' : ''
+            class={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-surface-hover ${
+              idx === selectedIndex ? 'bg-surface-hover' : ''
             }`}
             onmousedown={(e) => {
               // mousedown (not click) — the input's onblur fires before

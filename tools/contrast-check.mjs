@@ -1,5 +1,11 @@
-// Contrast gate for the theme text tiers. No dependencies.
-// Usage: node tools/contrast-check.mjs   (exit 1 if any text tier on a surface is below 4.5:1)
+// Contrast gate for the DS theme tokens. No dependencies.
+// Usage: node tools/contrast-check.mjs
+// Checks every pair of the design system's contrast table in both themes
+// (4.5:1 for text, 3:1 for focus, the unread dot and border-control, and the
+// avatar ink floors), plus the pre-DS aliases that components still draw with.
+// Before the real check it proves the gate: each pair, made to fail by giving
+// its foreground token the background's value, must be reported. Exit 1 on any
+// failure.
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
@@ -25,46 +31,107 @@ const ratio = (fg, bg) => {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
 }
 
-const css = readFileSync(fileURLToPath(new URL('../frontend/src/themes/built-in.css', import.meta.url)), 'utf8')
+const read = (f) => readFileSync(fileURLToPath(new URL(`../frontend/src/themes/${f}`, import.meta.url)), 'utf8')
 const themes = { light: ':root,\\s*\\[data-theme="light"\\]', dark: '\\[data-theme="dark"\\]' }
-const tiers = ['primary', 'secondary', 'tertiary']
-// Each fill and the text tiers drawn on it: the pane surfaces, the hover and
-// others'-bubble fill (muted), the selected chat row, and my bubbles (whose
-// text is always primary).
-const fills = {
-  'surface-sidebar': tiers, 'surface-list': tiers, 'surface-content': tiers,
-  muted: tiers, selected: tiers, 'bubble-own': ['primary'],
-}
-// Field placeholder text, drawn on the field surface (--background) and the content pane.
-const placeholderFills = ['background', 'surface-content']
-const MIN = 4.5
+const TEXT = 4.5
+const UI = 3
+const tints = ['sand', 'olive', 'sage', 'teal', 'slate', 'iris', 'mauve', 'clay']
 
-let failed = false
-for (const [name, selector] of Object.entries(themes)) {
-  const block = css.match(new RegExp(`${selector}\\s*\\{([^}]*)\\}`))?.[1]
-  if (!block) { console.error(`theme block not found: ${name}`); process.exit(1) }
-  const get = (v) => block.match(new RegExp(`--${v}:\\s*([^;/]+?)\\s*;`))?.[1]
-  console.log(`\n${name}`)
-  for (const t of tiers) {
-    const fg = get(`fg-${t}`)
-    const cells = Object.keys(fills).filter((s) => fills[s].includes(t)).map((s) => {
-      const bg = get(s)
-      if (!fg || !bg) { failed = true; return `${s.replace('surface-', '')}: missing` }
-      let r = 0
-      try { r = ratio(fg, bg) } catch { failed = true; return `${s.replace('surface-', '')}: unparseable` }
-      if (r < MIN) failed = true
-      return `${s.replace('surface-', '')} ${r.toFixed(2)} ${r >= MIN ? 'pass' : 'FAIL'}`
-    })
-    console.log(`  fg-${t.padEnd(9)} ${cells.join('  |  ')}`)
-  }
-  const ph = get('fg-placeholder')
-  const phCells = placeholderFills.map((s) => {
-    const bg = get(s)
-    if (!ph || !bg) { failed = true; return `${s}: missing` }
-    const r = ratio(ph, bg)
-    if (r < MIN) failed = true
-    return `${s.replace('surface-', '')} ${r.toFixed(2)} ${r >= MIN ? 'pass' : 'FAIL'}`
-  })
-  console.log(`  fg-placeholder ${phCells.join('  |  ')}`)
+// [foreground, background, minimum]. The design system's contrast table first.
+const pairs = (theme) => [
+  ['text-primary', 'surface', TEXT],
+  ['text-secondary', 'surface', TEXT],
+  ['text-tertiary', 'surface', TEXT],
+  ['text-tertiary', 'surface-selected', TEXT],
+  ['text-tertiary', 'surface-raised', TEXT],
+  ['text-primary', 'surface-reading', TEXT],
+  ['on-accent', 'accent', TEXT],
+  ['on-accent', 'accent-hover', TEXT],
+  ['accent-text', 'surface-reading', TEXT],
+  ['accent-text', 'surface-selected', TEXT],
+  ['accent-text', 'surface-hover', TEXT], // text-primary on hover and muted fills
+  ['accent-text', 'accent-soft', TEXT], // text-primary on accent tints
+  ['focus', 'surface', UI],
+  ['focus', 'surface-selected', UI],
+  ['accent', 'surface', UI], // unread dot
+  ['accent', 'surface-selected', UI],
+  ['border-control', 'surface-raised', UI],
+  ['danger', 'surface-raised', TEXT],
+  ['paper-text', 'paper', TEXT],
+  // Avatar ink on its tint: the table's floors of 6.4 (Light) and 7.6 (Dark)
+  // are rounded to one decimal, so teal's 6.39 meets the 6.4 floor.
+  ...tints.map((t) => [`avatar-${t}-ink`, `avatar-${t}`, theme === 'light' ? 6.35 : 7.55]),
+  // Pre-DS aliases still drawn by components: every tier on each pane, the
+  // hover fill (--muted) and the selected row; placeholders on fields.
+  ...['fg-primary', 'fg-secondary', 'fg-tertiary'].flatMap((fg) =>
+    ['surface-sidebar', 'surface-list', 'surface-content', 'muted', 'selected'].map((bg) => [fg, bg, TEXT])),
+  ['fg-primary', 'bubble-own', TEXT],
+  ['fg-placeholder', 'background', TEXT],
+  ['fg-placeholder', 'surface-content', TEXT],
+  ['destructive-foreground', 'destructive', TEXT],
+  ['ring', 'background', UI],
+]
+
+// Token values per theme: DS tokens from built-in.css, then the aliases in
+// _defaults.css resolved against them.
+function tokens(builtIn, defaults) {
+  const decls = (block) => Object.fromEntries([...block.matchAll(/--([\w-]+):\s*([^;]+?)\s*;/g)]
+    .map(([, k, v]) => [k, v.replace(/\/\*.*?\*\//g, '').trim()]))
+  const aliases = decls(defaults.match(/:root\s*\{([^}]*)\}/)?.[1] ?? '')
+  return Object.fromEntries(Object.entries(themes).map(([name, selector]) => {
+    const block = builtIn.match(new RegExp(`${selector}\\s*\\{([^}]*)\\}`))?.[1]
+    if (!block) throw new Error(`theme block not found: ${name}`)
+    const own = decls(block)
+    const get = (k, seen = new Set()) => {
+      const v = own[k] ?? aliases[k]
+      if (v === undefined || seen.has(k)) return undefined
+      const ref = v.match(/^var\(--([\w-]+)\)$/)
+      return ref ? get(ref[1], seen.add(k)) : v
+    }
+    return [name, get]
+  }))
 }
-process.exit(failed ? 1 : 0)
+
+function check(builtIn, defaults, log = () => {}) {
+  const failures = []
+  for (const [name, get] of Object.entries(tokens(builtIn, defaults))) {
+    log(`\n${name}`)
+    for (const [fg, bg, min] of pairs(name)) {
+      const [f, b] = [get(fg), get(bg)]
+      let r = 0
+      let note = 'missing'
+      if (f && b) {
+        try { r = ratio(f, b); note = r.toFixed(2) } catch { note = 'unparseable' }
+      }
+      const ok = r >= min
+      if (!ok) failures.push(`${name}: ${fg} on ${bg}`)
+      log(`  ${`${fg} on ${bg}`.padEnd(44)} ${note.padStart(6)}  min ${min}  ${ok ? 'pass' : 'FAIL'}`)
+    }
+  }
+  return failures
+}
+
+const builtIn = read('built-in.css')
+const defaults = read('_defaults.css')
+
+// Self-test: each pair must fail once its foreground takes the background's value.
+const proof = []
+for (const theme of Object.keys(themes)) {
+  const get = tokens(builtIn, defaults)[theme]
+  const selector = new RegExp(`(${themes[theme]}\\s*\\{[^}]*)\\}`)
+  for (const [fg, bg] of pairs(theme)) {
+    const value = get(bg)
+    if (!value) continue
+    const mutated = builtIn.replace(selector, `$1  --${fg}: ${value};\n  }`)
+    const mutatedDefaults = defaults.replace(new RegExp(`--${fg}:[^;]*;`), '')
+    if (!check(mutated, mutatedDefaults).some((f) => f === `${theme}: ${fg} on ${bg}`)) proof.push(`${theme}: ${fg} on ${bg}`)
+  }
+}
+if (proof.length) {
+  console.error(`self-test: these pairs were not reported when made to fail:\n  ${proof.join('\n  ')}`)
+  process.exit(1)
+}
+
+const failures = check(builtIn, defaults, console.log)
+if (failures.length) console.error(`\n${failures.length} pair(s) below the minimum:\n  ${failures.join('\n  ')}`)
+process.exit(failures.length ? 1 : 0)

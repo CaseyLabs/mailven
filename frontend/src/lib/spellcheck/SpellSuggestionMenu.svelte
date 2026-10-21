@@ -28,7 +28,7 @@
   }
 
   function itemClass(i: number): string {
-    return s.keyboard && selected === i ? 'bg-accent' : 'hover:bg-accent'
+    return s.keyboard && selected === i ? 'bg-surface-hover' : 'hover:bg-surface-hover'
   }
 
   $effect(() => {

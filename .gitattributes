@@ -1,3 +1,7 @@
 # Generated Wails bindings: keep the generator's exact output (it writes tabs on blank
 # lines) so app runs and builds leave no diff, and skip whitespace checks for them.
 frontend/wailsjs/** -whitespace
+
+# Vendored fonts and their licence texts: kept byte-for-byte as released upstream
+# (SHA-256 in frontend/src/assets/fonts/README.md), so skip whitespace checks.
+frontend/src/assets/fonts/** -whitespace

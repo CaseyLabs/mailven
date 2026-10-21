@@ -1,39 +1,58 @@
-/* Avatar palette — global defaults (Tailwind *-500 colors with white initials).
-   Themes may override any subset of these in their own [data-theme="..."] block
-   to fit their visual identity. */
+/* Pre-DS token names, kept as aliases of the DS tokens in built-in.css so
+   custom themes and components not yet migrated keep working. A theme may
+   override any alias in its own [data-theme="..."] block. The alias map is
+   in docs/UI_TOKENS.md; DS-6 removes the aliases nothing uses any more. */
 @layer base {
   :root {
-    --avatar-1:  0 84% 60%;    /* red */
-    --avatar-2:  25 95% 53%;   /* orange */
-    --avatar-3:  38 92% 50%;   /* amber */
-    --avatar-4:  48 96% 53%;   /* yellow */
-    --avatar-5:  142 71% 45%;  /* green */
-    --avatar-6:  160 84% 39%;  /* emerald */
-    --avatar-7:  173 80% 40%;  /* teal */
-    --avatar-8:  189 95% 43%;  /* cyan */
-    --avatar-9:  199 89% 48%;  /* sky */
-    --avatar-10: 217 91% 60%;  /* blue */
-    --avatar-11: 239 84% 67%;  /* indigo */
-    --avatar-12: 258 90% 66%;  /* violet */
-    --avatar-13: 271 91% 65%;  /* purple */
-    --avatar-14: 330 81% 60%;  /* pink */
-  }
-}
+    /* shadcn names. --accent is no longer a hover grey: it is the DS accent
+       itself (built-in.css); the old hover fill is --surface-hover. */
+    --background: var(--bg);
+    --foreground: var(--text-primary);
+    --card: var(--surface-raised);
+    --card-foreground: var(--text-primary);
+    --popover: var(--surface-raised);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent);
+    --primary-foreground: var(--on-accent);
+    --accent-foreground: var(--on-accent);
+    --secondary: var(--surface-hover);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--surface-hover);
+    --muted-foreground: var(--text-secondary);
+    --destructive: var(--danger);
+    --destructive-foreground: var(--on-accent);
+    --border: var(--border-subtle);
+    --input: var(--border-control);
+    --ring: var(--focus);
 
-/* Pane surfaces and text tiers — global defaults that reproduce the colours
-   the panes use today. Themes may override any of them in their own
-   [data-theme="..."] block (see docs/UI_TOKENS.md). */
-@layer base {
-  :root {
-    --surface-sidebar: var(--muted) / 0.3;
-    --surface-list:    var(--background);
-    --surface-content: var(--background);
+    /* Mailven pane and row names. --bubble-own has no DS replacement (own
+       messages stop being bubbles in DS-3); it keeps a neutral fill. */
+    --surface-sidebar: var(--bg);
+    --surface-list: var(--surface);
+    --surface-content: var(--surface-reading);
+    --selected: var(--surface-selected);
+    --bubble-own: var(--surface-selected);
+    --divider: var(--border-subtle);
 
-    --fg-primary:   var(--foreground);
-    --fg-secondary: var(--muted-foreground);
-    --fg-tertiary:  var(--muted-foreground);
-    --fg-placeholder: var(--muted-foreground);
+    --fg-primary: var(--text-primary);
+    --fg-secondary: var(--text-secondary);
+    --fg-tertiary: var(--text-tertiary);
+    --fg-placeholder: var(--text-tertiary);
 
-    --selected: var(--muted);
+    /* Fourteen avatar slots over the eight DS tint and ink pairs. */
+    --avatar-1: var(--avatar-sand);     --avatar-1-ink: var(--avatar-sand-ink);
+    --avatar-2: var(--avatar-olive);    --avatar-2-ink: var(--avatar-olive-ink);
+    --avatar-3: var(--avatar-sage);     --avatar-3-ink: var(--avatar-sage-ink);
+    --avatar-4: var(--avatar-teal);     --avatar-4-ink: var(--avatar-teal-ink);
+    --avatar-5: var(--avatar-slate);    --avatar-5-ink: var(--avatar-slate-ink);
+    --avatar-6: var(--avatar-iris);     --avatar-6-ink: var(--avatar-iris-ink);
+    --avatar-7: var(--avatar-mauve);    --avatar-7-ink: var(--avatar-mauve-ink);
+    --avatar-8: var(--avatar-clay);     --avatar-8-ink: var(--avatar-clay-ink);
+    --avatar-9: var(--avatar-sand);     --avatar-9-ink: var(--avatar-sand-ink);
+    --avatar-10: var(--avatar-olive);   --avatar-10-ink: var(--avatar-olive-ink);
+    --avatar-11: var(--avatar-sage);    --avatar-11-ink: var(--avatar-sage-ink);
+    --avatar-12: var(--avatar-teal);    --avatar-12-ink: var(--avatar-teal-ink);
+    --avatar-13: var(--avatar-slate);   --avatar-13-ink: var(--avatar-slate-ink);
+    --avatar-14: var(--avatar-iris);    --avatar-14-ink: var(--avatar-iris-ink);
   }
 }

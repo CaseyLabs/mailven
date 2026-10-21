@@ -93,7 +93,7 @@ const (
 // DefaultMessageListSortOrder is the default sort order
 const DefaultMessageListSortOrder = SortOrderNewest
 
-// Theme mode values. Light and Dark both use the Nord palette.
+// Theme mode values. Light and Dark both use the warm DS palette.
 const (
 	ThemeModeSystem = "system"
 	ThemeModeLight  = "light"

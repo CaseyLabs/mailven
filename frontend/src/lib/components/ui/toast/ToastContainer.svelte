@@ -56,7 +56,7 @@
       <div class="relative">
         <Toast toast={pile} onClose={() => toasts.remove(pile.id)} />
         <button
-          class="absolute -top-2 -right-2 text-xs font-medium px-1.5 py-0.5 rounded-full bg-muted border border-border text-muted-foreground shadow-sm hover:bg-accent transition-colors"
+          class="absolute -top-2 -right-2 text-xs font-medium px-1.5 py-0.5 rounded-full bg-muted border border-border text-muted-foreground shadow-sm hover:bg-surface-hover transition-colors"
           onclick={() => (expanded = true)}
           aria-label={$_('aria.showAllToasts')}
         >
@@ -69,7 +69,7 @@
   {#if expanded}
     <div class="pointer-events-auto flex justify-end">
       <button
-        class="px-2 py-1 rounded-full bg-muted border border-border text-muted-foreground shadow-sm hover:bg-accent transition-colors"
+        class="px-2 py-1 rounded-full bg-muted border border-border text-muted-foreground shadow-sm hover:bg-surface-hover transition-colors"
         onclick={() => (expanded = false)}
         aria-label={$_('aria.collapseToasts')}
       >

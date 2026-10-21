@@ -1,6 +1,6 @@
 # DS — Reading-first redesign
 
-[Project](../../PLAN.md#ds). Status: proposed design plan; no milestone is selected. Owner direction was recorded on 2026-10-20. Each DS milestone needs explicit selection under [the lifecycle rules](../PROJECT_MANAGEMENT.md).
+[Project](../../PLAN.md#ds). Status: active design plan; DS-1 was selected by the owner on 2026-10-20. Owner direction was recorded on 2026-10-20. Each later DS milestone needs explicit selection under [the lifecycle rules](../PROJECT_MANAGEMENT.md).
 
 ## Goal
 
@@ -88,12 +88,22 @@ Several milestones touch `frontend/src/lib/components/kit/**`, so read [EXT_RULE
 
 - [x] Design system published and owner font/paper choices recorded (2026-10-20).
 - [x] Proposed project and milestones recorded (2026-10-20).
+- [x] DS-1 (done 2026-10-20, [validation](../validation/ds-1.md); owner-selected 2026-10-20; branch `fix/gracious-hopper-d65040`, base `2313bf5`). Font download approved 2026-10-20.
+  - [x] Fonts fetched from the upstream release tags (sizes match the approved list).
+  - [x] `--accent` usages renamed to `surface-hover`; tokens and aliases in `built-in.css`, `_defaults.css` and `app.css`; `--color-unread` removed.
+  - [x] `text-2xs` → `text-ui-meta`; `MORE_PX` budget updated (15 → 17); TimelineView one-line leading 13 → 14 px. `--height-header`, `PILL_PX`/`BAND_PX` and `ChatRow` are unchanged: they use no `2xs` size and explicit line heights.
+  - [x] Contrast check extended; UI13 placeholder test updated (owner decision below).
+  - [x] UI_TOKENS, font README, THIRD_PARTY_NOTICES.
+  - [x] Validation: contrast check, `make lint`, frontend lint/check, `ui-quality`, full UI suite (187 pass), network font check, visual check. Native WebKitGTK recorded unrun.
 
 ## Decision Log
 
+- 2026-10-20 (DS-1, owner): field placeholders follow the design system and use `text-tertiary`; `--fg-placeholder` becomes its alias, superseding UI13's separate dimmer tier. `placeholder.test.cjs` changes deliberately from "dimmer than tertiary" to "equals tertiary, dimmer than entered text".
+- 2026-10-20 (DS-1, owner): fonts are Inter v4.1 `InterVariable.woff2` and Literata 3.103 `Literata[opsz,wght].woff2` / `Literata-Italic[opsz,wght].woff2` from the upstream tags. The variable files cover the required weights and the opsz axis.
 - 2026-10-20: Literata for reading, Inter for the UI, and a paper card for HTML mail in dark mode (owner). DS supersedes UIX's Nord palette. Flows, bindings and shortcuts are unchanged. Excluded: new settings, a per-sender dark-HTML option, restructuring `App.svelte`, and redesigning the separate-window composer beyond the token and button changes.
 
 ## Surprises & Discoveries
 
+- Components use `text-primary` (accent) as a text colour in 54 files, and on hover and accent-tint fills terracotta `accent` reaches only 4.16:1. The design system draws accent text in `accent-text`, so `app.css` redefines the `text-primary` utility to `accent-text` while `--primary` stays the fill. Tailwind 4 drops an `@utility text-primary` override; a rule in `@layer utilities` replaces the generated one. Hover variants (`hover:text-primary`) still use `--primary`.
 - The design system's implementation map names `themes/app.css`, but the shared tokens live in `frontend/src/app.css`, with theme values in `frontend/src/themes/built-in.css` and `_defaults.css`.
 - The sidebar navigation from `eeed8d0` (kit `AppNav`) already replaced the rail, so DS-5 restyles that sidebar rather than the old rail.

@@ -89,7 +89,7 @@
   }
 
   const ring = 'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden'
-  const itemClass = 'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground'
+  const itemClass = 'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden focus:bg-surface-hover focus:text-foreground'
 </script>
 
 <div class="@container flex flex-col">

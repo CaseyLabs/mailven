@@ -13,7 +13,9 @@ Mailven is an independent email client derived from [Aerion](https://github.com/
 
 **Visual refinement**
 
-- Calmer chat list: roomy, airy density-aware rows (micro, compact, standard, large), sentence-case group labels, a quieter list header with an accent Compose button, and a soft Frost tint on the selected chat and on your own bubbles
+- Calmer chat list: roomy, airy density-aware rows (micro, compact, standard, large), sentence-case group labels, a quieter list header with an accent Compose button, and a soft warm tint on the selected chat and on your own bubbles
+- Warm, calm palette: warm neutral surfaces in Light and Dark with one muted terracotta accent for the primary action, unread state and focus; every text pair meets WCAG AA
+- Bundled Inter for the interface and Literata for reading, so text looks the same on every system and no font is fetched from the network; no interface text is smaller than 12 px
 - Easier-to-read text: one size step larger throughout the app
 - Clearer hierarchy: contrast-checked primary, secondary and tertiary text, and a tonal step between the Accounts column, chat list and conversation pane in Dark and Light
 - No left navigation rail: Mail, enabled extensions and Settings are labeled options at the top of each view's sidebar, so with the sidebar collapsed the chat list sits at the window's left edge; the Accounts column drops its New message action (Compose stays in the list header)

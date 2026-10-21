@@ -570,4 +570,6 @@ All future Wails work is deferred by owner decision on 2026-10-14 until the offi
 
 ## Recurring problems
 
-None. Track environment/tooling symptoms, workaround and count here; on a second occurrence or a costly first occurrence, promote the solution into applicable guidance and remove the tally.
+Track environment/tooling symptoms, workaround and count here; on a second occurrence or a costly first occurrence, promote the solution into applicable guidance and remove the tally.
+
+- **UI harness theme race** (1 occurrence, 2026-10-20). Under full `make test-ui` load, a test without a `ready` selector can fail with `expected the app to apply the dark theme, got null`: `tests/ui/harness.cjs` reads `data-theme` immediately after `page.goto` without waiting for it. Seen once on `Google sign-in names its client, hides Username, and keeps checklist ticks`, which then passed 5 of 5 alone (`node tests/ui/run.mjs google-add-account`). Workaround: rerun the suite. Fix: wait for `data-theme` in the harness before checking it.

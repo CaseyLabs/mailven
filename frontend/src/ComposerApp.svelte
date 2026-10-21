@@ -208,7 +208,7 @@
           aria-label={$_('aria.minimizeWindow')}
         >
           {#if isHovering}
-            <span class="text-2xs font-bold text-black/60 leading-none">−</span>
+            <span class="text-ui-meta font-bold text-black/60 leading-none">−</span>
           {/if}
         </button>
 
@@ -220,7 +220,7 @@
           aria-label={isMaximized ? $_('aria.restoreWindow') : $_('aria.maximizeWindow')}
         >
           {#if isHovering}
-            <span class="text-2xs font-bold text-black/60 leading-none">+</span>
+            <span class="text-ui-meta font-bold text-black/60 leading-none">+</span>
           {/if}
         </button>
 
@@ -232,7 +232,7 @@
           aria-label={$_('aria.closeWindow')}
         >
           {#if isHovering}
-            <span class="text-2xs font-bold text-black/60 leading-none">×</span>
+            <span class="text-ui-meta font-bold text-black/60 leading-none">×</span>
           {/if}
         </button>
       </div>
