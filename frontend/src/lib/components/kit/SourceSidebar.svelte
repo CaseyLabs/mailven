@@ -3,6 +3,10 @@
   // Owns keyboard navigation (Up/Down/J/K within sidebar) via tabindex+focus.
   // Selection state managed by consumer via selectedId + onSelect.
   //
+  // The items sit in a focusable role="listbox" (sections as role="group")
+  // that names the selected option through aria-activedescendant; the
+  // consumer passes the snippet's optionId to SourceItem as its id.
+  //
   // Pane-focus store integration mirrors ListPane: registers focusSlot, takes
   // DOM focus when the slot matches so Alt+H/L cycling routes here.
   //
@@ -27,7 +31,7 @@
     selectedId: string | null
     focusSlot?: FocusablePane
     label?: string
-    item: Snippet<[T, { active: boolean }]>
+    item: Snippet<[T, { active: boolean; optionId: string }]>
     header?: Snippet
     sectionEmpty?: Snippet<[SourceSection<T>]>
     /** Optional sticky bottom strip — forwarded to SidebarFrame's footer
@@ -55,7 +59,10 @@
 
   let containerRef = $state<HTMLElement | null>(null)
 
+  const uid = $props.id()
   const allItems = $derived(sections.flatMap(s => s.items))
+  const optionId = (id: string) => `${uid}-option-${indexOf(id)}`
+  const headingId = (sIdx: number) => `${uid}-section-${sIdx}`
 
   $effect(() => {
     if (getFocusedPane() === focusSlot && containerRef && document.activeElement !== containerRef) {
@@ -132,12 +139,9 @@
 <SidebarFrame
   {title}
   {label}
-  bind:containerRef
   {resizeKey}
-  focusable
   class={flashing ? 'pane-focus-flash' : ''}
   onkeydown={handleKeyDown}
-  onfocus={handleFocus}
   onmousedown={handleMouseDown}
 >
   {#snippet body()}
@@ -145,23 +149,35 @@
       {@render header()}
     {/if}
 
-    {#each sections as section, sIdx (sIdx)}
-      {#if section.heading}
-        <div class="mx-4 mt-4 mb-1 text-ui-section text-fg-secondary">
-          {section.heading}
-        </div>
-      {/if}
+    <div
+      bind:this={containerRef}
+      role="listbox"
+      tabindex="0"
+      aria-label={label ?? title}
+      aria-activedescendant={indexOf(selectedId) >= 0 ? optionId(selectedId!) : undefined}
+      class="outline-hidden"
+      onfocus={handleFocus}
+    >
+      {#each sections as section, sIdx (sIdx)}
+        <div role="group" aria-labelledby={section.heading ? headingId(sIdx) : undefined}>
+          {#if section.heading}
+            <div id={headingId(sIdx)} class="mx-4 mt-4 mb-1 text-ui-section text-fg-secondary">
+              {section.heading}
+            </div>
+          {/if}
 
-      {#if section.items.length === 0}
-        {#if sectionEmpty}
-          {@render sectionEmpty(section)}
-        {/if}
-      {:else}
-        {#each section.items as it (it.id)}
-          {@render item(it, { active: it.id === selectedId })}
-        {/each}
-      {/if}
-    {/each}
+          {#if section.items.length === 0}
+            {#if sectionEmpty}
+              {@render sectionEmpty(section)}
+            {/if}
+          {:else}
+            {#each section.items as it (it.id)}
+              {@render item(it, { active: it.id === selectedId, optionId: optionId(it.id) })}
+            {/each}
+          {/if}
+        </div>
+      {/each}
+    </div>
   {/snippet}
 
   {#snippet footer()}

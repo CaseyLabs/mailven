@@ -18,7 +18,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [MAINT — Maintenance and documentation](#maint): [D2](#d2)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
-- [DS — Reading-first redesign](#ds): [UI17](#ui17), [UI18](#ui18)
+- [DS — Reading-first redesign](#ds): no unresolved issue recorded
 
 <a id="send"></a>
 
@@ -579,40 +579,28 @@ Project: [DS](PLAN.md#ds).
 
 ### UI17 — Chat row quick actions are nested inside the option
 
-- **Owner / milestone:** [DS](PLAN.md#ds) / found during [DS-2](PLAN.md#ds-2); see also [DSR-2](PLAN.md#dsr-2), which may close it.
-- **Severity / proposed priority / status:** low / P3 / open.
-- **Location / problem:** `frontend/src/lib/components/chat/ChatRow.svelte`, the `[data-row-actions]` group. The Archive, Mark as read/unread and Snooze buttons sit inside the row's `role="option"`, whose children ARIA treats as presentational, so a screen reader may fold their names into the option or skip them. Keyboard users reach them by Tab (covered by `tests/ui/chat-row.test.cjs`); the same actions stay available through the row's context menu and the list shortcuts.
-- **Evidence / closure:** [DSR-2](PLAN.md#dsr-2) made the buttons opt-in (off by default), so the default row has none; with the setting on the nesting is unchanged and this stays open. Found by review on 2026-10-20; no assistive-technology run, and the UI suite has no axe audit. Close by restructuring the list so the actions are not owned by the option (for example a grid with row and cell roles, or actions outside the option tied by `aria-controls`), checked with a screen reader or an axe `nested-interactive` rule.
+- **Status:** resolved 2026-10-21 (branch `fix/ui-followups`). `ChatRow.svelte` wraps each row in a `role="none"` `[data-chat-item]` that holds the hover group; the opt-in quick-action group and the snooze anchor sit beside the `role="option"` instead of inside it, and the group names its row with `aria-controls`. `chat-row.test.cjs` asserts that no chat option contains a focusable control, and the hover, focus, Tab-order and masking checks still pass. No screen reader or axe run (axe is not installed).
 
 <a id="ui18"></a>
 
 ### UI18 — Signatures share the quoted-text fold
 
-- **Owner / milestone:** [DS](PLAN.md#ds) / deferred from [DS-3](PLAN.md#ds-3) by owner decision.
-- **Severity / proposed priority / status:** low / P3 / open.
-- **Location / problem:** `frontend/src/lib/components/chat/ChatBubble.svelte`. The design system folds quoted history and the signature separately, but the chat text extraction returns them together in `chat.quoted`, so one "Show quoted text" toggle opens both. A reader who wants only the signature (for a phone number) also gets the full quoted history.
-- **Evidence / closure:** owner chose one fold on 2026-10-20 ([Decision Log](docs/plans/reading-redesign.md#decision-log)). Close by splitting the signature from the quoted part in the backend chat extraction and adding a "Show signature" fold, with a test in `tests/ui/chat-folds.test.cjs`.
+- **Status:** resolved 2026-10-21 (branch `fix/ui-followups`), reversing the 2026-10-20 one-fold decision at the owner's request to fix the remaining UI issues. `internal/message/chattext.go` returns the stripped `-- ` signature (with any mobile footer under it) in a new `ChatText.Signature` field instead of `Quoted`, and `ChatBubble.svelte` folds it behind its own "Show signature" toggle ahead of "Show quoted text". `chattext_test.go` covers the split; `chat-folds.test.cjs` asserts each fold opens without the other.
 
 <a id="ui19"></a>
 
 ### UI19 — Source sidebar options have no listbox owner
 
-- **Owner / milestone:** [DS](PLAN.md#ds) / found during [DS-5](PLAN.md#ds-5).
-- **Severity / proposed priority / status:** low / P3 / open.
-- **Location / problem:** `frontend/src/lib/components/kit/SourceSidebar.svelte` and `kit/SourceItem.svelte`. Items are `role="option"` with `aria-selected`, but their focusable container is the `role="navigation"` `<aside>` from `SidebarFrame`, not a `role="listbox"`, and the container sets no `aria-activedescendant`. A screen reader may not announce the selected source as the keys move it. Since DS-5 the selected option is ringed visually while the `<aside>` has keyboard focus.
-- **Evidence / closure:** found by review on 2026-10-21; predates DS-5; no assistive-technology run. Close by wrapping the items in a `role="listbox"` that owns them with `aria-activedescendant` (or by switching to buttons with `aria-current`), checked with a screen reader or an axe `aria-required-parent` rule, with `sidebar-focus` and `sidebar-states` still passing.
+- **Status:** resolved 2026-10-21 (branch `fix/ui-followups`). `kit/SourceSidebar.svelte` now holds its items in a focusable `role="listbox"` (sections as labelled `role="group"`) whose `aria-activedescendant` names the selected `SourceItem`; the `<aside>` stays the navigation landmark and keeps the keys. `sidebar-states` asserts the ownership and that `aria-activedescendant` follows the keys; `sidebar-focus` passes. No screen reader or axe run (axe is not installed).
 
 <a id="ui20"></a>
 
 ### UI20 — Fixtures and tests depend on the wall clock
 
-- **Owner / milestone:** [DSR](PLAN.md#dsr) / found during [DSR-3](PLAN.md#dsr-3).
-- **Severity / proposed priority / status:** low / P3 / open.
-- **Location / problem:** `.agents/skills/run-mailven/screenshot-fakes.js` dates the trip chat relative to the current time, and the UI harness runs in UTC. When a run crosses midnight UTC between `trip-4` and `trip-5`, `trip-5` starts a new day and shows its sender name, so `chat-presentation.test.cjs` "incoming and outgoing message blocks grouped by sender" fails.
-- **Evidence / closure:** seen once in the DSR-3 acceptance run (2026-10-22 UTC, `trip-5` at 00:03). The same file passed on its own three times, and two full suites passed. The assertion predates DSR-3. During DSR-4 (01:00–01:45 UTC, 2026-10-22) the full `make test-ui` failed `chat-row.test.cjs` "by default rows show no avatar…" (the H shortcut's snooze menu never opened; `waitFor` timed out) on four runs, also on a clean stash of the base. The file passes alone (13 of 13, five runs). The cause is unconfirmed; it appeared in the same after-midnight-UTC window, so a wall-clock link is likely but not shown. Close by pinning the page clock in `harness.cjs` (for example Playwright `page.clock`) or by anchoring the fixture dates to a fixed hour, then rerunning the chat suites.
+- **Status:** resolved 2026-10-21 (branch `fix/ui-followups`). `tests/ui/harness.cjs` installs Playwright's clock at a fixed mid-afternoon UTC start, so relative fixture dates never cross midnight; time still flows. The fonts test opts out (`clock: false`) because the fake clock empties resource timing. Full `make test-ui` passes.
 
 ## Recurring problems
 
 Track environment/tooling symptoms, workaround and count here; on a second occurrence or a costly first occurrence, promote the solution into applicable guidance and remove the tally.
 
-- **UI harness theme race** (2 occurrences, 2026-10-20 and 2026-10-21 in DS-6's full check, same test, passed 4 of 4 alone). Under full `make test-ui` load, a test without a `ready` selector can fail with `expected the app to apply the dark theme, got null`: `tests/ui/harness.cjs` reads `data-theme` immediately after `page.goto` without waiting for it. Seen on `Google sign-in names its client, hides Username, and keeps checklist ticks`, which then passed 5 of 5 alone (`node tests/ui/run.mjs google-add-account`). Workaround: rerun the suite. Fix: wait for `data-theme` in the harness before checking it.
+- **Full UI suite timeouts under load** (count 1, 2026-10-21): one full `node tests/ui/run.mjs` run failed `chat-reading` "Save applies the reading font…" and `chat-row` "standard rows are 56 px…" after ~22 s each; both files and a second full run passed (263/263). Workaround: rerun the failing files; if it recurs, look at harness timeouts or worker count.

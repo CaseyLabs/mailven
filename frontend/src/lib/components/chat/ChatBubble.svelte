@@ -2,7 +2,8 @@
   // ChatBubble — one message block in the thread column: an optional avatar
   // (Settings → Chat), a sender line ("Name 12:45 PM to 10 people ▾", or "You"),
   // then the body, left-aligned for everyone in either display style. New text reads in Literata at the measure, with
-  // quoted history and signatures behind a "Show quoted text" fold; rich mail
+  // the signature behind a "Show signature" fold and quoted history behind a
+  // "Show quoted text" fold; rich mail
   // renders as sanitized reader content, or as a card when the setting asks;
   // signed or encrypted mail uses the chat text of its verified or decrypted
   // body; mail without chat text, the Original layout setting for signed or
@@ -69,6 +70,7 @@
 
   let showOriginal = $state(false)
   let showQuoted = $state(false)
+  let showSignature = $state(false)
   let showDetails = $state(false)
   let showRecipients = $state(false)
   let cardExpanded = $state(false)
@@ -89,7 +91,7 @@
   const decryptedAttachments = $derived(pgp?.attachments ?? smime?.attachments)
   const hasAttachments = $derived(msg.hasAttachments || (decryptedAttachments?.length ?? 0) > 0)
   // Attachment-only mail: no empty text block above the attachment list.
-  const bare = $derived(mode === 'bubble' && hasAttachments && !chat?.hasQuoted && !chat?.text.trim())
+  const bare = $derived(mode === 'bubble' && hasAttachments && !chat?.hasQuoted && !chat?.signature && !chat?.text.trim())
   const canDarken = $derived(getDarkMailContent() && getIsDarkActive())
   const darken = $derived(canDarken && !darkOverride)
   // Sender-styled HTML shown light in a dark UI sits on a paper card, not a white slab.
@@ -272,6 +274,17 @@
           <div class="overflow-hidden">{@render emailBody()}</div>
         {/if}
       </div>
+
+      <!-- Folds in body order: the signature, then the quoted history. -->
+      {#if mode === 'bubble' && chat!.signature}
+        <ChatFoldToggle open={showSignature} showLabel={$_('chat.showSignature')} hideLabel={$_('chat.hideSignature')} controls="signature-{msg.id}" onToggle={(el) => fold(el, () => (showSignature = !showSignature))} />
+      {/if}
+
+      {#if showSignature && mode === 'bubble'}
+        <div id="signature-{msg.id}" class="{looksPreformatted(chat!.signature ?? '') ? 'font-mono text-mono' : 'font-read text-read-quote'} text-fg-secondary max-w-(--measure) whitespace-pre-wrap wrap-anywhere" data-signature>
+          {@render text(chat!.signature ?? '')}
+        </div>
+      {/if}
 
       {#if mode === 'bubble' && chat!.hasQuoted}
         <ChatFoldToggle open={showQuoted} showLabel={$_('chat.showQuoted')} hideLabel={$_('chat.hideQuoted')} controls="quoted-{msg.id}" onToggle={(el) => fold(el, () => (showQuoted = !showQuoted))} />

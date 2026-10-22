@@ -45,8 +45,8 @@ svg g[stroke-width="2"] { stroke-width: 1.75; }
 .nav-item > svg { color: hsl(var(--fg-tertiary)); flex-shrink: 0; }
 .nav-item:hover { background-color: hsl(var(--surface-hover)); color: hsl(var(--fg-primary)); }
 .nav-item:focus-visible { outline: none; box-shadow: inset 0 0 0 2px hsl(var(--focus)); }
-/* Kit SourceSidebar keeps DOM focus on its <aside> and moves selection with the keys; ring the selected option. */
-aside:focus-visible .nav-item[role="option"][aria-selected="true"] { box-shadow: inset 0 0 0 2px hsl(var(--focus)); }
+/* Kit SourceSidebar keeps DOM focus on its listbox and moves selection with the keys; ring the selected option. */
+[role="listbox"]:focus-visible .nav-item[role="option"][aria-selected="true"] { box-shadow: inset 0 0 0 2px hsl(var(--focus)); }
 .nav-item[aria-current="page"],
 .nav-item[aria-selected="true"],
 .nav-item[data-selected="true"] {

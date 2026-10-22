@@ -81,13 +81,16 @@ exports.openSettings = async (page) => {
 }
 
 // run(options, fn) returns a node:test function that opens the app, runs fn(page, config, t) and closes it.
-// options: width, height, theme ('dark'|'light'), accounts ('expanded'|'collapsed'), previews (bool), avatars (bool, chat-list avatars), hoverActions (bool, row quick actions), messageAvatars (bool, avatars beside messages), readingFont ('serif'|'sans'),
+// options: width, height, theme ('dark'|'light'), accounts ('expanded'|'collapsed'), previews (bool), avatars (bool, chat-list avatars), hoverActions (bool, row quick actions), messageAvatars (bool, avatars beside messages), readingFont ('serif'|'sans'), clock (false: real wall clock),
 // style (label suffix for a variant), allow (binding names that resolve), beforeMount (browser source), ready (selector), path (URL path).
 exports.run = (options, fn) => async (t) => {
   if (!baseURL) throw new Error('MAILVEN_UI_URL is not set; run the suite with `make test-ui` or `node tests/ui/run.mjs`')
   const o = { ...defaults, ...options }
   const config = { ...o, label: describeConfig(o) }
   const context = await (await getBrowser()).newContext({ viewport: { width: o.width, height: o.height }, locale: 'en-GB', timezoneId: 'UTC', reducedMotion: 'reduce' })
+  // Fixed start time (mid-afternoon UTC) so relative fixture dates never straddle midnight; time still flows and timers run.
+  // clock: false keeps the real clock (the fake one also replaces performance, emptying resource timing).
+  if (o.clock !== false) await context.clock.install({ time: new Date('2026-06-10T14:00:00Z') })
   const page = await context.newPage()
   const errors = []
   page.on('pageerror', (e) => { if (!expectedError.test(e.message)) errors.push(e.message) })
@@ -97,7 +100,9 @@ exports.run = (options, fn) => async (t) => {
     if (o.ready) await page.waitForSelector(o.ready, { timeout: 20000 })
     // Final states only: no transition or animation can be sampled mid-way (hover reveals, theme fades).
     await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation-duration:0s!important;animation-delay:0s!important}' })
-    const theme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'))
+    // The app applies data-theme after mount; tests without a ready selector would otherwise read it too early.
+    const theme = await page.waitForFunction(() => document.documentElement.getAttribute('data-theme'), null, { timeout: 20000 })
+      .then((h) => h.jsonValue()).catch(() => null)
     if (theme !== o.theme) throw new Error(`expected the app to apply the ${o.theme} theme, got ${theme}`)
     await fn(page, config, t)
     if (errors.length) throw new Error(`Unexpected page errors [${config.label}]:\n${[...new Set(errors)].slice(0, 5).join('\n')}`)

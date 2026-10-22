@@ -33,7 +33,7 @@ npm install --prefix ~/.cache/mailven-upnote-ui --no-save playwright@1.63.0
 | `chat-secure.test.cjs` | Signed and decrypted mail as chat text with their badges from faked S/MIME and PGP view results, Show original, Original layout, failed decryption |
 | `chat-row.test.cjs` | Chat rows: 56/48 px heights (64/52 with avatars on), unread, hover, selected and focus states, keyboard-reachable quick actions, the paired group avatar, and no avatar, account dot or hover buttons by default |
 | `chat-presentation.test.cjs` | Left-aligned message blocks, "You" on my messages and sender runs, quoted text and signature, sender chats with several subjects, combine/split with Undo |
-| `chat-folds.test.cjs` | DS-3 reading: quoted-text fold and the details button in the message actions (Enter/Space, `aria-expanded`, position hold), the 68ch Literata measure at each reading width, mono for laid-out plain text, the dark-mode paper card and the "New" divider |
+| `chat-folds.test.cjs` | DS-3 reading: quoted-text and signature folds (each opens alone) and the details button in the message actions (Enter/Space, `aria-expanded`, position hold), the 68ch Literata measure at each reading width, mono for laid-out plain text, the dark-mode paper card and the "New" divider |
 | `chat-reading.test.cjs` | DSR-3 reading: the recipient disclosure by keyboard, 10 px paragraph spacing, the left-aligned 760 px column, and the reading-font and avatars-in-messages settings applying live and saving |
 | `inbox-triage.test.cjs` | Pin, snooze, archive, read/unread, the automatic Low priority group, sender priority overrides, Undo |
 | `chat-compose.test.cjs` | Reply vs Reply All, draft autosave and restore, undo-send, reply identity, a refused reply (ISSUES.md R1) |

@@ -64,8 +64,8 @@
   resizeKey="contacts.sidebar"
   onSelect={pick}
 >
-  {#snippet item(it: SidebarItem, { active })}
-    <SourceItem icon={it.icon} label={it.label} {active} onclick={() => pick(it.id)} />
+  {#snippet item(it: SidebarItem, { active, optionId })}
+    <SourceItem id={optionId} icon={it.icon} label={it.label} {active} onclick={() => pick(it.id)} />
   {/snippet}
 
   {#snippet sectionEmpty(_section: { heading?: string; items: SidebarItem[] })}

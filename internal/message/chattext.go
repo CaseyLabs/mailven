@@ -17,10 +17,13 @@ type ChatText struct {
 	// mobile footers removed. It falls back to the full body when stripping
 	// would leave nothing.
 	Text string `json:"text"`
-	// Quoted holds the stripped quoted history and signature, in body order.
+	// Quoted holds the stripped quoted history, in body order.
 	Quoted string `json:"quoted,omitempty"`
 	// HasQuoted reports whether Quoted is non-empty.
 	HasQuoted bool `json:"hasQuoted"`
+	// Signature holds the stripped "-- " signature (without the delimiter)
+	// and any mobile footer under it, so it can fold apart from Quoted.
+	Signature string `json:"signature,omitempty"`
 	// IsRich marks layout-heavy HTML (newsletters, receipts) or very long
 	// text that should render as a collapsed card instead of a bubble.
 	IsRich bool `json:"isRich"`
@@ -143,13 +146,15 @@ func splitChatLines(lines []string, cut int) (ChatText, int) {
 		lo, hi = 0, cut
 	}
 
-	// A mobile footer is dropped, unless a signature above it moves both to Quoted.
-	tailStart := hi
+	// A mobile footer is dropped, unless a signature above it moves both to Signature.
+	end, tailStart := hi, hi
 	if f := lastNonBlank(lines, lo, hi); f > lo && mobileFooterRe.MatchString(strings.TrimSpace(lines[f])) {
 		hi, tailStart = f, f+1
 	}
+	var signature string
 	if s := signatureStart(lines, lo, hi); s >= 0 {
-		hi, tailStart = s, s
+		signature = joinLines(lines[s+1 : end])
+		hi, tailStart = s, end
 	}
 
 	text := joinLines(lines[lo:hi])
@@ -163,7 +168,7 @@ func splitChatLines(lines []string, cut int) (ChatText, int) {
 		}
 	}
 	q := strings.Join(quoted, "\n\n")
-	return ChatText{Text: text, Quoted: q, HasQuoted: q != ""}, hi
+	return ChatText{Text: text, Quoted: q, HasQuoted: q != "", Signature: signature}, hi
 }
 
 // fullText is the fallback when stripping would leave nothing.

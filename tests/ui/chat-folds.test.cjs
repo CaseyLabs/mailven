@@ -1,4 +1,4 @@
-// Reading-first message blocks (DS-3): quoted text and signatures start folded behind a quiet toggle, and
+// Reading-first message blocks (DS-3): quoted text and signatures start folded behind their own quiet toggles (UI18), and
 // details behind a button in the hover actions, both keeping their place when opened; text bodies read in
 // Literata capped at the 68ch measure, laid-out plain text in mono; and in dark mode light HTML mail sits on
 // a paper card.
@@ -18,7 +18,7 @@ const foldFake = `{ const A = window.go.app.App, get = A.GetConversation
     if (id !== 't-trip') return c
     const last = c.messages.length - 1
     c.messages[last] = { ...c.messages[last], chat: { text: ${JSON.stringify(LONG)}, hasQuoted: true, isRich: false,
-      quoted: 'Priya\\n-- \\nSent from the lighthouse\\n\\nOn Monday Sam wrote:\\n> Saturday works for me.' } }
+      quoted: 'On Monday Sam wrote:\\n> Saturday works for me.', signature: 'Priya\\n\\nSent from the lighthouse' } }
     const t = c.messages.findIndex((m) => m.id === 'trip-4')
     c.messages[t] = { ...c.messages[t], chat: { text: ${JSON.stringify(TABLE)}, hasQuoted: false, isRich: false } }
     return c
@@ -59,11 +59,24 @@ describe('chat message folds and reading', () => {
     await page.keyboard.press('Enter')
     const hide = last.getByRole('button', { name: 'Hide quoted text' })
     assert.equal(await hide.getAttribute('aria-expanded'), 'true')
-    await last.getByText(/Sent from the lighthouse/).waitFor()
+    await last.getByText(/Sam wrote/).waitFor()
+    assert.doesNotMatch(await last.innerText(), /Sent from the lighthouse/, 'the quote does not open the signature')
     assert.match(await last.locator('[data-quoted]').evaluate((el) => getComputedStyle(el).fontFamily), /Literata/, 'the quote reads in Literata')
     await page.keyboard.press('Space')
     assert.equal(await quote.getAttribute('aria-expanded'), 'false')
     assert.equal(await last.locator('[data-quoted]').count(), 0, 'Space folds it again')
+
+    // UI18: the signature has its own fold, apart from the quoted history.
+    const sig = last.getByRole('button', { name: 'Show signature' })
+    assert.equal(await sig.getAttribute('aria-expanded'), 'false')
+    assert.equal(await sig.getAttribute('aria-controls'), 'signature-trip-5')
+    await sig.focus()
+    await page.keyboard.press('Enter')
+    assert.equal(await last.getByRole('button', { name: 'Hide signature' }).getAttribute('aria-expanded'), 'true')
+    await last.locator('[data-signature]').getByText(/Sent from the lighthouse/).waitFor()
+    assert.doesNotMatch(await last.innerText(), /Sam wrote/, 'the signature does not open the quote')
+    await page.keyboard.press('Space')
+    assert.equal(await last.locator('[data-signature]').count(), 0, 'Space folds the signature again')
 
     const details = last.getByRole('button', { name: 'Show details' })
     assert.equal(await details.getAttribute('aria-expanded'), 'false')
@@ -86,7 +99,7 @@ describe('chat message folds and reading', () => {
     const before = (await quote.boundingBox()).y
     const scrolled = await log.evaluate((el) => el.scrollTop)
     await quote.click()
-    await last.getByText(/Sent from the lighthouse/).waitFor()
+    await last.getByText(/Sam wrote/).waitFor()
     await page.waitForTimeout(100)
     const after = (await last.getByRole('button', { name: 'Hide quoted text' }).boundingBox()).y
     assert.ok(Math.abs(after - before) <= 1, `the toggle stays put: ${before} → ${after} (scrollTop ${scrolled})`)

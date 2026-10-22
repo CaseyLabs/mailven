@@ -164,6 +164,8 @@
     "draft": "Draft",
     "showQuoted": "Show quoted text",
     "hideQuoted": "Hide quoted text",
+    "showSignature": "Show signature",
+    "hideSignature": "Hide signature",
     "you": "You",
     "showDetails": "Show details",
     "hideDetails": "Hide details",

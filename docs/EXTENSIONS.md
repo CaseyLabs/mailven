@@ -1623,8 +1623,8 @@ The `onDelete` handler typically opens a `ConfirmDialog` (see below) rather than
   selectedId={selected}
   onSelect={pick}
 >
-  {#snippet item(it, { active })}
-    <SourceItem icon={it.icon} label={it.label} {active} onclick={() => pick(it.id)} />
+  {#snippet item(it, { active, optionId })}
+    <SourceItem id={optionId} icon={it.icon} label={it.label} {active} onclick={() => pick(it.id)} />
   {/snippet}
 </SourceSidebar>
 ```
@@ -1634,6 +1634,7 @@ The `onDelete` handler typically opens a `ConfirmDialog` (see below) rather than
 - j/k/Up/Down navigation across the flattened item list
 - Enter to re-select current
 - DOM-level focus; registers as `'sidebar'` slot by default (override via `focusSlot` prop)
+- Listbox semantics: the items sit in a focusable `role="listbox"` (each section a `role="group"` labelled by its heading) whose `aria-activedescendant` names the selected option. Pass the snippet's `optionId` to `SourceItem` as `id`, or the selection is not announced.
 - **Chrome via `SidebarFrame`**: container styling, narrow-mode responsive overlay (slide-in + back button), title rendering, and the body-scroll layout are all delegated to the kit's `SidebarFrame` primitive (see below). SourceSidebar wraps that chrome with its keyboard nav, focus-slot integration, and section/item rendering — but doesn't own the visual shell anymore. The benefit: when sidebar-wide settings (density, etc.) land on `SidebarFrame`, all SourceSidebar consumers inherit them automatically.
 
 #### `SidebarFrame` — sidebar chrome primitive

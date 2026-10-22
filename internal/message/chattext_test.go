@@ -12,6 +12,7 @@ func TestExtractChatText(t *testing.T) {
 		html       string
 		wantText   string
 		wantQuoted []string // substrings expected in Quoted; nil means no quoted part
+		wantSig    string   // exact Signature; empty means none
 		wantRich   bool
 	}{
 		{
@@ -66,10 +67,23 @@ func TestExtractChatText(t *testing.T) {
 			wantQuoted: []string{"> Lunch tomorrow?"},
 		},
 		{
-			name:       "signature after delimiter",
-			text:       "See you then.\n\n-- \nBob Smith\nACME Corp\n",
-			wantText:   "See you then.",
-			wantQuoted: []string{"Bob Smith"},
+			name:     "signature after delimiter",
+			text:     "See you then.\n\n-- \nBob Smith\nACME Corp\n",
+			wantText: "See you then.",
+			wantSig:  "Bob Smith\nACME Corp",
+		},
+		{
+			name:     "signature keeps the mobile footer under it",
+			text:     "See you then.\n\n-- \nBob Smith\n\nSent from my iPhone\n",
+			wantText: "See you then.",
+			wantSig:  "Bob Smith\n\nSent from my iPhone",
+		},
+		{
+			name:       "signature above quoted history folds apart from it",
+			text:       "Sounds good.\n\n-- \nBob Smith\n\nOn Tue, Alice wrote:\n> Lunch tomorrow?\n",
+			wantText:   "Sounds good.",
+			wantQuoted: []string{"On Tue, Alice wrote:", "> Lunch tomorrow?"},
+			wantSig:    "Bob Smith",
 		},
 		{
 			name:     "mobile footer dropped",
@@ -126,8 +140,8 @@ func TestExtractChatText(t *testing.T) {
 			name: "gmail html signature",
 			html: `<div dir="ltr">Thanks!<br clear="all"><div><br></div><span class="gmail_signature_prefix">-- </span><br>` +
 				`<div dir="ltr" class="gmail_signature">Bob Smith<br>ACME</div></div>`,
-			wantText:   "Thanks!",
-			wantQuoted: []string{"Bob Smith"},
+			wantText: "Thanks!",
+			wantSig:  "Bob Smith\nACME",
 		},
 		{
 			name: "outlook desktop html reply",
@@ -162,7 +176,8 @@ func TestExtractChatText(t *testing.T) {
 Bob</pre><div class="moz-cite-prefix">On 10/7/25 10:00 AM, Alice Chen wrote:<br></div>` +
 				`<blockquote type="cite" cite="mid:abc@example.com"><p>Party on Friday?</p></blockquote></body></html>`,
 			wantText:   "Count me in.",
-			wantQuoted: []string{"Bob", "On 10/7/25 10:00 AM, Alice Chen wrote:", "> Party on Friday?"},
+			wantQuoted: []string{"On 10/7/25 10:00 AM, Alice Chen wrote:", "> Party on Friday?"},
+			wantSig:    "Bob",
 		},
 		{
 			name: "html inline reply keeps quotes",
@@ -229,10 +244,10 @@ Bob</pre><div class="moz-cite-prefix">On 10/7/25 10:00 AM, Alice Chen wrote:<br>
 			wantText: "Part one.\n--\n" + strings.TrimSpace(strings.Repeat("Line.\n", signatureMaxLines+1)),
 		},
 		{
-			name:       "signature images do not make a reply rich",
-			html:       `<div>Thanks!</div><table role="presentation" width="100%"><tr><td>-- <br>Bob <img src="a"><img src="b"><img src="c"></td></tr></table>`,
-			wantText:   "Thanks!",
-			wantQuoted: []string{"Bob"},
+			name:     "signature images do not make a reply rich",
+			html:     `<div>Thanks!</div><table role="presentation" width="100%"><tr><td>-- <br>Bob <img src="a"><img src="b"><img src="c"></td></tr></table>`,
+			wantText: "Thanks!",
+			wantSig:  "Bob",
 		},
 		{
 			name:     "gmail signature logo table does not make a reply rich",
@@ -276,6 +291,12 @@ Bob</pre><div class="moz-cite-prefix">On 10/7/25 10:00 AM, Alice Chen wrote:<br>
 				if !strings.Contains(got.Quoted, q) {
 					t.Errorf("Quoted = %q, want it to contain %q", got.Quoted, q)
 				}
+			}
+			if got.Signature != tt.wantSig {
+				t.Errorf("Signature = %q, want %q", got.Signature, tt.wantSig)
+			}
+			if strings.Contains(got.Quoted, tt.wantSig) && tt.wantSig != "" {
+				t.Errorf("Quoted = %q also holds the signature", got.Quoted)
 			}
 			if got.IsRich != tt.wantRich {
 				t.Errorf("IsRich = %v, want %v", got.IsRich, tt.wantRich)

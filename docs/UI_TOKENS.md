@@ -305,10 +305,12 @@ is one left-aligned block in `--chat-stream` with 16 px side padding:
   `measure`. Text laid out with spaces (tables, box drawing; `chatReading.ts`)
   uses `font-mono` `text-mono` instead. Readable-text mail (`ChatReaderMessage`)
   uses the same face and measure, headings in Literata 600.
-- Quoted fold (`ChatFoldToggle`): a quiet 24 px pill in `surface-hover` with
-  `ui-meta` `text-secondary`, `aria-expanded` and `aria-controls`. "Show quoted
-  text" covers quoted history and the signature (`read-quote`, `text-secondary`,
-  a 2 px `border-subtle` rule). Opening a fold keeps its toggle in place.
+- Folds (`ChatFoldToggle`): a quiet 24 px pill in `surface-hover` with
+  `ui-meta` `text-secondary`, `aria-expanded` and `aria-controls`. "Show
+  signature" opens the `-- ` signature (`read-quote`, `text-secondary`, no
+  rule) and "Show quoted text" the quoted history (`read-quote`,
+  `text-secondary`, a 2 px `border-subtle` rule); each opens on its own.
+  Opening a fold keeps its toggle in place.
 - Hover and focus actions (`ChatMessageActions`) sit over the top-right corner
   on `surface-raised` with `shadow-1`; keyboard focus draws the inset `focus`
   outline. Their "Show details" button (`aria-expanded`) lists From, To, Cc, Bcc

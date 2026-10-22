@@ -42,7 +42,7 @@ describe('inbox triage', () => {
     const [[account, key, until]] = await argsOf(page, 'SnoozeChat')
     assert.deepEqual([account, key], ['acc1', 't-omar'])
     const at = new Date(until) // the browser runs in UTC (harness)
-    assert.ok(until > Date.now() && at.getUTCHours() === 8 && at.getUTCMinutes() === 0, `Tomorrow snoozes to 08:00 tomorrow, got ${at.toISOString()}`)
+    assert.ok(until > await page.evaluate(() => Date.now()) && at.getUTCHours() === 8 && at.getUTCMinutes() === 0, `Tomorrow snoozes to 08:00 tomorrow, got ${at.toISOString()}`)
     await menu(page, 'Grace Okafor', 'Unsnooze')
     assert.deepEqual(await argsOf(page, 'UnsnoozeChat'), [['acc1', 't-grace']])
   }))

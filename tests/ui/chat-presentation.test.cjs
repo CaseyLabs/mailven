@@ -1,5 +1,5 @@
 // Chat presentation in the open chat: left-aligned message blocks and sender runs ("You" on mine), quoted text
-// and signatures behind the "Show quoted text" fold, the sticky subject heading, subject headings in a sender chat, and combining/splitting sender chats.
+// and signatures behind their own folds, the sticky subject heading, subject headings in a sender chat, and combining/splitting sender chats.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
@@ -8,14 +8,14 @@ const bubble = (page, id) => page.locator(`[data-message-id="${id}"]`)
 const row = (page, text) => page.locator('[data-chat-row]', { hasText: text })
 const subjects = (page) => page.getByRole('log').getByRole('heading', { level: 3 }).allInnerTexts()
 
-// The trip chat's last message carries quoted history and a signature (the backend moves both to chat.quoted).
+// The trip chat's last message carries quoted history and a signature (the backend splits them into chat.quoted and chat.signature).
 const quotedFake = `{ const A = window.go.app.App, get = A.GetConversation
   A.GetConversation = async (id) => {
     const c = await get(id)
     if (id !== 't-trip') return c
     const last = c.messages.length - 1
     c.messages[last] = { ...c.messages[last], chat: { text: 'Booking the cabin tonight.', hasQuoted: true, isRich: false,
-      quoted: 'Priya\\n-- \\nSent from the lighthouse\\n\\nOn Monday Sam wrote:\\n> Saturday works for me.' } }
+      quoted: 'On Monday Sam wrote:\\n> Saturday works for me.', signature: 'Priya\\n\\nSent from the lighthouse' } }
     return c
   } }`
 
@@ -81,7 +81,7 @@ describe('chat presentation', () => {
     assert.equal(top, 'Ten autumn hikes', 'the heading paints over the messages scrolling under it')
   }))
 
-  it('quoted text and signature hide behind the fold', ui.run({ beforeMount: quotedFake }, async (page) => {
+  it('quoted text and signature hide behind their folds', ui.run({ beforeMount: quotedFake }, async (page) => {
     const last = bubble(page, 'trip-5')
     await last.waitFor()
     assert.match(await last.innerText(), /Booking the cabin tonight\./)
@@ -91,7 +91,9 @@ describe('chat presentation', () => {
     await show.click()
     const hide = last.getByRole('button', { name: 'Hide quoted text' })
     assert.equal(await hide.getAttribute('aria-expanded'), 'true')
-    assert.match(await last.innerText(), /Sent from the lighthouse[\s\S]*Saturday works for me\./, 'the marker reveals signature and quote')
+    assert.match(await last.innerText(), /Saturday works for me\./, 'the marker reveals the quote')
+    await last.getByRole('button', { name: 'Show signature' }).click()
+    assert.match(await last.innerText(), /Sent from the lighthouse[\s\S]*Saturday works for me\./, 'the signature sits above the quote in body order')
     await hide.click()
     assert.doesNotMatch(await last.innerText(), /Sam wrote/, 'and hides them again')
     assert.equal(await bubble(page, 'trip-4').getByRole('button', { name: 'Show quoted text' }).count(), 0, 'no marker without quoted text')

@@ -2609,6 +2609,7 @@ export namespace message {
 	    text: string;
 	    quoted?: string;
 	    hasQuoted: boolean;
+	    signature?: string;
 	    isRich: boolean;
 	    reader?: ReaderBlock[];
 	
@@ -2621,6 +2622,7 @@ export namespace message {
 	        this.text = source["text"];
 	        this.quoted = source["quoted"];
 	        this.hasQuoted = source["hasQuoted"];
+	        this.signature = source["signature"];
 	        this.isRich = source["isRich"];
 	        this.reader = this.convertValues(source["reader"], ReaderBlock);
 	    }

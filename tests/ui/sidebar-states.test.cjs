@@ -131,10 +131,26 @@ describe('sidebar states', () => {
       assert.equal((await probe(item)).bg, hover)
       let ring
       if (view === 'contacts') {
-        // SourceSidebar keeps DOM focus on its <aside>; the keys move selection and the selected option shows the ring.
-        await sidebar.focus()
+        // SourceSidebar keeps DOM focus on its listbox; the keys move selection and the selected option shows the ring.
+        const listbox = sidebar.getByRole('listbox')
+        await listbox.focus()
         await page.keyboard.press('ArrowDown')
-        ring = (await probe(sidebar.locator('.nav-item[aria-selected="true"]'))).shadow
+        const selected = sidebar.locator('.nav-item[aria-selected="true"]')
+        ring = (await probe(selected)).shadow
+        // UI19: every option is owned by the listbox (directly or through a group) and the
+        // listbox names the selected one through aria-activedescendant.
+        const aria = await listbox.evaluate((lb) => ({
+          owned: [...lb.closest('aside').querySelectorAll('[role="option"]')].every((o) => lb.contains(o)),
+          parents: [...lb.querySelectorAll('[role="option"]')].map((o) => o.parentElement.getAttribute('role')),
+          active: lb.getAttribute('aria-activedescendant'),
+          focused: document.activeElement === lb,
+        }))
+        assert.ok(aria.owned && aria.parents.every((r) => r === 'group' || r === 'listbox'), `options sit directly in the listbox or a group: ${JSON.stringify(aria)}`)
+        assert.ok(aria.focused, 'the listbox holds DOM focus')
+        assert.equal(aria.active, await selected.getAttribute('id'), 'aria-activedescendant names the selected option')
+        await page.keyboard.press('ArrowDown')
+        const next = await sidebar.locator('.nav-item[aria-selected="true"]').getAttribute('id')
+        assert.equal(await listbox.getAttribute('aria-activedescendant'), next, 'aria-activedescendant follows the keys')
       } else {
         await item.focus()
         await page.keyboard.press('Tab')

@@ -11,7 +11,7 @@ const beforeMount = 'performance.setResourceTimingBufferSize(10000)'
 
 for (const theme of ['dark', 'light']) {
   for (const accounts of ['expanded', 'collapsed']) {
-    test(`Bundled fonts load locally (${theme}, Accounts ${accounts})`, ui.run({ theme, accounts, beforeMount }, async (page) => {
+    test(`Bundled fonts load locally (${theme}, Accounts ${accounts})`, ui.run({ theme, accounts, beforeMount, clock: false }, async (page) => {
       const result = await page.evaluate(async () => {
         await document.fonts.ready
         // Literata has no user yet (DS-3), so request it as a body would.

@@ -7,13 +7,15 @@ const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
 
 const row = (page, text) => page.locator('[data-chat-row]', { hasText: text })
+// The row's wrapper: the option plus its quick actions, which sit beside the option (UI17).
+const item = (page, text) => page.locator('[data-chat-item]', { hasText: text })
 const density = (d) => `{ window.go.app.App.GetMessageListDensity = async () => '${d}' }`
 
 // The computed look of a row: fill, ring (box-shadow), name weight, preview colour and whether actions show.
 // A visible 2px inset ring is an opaque box-shadow layer; Tailwind leaves transparent layers when no ring is set.
 const look = (r) => r.evaluate((el) => {
   const s = getComputedStyle(el)
-  const actions = el.querySelector('[data-row-actions]')
+  const actions = el.closest('[data-chat-item]').querySelector('[data-row-actions]')
   return {
     fill: s.backgroundColor,
     ring: /rgb\([^)]*\) 0px 0px 0px 2px inset/.test(s.boxShadow),
@@ -54,7 +56,7 @@ describe('chat rows', () => {
       assert.ok(h.actions, 'hover shows the quick actions')
     // The group masks both lines, so no preview glyph shows half-covered beside it.
     const span = await read.evaluate((el) => {
-      const a = el.querySelector('[data-row-actions]').getBoundingClientRect()
+      const a = el.closest('[data-chat-item]').querySelector('[data-row-actions]').getBoundingClientRect()
       const p = el.querySelector('[data-row-preview]').getBoundingClientRect()
       return { top: a.top <= p.top, bottom: a.bottom >= p.bottom }
     })
@@ -72,10 +74,15 @@ describe('chat rows', () => {
   it('quick actions are reachable by keyboard and keep their names', ui.run({ allow: ['MarkAsUnread', 'Archive'], hoverActions: true }, async (page) => {
     const selected = row(page, 'Weekend trip')
     await page.locator('[data-message-id="trip-5"]').waitFor()
-    assert.equal(await row(page, 'Omar Haddad').getByRole('button', { name: 'Archive' }).getAttribute('tabindex'), '-1', 'other rows stay out of the Tab order')
+    assert.equal(await item(page, 'Omar Haddad').getByRole('button', { name: 'Archive' }).getAttribute('tabindex'), '-1', 'other rows stay out of the Tab order')
+    // UI17: no option owns a focusable control (axe nested-interactive); the actions group names its row.
+    const nested = await page.locator('[role="option"][data-chat-row]').evaluateAll((els) =>
+      els.filter((el) => el.querySelector('button, a[href], input, select, textarea, [tabindex]')).length)
+    assert.equal(nested, 0, 'no chat option contains a focusable control')
+    assert.equal(await item(page, 'Weekend trip').locator('[data-row-actions]').getAttribute('aria-controls'), await selected.getAttribute('id'))
     await page.getByRole('listbox').focus()
     // Tab passes the Pinned group's toggle, then reaches the selected row's actions.
-    const archive = selected.getByRole('button', { name: 'Archive', exact: true })
+    const archive = item(page, 'Weekend trip').getByRole('button', { name: 'Archive', exact: true })
     const active = (l) => l.evaluate((el) => el === document.activeElement)
     for (let i = 0; i < 3 && !(await active(archive)); i++) await page.keyboard.press('Tab')
     assert.ok(await active(archive), 'Tab from the list reaches the selected row\'s Archive')
@@ -83,16 +90,16 @@ describe('chat rows', () => {
     const time = selected.locator('.tabular-nums')
     assert.equal(await time.evaluate((el) => getComputedStyle(el).visibility), 'hidden', 'the actions replace the time')
     await page.keyboard.press('Tab')
-    const toggle = selected.getByRole('button', { name: 'Mark as unread', exact: true })
+    const toggle = item(page, 'Weekend trip').getByRole('button', { name: 'Mark as unread', exact: true })
     assert.ok(await active(toggle))
     await page.keyboard.press('Enter')
     await page.waitForFunction(() => window.__calls.some((c) => c.name === 'MarkAsUnread'))
     assert.deepEqual((await ui.calls(page, 'MarkAsUnread')).map((c) => c.args), [[['t-trip-m']]])
     await page.keyboard.press('Tab')
-    assert.ok(await active(selected.getByRole('button', { name: 'Snooze', exact: true })))
+    assert.ok(await active(item(page, 'Weekend trip').getByRole('button', { name: 'Snooze', exact: true })))
     await page.keyboard.press('Enter')
     await page.getByRole('menu').waitFor()
-    assert.equal(await row(page, 'Jamie Chen').getByRole('button', { name: 'Mark as read', exact: true }).count(), 1, 'an unread row offers Mark as read')
+    assert.equal(await item(page, 'Jamie Chen').getByRole('button', { name: 'Mark as read', exact: true }).count(), 1, 'an unread row offers Mark as read')
   }))
 
   it('a group chat shows an overlapping pair with one initial each', ui.run({ avatars: true }, async (page) => {
@@ -115,7 +122,7 @@ describe('chat rows', () => {
   it('by default rows show no avatar, account dot or hover buttons, and the actions stay in the context menu', ui.run({ accounts: 'expanded', allow: ['Archive'] }, async (page) => {
     const omar = row(page, 'Omar Haddad')
     assert.equal(await page.locator('[data-chat-row] [data-avatar-tint]').count(), 0, 'no row has an avatar')
-    assert.equal(await page.locator('[data-chat-row] [data-row-actions]').count(), 0, 'no row has hover buttons')
+    assert.equal(await page.locator('[data-chat-item] [data-row-actions]').count(), 0, 'no row has hover buttons')
     assert.equal(await page.locator('[data-chat-row] [style*="background-color"][title]').count(), 0, 'no row has an account dot')
     await omar.hover()
     assert.equal(await omar.locator('.tabular-nums').evaluate((el) => getComputedStyle(el).visibility), 'visible', 'hover leaves the time in place')

@@ -187,101 +187,107 @@
   {extraItems}
   hideArchive
 >
-  <div
-    {id}
-    role="option"
-    aria-selected={selected}
-    aria-label={ariaLabel}
-    tabindex="-1"
-    data-chat-row
-    data-unread={hasUnread || undefined}
-    draggable={getLayoutMode() !== 'narrow'}
-    data-density={density}
-    title={showAccount ? chat.accountName : undefined}
-    style:height="{rowPx}px"
-    style:contain-intrinsic-size="auto {rowPx}px"
-    class="chat-row group/row relative flex items-center gap-3 px-3 mx-2 my-0.5 rounded-md cursor-pointer outline-hidden transition-colors duration-[80ms] motion-reduce:transition-none {selected ? 'bg-surface-selected text-fg-primary group-data-[focused]/list:ring-2 group-data-[focused]/list:ring-inset group-data-[focused]/list:ring-focus' : 'hover:bg-surface-hover focus-within:bg-surface-hover'}"
-    onclick={onSelect}
-    onkeydown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSelect() } }}
-    ondragstart={handleDragStart}
-  >
-    {#if showAvatars}
-      <!-- Avatar: one person, or an overlapping pair for a group. The front
-           circle is ringed in the row's own fill. -->
-      <div class="relative shrink-0" style:width="{avatarPx}px" style:height="{avatarPx}px" aria-hidden="true">
-        {#if people.length > 1}
-          <div class="absolute top-0 left-0">{@render avatar(people[0], 20, 1)}</div>
-          <div class="absolute bottom-0 right-0 rounded-full ring-2 {fillRing}">{@render avatar(people[1], 20, 1)}</div>
-        {:else}
-          {@render avatar(people[0], avatarPx)}
-        {/if}
-      </div>
-    {/if}
+  <!-- The wrapper holds the hover group and the margins. The quick actions and
+       the snooze anchor sit beside the option, not in it, because an option's
+       children are presentational to assistive technology (UI17). -->
+  <div class="group/row relative mx-2 my-0.5" role="none" data-chat-item>
+    <div
+      {id}
+      role="option"
+      aria-selected={selected}
+      aria-label={ariaLabel}
+      tabindex="-1"
+      data-chat-row
+      data-unread={hasUnread || undefined}
+      draggable={getLayoutMode() !== 'narrow'}
+      data-density={density}
+      title={showAccount ? chat.accountName : undefined}
+      style:height="{rowPx}px"
+      style:contain-intrinsic-size="auto {rowPx}px"
+      class="chat-row relative flex items-center gap-3 px-3 rounded-md cursor-pointer outline-hidden transition-colors duration-[80ms] motion-reduce:transition-none {selected ? 'bg-surface-selected text-fg-primary group-data-[focused]/list:ring-2 group-data-[focused]/list:ring-inset group-data-[focused]/list:ring-focus' : 'group-hover/row:bg-surface-hover group-focus-within/row:bg-surface-hover'}"
+      onclick={onSelect}
+      onkeydown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSelect() } }}
+      ondragstart={handleDragStart}
+    >
+      {#if showAvatars}
+        <!-- Avatar: one person, or an overlapping pair for a group. The front
+             circle is ringed in the row's own fill. -->
+        <div class="relative shrink-0" style:width="{avatarPx}px" style:height="{avatarPx}px" aria-hidden="true">
+          {#if people.length > 1}
+            <div class="absolute top-0 left-0">{@render avatar(people[0], 20, 1)}</div>
+            <div class="absolute bottom-0 right-0 rounded-full ring-2 {fillRing}">{@render avatar(people[1], 20, 1)}</div>
+          {:else}
+            {@render avatar(people[0], avatarPx)}
+          {/if}
+        </div>
+      {/if}
 
-    <div class="flex-1 min-w-0">
-      <!-- Line one: people and time -->
-      <div class="flex items-baseline gap-2">
-        <span class="flex-1 min-w-0 truncate text-fg-primary {hasUnread ? 'text-ui-name-strong' : 'text-ui-name'}" data-row-name>{title}</span>
-        <span class="shrink-0 text-ui-meta tabular-nums text-fg-tertiary {hoverActions ? hideOnHover : ''}">{time}</span>
-      </div>
-      <!-- Line two: subject, preview, status icons and the status slot -->
-      <div class="flex items-center gap-1.5">
-        <span class="flex-1 min-w-0 truncate text-ui-small {hasUnread ? 'text-fg-primary' : 'text-fg-secondary'}">
-          <!-- Chat search highlights the subject with its prefixes already dropped. -->
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
-          {#if chat.highlightedSubject}{@html chat.highlightedSubject}{:else}{subject}{/if}
-          {#if showPreview}
-            <span class={hasUnread ? 'text-fg-secondary' : 'text-fg-tertiary'} data-row-preview> — <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
-              {#if chat.highlightedSnippet}{@html chat.highlightedSnippet}{:else}{chat.snippet}{/if}</span>
-          {/if}
-        </span>
-        {@render statusIcons()}
-        <!-- Status glyph: one slot, kept even when empty so rows align.
-             Unread under a higher-priority glyph shows as a small dot on its corner. -->
-        <span class="relative flex items-center justify-center w-4 shrink-0 {hoverActions ? hideOnHover : ''}" data-row-status={status ?? undefined} aria-hidden="true">
-          {#if status === 'sending'}
-            <span title={$_('chat.sending')}><Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
-          {:else if status === 'snoozed'}
-            <span title={$_('chat.snoozedUntil', { values: { time: snoozeTime } })}><Icon icon="lucide:alarm-clock" class="w-4 h-4 text-fg-tertiary" /></span>
-          {:else if status === 'unread'}
-            <span class="w-2 h-2 rounded-full bg-accent"></span>
-          {/if}
-          {#if hasUnread && status !== 'unread'}
-            <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-accent ring-1 {fillRing}" data-row-unread></span>
-          {/if}
-        </span>
+      <div class="flex-1 min-w-0">
+        <!-- Line one: people and time -->
+        <div class="flex items-baseline gap-2">
+          <span class="flex-1 min-w-0 truncate text-fg-primary {hasUnread ? 'text-ui-name-strong' : 'text-ui-name'}" data-row-name>{title}</span>
+          <span class="shrink-0 text-ui-meta tabular-nums text-fg-tertiary {hoverActions ? hideOnHover : ''}">{time}</span>
+        </div>
+        <!-- Line two: subject, preview, status icons and the status slot -->
+        <div class="flex items-center gap-1.5">
+          <span class="flex-1 min-w-0 truncate text-ui-small {hasUnread ? 'text-fg-primary' : 'text-fg-secondary'}">
+            <!-- Chat search highlights the subject with its prefixes already dropped. -->
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
+            {#if chat.highlightedSubject}{@html chat.highlightedSubject}{:else}{subject}{/if}
+            {#if showPreview}
+              <span class={hasUnread ? 'text-fg-secondary' : 'text-fg-tertiary'} data-row-preview> — <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
+                {#if chat.highlightedSnippet}{@html chat.highlightedSnippet}{:else}{chat.snippet}{/if}</span>
+            {/if}
+          </span>
+          {@render statusIcons()}
+          <!-- Status glyph: one slot, kept even when empty so rows align.
+               Unread under a higher-priority glyph shows as a small dot on its corner. -->
+          <span class="relative flex items-center justify-center w-4 shrink-0 {hoverActions ? hideOnHover : ''}" data-row-status={status ?? undefined} aria-hidden="true">
+            {#if status === 'sending'}
+              <span title={$_('chat.sending')}><Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
+            {:else if status === 'snoozed'}
+              <span title={$_('chat.snoozedUntil', { values: { time: snoozeTime } })}><Icon icon="lucide:alarm-clock" class="w-4 h-4 text-fg-tertiary" /></span>
+            {:else if status === 'unread'}
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+            {/if}
+            {#if hasUnread && status !== 'unread'}
+              <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-accent ring-1 {fillRing}" data-row-unread></span>
+            {/if}
+          </span>
+        </div>
       </div>
     </div>
 
-    {#if hoverActions}
-      <!-- Quick actions replace the time and status slot on hover and when one
-           has focus. The group spans both lines so it masks them cleanly, inset
-           2 px to keep the focus ring. Tab reaches the selected row's actions. -->
-      <div
-        class="absolute inset-y-0.5 right-0.5 pl-2 pr-1.5 flex items-center gap-0.5 rounded-r-md opacity-0 pointer-events-none group-hover/row:opacity-100 group-hover/row:pointer-events-auto group-focus-within/row:opacity-100 group-focus-within/row:pointer-events-auto {selected ? 'bg-surface-selected' : 'bg-surface-hover'}"
-        role="group"
-        aria-label={$_('chat.quickActions')}
-        data-row-actions
-      >
-        {@render quickAction($_('viewer.archive'), 'lucide:archive', actions.onArchive)}
-        {@render quickAction(hasUnread ? $_('viewer.markAsRead') : $_('viewer.markAsUnread'), hasUnread ? 'lucide:mail-open' : 'lucide:mail', actions.onToggleRead)}
-        {@render quickAction($_('chat.snooze'), 'lucide:alarm-clock', () => void openSnooze())}
-      </div>
-    {/if}
+      {#if hoverActions}
+        <!-- Quick actions replace the time and status slot on hover and when one
+             has focus. The group spans both lines so it masks them cleanly, inset
+             2 px to keep the focus ring. Tab reaches the selected row's actions. -->
+        <div
+          class="absolute inset-y-0.5 right-0.5 pl-2 pr-1.5 flex items-center gap-0.5 rounded-r-md opacity-0 pointer-events-none group-hover/row:opacity-100 group-hover/row:pointer-events-auto group-focus-within/row:opacity-100 group-focus-within/row:pointer-events-auto {selected ? 'bg-surface-selected' : 'bg-surface-hover'}"
+          role="group"
+          aria-label={$_('chat.quickActions')}
+          aria-controls={id}
+          data-row-actions
+        >
+          {@render quickAction($_('viewer.archive'), 'lucide:archive', actions.onArchive)}
+          {@render quickAction(hasUnread ? $_('viewer.markAsRead') : $_('viewer.markAsUnread'), hasUnread ? 'lucide:mail-open' : 'lucide:mail', actions.onToggleRead)}
+          {@render quickAction($_('chat.snooze'), 'lucide:alarm-clock', () => void openSnooze())}
+        </div>
+      {/if}
 
-    {#if snoozeMounted}
-      <!-- Hidden anchor so the snooze menu opens at the row's top-right. -->
-      <div class="absolute right-2 top-1.5" aria-hidden="true">
-        <ChatSnoozeMenu
-          bind:this={snoozeMenu}
-          hiddenTrigger
-          onClose={handleSnoozeClose}
-          snoozedUntil={chat.snoozedUntil}
-          onSnooze={actions.onSnooze}
-          onUnsnooze={actions.onUnsnooze}
-        />
-      </div>
-    {/if}
+      {#if snoozeMounted}
+        <!-- Hidden anchor so the snooze menu opens at the row's top-right. -->
+        <div class="absolute right-2 top-1.5" aria-hidden="true">
+          <ChatSnoozeMenu
+            bind:this={snoozeMenu}
+            hiddenTrigger
+            onClose={handleSnoozeClose}
+            snoozedUntil={chat.snoozedUntil}
+            onSnooze={actions.onSnooze}
+            onUnsnooze={actions.onUnsnooze}
+          />
+        </div>
+      {/if}
   </div>
 </MessageContextMenu>
 
