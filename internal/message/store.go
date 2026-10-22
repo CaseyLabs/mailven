@@ -194,7 +194,7 @@ func (s *Store) ListConversationsUnifiedInbox(offset, limit int, sortOrder, filt
 
 		if participantsJSON.Valid {
 			var latestSnippet string
-			c.Participants, latestSnippet = parseParticipantsJSON(participantsJSON.String)
+			c.Participants, latestSnippet, c.LatestSender = parseParticipantsJSON(participantsJSON.String)
 			if latestSnippet != "" {
 				c.Snippet = latestSnippet
 			}
@@ -1448,7 +1448,7 @@ func (s *Store) ListConversationsByFolder(folderID string, offset, limit int, so
 			}
 			if !useToList {
 				var latestSnippet string
-				c.Participants, latestSnippet = parseParticipantsJSON(participantsJSON.String)
+				c.Participants, latestSnippet, c.LatestSender = parseParticipantsJSON(participantsJSON.String)
 				if latestSnippet != "" {
 					c.Snippet = latestSnippet
 				}
@@ -1467,10 +1467,12 @@ func (s *Store) ListConversationsByFolder(folderID string, offset, limit int, so
 // Participants[0] is always the LATEST message's sender (#169; SQLite fills
 // aggregates in scan order, which is oldest-first). The second return value
 // is the newest non-empty snippet (falling back to the newest), so the row
-// preview also reflects the latest message; empty when undeterminable.
-func parseParticipantsJSON(s string) ([]Address, string) {
+// preview also reflects the latest message; empty when undeterminable. The
+// third is that snippet's sender (the newest sender when no message has one),
+// so the row can prefix the preview with who wrote it.
+func parseParticipantsJSON(s string) ([]Address, string, Address) {
 	if s == "" || s == "[]" {
-		return nil, ""
+		return nil, "", Address{}
 	}
 	var raw []struct {
 		Name    string `json:"name"`
@@ -1479,7 +1481,7 @@ func parseParticipantsJSON(s string) ([]Address, string) {
 		Snippet string `json:"snippet"`
 	}
 	if err := json.Unmarshal([]byte(s), &raw); err != nil {
-		return nil, ""
+		return nil, "", Address{}
 	}
 	// Dates share one storage format (written by the same driver), so
 	// lexicographic comparison orders them correctly.
@@ -1489,9 +1491,11 @@ func parseParticipantsJSON(s string) ([]Address, string) {
 	participants := make([]Address, 0, len(raw))
 	seen := make(map[string]bool, len(raw))
 	latestSnippet := ""
+	latestSender := Address{Name: raw[0].Name, Email: raw[0].Email}
 	for _, r := range raw {
 		if latestSnippet == "" && r.Snippet != "" {
 			latestSnippet = r.Snippet
+			latestSender = Address{Name: r.Name, Email: r.Email}
 		}
 		key := strings.ToLower(r.Email)
 		if seen[key] {
@@ -1500,7 +1504,7 @@ func parseParticipantsJSON(s string) ([]Address, string) {
 		seen[key] = true
 		participants = append(participants, Address{Name: r.Name, Email: r.Email})
 	}
-	return participants, latestSnippet
+	return participants, latestSnippet, latestSender
 }
 
 // parseAggregatedToListJSON parses the nested array produced by
@@ -2495,7 +2499,7 @@ func (s *Store) SearchConversations(folderID, query string, offset, limit int, f
 		// highlighted snippet reflects the latest message (#169)
 		if participantsJSON.Valid {
 			var latestSnippet string
-			c.Participants, latestSnippet = parseParticipantsJSON(participantsJSON.String)
+			c.Participants, latestSnippet, c.LatestSender = parseParticipantsJSON(participantsJSON.String)
 			if latestSnippet != "" {
 				c.Snippet = latestSnippet
 			}
@@ -2626,7 +2630,7 @@ func (s *Store) SearchConversationsUnifiedInbox(query string, offset, limit int,
 		// highlighted snippet reflects the latest message (#169)
 		if participantsJSON.Valid {
 			var latestSnippet string
-			c.Participants, latestSnippet = parseParticipantsJSON(participantsJSON.String)
+			c.Participants, latestSnippet, c.LatestSender = parseParticipantsJSON(participantsJSON.String)
 			if latestSnippet != "" {
 				c.Snippet = latestSnippet
 			}

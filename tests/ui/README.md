@@ -67,7 +67,7 @@ with its reason, never in a broad pattern.
 
 Use `ui.run(options, async (page, config) => { ... })` from `harness.cjs`. The options are:
 
-- `width`, `height`, `theme`, `accounts`, `previews`, `avatars`, `hoverActions`, `messageAvatars`, `readingFont`
+- `width`, `height`, `theme`, `accounts`, `previews`, `avatars`, `hoverActions`, `messageAvatars`, `readingFont`, `displayStyle`
 - `allow`: binding names that resolve instead of rejecting
 - `beforeMount`: browser source that runs after the fakes and before the app, for example to wrap
   `window.go.app.App.GetConversation`

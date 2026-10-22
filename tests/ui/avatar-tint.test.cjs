@@ -45,7 +45,7 @@ describe('avatar tints', () => {
 
   it('one sender gets one tint in the list, the open chat and Contacts', ui.run({ beforeMount: contactsFake, avatars: true, messageAvatars: true }, async (page) => {
     const tintIn = (scope) => scope.locator('[data-avatar-tint]').first().getAttribute('data-avatar-tint')
-    const tripRow = page.locator('[data-chat-row]', { hasText: 'Weekend trip' })
+    const tripRow = page.locator('[data-chat-row]', { hasText: 'Priya Shah' })
     await tripRow.waitFor()
     const rowTints = await tripRow.locator('[data-avatar-tint]').evaluateAll((els) => els.map((e) => e.dataset.avatarTint))
     assert.ok(rowTints.includes('teal'), `the trip row shows Priya in teal: ${rowTints}`)

@@ -80,6 +80,10 @@
   --color-border-control: hsl(var(--border-control));
   --color-paper: hsl(var(--paper));
   --color-paper-text: hsl(var(--paper-text));
+  --color-bubble-in: hsl(var(--bubble-in));
+  --color-bubble-out: hsl(var(--bubble-out));
+  --color-bubble-quote-rail: hsl(var(--bubble-quote-rail));
+  --color-divider-pill: hsl(var(--divider-pill));
   --color-danger: hsl(var(--danger));
 
   --color-popover: hsl(var(--popover));
@@ -98,6 +102,8 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-full: 999px;
+  /* CF: message bubbles' outer corners; joined corners use radius-sm. */
+  --radius-bubble: 1.125rem;
 
   /* DS elevation: values per theme in built-in.css (--elevation-1…3). */
   --shadow-1: var(--elevation-1);
@@ -161,6 +167,9 @@
   --text-read-quote--line-height: 1.5rem;
   --text-read-small: 0.875rem;
   --text-read-small--line-height: 1.375rem;
+  /* CF: message text in a bubble (Inter by default; Literata with Message font → Serif). */
+  --text-bubble-body: 0.9375rem;
+  --text-bubble-body--line-height: 1.375rem;
   --text-mono: 0.8125rem;
   --text-mono--line-height: 1.25rem;
 
@@ -259,6 +268,20 @@
   --chat-stream: 54rem;
 }
 
+/* Bubbles (CF, Settings → Chat → Message style): the stream is centred at
+   stream-max (820px) so incoming and outgoing bubbles both have room; Blocks
+   keeps the DSR left-aligned thread column. Bubbles hug short text up to
+   bubble-max (72%, at most 560px); long text (CF-2) widens to bubble-long-max
+   (88%, at most 640px). */
+:root {
+  --stream-max: 51.25rem;
+  --bubble-max: min(72%, 35rem);
+  --bubble-long-max: min(88%, 40rem);
+}
+:root[data-display-style='bubbles']:not([data-reading-width='wide']) {
+  --chat-stream: var(--stream-max);
+}
+
 /* The thread column is left-aligned at a gutter (DSR-3): the header, messages,
    day dividers, fold rows and the anchored composer share it. Narrow windows
    keep a 16px gutter. */
@@ -267,6 +290,9 @@
     width: 100%;
     max-width: var(--chat-stream);
     padding-inline: 1rem;
+  }
+  :root[data-display-style='bubbles'] .chat-col {
+    margin-inline: auto;
   }
   @media (min-width: 900px) {
     .chat-col {
@@ -280,6 +306,12 @@
    (which @theme inline bakes in as a literal family). */
 :root[data-reading-font='sans'] [data-chat-stream] .font-read {
   font-family: var(--font-ui);
+}
+
+/* A long bubble, once opened, reads in the reading face whatever the Message
+   font (CF-2): it is a letter, not a chat line. */
+[data-chat-stream] .font-long {
+  font-family: var(--font-read);
 }
 
 @layer base {

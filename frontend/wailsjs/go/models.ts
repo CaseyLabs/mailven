@@ -2772,6 +2772,7 @@ export namespace message {
 	    // Go type: time
 	    latestDate: any;
 	    participants: Address[];
+	    latestSender: Address;
 	    messageIds: string[];
 	    isEncrypted: boolean;
 	    messages?: Message[];
@@ -2802,6 +2803,7 @@ export namespace message {
 	        this.isStarred = source["isStarred"];
 	        this.latestDate = this.convertValues(source["latestDate"], null);
 	        this.participants = this.convertValues(source["participants"], Address);
+	        this.latestSender = this.convertValues(source["latestSender"], Address);
 	        this.messageIds = source["messageIds"];
 	        this.isEncrypted = source["isEncrypted"];
 	        this.messages = this.convertValues(source["messages"], Message);
@@ -2846,6 +2848,7 @@ export namespace message {
 	    // Go type: time
 	    latestDate: any;
 	    participants: Address[];
+	    latestSender: Address;
 	    messageIds: string[];
 	    isEncrypted: boolean;
 	    messages?: Message[];
@@ -2877,6 +2880,7 @@ export namespace message {
 	        this.isStarred = source["isStarred"];
 	        this.latestDate = this.convertValues(source["latestDate"], null);
 	        this.participants = this.convertValues(source["participants"], Address);
+	        this.latestSender = this.convertValues(source["latestSender"], Address);
 	        this.messageIds = source["messageIds"];
 	        this.isEncrypted = source["isEncrypted"];
 	        this.messages = this.convertValues(source["messages"], Message);
@@ -2924,6 +2928,7 @@ export namespace message {
 	    // Go type: time
 	    latestDate: any;
 	    participants: Address[];
+	    latestSender: Address;
 	    messageIds: string[];
 	    isEncrypted: boolean;
 	    messages?: Message[];
@@ -2947,6 +2952,7 @@ export namespace message {
 	        this.isStarred = source["isStarred"];
 	        this.latestDate = this.convertValues(source["latestDate"], null);
 	        this.participants = this.convertValues(source["participants"], Address);
+	        this.latestSender = this.convertValues(source["latestSender"], Address);
 	        this.messageIds = source["messageIds"];
 	        this.isEncrypted = source["isEncrypted"];
 	        this.messages = this.convertValues(source["messages"], Message);
@@ -2985,6 +2991,7 @@ export namespace message {
 	    // Go type: time
 	    latestDate: any;
 	    participants: Address[];
+	    latestSender: Address;
 	    messageIds: string[];
 	    isEncrypted: boolean;
 	    messages?: Message[];
@@ -3013,6 +3020,7 @@ export namespace message {
 	        this.isStarred = source["isStarred"];
 	        this.latestDate = this.convertValues(source["latestDate"], null);
 	        this.participants = this.convertValues(source["participants"], Address);
+	        this.latestSender = this.convertValues(source["latestSender"], Address);
 	        this.messageIds = source["messageIds"];
 	        this.isEncrypted = source["isEncrypted"];
 	        this.messages = this.convertValues(source["messages"], Message);

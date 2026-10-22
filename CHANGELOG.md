@@ -19,13 +19,20 @@ Mailven is an independent email client derived from [Aerion](https://github.com/
 - Easier-to-read text: one size step larger throughout the app
 - Clearer hierarchy: contrast-checked primary, secondary and tertiary text, and a tonal step between the Accounts column, chat list and conversation pane in Dark and Light
 - No left navigation rail: Mail, enabled extensions and Settings are labeled options at the top of each view's sidebar, so with the sidebar collapsed the chat list sits at the window's left edge; the Accounts column drops its New message action (Compose stays in the list header)
-- Reading-first conversations: messages sit in one left-aligned column under day dividers, each fully shown with the sender, time and "to N people ▾" (no email address), and your own messages labelled "You"; paragraphs are 10 px apart; text is set in Literata (Sans is an option in Settings → Chat) at a comfortable measure; avatars beside messages are off unless you turn them on; quoted text, signatures and details fold behind quiet toggles; a "New" divider marks the first unread message; only chats of more than 60 messages fold their oldest read messages into an "N earlier messages" line; in Dark, sender-styled HTML mail shows on a soft light card; the Reading width setting (Narrow, Standard, Wide) still applies
-- Two-row thread header: a toolbar of labelled actions (icons only below 1100 px) above the subject with "N people · N messages"
-- Calmer inbox: two-line rows with no account dots and no avatars by default, a tinted selected row, and quick actions on hover only if you turn them on (Settings → Chat); the actions stay in the row menu and on the keyboard
+- Readable conversations: quoted text, signatures and details fold behind quiet toggles; a "New" divider marks the first unread message; only chats of more than 60 messages fold their oldest read messages into an "N earlier messages" line; in Dark, sender-styled HTML mail shows on a soft light card; the Reading width setting (Narrow, Standard, Wide) still applies
 - Brighter, cooler Dark theme: slate-blue surfaces with the reading pane as the lightest plane, the terracotta accent unchanged; Light keeps its warm palette
-- A composer card anchored to the bottom of the conversation, collapsed to a one-line reply bar until focused; one filled button per view; Lucide icons throughout and sidebar items that share the chat list's hover, selected and focus states; muted avatar tints; no divider lines between panes or rows
+- One filled button per view; Lucide icons throughout and sidebar items that share the chat list's hover, selected and focus states; muted avatar tints; no divider lines between panes or rows
 - Nothing animates when the system asks for reduced motion
 - Design tokens documented in `docs/UI_TOKENS.md`; `make lint` checks text contrast
+
+**Chat-first revision**
+
+- Message bubbles by default: other people's messages on the left in a neutral bubble, yours on the right in a warm tint, grouped when one person writes several in a row, with the time under each group (Settings → Chat → Message style → Blocks keeps the one-column layout)
+- Chat events in the stream: people added or removed and topic changes show as centred lines, and days as small pills
+- Long messages fold to about six lines with "Read full message · N min" and open in place in the reading font
+- People-first chat list: avatars on by default, the people on the first line and the latest message on the second ("You:" or the writer's first name in group chats) instead of the subject, an unread count badge, and the time in the accent colour while unread; Settings → General → Hide message preview shows the subject instead
+- A one-row conversation header: the chat's picture, the people (click for addresses) with the subject and message count below, and only Archive and ⋯ beside them; Delete, Snooze, Mark read, Move and Previous/Next chat are in ⋯ and keep their shortcuts
+- A messenger-style reply field: "Message Priya, Sam", Attach and ⋯ inside, a round Send button beside it; no mail fields with the usual choices, a chip only when you reply to one person instead of everyone, and every other option under ⋯ (Open in full composer for Cc, Bcc and a new subject)
 
 **Migration to Mailven**
 

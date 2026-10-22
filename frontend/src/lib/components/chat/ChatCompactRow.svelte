@@ -1,8 +1,9 @@
 <script lang="ts">
   // ChatCompactRow — one quiet line standing for a run of earlier messages;
-  // a button that expands or collapses the run.
+  // a button that expands or collapses the run. Bubbles centre it as a pill.
   import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
+  import { getChatDisplayStyle } from '$lib/stores/settings.svelte'
 
   interface Props {
     count: number
@@ -11,13 +12,18 @@
   }
 
   let { count, open, onToggle }: Props = $props()
+  const shape = $derived(
+    getChatDisplayStyle() === 'bubbles'
+      ? 'mx-auto mt-5 h-7 rounded-full bg-divider-pill px-3 text-fg-tertiary'
+      : 'mt-6 w-full h-8 rounded-md px-2 text-left text-fg-secondary',
+  )
 </script>
 
-<div class="chat-col">
+<div class="chat-col flex">
   <button
     type="button"
     data-compact-row
-    class="mt-6 flex w-full items-center gap-2 h-8 rounded-md px-2 text-left text-ui-meta text-fg-secondary hover:bg-surface-hover hover:text-fg-primary transition-colors duration-80 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-focus"
+    class="{shape} flex items-center gap-2 text-ui-meta hover:bg-surface-hover hover:text-fg-primary transition-colors duration-80 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-focus"
     aria-expanded={open}
     onclick={(e) => onToggle(e.currentTarget)}
   >

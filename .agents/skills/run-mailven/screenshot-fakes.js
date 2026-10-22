@@ -15,7 +15,7 @@ window.__installFakes = (win) => {
   }
   const p = (name, email) => ({ name, email })
   const sam = p('Sam Rivera', 'sam.rivera@example.org'), priya = p('Priya Shah', 'priya@example.net'), jamie = p('Jamie Chen', 'jamie.chen@example.com')
-  const chat = (id, subject, snippet, people, ago, o = {}) => ({ threadId: id, threadKey: id, subject, snippet, messageCount: o.count ?? 3, unreadCount: o.unread ?? 0, hasAttachments: !!o.att, isStarred: false, latestDate: iso(ago), participants: [...people, me], recipients: [], messageIds: [id + '-m'], isEncrypted: false, accountId: 'acc1', accountName: 'Personal', accountColor: '#88c0d0', folderId: 'f1-inbox', senderEmail: o.sender ?? '', isPinned: !!o.pinned, isLowPriority: !!o.low })
+  const chat = (id, subject, snippet, people, ago, o = {}) => ({ threadId: id, threadKey: id, subject, snippet, messageCount: o.count ?? 3, unreadCount: o.unread ?? 0, hasAttachments: !!o.att, isStarred: false, latestDate: iso(ago), participants: [...people, me], latestSender: o.from ?? people[0], recipients: [], messageIds: [id + '-m'], isEncrypted: false, accountId: 'acc1', accountName: 'Personal', accountColor: '#88c0d0', folderId: 'f1-inbox', senderEmail: o.sender ?? '', isPinned: !!o.pinned, isLowPriority: !!o.low })
   const pinned = [
     chat('t-trip', 'Weekend trip to the coast', 'Booking the cabin tonight. Sunday dinner is on me.', [priya, sam], 25 * 60e3, { pinned: true, count: 6 }),
     chat('t-mum', 'Sunday lunch', 'Lovely, see you at one. Bring the lemon tart!', [p('Mum', 'mum@example.com')], 3 * H, { pinned: true }),
@@ -27,7 +27,7 @@ window.__installFakes = (win) => {
     chat('t-kim', 'Photos from the wedding', 'Uploaded the whole album, there are some great ones of you two.', [p('Kim Park', 'kim.park@example.com')], 26 * H, { att: true, count: 4 }),
     chat('t-noah', 'Running club Thursday', 'Same route as last week? I can bring the new route map.', [p('Noah Williams', 'noah.w@example.net'), p('Ines Duarte', 'ines@example.pt')], 2 * D, { count: 8 }),
     chat('t-library', 'Your reservation is ready', 'The book you reserved is ready for collection until Friday.', [p('City Library', 'noreply@library.example')], 3 * D, { count: 1 }),
-    chat('t-grace', 'Recipe you asked for', 'Here it is. The trick is to toast the spices first.', [p('Grace Okafor', 'grace.okafor@example.com')], 4 * D, { count: 3 }),
+    chat('t-grace', 'Recipe you asked for', 'Thank you! Toasting the spices first, got it.', [p('Grace Okafor', 'grace.okafor@example.com')], 4 * D, { count: 3, from: me }),
   ]
   const low = [
     chat('sender:news@trailmag.example', 'Ten autumn hikes worth the drive', 'This week: coastal paths, quiet ridges and where to find good coffee.', [p('Trail Magazine', 'news@trailmag.example')], 6 * H, { low: true, sender: 'news@trailmag.example', count: 12 }),

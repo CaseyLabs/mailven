@@ -1,6 +1,6 @@
 // Reading-first message blocks (DS-3): quoted text and signatures start folded behind their own quiet toggles (UI18), and
 // details behind a button in the hover actions, both keeping their place when opened; text bodies read in
-// Literata capped at the 68ch measure, laid-out plain text in mono; and in dark mode light HTML mail sits on
+// Literata capped at the 68ch measure (Blocks with Serif), laid-out plain text in mono; and in dark mode light HTML mail sits on
 // a paper card.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
@@ -47,7 +47,7 @@ const measure = (loc) => loc.evaluate((el) => {
 })
 
 describe('chat message folds and reading', () => {
-  it('quoted text and details start folded and toggle with Enter and Space', ui.run({ beforeMount: foldFake }, async (page) => {
+  it('quoted text and details start folded and toggle with Enter and Space', ui.run({ beforeMount: foldFake, readingFont: 'serif' }, async (page) => {
     const last = block(page, 'trip-5')
     await last.waitFor()
     assert.doesNotMatch(await last.innerText(), /Sent from the lighthouse|Sam wrote/, 'quote and signature start folded')
@@ -106,7 +106,7 @@ describe('chat message folds and reading', () => {
   }))
 
   for (const width of ['narrow', 'standard', 'wide']) {
-    it(`text bodies read in Literata within 68ch (${width} reading width)`, ui.run({ beforeMount: `${foldFake}\n{ window.go.app.App.GetChatReadingWidth = async () => ${JSON.stringify(width)} }`, width: 1600 }, async (page) => {
+    it(`Blocks read in Literata within 68ch (${width} reading width)`, ui.run({ beforeMount: `${foldFake}\n{ window.go.app.App.GetChatReadingWidth = async () => ${JSON.stringify(width)} }`, width: 1600, displayStyle: 'flat', readingFont: 'serif' }, async (page) => {
       const text = block(page, 'trip-5').locator('[data-message-text]')
       await text.waitFor()
       const m = await measure(text)

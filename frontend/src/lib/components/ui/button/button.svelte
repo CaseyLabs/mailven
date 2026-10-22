@@ -48,6 +48,8 @@
     lg: 'h-control-lg px-6',
     'control-lg': 'h-control-lg px-6',
     icon: 'h-control w-8 px-0',
+    // The chat composer's round 40px Send.
+    send: 'size-10 px-0 rounded-full',
   }
 </script>
 

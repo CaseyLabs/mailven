@@ -1,5 +1,5 @@
 <script lang="ts">
-  // ChatPeopleMenu — the open chat's title as a button that lists every
+  // ChatPeopleMenu — the open chat's people as a button that lists every
   // participant with their address, like a messenger's chat details.
   // Choosing someone starts a new message to them; "Copy addresses" copies
   // them all.
@@ -14,10 +14,12 @@
   interface Props {
     people: Person[]
     title: string
+    // Styled as the header's name line (inherits its 16/22 600 text).
+    heading?: boolean
     onComposeTo?: (to: string) => void
   }
 
-  let { people, title, onComposeTo }: Props = $props()
+  let { people, title, heading = false, onComposeTo }: Props = $props()
 
   const addresses = $derived(people.filter((p) => p.email).map(formatAddress))
 
@@ -26,7 +28,7 @@
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger
-    class="min-w-0 max-w-full -ml-1 px-1 rounded-md text-xs text-fg-secondary truncate hover:bg-muted hover:text-fg-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
+    class="min-w-0 max-w-full -ml-1 px-1 rounded-md truncate text-left hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden {heading ? '' : 'text-xs text-fg-secondary hover:text-fg-primary'}"
     title={$_('chat.showPeople')}
   >
     {title}

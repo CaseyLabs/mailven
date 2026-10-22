@@ -53,14 +53,14 @@ let accentUnreadStyle = $state<string>('dot')
 let showMessageListCircles = $state<boolean>(true)
 let showMessageListProfilePics = $state<boolean>(false)
 let alwaysShowMessageCheckbox = $state<boolean>(false)
-let showMessagePreview = $state<boolean>(false)
+let showMessagePreview = $state<boolean>(true)
 let showViewerCircles = $state<boolean>(true)
 // Chat-list row extras; both are opt-in.
-let chatShowAvatars = $state<boolean>(false)
+let chatShowAvatars = $state<boolean>(true)
 let chatHoverActions = $state<boolean>(false)
 // Open-chat reading options: sender avatars are opt-in, and the text face is Serif or Sans.
-let chatMessageAvatars = $state<boolean>(false)
-let chatReadingFont = $state<ChatReadingFont>('serif')
+let chatMessageAvatars = $state<boolean>(true)
+let chatReadingFont = $state<ChatReadingFont>('sans')
 
 // Getter functions to access the state
 export function getMessageListDensity(): MessageListDensity {
@@ -103,8 +103,10 @@ export function getChatDisplayStyle(): ChatDisplayStyle {
   return chatDisplayStyle
 }
 
+// Stores the style and applies it: app.css centres the chat column for bubbles.
 export function setChatDisplayStyle(v: ChatDisplayStyle) {
   chatDisplayStyle = v
+  document.documentElement.dataset.displayStyle = v
 }
 
 export function getChatRichStyle(): ChatRichStyle {
@@ -417,11 +419,11 @@ export async function loadSettings(): Promise<ThemeMode> {
     showMessageListCircles = listCircles ?? true
     showMessageListProfilePics = listProfilePics ?? false
     alwaysShowMessageCheckbox = alwaysCheckbox ?? false
-    showMessagePreview = messagePreview ?? false
-    chatShowAvatars = showAvatars ?? false
+    showMessagePreview = messagePreview ?? true
+    chatShowAvatars = showAvatars ?? true
     chatHoverActions = hoverActions ?? false
-    chatMessageAvatars = messageAvatars ?? false
-    setChatReadingFont(readingFont === 'sans' ? 'sans' : 'serif')
+    chatMessageAvatars = messageAvatars ?? true
+    setChatReadingFont(readingFont === 'serif' ? 'serif' : 'sans')
     showViewerCircles = viewerCircles ?? true
     spellcheckEnabled = scEnabled ?? true
     spellcheckLanguages = filterSupportedDicts(scLangs ?? [])

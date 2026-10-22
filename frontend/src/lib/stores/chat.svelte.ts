@@ -37,6 +37,8 @@ export interface ChatItem {
   snippet: string
   latestDate: Date
   participants: ChatPerson[]
+  // Who sent the snippet's message (CF-3 row prefix); empty when unknown.
+  latestSender: ChatPerson
   recipients: ChatPerson[]
   messageIds: string[]
   messageCount: number
@@ -87,6 +89,7 @@ function toItem(c: message.Chat | message.ChatSearchResult | message.Conversatio
     snippet: decodeEntities(c.snippet || ''),
     latestDate: new Date(c.latestDate),
     participants: (c.participants || []).map((p) => ({ name: p.name || '', email: p.email || '' })),
+    latestSender: { name: c.latestSender?.name || '', email: c.latestSender?.email || '' },
     recipients: (chat.recipients || []).map((p) => ({ name: p.name || '', email: p.email || '' })),
     messageIds: c.messageIds || [],
     messageCount: c.messageCount || 0,
@@ -110,7 +113,7 @@ export function senderEmailOf(threadId: string | null | undefined): string {
 
 // mergeRows appends a page, folding a row whose chat is already listed into
 // it: SearchChats merges a sender chat's threads only within one page. The
-// folded row keeps the newer row's subject and snippet.
+// folded row keeps the newer row's subject, snippet and latest sender.
 function mergeRows(items: ChatItem[], page: ChatItem[]): ChatItem[] {
   const byKey = new Map(items.map((c, i) => [c.key, i]))
   const out = [...items]
@@ -131,6 +134,7 @@ function mergeRows(items: ChatItem[], page: ChatItem[]): ChatItem[] {
       ...o,
       subject: newer.subject,
       snippet: newer.snippet,
+      latestSender: newer.latestSender,
       latestDate: newer.latestDate,
       highlightedSubject: newer.highlightedSubject,
       highlightedSnippet: newer.highlightedSnippet,

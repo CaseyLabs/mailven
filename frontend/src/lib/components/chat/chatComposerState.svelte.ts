@@ -115,6 +115,11 @@ export class ChatComposer {
     return this.replyAllChoice ?? this.#opts.target()?.defaultReplyAll ?? false
   }
 
+  // True while the reply mode is the target's default (no chip to show).
+  get defaultTarget(): boolean {
+    return this.replyAll === (this.#opts.target()?.defaultReplyAll ?? false)
+  }
+
   // Who reply and reply all reach; null while unknown.
   get choices(): ReplyRecipients | null {
     return this.#opts.recipients()
@@ -172,6 +177,11 @@ export class ChatComposer {
 
   toggleReplyAll() {
     this.replyAllChoice = !this.replyAll
+    this.#changed()
+  }
+
+  resetReplyAll() {
+    this.replyAllChoice = null
     this.#changed()
   }
 

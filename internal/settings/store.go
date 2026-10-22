@@ -39,12 +39,12 @@ const (
 	KeyShowMessageListCircles     = "show_message_list_circles"
 	KeyShowMessageListProfilePics = "show_message_list_profile_pics" // render contact photos in the message-list avatar slot (default off)
 	KeyAlwaysShowMessageCheckbox  = "always_show_message_checkbox"   // reserve a fixed checkbox column instead of the hover/swipe slide-reveal (default off)
-	KeyShowMessagePreview         = "show_message_preview"           // show the body preview line in message-list rows (default off)
+	KeyShowMessagePreview         = "show_message_preview"           // show the latest line in chat-list rows (default on)
 	KeyShowViewerCircles          = "show_viewer_circles"
-	KeyChatShowAvatars            = "chat_show_avatars"         // show avatars in chat-list rows (default off)
+	KeyChatShowAvatars            = "chat_show_avatars"         // show avatars in chat-list rows (default on)
 	KeyChatHoverActions           = "chat_hover_actions"        // show quick-action buttons when a chat row is hovered (default off)
-	KeyChatMessageAvatars         = "chat_message_avatars"      // show sender avatars beside messages in an open chat (default off)
-	KeyChatReadingFont            = "chat_reading_font"         // "serif" or "sans": the face for message text in an open chat (default serif)
+	KeyChatMessageAvatars         = "chat_message_avatars"      // show sender avatars beside messages in an open chat (default on)
+	KeyChatReadingFont            = "chat_reading_font"         // "serif" or "sans": the face for message text in an open chat (default sans)
 	KeySpellcheckEnabled          = "spellcheck_enabled"        // composer spellcheck master toggle (defaults on)
 	KeySpellcheckLanguages        = "spellcheck_languages"      // JSON array of enabled dictionary codes, e.g. ["en","en-gb"]
 	KeySpellcheckCustomWords      = "spellcheck_custom_words"   // JSON array of user-added dictionary words
@@ -483,14 +483,14 @@ func (s *Store) SetAlwaysShowMessageCheckbox(enabled bool) error {
 	return s.Set(KeyAlwaysShowMessageCheckbox, v)
 }
 
-// GetShowMessagePreview returns whether message-list rows show the body
-// preview line below the subject. Default: false.
+// GetShowMessagePreview returns whether chat-list rows show the latest line
+// instead of the subject. Default: true (CF-3); a stored "false" is kept.
 func (s *Store) GetShowMessagePreview() (bool, error) {
 	value, err := s.Get(KeyShowMessagePreview)
 	if err != nil {
-		return false, err
+		return true, err
 	}
-	return value == "true", nil
+	return value != "false", nil
 }
 
 // SetShowMessagePreview enables or disables the message-list preview line
@@ -502,13 +502,14 @@ func (s *Store) SetShowMessagePreview(enabled bool) error {
 	return s.Set(KeyShowMessagePreview, v)
 }
 
-// GetChatShowAvatars returns whether chat-list rows show an avatar. Default: false.
+// GetChatShowAvatars returns whether chat-list rows show an avatar. Default:
+// true (CF); a stored "false" is kept.
 func (s *Store) GetChatShowAvatars() (bool, error) {
 	value, err := s.Get(KeyChatShowAvatars)
 	if err != nil {
-		return false, err
+		return true, err
 	}
-	return value == "true", nil
+	return value != "false", nil
 }
 
 // SetChatShowAvatars shows or hides avatars in chat-list rows
@@ -799,13 +800,13 @@ func (s *Store) SetChatRichStyle(style string) error {
 }
 
 // GetChatMessageAvatars returns whether messages in an open chat show the
-// sender's avatar. Default: false.
+// sender's avatar. Default: true (CF); a stored "false" is kept.
 func (s *Store) GetChatMessageAvatars() (bool, error) {
 	value, err := s.Get(KeyChatMessageAvatars)
 	if err != nil {
-		return false, err
+		return true, err
 	}
-	return value == "true", nil
+	return value != "false", nil
 }
 
 // SetChatMessageAvatars shows or hides avatars beside messages in an open chat
@@ -818,13 +819,13 @@ func (s *Store) SetChatMessageAvatars(enabled bool) error {
 }
 
 // GetChatReadingFont returns the face for message text in an open chat:
-// "serif" (default, Literata) or "sans".
+// "sans" (default since CF, Inter) or "serif" (Literata).
 func (s *Store) GetChatReadingFont() (string, error) {
 	value, err := s.Get(KeyChatReadingFont)
-	if value == ChatReadingFontSans {
+	if value == ChatReadingFontSerif {
 		return value, err
 	}
-	return ChatReadingFontSerif, err
+	return ChatReadingFontSans, err
 }
 
 // SetChatReadingFont sets the face for message text in an open chat.

@@ -25,7 +25,7 @@ async function chatSettings(page) {
 }
 
 describe('chat reading', () => {
-  it('the recipient disclosure opens by keyboard and shows names, not addresses', ui.run({}, async (page) => {
+  it('the recipient disclosure opens by keyboard and shows names, not addresses (Blocks)', ui.run({ displayStyle: 'flat' }, async (page) => {
     const msg = bubble(page, 'trip-0')
     await msg.waitFor()
     const toggle = msg.locator('[data-recipients-toggle]')
@@ -42,7 +42,7 @@ describe('chat reading', () => {
     assert.equal(await toggle.getAttribute('aria-expanded'), 'false', 'Space closes it again')
   }))
 
-  it('plain-text paragraphs are 10px apart', ui.run({ beforeMount: paragraphs }, async (page) => {
+  it('plain-text paragraphs are 10px apart in Blocks', ui.run({ beforeMount: paragraphs, displayStyle: 'flat' }, async (page) => {
     const text = bubble(page, 'trip-5').locator('[data-message-text]')
     await text.waitFor()
     const ps = text.locator('p')
@@ -51,7 +51,22 @@ describe('chat reading', () => {
     assert.equal(Math.round(b.y - (a.y + a.height)), 10, 'ten pixels between paragraphs')
   }))
 
-  it('messages sit in a left-aligned column, 760px at most', ui.run({ width: 1800 }, async (page) => {
+  it('bubble paragraphs are 8px apart', ui.run({ beforeMount: paragraphs }, async (page) => {
+    const ps = bubble(page, 'trip-5').locator('[data-message-text] p')
+    await ps.first().waitFor()
+    const [a, b] = [await ps.nth(0).boundingBox(), await ps.nth(1).boundingBox()]
+    assert.equal(Math.round(b.y - (a.y + a.height)), 8, 'eight pixels between paragraphs')
+  }))
+
+  it('bubbles sit in a centred column, 820px at most', ui.run({ width: 1800 }, async (page) => {
+    const msg = bubble(page, 'trip-0')
+    await msg.waitFor()
+    const col = await msg.evaluate((el) => { const r = el.getBoundingClientRect(), p = el.parentElement.getBoundingClientRect(); return { width: r.width, left: r.left - p.left, right: p.right - r.right } })
+    assert.ok(col.width <= 820 + 1, `column ${col.width}px is at most 820px`)
+    assert.ok(Math.abs(col.left - col.right) < 24, `the column is centred (${col.left} / ${col.right})`)
+  }))
+
+  it('Blocks sit in a left-aligned column, 760px at most', ui.run({ width: 1800, displayStyle: 'flat' }, async (page) => {
     const msg = bubble(page, 'trip-0')
     await msg.waitFor()
     const col = await msg.evaluate((el) => { const r = el.getBoundingClientRect(), p = el.parentElement.getBoundingClientRect(); return { width: r.width, left: r.left - p.left } })
@@ -61,22 +76,22 @@ describe('chat reading', () => {
     assert.equal(padLeft, 32, 'a 32px gutter')
   }))
 
-  it('the reading font is Serif by default and Sans from the setting', ui.run({}, async (page) => {
-    const face = () => bubble(page, 'trip-5').locator('.font-read').first().evaluate((el) => getComputedStyle(el).fontFamily)
-    await bubble(page, 'trip-5').waitFor()
-    assert.match(await face(), /Literata/, 'Serif is Literata')
-    assert.equal(await page.evaluate(() => document.documentElement.dataset.readingFont), 'serif')
-  }))
-
-  it('Sans applies from a stored setting', ui.run({ readingFont: 'sans' }, async (page) => {
+  it('the reading font is Sans by default', ui.run({}, async (page) => {
     await bubble(page, 'trip-5').waitFor()
     const family = await bubble(page, 'trip-5').locator('.font-read').first().evaluate((el) => getComputedStyle(el).fontFamily)
     assert.doesNotMatch(family, /Literata/, `Sans drops Literata: ${family}`)
+    assert.equal(await page.evaluate(() => document.documentElement.dataset.readingFont), 'sans')
   }))
 
-  it('Save applies the reading font and avatars at once and persists them', ui.run({ allow: SAVE }, async (page) => {
+  it('Serif applies from a stored setting', ui.run({ readingFont: 'serif' }, async (page) => {
     await bubble(page, 'trip-5').waitFor()
-    assert.equal(await bubble(page, 'trip-5').locator('[aria-hidden="true"].w-8').count(), 0, 'no message avatars by default')
+    const family = await bubble(page, 'trip-5').locator('.font-read').first().evaluate((el) => getComputedStyle(el).fontFamily)
+    assert.match(family, /Literata/, 'Serif is Literata')
+  }))
+
+  it('Save applies the reading font and avatars at once and persists them', ui.run({ allow: SAVE, displayStyle: 'flat', readingFont: 'serif', messageAvatars: false }, async (page) => {
+    await bubble(page, 'trip-5').waitFor()
+    assert.equal(await bubble(page, 'trip-5').locator('[aria-hidden="true"].w-8').count(), 0, 'no message avatars when stored off')
     const dialog = await chatSettings(page)
     await page.getByRole('button', { name: 'Message font' }).click()
     await page.getByRole('option', { name: /^Sans/ }).click()

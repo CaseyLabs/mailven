@@ -1,7 +1,8 @@
 <script lang="ts">
   // ChatRow — one chat in the chat list: people first (names, plus an avatar
-  // when Settings turn avatars on), then subject, then the latest line unless
-  // Settings hides previews. Right-click opens the shared message context menu
+  // when Settings turn avatars on), then the latest message's first line,
+  // prefixed with who wrote it ("You", or a first name in a group). The subject
+  // shows only when there is no line or Settings hides previews. Right-click opens the shared message context menu
   // for the whole thread, with the triage actions (Archive, Pin, Snooze, sender
   // moves) on top.
   import { tick } from 'svelte'
@@ -16,7 +17,7 @@
   import { getChatHoverActions, getChatShowAvatars, getMessageListDensity, getShowMessagePreview } from '$lib/stores/settings.svelte'
   import type { ChatItem, ChatPerson } from '$lib/stores/chat.svelte'
   import ChatSnoozeMenu from './ChatSnoozeMenu.svelte'
-  import { canToggleSenderChat, displayName, displaySubject, rowPeople } from './chatFormat'
+  import { canToggleSenderChat, displayName, displaySubject, rowPeople, rowPrefix } from './chatFormat'
   import type { ChatRowActions } from './chatTriage'
   import { formatSnoozedUntil } from './chatSnooze'
   import { isSendingChat } from './chatComposerState.svelte'
@@ -103,12 +104,19 @@
   const hideOnHover = 'group-hover/row:invisible group-focus-within/row:invisible'
 
   const subject = $derived(displaySubject(chat.subject) || $_('viewer.noSubject'))
+  // Line two is the latest line when there is one; otherwise the subject.
+  const showLine = $derived(showPreview && !!(chat.highlightedSnippet || chat.snippet))
+  const prefix = $derived.by(() => {
+    const p = rowPrefix(chat.latestSender, people, myEmails)
+    if (!p) return ''
+    return p.mine ? $_('chat.rowYou') : p.name
+  })
+  const unreadBadge = $derived(chat.unreadCount > 99 ? '99+' : String(chat.unreadCount))
   // Screen-reader summary of the row's visual signals.
   const ariaLabel = $derived(
     [
       title,
-      subject,
-      // The row shows only a dot for unread; screen readers still hear the count.
+      showLine ? (prefix ? `${prefix}: ${chat.snippet}` : chat.snippet) : subject,
       status === 'sending' ? $_('chat.sending') : '',
       hasUnread ? $_('chat.unreadCount', { values: { count: chat.unreadCount } }) : '',
       chat.isPinned ? $_('chat.pinnedLabel') : '',
@@ -226,29 +234,32 @@
         <!-- Line one: people and time -->
         <div class="flex items-baseline gap-2">
           <span class="flex-1 min-w-0 truncate text-fg-primary {hasUnread ? 'text-ui-name-strong' : 'text-ui-name'}" data-row-name>{title}</span>
-          <span class="shrink-0 text-ui-meta tabular-nums text-fg-tertiary {hoverActions ? hideOnHover : ''}">{time}</span>
+          <span class="shrink-0 text-ui-meta tabular-nums {hasUnread ? 'text-accent-text' : 'text-fg-tertiary'} {hoverActions ? hideOnHover : ''}" data-row-time>{time}</span>
         </div>
-        <!-- Line two: subject, preview, status icons and the status slot -->
+        <!-- Line two: the latest line with its writer, or the subject -->
         <div class="flex items-center gap-1.5">
-          <span class="flex-1 min-w-0 truncate text-ui-small {hasUnread ? 'text-fg-primary' : 'text-fg-secondary'}">
-            <!-- Chat search highlights the subject with its prefixes already dropped. -->
-            <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
-            {#if chat.highlightedSubject}{@html chat.highlightedSubject}{:else}{subject}{/if}
-            {#if showPreview}
-              <span class={hasUnread ? 'text-fg-secondary' : 'text-fg-tertiary'} data-row-preview> — <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
+          <span class="flex-1 min-w-0 truncate text-ui-small {hasUnread ? 'text-fg-primary' : 'text-fg-secondary'}" data-row-line={showLine ? 'snippet' : 'subject'}>
+            {#if showLine}
+              {#if prefix}<span class="text-fg-primary font-medium" data-row-prefix>{prefix}:</span>{/if}
+              <span data-row-preview><!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
                 {#if chat.highlightedSnippet}{@html chat.highlightedSnippet}{:else}{chat.snippet}{/if}</span>
+            {:else}
+              <!-- Chat search highlights the subject with its prefixes already dropped. -->
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlightMatches only inserts <mark> around already-escaped text -->
+              {#if chat.highlightedSubject}{@html chat.highlightedSubject}{:else}{subject}{/if}
             {/if}
           </span>
           {@render statusIcons()}
-          <!-- Status glyph: one slot, kept even when empty so rows align.
-               Unread under a higher-priority glyph shows as a small dot on its corner. -->
-          <span class="relative flex items-center justify-center w-4 shrink-0 {hoverActions ? hideOnHover : ''}" data-row-status={status ?? undefined} aria-hidden="true">
+          <!-- Status glyph: one slot, kept even when empty so rows align. Unread
+               shows its count as a badge; under a higher-priority glyph, as a
+               small dot on its corner. -->
+          <span class="relative flex items-center justify-center min-w-[18px] shrink-0 {hoverActions ? hideOnHover : ''}" data-row-status={status ?? undefined} aria-hidden="true">
             {#if status === 'sending'}
               <span title={$_('chat.sending')}><Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
             {:else if status === 'snoozed'}
               <span title={$_('chat.snoozedUntil', { values: { time: snoozeTime } })}><Icon icon="lucide:alarm-clock" class="w-4 h-4 text-fg-tertiary" /></span>
             {:else if status === 'unread'}
-              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <span class="min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-accent-foreground text-ui-meta leading-[18px] font-semibold tabular-nums text-center" data-row-badge>{unreadBadge}</span>
             {/if}
             {#if hasUnread && status !== 'unread'}
               <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-accent ring-1 {fillRing}" data-row-unread></span>

@@ -1,6 +1,6 @@
 # Project roadmap
 
-Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **No active milestone.** The last completed milestone is [DSR-3](#dsr-3) (thread header and chat-style messages, 2026-10-21).
+Authoritative portfolio of remaining work. [Issue register](ISSUES.md) owns findings; [project-management rules](docs/PROJECT_MANAGEMENT.md) define IDs, statuses, authorization and execution plans. **Active:** none. The last completed milestone is [CF-5](#cf-5) (visual matrix and docs, 2026-10-21), which completes [CF](#cf); branch `feat/cf` lands with the proposal branch `docs/propose-cf`.
 
 ## Portfolio
 
@@ -17,6 +17,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [DS — Reading-first redesign](#ds) | done | P3 | [0](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17, UI18 and UI19 resolved 2026-10-21 |
 | [DSR — Reading redesign revision](#dsr) | done | P3 | 0 | DSR-1–4 done (2026-10-21) |
+| [CF — Chat-first revision](#cf) | done | P3 | [3](ISSUES.md#cf) | CF-1–5 done (2026-10-21); UI21, UI22 and UI23 open |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
@@ -30,9 +31,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**Active:** none. [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
+**Active:** none. [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** none selected. SEND-2 still needs separately authorized live verification.
+**Next recommended:** none selected. SEND-2 still needs separately authorized live verification; UI21–UI23 are open P3 follow-ups from CF.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -732,6 +733,70 @@ Owner decisions (2026-10-21), chosen against side-by-side renders of the shipped
 
 - **Status / proposed priority:** done 2026-10-21 (owner-selected; branch `feat/dsr-1`, base `fcb1325`; [validation](docs/validation/dsr-4.md)) / P3. **Dependencies / gates:** DSR-1–3.
 - **Scope:** the full visual matrix (Mail, Contacts, Calendar and Settings in both themes, Accounts expanded and collapsed, narrow and standard); retaken `docs/ss*.png` screenshots from synthetic data; user-guide updates for the Appearance options, header and message layout; CHANGELOG.
+- **Acceptance:** every matrix screenshot is reviewed and passes the UI audit and contrast check. Screenshots show no real personal data, and the user guide matches the app.
+- **Validation:** full UI suite, `make lint`, `make test`, `run-mailven` native WebKitGTK screenshots (or recorded as unrun), and `tools/check-doc-links.py`.
+
+<a id="cf"></a>
+
+## CF — Chat-first revision
+
+- **Objective / outcome:** Bring back the chat feel that DS-3 and DSR-3 traded for a reading-first mail layout, while keeping the DSR palette, fonts and three-pane layout. Messages become bubbles (incoming on the left, yours on the right), grouped by sender. Rows and the header lead with people, not subjects. Mail metadata becomes stream events, and the composer becomes a messenger field. It changes visuals and hierarchy only: every mail action, keyboard shortcut and binding stays reachable.
+- **Status / proposed priority:** done 2026-10-21 / P3. CF-1–5 selected 2026-10-21 with the proposed defaults and completed the same day. [Checkpoint](docs/plans/cf.md).
+- **Dependencies / blockers:** builds on DSR-1–4 (done). CF-1 first (tokens and bubbles); CF-2 follows CF-1 (same stream components); CF-3 and CF-4 are independent of each other and of CF-1 apart from its tokens; CF-5 comes last.
+- **Issues:** none.
+- **Technical references:** [chat-first design system](https://claude.ai/artifact/B9YfZore1doQDVyucWFWnD) (tokens, components, Mail view mock), [DSR revision system](https://claude.ai/artifact/8tvJbQiBQYQRhAmxbbWkrz), [DS design plan](docs/plans/reading-redesign.md), [UI_TOKENS](docs/UI_TOKENS.md), [UI tests](tests/ui/README.md).
+
+Owner feedback (2026-10-21): the DSR colours and layout are right, but the app has drifted from a chat-like client back to a regular email client. The design system traces the drift to the toolbar-and-subject header, a mail header on every message, identical left-aligned blocks for every sender, a serif body, hidden avatars, subject-first rows and the "Reply to / Topic" composer footer.
+
+Defaults (accepted 2026-10-21):
+
+- `chat_display_style` regains its meaning: `bubbles` (default) renders the new bubbles, and `flat` keeps today's DSR block layout. No new key is needed.
+- Message text uses Inter: `chat_reading_font` defaults to `sans`, with Serif remaining an option. Expanded long messages use Literata.
+- `chat_show_avatars` and `chat_message_avatars` default to on. Profiles that never changed them follow the new default; stored values are kept. `chat_hover_actions` stays off.
+- Four colour tokens are added (`bubble-in`, `bubble-out`, `bubble-quote-rail`, `divider-pill`). No existing value changes.
+
+<a id="cf-1"></a>
+
+### CF-1 — Bubble tokens and message bubbles
+
+- **Status / proposed priority:** done 2026-10-21 / P3. **Progress:** bubbles render by default; `flat` is relabelled "Blocks". Contrast check, Go settings tests (`TestChatDefaultsKeepStoredValues`), lint, Svelte check and the full UI suite pass (one chat-row keyboard check flaked under full-suite load and passed on rerun); visual check of both themes with Accounts expanded and collapsed, and at 900 px.
+- **Scope:** add the four tokens to `frontend/src/themes/built-in.css` (and `_defaults.css` / `app.css` aliases as needed) with the design system's values, plus `tools/contrast-check.mjs` pairs and [UI_TOKENS](docs/UI_TOKENS.md). `ChatBubble.svelte` and `ChatStream.svelte` render the `bubbles` style. Incoming bubbles use `bubble-in` and sit on the left; yours use `bubble-out` and sit on the right, with no "You" label. Consecutive messages from one sender form a group with joined `radius-sm` corners on the avatar side. The sender's first name shows once above an incoming group in group chats. A 28 px avatar sits level with the last bubble, and the time shows once under the group. The per-message "to N people ▾" line is removed from bubbles; recipients stay under the message's details. Bubbles hug short text up to 72% (560 px), and the stream is centred at 820 px. `flat` keeps the DSR-3 rendering unchanged. Apply the setting-default changes listed above.
+- **Acceptance:** every new contrast pair passes in both themes (`text-primary` ≥ 10:1 and `text-tertiary` ≥ 4.5:1 on both bubble fills). With `bubbles`, own messages are right-aligned on `bubble-out`, and a sender's consecutive messages share one name and one time. Switching to `flat` restores the DSR layout live. Quote and signature folds, the paper card, scroll anchoring, the unread jump and the long-thread fold still hold. Message actions keep their accessible names and remain reachable by keyboard and context menu. The default changes are covered by a settings test.
+- **Validation:** `node tools/contrast-check.mjs`, Go settings tests, the `chat-presentation`, `chat-flat`, `chat-reader`, `chat-anchor`, `chat-folds` and `chat-compaction` suites plus a new bubble-grouping test, frontend lint and Svelte/TypeScript check, the full UI suite, and the visual check of both themes with Accounts expanded and collapsed.
+
+<a id="cf-2"></a>
+
+### CF-2 — Stream events and long messages
+
+- **Status / proposed priority:** done 2026-10-21 / P3. **Dependencies / gates:** CF-1. **Progress:** event lines read "Priya added Lena Fischer" and "Priya changed the topic to …" (the actor is named, like the membership lines); they apply to thread chats in Bubbles, not sender chats, and an event starts a new bubble group. An opened long message reads in Literata. Logic tests (event derivation, `longText`), the new `chat-events` suite, lint, Svelte check, contrast check and the full UI suite pass; visual check of both themes with Accounts expanded and collapsed, and at 900 px.
+- **Scope:** `ChatDaySeparator.svelte` becomes a centred day pill on `divider-pill`. New event lines record changes between consecutive messages: recipients added or removed ("Priya added Lena Fischer") and subject changes ("Topic changed to …"). The UIX-5 "N earlier messages" fold renders as a pill. Long plain-text messages (over about 8 lines) show the first ~6 lines in a wider bubble with a "Read full message · N min" disclosure that expands in place. Sender-styled HTML stays on the paper card inside the sender's group, with the same avatar, name and time. Reply-context snippets (the line a reply answers) are out of scope.
+- **Acceptance:** event lines appear only when the recipients or subject actually change, and the derivation is unit-tested. The long-message disclosure works by keyboard with `aria-expanded` and keeps the scroll position. HTML mail never fills the whole pane, and its dark-mode paper rendering is unchanged. `flat` keeps the DSR day dividers and sender lines.
+- **Validation:** unit tests for event derivation; the `chat-presentation`, `chat-reader`, `chat-folds` and `chat-anchor` suites plus new event and long-message tests; frontend lint and check; full UI suite; and the visual check.
+
+<a id="cf-3"></a>
+
+### CF-3 — People-first rows and header
+
+- **Status / proposed priority:** done 2026-10-21 / P3. **Progress:** `Conversation.latestSender` is the sender of the snippet's message; whether it is mine is decided in the frontend from the account addresses. The preview line now defaults to on (Settings → **Hide message preview** off; a stored value is kept), so rows show the latest line unless the owner hides it. The unread badge caps at "99+". The header's "Search in conversation" is not built ([UI22](ISSUES.md#ui22)); "You:" shows in Inbox rows only when my message is in that folder ([UI21](ISSUES.md#ui21)). Delete in the header's ⋯ runs the chat's own delete (undo and Trash confirmation). Go tests (`TestListChatsLatestSender`, `TestParseParticipantsLatestSender`, preview default), `chat-row` and `chat-header` suites updated, full UI suite, visual check. **Dependencies / gates:** CF-1 tokens only (`radius-pill` badge). It needs a backend field and regenerated Wails bindings ([Regenerating Wails bindings](CONTRIBUTING.md#regenerating-wails-bindings)).
+- **Scope:** `message.Conversation` gains the latest message's sender (address and whether it is the account's own), filled by the conversation queries. `ChatRow.svelte` shows the people on line 1. Line 2 shows the latest message's first line (`snippet`), prefixed "You:" for your own messages or the sender's first name in group chats, instead of the subject. Unread shows as an `accent` count badge, replacing the dot, with the name at 600 and the time in `accent-text`. Group chats show two overlapped avatars with single initials. `ChatViewHeader.svelte` and `ChatSubjectHeading.svelte` merge into one row: avatar or stack, then the people (16/22 600), then the subject and message count as a 12 px subtitle. Only Search in conversation, Archive and `⋯` stay visible; Delete, Snooze, Mark unread, Move and previous/next move into `⋯`, the context menu and shortcuts. Clicking the people opens `ChatPeopleMenu`.
+- **Acceptance:** rows never show the subject when a body snippet exists. The "You:" and first-name prefixes are correct for 1:1, group and self-sent chats, and are tested. The unread count is announced to screen readers. `data-chat-row` and row heights (64/52 px with avatars) are unchanged. Every header action keeps its shortcut and accessible name, and the header never wraps at 900 px and up. Go query tests cover the new field.
+- **Validation:** Go tests for the conversation queries, `make generate` per the bindings procedure, the `chat-row`, `chat-header`, `chat-presentation` and `inbox-triage` suites with updated expectations, frontend lint and check, full UI suite, and the visual check.
+
+<a id="cf-4"></a>
+
+### CF-4 — Messenger composer
+
+- **Status / proposed priority:** done 2026-10-21 / P3. **Progress:** the field is a pill with Attach and ⋯ inside and a round 40 px Send beside it (`Button` size `send`); it no longer collapses on blur. ⋯ holds Reply to everyone / Reply to <person> in group chats, the sending alias, and Open in full composer. Only the reply-target chip exists: the chat reply carries no subject or Cc/Bcc, so those stay in the full composer ([UI23](ISSUES.md#ui23)). `chat-compose` and `chat-composer-card` updated (menu selectors, chip reset, one-to-one chat, Send size and state), full UI suite, contrast check, visual check. **Dependencies / gates:** CF-1 tokens only.
+- **Scope:** `ChatComposer.svelte`: a pill-shaped field on `surface-raised`, at least 40 px tall and growing to 8 lines, with an attach icon inside and a 40 px round `accent` send button that is disabled while empty. The placeholder names the people ("Message Priya, Sam"). The "Reply to: All · N recipients · Topic: …" row is removed. An `accent-soft` chip above the field appears only when a choice differs from the default (reply to one person, a changed topic, or Cc/Bcc added), and its ✕ resets the choice. Every mail option stays under the field's `⋯ › Options`. Drafts, identities, attachments, `chat_send_key` and the full composer handoff are unchanged.
+- **Acceptance:** with defaults, no mail fields are visible. Changing the reply target or topic shows its chip, and ✕ restores the default. Send is disabled while the field is empty and has an accessible name. Keyboard send and newline behaviour follow `chat_send_key`. Existing composer tests pass with updated selectors only.
+- **Validation:** the `chat-compose` and `chat-composer-card` suites plus new chip tests, frontend lint and check, full UI suite, and the visual check.
+
+<a id="cf-5"></a>
+
+### CF-5 — Visual matrix and docs
+
+- **Status / proposed priority:** done 2026-10-21 / P3. **Progress:** reviewed the Mail matrix (`ui-matrix.js`: both themes, 1400, 900 and 700 px, Accounts expanded and collapsed, previews on and off) plus Blocks at 1400 and 700 px and Settings → Chat in both themes; the synthetic page has no Contacts or Calendar views, so those were not shot. Retook `docs/ss*.png` from synthetic data; CHANGELOG gained a Chat-first revision section; the guides were updated in CF-1–4 and checked against the app. Fixed a race in the chat-row H-shortcut check (it could see the closing context menu) after it flaked under full-suite load. Full UI suite (279/280; the flaky check then passed five times alone, three of them after the fix), `make lint`, `make test`, contrast check and `tools/check-doc-links.py` pass. Native WebKitGTK `run-mailven` screenshots were not run. **Dependencies / gates:** CF-1–4.
+- **Scope:** the full visual matrix (Mail, Contacts, Calendar and Settings in both themes, Accounts expanded and collapsed, narrow and standard, `bubbles` and `flat`); retaken `docs/ss*.png` screenshots from synthetic data; user-guide updates for bubbles, the header, rows, the composer and the changed Appearance defaults; CHANGELOG.
 - **Acceptance:** every matrix screenshot is reviewed and passes the UI audit and contrast check. Screenshots show no real personal data, and the user guide matches the app.
 - **Validation:** full UI suite, `make lint`, `make test`, `run-mailven` native WebKitGTK screenshots (or recorded as unrun), and `tools/check-doc-links.py`.
 

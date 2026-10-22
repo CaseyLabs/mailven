@@ -42,7 +42,7 @@ const longSenderFake = `{ const A = window.go.app.App, get = A.GetSenderChat
   } }`
 
 describe('chat presentation', () => {
-  it('incoming and outgoing message blocks grouped by sender', ui.run({}, async (page) => {
+  it('incoming and outgoing message blocks grouped by sender (Blocks)', ui.run({ displayStyle: 'flat' }, async (page) => {
     await bubble(page, 'trip-5').waitFor()
     const ids = await page.locator('[role="article"][data-message-id]').evaluateAll((els) => els.map((e) => e.dataset.messageId))
     assert.deepEqual(ids, ['trip-0', 'trip-1', 'trip-2', 'trip-3', 'trip-4', 'trip-5'], 'messages render oldest first')
@@ -61,9 +61,8 @@ describe('chat presentation', () => {
   it('the subject heads the header, not the stream', ui.run({}, async (page) => {
     await bubble(page, 'trip-5').waitFor()
     assert.deepEqual(await subjects(page), [], 'a thread has no in-stream subject heading')
-    const title = page.getByRole('heading', { level: 2 })
-    assert.equal(await title.innerText(), 'Weekend trip to the coast', 'the header carries the subject')
     const header = page.locator('[data-chat-header]')
+    assert.equal(await header.locator('[data-header-topic]').innerText(), 'Weekend trip to the coast', 'the header carries the subject')
     assert.doesNotMatch(await header.innerText(), /Priya Shah:|wrote/, 'and no sender')
   }))
 
@@ -99,7 +98,7 @@ describe('chat presentation', () => {
     assert.equal(await bubble(page, 'trip-4').getByRole('button', { name: 'Show quoted text' }).count(), 0, 'no marker without quoted text')
   }))
 
-  it('sender chat with several subjects', ui.run({ beforeMount: senderFake }, async (page) => {
+  it('sender chat with several subjects (Blocks)', ui.run({ beforeMount: senderFake, displayStyle: 'flat' }, async (page) => {
     await page.getByRole('button', { name: 'Low priority (2)' }).click()
     await row(page, 'Trail Magazine').click()
     await bubble(page, 'news-3').waitFor()

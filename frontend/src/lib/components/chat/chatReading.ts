@@ -16,3 +16,18 @@ export function looksPreformatted(text: string): boolean {
   const laidOut = lines.filter((l) => LAID_OUT.test(l)).length
   return laidOut >= MIN_LINES && laidOut / lines.length >= MIN_SHARE
 }
+
+// Bubbles fold text longer than this many estimated lines.
+export const LONG_TEXT_LINES = 8
+const CHARS_PER_LINE = 62
+const WORDS_PER_MINUTE = 230
+
+// longText estimates how many lines text takes in a bubble (each line wraps
+// at about 62 characters) and, when that exceeds LONG_TEXT_LINES, returns the
+// reading time in whole minutes (at least 1); otherwise null.
+export function longText(text: string): number | null {
+  const lines = text.split('\n').reduce((n, line) => n + Math.max(1, Math.ceil(line.length / CHARS_PER_LINE)), 0)
+  if (lines <= LONG_TEXT_LINES) return null
+  const words = text.split(/\s+/).filter(Boolean).length
+  return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE))
+}

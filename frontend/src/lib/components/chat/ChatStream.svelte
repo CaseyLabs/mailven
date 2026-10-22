@@ -1,7 +1,9 @@
 <script lang="ts">
-  // ChatStream — the messages of a chat: day / subject headings, message
-  // blocks and pending replies, left-aligned in a centred --chat-stream column.
-  // A "New" divider sits above the first message that was unread on open.
+  // ChatStream — the messages of a chat: day / subject headings, messages
+  // (bubbles or blocks, Settings → Chat → Message style) and pending replies in
+  // the --chat-stream column.
+  // A "New" divider sits above the first message that was unread on open, and
+  // bubbles show membership and topic changes (item.events) as centred lines.
   // Each subject run is a section whose heading sticks while it scrolls past.
   import { _ } from '$lib/i18n'
   import ChatBubble from './ChatBubble.svelte'
@@ -9,6 +11,7 @@
   import ChatCompactRow from './ChatCompactRow.svelte'
   import ChatDaySeparator from './ChatDaySeparator.svelte'
   import ChatPendingBubble from './ChatPendingBubble.svelte'
+  import ChatStreamEvent from './ChatStreamEvent.svelte'
   import ChatSubjectHeading from './ChatSubjectHeading.svelte'
   import type { ChatThread } from './chatThread.svelte'
   import type { ChatComposer } from './chatComposerState.svelte'
@@ -54,6 +57,8 @@
     }
     for (const it of items) if (!it.msg.isRead) keep.add(it.msg.id)
   })
+  // Bubbles name the sender above each incoming run once two or more people write.
+  const showSender = $derived(new Set(items.filter((it) => !it.mine).map((it) => (it.msg.fromEmail || '').toLowerCase())).size > 1)
   const sections = $derived(subjectSections(compactItems(items, expanded, keep)))
   // Only worth a divider when something already read comes before it.
   const firstNew = $derived.by(() => {
@@ -95,6 +100,7 @@
               {/if}
             </div>
           {/if}
+          {#each item.events ?? [] as event, ei (ei)}<ChatStreamEvent {event} />{/each}
           <ChatBubble
             {item}
             {thread}
@@ -102,6 +108,7 @@
             {folderId}
             {folderType}
             {holdPosition}
+            {showSender}
             onFocusChange={(f) => onFocusChange(item.msg.id, f)}
             {onReply}
             {onComposeToAddress}

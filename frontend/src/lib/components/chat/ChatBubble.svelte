@@ -1,7 +1,11 @@
 <script lang="ts">
-  // ChatBubble — one message block in the thread column: an optional avatar
-  // (Settings → Chat), a sender line ("Name 12:45 PM to 10 people ▾", or "You"),
-  // then the body, left-aligned for everyone in either display style. New text reads in Literata at the measure, with
+  // ChatBubble — one message in the thread column. Bubbles (the default style,
+  // CF): incoming messages sit on the left in bubble-in and mine on the right in
+  // bubble-out; a sender run shows its first name once (group chats), the
+  // avatar beside its last bubble and the time once under it, and bubbles join
+  // at the corners on the avatar side. Blocks (DSR-3): an optional avatar, a
+  // sender line ("Name 12:45 PM to 10 people ▾", or "You"), then the body,
+  // left-aligned for everyone. New text reads in the message font, with
   // the signature behind a "Show signature" fold and quoted history behind a
   // "Show quoted text" fold; rich mail
   // renders as sanitized reader content, or as a card when the setting asks;
@@ -19,17 +23,19 @@
   import AttachmentList from '$lib/components/viewer/AttachmentList.svelte'
   import MessageContextMenu from '$lib/components/common/MessageContextMenu.svelte'
   import { contactPhotos } from '$lib/stores/contactPhotos.svelte'
-  import { getDarkMailContent, getChatRichStyle, getChatMessageAvatars } from '$lib/stores/settings.svelte'
+  import { getDarkMailContent, getChatRichStyle, getChatMessageAvatars, getChatDisplayStyle } from '$lib/stores/settings.svelte'
+  import { avatarTint } from '$lib/components/kit/avatarTint'
   import { getIsDarkActive } from '$lib/stores/theme.svelte'
   import ChatRichCard from './ChatRichCard.svelte'
   import ChatReaderMessage from './ChatReaderMessage.svelte'
   import ChatSecurityBanners from './ChatSecurityBanners.svelte'
   import ChatFoldToggle from './ChatFoldToggle.svelte'
   import ChatMessageActions from './ChatMessageActions.svelte'
+  import ChatMessageSource from './ChatMessageSource.svelte'
   import { toasts } from '$lib/stores/toast'
   import { copyText } from './chatClipboard'
   import { securityStatus, TONES } from './chatSecurity'
-  import { looksPreformatted } from './chatReading'
+  import { longText, looksPreformatted } from './chatReading'
   import { linkify, parseRecipients, formatAddress, displayName, displaySubject, type ReplyMode, type ThreadItem } from './chatFormat'
   import { formatStamp } from '$lib/utils/date'
   import type { ChatThread } from './chatThread.svelte'
@@ -42,6 +48,8 @@
     folderType: string
     // Runs a change that resizes content around `el` without moving `el`.
     holdPosition?: (el: HTMLElement, change: () => void) => void
+    // Bubbles: name the sender above an incoming run (group chats).
+    showSender?: boolean
     onFocusChange: (focused: boolean) => void
     onReply?: (mode: ReplyMode, messageId: string, imagesLoaded?: boolean) => void
     onComposeToAddress?: (to: string) => void
@@ -53,7 +61,7 @@
   }
 
   let {
-    item, thread, accountId, folderId, folderType, holdPosition, onFocusChange,
+    item, thread, accountId, folderId, folderType, holdPosition, showSender = false, onFocusChange,
     onReply, onComposeToAddress, onEditDraft, onImagesLoaded, imagesLoaded, onActionComplete, onOpenLink,
   }: Props = $props()
 
@@ -70,6 +78,7 @@
 
   let showOriginal = $state(false)
   let showQuoted = $state(false)
+  let showLong = $state(false)
   let showSignature = $state(false)
   let showDetails = $state(false)
   let showRecipients = $state(false)
@@ -96,11 +105,27 @@
   const darken = $derived(canDarken && !darkOverride)
   // Sender-styled HTML shown light in a dark UI sits on a paper card, not a white slab.
   const paper = $derived(!!bodyHtml && getIsDarkActive() && !darken)
+  const bubbles = $derived(getChatDisplayStyle() === 'bubbles')
+  // Bubbles hug short text up to bubble-max; rich and full mail use the column.
+  const hug = $derived(bubbles && (mode === 'bubble' || mode === 'loading'))
+  // The avatar side of a bubble tightens where it joins the run's other bubbles.
+  const fill = $derived.by(() => {
+    if (!bubbles) return ''
+    const [top, bottom] = item.mine ? ['rounded-tr-sm', 'rounded-br-sm'] : ['rounded-tl-sm', 'rounded-bl-sm']
+    return `px-3 py-2 rounded-bubble ${item.mine ? 'bg-bubble-out' : 'bg-bubble-in'} ${item.groupStart ? '' : top} ${item.groupEnd ? '' : bottom}`
+  })
+  // Long text in a bubble folds to about six lines with its reading time (CF-2).
+  const longMinutes = $derived(bubbles && mode === 'bubble' ? longText(chat!.text) : null)
   // Plain text laid out with spaces keeps its alignment in mono.
-  const textFace = $derived(mode === 'bubble' && looksPreformatted(chat!.text) ? 'font-mono text-mono' : 'font-read text-read-body')
+  const textFace = $derived.by(() => {
+    if (mode === 'bubble' && looksPreformatted(chat!.text)) return 'font-mono text-mono'
+    if (!bubbles) return 'font-read text-read-body'
+    return longMinutes && showLong ? 'font-long text-bubble-body' : 'font-read text-bubble-body'
+  })
   const quoteFace = $derived(mode === 'bubble' && looksPreformatted(chat!.quoted ?? '') ? 'font-mono text-mono' : 'font-read text-read-quote')
 
   const senderName = $derived(msg.fromName || msg.fromEmail || $_('viewer.unknown'))
+  const firstName = $derived(msg.fromName?.trim().split(/\s+/)[0] || senderName)
   const photo = $derived(contactPhotos.get(msg.fromEmail))
   const time = $derived(formatStamp(item.date))
   // To and Cc, once each, for the sender line's "to N people" disclosure (names only, no addresses).
@@ -159,6 +184,15 @@
   {/each}
 {/snippet}
 
+{#snippet badgeList()}
+  {#each badges as b (b.icon + b.text)}
+    <span class="inline-flex items-center gap-1 px-1.5 py-px self-center rounded-full border text-caption leading-4 {TONES[b.tone]}" title={b.text}>
+      <Icon icon={b.icon} class="w-3 h-3 shrink-0" aria-hidden="true" />
+      <span class="max-w-48 truncate">{b.text}</span>
+    </span>
+  {/each}
+{/snippet}
+
 {#snippet emailBody()}
   {#if paper}
     <div class="rounded-lg bg-paper text-paper-text shadow-1 overflow-hidden" data-paper-card>
@@ -195,7 +229,8 @@
   {onReply}
 >
   <div
-    class="group flex gap-3 chat-col rounded-md {item.groupStart ? 'mt-6' : 'mt-1'} focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
+    class="group flex chat-col rounded-md {bubbles ? `gap-2 items-end ${item.mine ? 'flex-row-reverse' : ''} ${item.groupStart ? 'mt-4' : 'mt-1'}` : `gap-3 ${item.groupStart ? 'mt-6' : 'mt-1'}`} focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
+    data-bubble={bubbles ? (item.mine ? 'out' : 'in') : undefined}
     data-message-id={msg.id}
     data-mine={item.mine ? '' : undefined}
     tabindex="-1"
@@ -204,8 +239,15 @@
     onfocus={() => onFocusChange(true)}
     onblur={() => onFocusChange(false)}
   >
-    <!-- Avatar column (opt-in); the spacer keeps a sender's grouped messages aligned -->
-    {#if getChatMessageAvatars()}
+    <!-- Avatar column; the spacer keeps a sender's grouped messages aligned. Bubbles show
+         a 28px avatar beside an incoming run's last bubble, above its time. -->
+    {#if bubbles && getChatMessageAvatars() && !item.mine}
+      <div class="w-7 shrink-0 {item.groupEnd ? 'mb-5' : ''}" aria-hidden="true" data-avatar-slot>
+        {#if item.groupEnd}
+          <Avatar email={msg.fromEmail} name={msg.fromName} size={28} photoData={photo?.data} photoMediaType={photo?.mediaType} />
+        {/if}
+      </div>
+    {:else if !bubbles && getChatMessageAvatars()}
       <div class="w-8 shrink-0" aria-hidden="true">
         {#if item.groupStart}
           <Avatar email={msg.fromEmail} name={msg.fromName} size={32} photoData={photo?.data} photoMediaType={photo?.mediaType} />
@@ -213,8 +255,17 @@
       </div>
     {/if}
 
-    <div class="relative flex flex-col gap-1.5 flex-1 min-w-0 items-start">
-      {#if item.groupStart || badges.length > 0}
+    <div class="relative flex flex-col min-w-0 {bubbles ? `gap-1 ${item.mine ? 'items-end' : 'items-start'} ${hug ? (longMinutes ? 'max-w-(--bubble-long-max)' : 'max-w-(--bubble-max)') : 'flex-1'}` : 'gap-1.5 flex-1 items-start'}">
+      {#if bubbles}
+        {#if (showSender && item.groupStart && !item.mine) || badges.length > 0}
+          <div class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 px-3">
+            {#if showSender && item.groupStart && !item.mine}
+              <span class="text-ui-meta font-semibold" style="color: hsl(var(--avatar-{avatarTint(msg.fromEmail || '')}-ink))" data-bubble-sender>{firstName}</span>
+            {/if}
+            {@render badgeList()}
+          </div>
+        {/if}
+      {:else if item.groupStart || badges.length > 0}
         <div class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 min-h-5 pr-20">
           {#if item.groupStart}
             <span class="text-ui-name-strong text-fg-primary">{item.mine ? $_('chat.you') : senderName}</span>
@@ -231,16 +282,11 @@
               >{toLabel}<Icon icon={showRecipients ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-3 h-3" aria-hidden="true" /></button>
             {/if}
           {/if}
-          {#each badges as b (b.icon + b.text)}
-            <span class="inline-flex items-center gap-1 px-1.5 py-px self-center rounded-full border text-caption leading-4 {TONES[b.tone]}" title={b.text}>
-              <Icon icon={b.icon} class="w-3 h-3 shrink-0" aria-hidden="true" />
-              <span class="max-w-48 truncate">{b.text}</span>
-            </span>
-          {/each}
+          {@render badgeList()}
         </div>
       {/if}
 
-      {#if showRecipients && item.groupStart}
+      {#if showRecipients && item.groupStart && !bubbles}
         <ul id="recipients-{msg.id}" class="flex flex-wrap gap-x-3 gap-y-0.5 text-ui-meta text-fg-secondary" aria-label={$_('chat.recipients')} data-recipients>
           {#each recipients as p (p.email || p.name)}<li>{displayName(p)}</li>{/each}
         </ul>
@@ -248,7 +294,7 @@
 
       <ChatSecurityBanners {msg} {thread} lines={security} />
 
-      <div class="w-full min-w-0">
+      <div class="{hug ? 'max-w-full' : 'w-full'} min-w-0">
         {#if notFetched && thread.bodyErrors.has(msg.id)}
           <div class="flex items-center gap-2 py-1 text-ui-body text-fg-secondary">
             <Icon icon="lucide:circle-alert" class="w-4 h-4 text-danger" />
@@ -263,8 +309,20 @@
         {:else if bare}
           <!-- Attachment-only mail: the attachment list below is the message -->
         {:else if mode === 'bubble'}
-          <div class="{textFace} text-fg-primary max-w-(--measure) flex flex-col gap-2.5 wrap-anywhere" data-message-text>
-            {#each paragraphs as para, i (i)}<p class="whitespace-pre-wrap">{@render text(para)}</p>{/each}
+          <div class="{textFace} {fill} text-fg-primary {bubbles ? 'gap-2' : 'max-w-(--measure) gap-2.5'} flex flex-col wrap-anywhere" data-message-text>
+            <div id="text-{msg.id}" class="flex flex-col {bubbles ? 'gap-2' : 'gap-2.5'} {longMinutes && !showLong ? 'max-h-33 overflow-hidden mask-b-from-60%' : ''}" data-long={longMinutes ? (showLong ? 'open' : 'folded') : undefined}>
+              {#each paragraphs as para, i (i)}<p class="whitespace-pre-wrap">{@render text(para)}</p>{/each}
+            </div>
+            {#if longMinutes}
+              <button
+                type="button"
+                class="self-start font-ui text-ui-body font-medium text-accent-text hover:underline focus-visible:outline-2 focus-visible:outline-focus rounded-sm"
+                aria-expanded={showLong}
+                aria-controls="text-{msg.id}"
+                onclick={(e) => fold(e.currentTarget, () => (showLong = !showLong))}
+                data-read-full
+              >{showLong ? $_('chat.readLess') : $_('chat.readFull', { values: { minutes: longMinutes } })}</button>
+            {/if}
           </div>
         {:else if mode === 'reader'}
           <ChatReaderMessage blocks={chat!.reader!} inlineAttachments={pgp?.inlineAttachments ?? smime?.inlineAttachments} fromEmail={msg.fromEmail} {onOpenLink} {onImagesLoaded} />
@@ -291,7 +349,7 @@
       {/if}
 
       {#if showQuoted && mode === 'bubble'}
-        <div id="quoted-{msg.id}" class="{quoteFace} text-fg-secondary max-w-(--measure) border-l-2 border-border-subtle pl-3 whitespace-pre-wrap wrap-anywhere" data-quoted>
+        <div id="quoted-{msg.id}" class="{quoteFace} text-fg-secondary max-w-(--measure) border-l-2 {bubbles ? 'border-bubble-quote-rail ml-3' : 'border-border-subtle'} pl-3 whitespace-pre-wrap wrap-anywhere" data-quoted>
           {@render text(chat!.quoted ?? '')}
         </div>
       {/if}
@@ -309,23 +367,12 @@
         <AttachmentList class="w-full max-w-md" messageId={msg.id} encryptedAttachments={decryptedAttachments} />
       {/if}
 
-      {#if sourceOpen}
-        <div class="relative w-full">
-          {#if source === null}
-            <div class="flex items-center gap-2 text-ui-body text-fg-secondary">
-              <Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin" />{$_('viewer.loadingSource')}
-            </div>
-          {:else}
-            <button
-              type="button"
-              class="absolute top-2 right-2 p-1.5 rounded-sm bg-surface-raised hover:bg-surface-hover"
-              title={$_('viewer.copySource')}
-              onclick={() => copyText(source ?? '', $_('viewer.viewSource'))}
-            >
-              <Icon icon="lucide:copy" class="w-4 h-4" />
-            </button>
-            <pre class="font-mono text-mono bg-surface-hover p-4 rounded-md max-h-96 overflow-auto whitespace-pre-wrap break-all">{source}</pre>
-          {/if}
+      {#if sourceOpen}<ChatMessageSource {source} />{/if}
+
+      {#if bubbles && (item.groupEnd || msg.isDraft)}
+        <div class="flex items-baseline gap-2 px-3 text-ui-meta text-fg-tertiary tabular-nums" data-bubble-meta>
+          {#if msg.isDraft}<span class="font-medium text-danger">{$_('chat.draft')}</span>{/if}
+          {#if item.groupEnd}<span>{time}</span>{/if}
         </div>
       {/if}
 
@@ -345,6 +392,7 @@
         onToggleSource={toggleSource}
         onCopy={() => copyText(chat?.text || bodyText || '', $_('chat.messageText'))}
         onToggleDetails={(el) => fold(el, () => (showDetails = !showDetails))}
+        placement={hug ? (item.mine ? 'top-0 right-full mr-1' : 'top-0 left-full ml-1') : undefined}
       />
     </div>
   </div>

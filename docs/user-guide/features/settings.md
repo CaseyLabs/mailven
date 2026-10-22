@@ -51,9 +51,9 @@ By default, inside the message list column, the area where the checkbox on the l
 
 ### Hide message preview
 
-Hide the line of the latest message below the subject in the chat list and the classic message list.
+Show each chat's subject under the people instead of the latest message's first line (in the chat list), or hide the preview line below the subject (in the classic message list).
 
-Enabled by default, so each chat in the list shows only the people and subject. Search results always show the matching preview text, regardless of this setting, so you can see why a message matched.
+Off by default, so each chat in the list shows its latest line, prefixed with "You:" for your own message or the writer's first name in a group chat. A setting you changed before is kept. Search results always show the matching preview text, regardless of this setting, so you can see why a message matched.
 
 ### Show colored circles in message list
 
@@ -193,7 +193,7 @@ Options for the chat-style mail list, thread view, and reply box.
 
 ### Show Avatars in the Chat List
 
-Off by default. Rows show the people, subject and time with no picture or initials; turn it on to add an avatar to each row (rows are then taller).
+On by default. Each row shows the sender's picture or initials (two overlapped avatars for a group chat); turn it off for shorter rows with no picture.
 
 ### Show Quick Actions on Hover
 
@@ -201,15 +201,15 @@ Off by default. When on, pointing at a row shows Archive, Mark as read/unread an
 
 ### Show Avatars in Messages
 
-Off by default. When on, each message in an open chat has the sender's picture or initials beside it.
+On by default. Each run of messages from someone else has their picture or initials beside its last message (Bubbles), or beside every run's first message (Blocks).
 
 ### Message Font
 
-The typeface for message text in an open chat: **Serif (Literata)** (default) or **Sans (Inter)**. It applies as soon as you save. Email in its original layout keeps the sender's fonts.
+The typeface for message text in an open chat: **Sans (Inter)** (default) or **Serif (Literata)**. It applies as soon as you save. Email in its original layout keeps the sender's fonts.
 
 ### Message Style
 
-**Bubbles** (default) and **Flat** now show the same thread: every message left-aligned with the sender's name and time (and the avatar when **Show avatars in messages** is on), and your own messages labelled **You**. The setting keeps your choice for a later style.
+**Bubbles** (default) shows other people's messages as bubbles on the left and yours on the right, in a different colour. Consecutive messages from one person join into one run, with the time once under it and, in a group chat, their first name once above it. **Blocks** shows every message left-aligned with the sender's name and time (and the avatar when **Show avatars in messages** is on), with your own messages labelled **You**.
 
 ### Email Layout
 

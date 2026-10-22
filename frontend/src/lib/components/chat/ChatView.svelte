@@ -21,6 +21,8 @@
   import { ChatThread } from './chatThread.svelte'
   import { ChatComposer as ComposerState } from './chatComposerState.svelte'
   import { buildThreadItems, displaySubject, myAddresses, replyAlias, replyRecipients, replyTarget, threadPeople, type ReplyMode } from './chatFormat'
+  import { withEvents } from './chatEvents'
+  import { getChatDisplayStyle } from '$lib/stores/settings.svelte'
   import { ChatScroll } from './chatScroll.svelte'
   import { ChatActions } from './chatActions.svelte'
 
@@ -83,7 +85,6 @@
   const identityEmails = $derived(identities ? new Set(identities.map((id) => id.email.trim().toLowerCase())) : null)
   const recipients = $derived(target ? replyRecipients(thread.messages, target.messageId, identityEmails ?? myEmails) : null)
   const targetMessage = $derived(target ? thread.messages.find((m) => m.id === target.messageId) : undefined)
-  const replySubject = $derived(displaySubject(targetMessage?.subject))
   // The non-default identity the reply goes out from, else ''. The To/Cc
   // match shows at once; Bcc and forwarding-header aliases come from the backend.
   const addressedAlias = $derived(targetMessage && identities ? replyAlias(targetMessage, identities) : '')
@@ -100,9 +101,12 @@
   const composer = new ComposerState({ target: () => target, recipients: () => recipients })
   // The docked composer shows its own draft; hide draft copies while it has one.
   const shown = $derived(composer.draftId ? thread.messages.filter((m) => !m.isDraft) : thread.messages)
-  const items = $derived(
-    buildThreadItems(focusedMessageIdInFocus ? shown.filter((m) => m.id === focusedMessageIdInFocus) : shown, !!senderEmailOf(threadId)),
-  )
+  const items = $derived.by(() => {
+    const senderChat = !!senderEmailOf(threadId)
+    const built = buildThreadItems(focusedMessageIdInFocus ? shown.filter((m) => m.id === focusedMessageIdInFocus) : shown, senderChat)
+    // Bubbles show membership and topic changes as lines; a sender chat mixes threads, so it has none.
+    return getChatDisplayStyle() === 'bubbles' && !senderChat ? withEvents(built, new Set([...myEmails, me.email])) : built
+  })
   const people = $derived(threadPeople(thread.messages, myEmails))
   const messageIds: string[] = $derived(thread.messages.map((m) => m.id))
   const effectiveFolderType = $derived(folderType || 'inbox')
@@ -359,7 +363,6 @@
       snoozedUntil={chatItem?.snoozedUntil ?? null}
       isLowPriority={chatItem ? chatItem.isLowPriority : null}
       canTriage={!!accountId && !!threadKey}
-      {isTrash}
       {showBackButton}
       {onBack}
       {onCompose}
@@ -409,7 +412,7 @@
       </div>
     </div>
 
-    <ChatComposer bind:this={composerRef} {composer} subject={replySubject} from={replyFrom} disabled={!canReply} {onEscape} onExpand={() => void expand()} />
+    <ChatComposer bind:this={composerRef} {composer} from={replyFrom} disabled={!canReply} {onEscape} onExpand={() => void expand()} />
   {/if}
 </div>
 

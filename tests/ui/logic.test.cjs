@@ -112,7 +112,7 @@ describe('chat logic', () => {
         window.__msg('c', sam, { subject: 'Fwd[2]: Delivery', date: at(9, 2) }),
         window.__msg('d', sam, { subject: '', date: at(9, 3) }),
       ]
-      const pick = (items) => items.map((i) => ({ id: i.msg.id, mine: i.mine, newDay: i.newDay, groupStart: i.groupStart, subject: i.subject ?? null }))
+      const pick = (items) => items.map((i) => ({ id: i.msg.id, mine: i.mine, newDay: i.newDay, groupStart: i.groupStart, groupEnd: !!i.groupEnd, subject: i.subject ?? null }))
       return {
         thread: pick(buildThreadItems(thread)),
         sender: pick(buildThreadItems(sender, true)),
@@ -122,6 +122,7 @@ describe('chat logic', () => {
       }
     }, formatModule)
     assert.deepEqual(r.thread.map((i) => i.groupStart), [true, false, true, true, true], 'runs split on sender change, 5-minute gap and new day')
+    assert.deepEqual(r.thread.map((i) => i.groupEnd), [false, true, true, true, true], 'each run ends where the next starts, and at the last message')
     assert.deepEqual(r.thread.map((i) => i.mine), [false, false, true, true, false], 'incoming and outgoing follow msg.mine')
     assert.deepEqual(r.thread.map((i) => i.newDay), [true, false, false, false, true])
     assert.deepEqual(r.sender.map((i) => i.subject), ['Invoice 12', null, 'Delivery', null], 'a sender chat labels each subject run; Re: continues it')
@@ -212,5 +213,52 @@ describe('account form logic', () => {
       ].map(looksPreformatted)
     }, '/src/lib/components/chat/chatReading.ts')
     assert.deepEqual(r, [false, true, true, true, true, false, false])
+  }))
+
+  it('stream events: people added and removed, topic changes, runs split', ui.run(opts, async (page) => {
+    const r = await page.evaluate(async (mods) => {
+      const { buildThreadItems } = await import(mods[0])
+      const { threadEvents, withEvents } = await import(mods[1])
+      const { me, sam, priya } = window.__people
+      const lena = { name: 'Lena Fischer', email: 'lena@example.com' }
+      const at = (m) => `2026-10-14T09:${String(m).padStart(2, '0')}:00Z`
+      const msgs = [
+        window.__msg('1', priya, { to: [me, sam], date: at(0) }),
+        window.__msg('2', priya, { to: [me, sam, lena], date: at(1), subject: 'Re: Plans' }), // Priya adds Lena
+        window.__msg('3', me, { to: [priya, lena], date: at(2), mine: true, subject: 'Re: Plans' }), // I remove Sam
+        window.__msg('4', lena, { to: [priya, me], date: at(3), subject: 'Dinner' }), // new topic
+        window.__msg('5', priya, { to: [me, lena], date: at(4), subject: '' }), // empty subject: no topic event
+        window.__msg('6', sam, { to: [priya, me, lena], date: at(5), subject: 'RE: dinner' }), // Sam rejoins: the sender never counts
+      ]
+      const self = new Set(['ALEX@example.com'])
+      const ev = threadEvents(buildThreadItems(msgs), self)
+      const items = withEvents(buildThreadItems(msgs.slice(0, 2)), self)
+      const show = (e) => e.kind === 'topic' ? `${e.actor}${e.mine ? '*' : ''} topic ${e.subject}` : `${e.actor}${e.mine ? '*' : ''} ${e.kind} ${e.people.map((p) => p.email).join(',')}`
+      return {
+        events: Object.fromEntries([...ev].map(([id, list]) => [id, list.map(show)])),
+        runs: items.map((i) => [i.groupStart, !!i.groupEnd, (i.events ?? []).length]),
+      }
+    }, ['/src/lib/components/chat/chatFormat.ts', '/src/lib/components/chat/chatEvents.ts'])
+    assert.deepEqual(r.events, {
+      2: ['Priya added lena@example.com'],
+      3: ['Alex* removed sam@example.org'],
+      4: ['Lena topic Dinner'],
+    }, 'only changes made by the sender count; Re: and an empty subject keep the topic')
+    assert.deepEqual(r.runs, [[true, true, 0], [true, true, 1]], 'an event starts a new run and ends the one before it')
+  }))
+
+  it('long text: over eight estimated lines folds with a reading time', ui.run(opts, async (page) => {
+    const r = await page.evaluate(async (mod) => {
+      const { longText } = await import(mod)
+      const words = (n) => Array.from({ length: n }, () => 'word').join(' ')
+      return [
+        longText('Short note'),
+        longText(Array(8).fill('line').join('\n')), // 8 lines: not long
+        longText(Array(9).fill('line').join('\n')), // 9 lines: long, 1 minute
+        longText(words(100)), // 499 chars: 9 wrapped lines
+        longText(words(600)), // 600 words: 3 minutes
+      ]
+    }, '/src/lib/components/chat/chatReading.ts')
+    assert.deepEqual(r, [null, null, 1, 1, 3])
   }))
 })

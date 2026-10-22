@@ -20,7 +20,8 @@ const look = (r) => r.evaluate((el) => {
     fill: s.backgroundColor,
     ring: /rgb\([^)]*\) 0px 0px 0px 2px inset/.test(s.boxShadow),
     weight: getComputedStyle(el.querySelector('[data-row-name]')).fontWeight,
-    dot: !!el.querySelector('[data-row-status="unread"] .bg-accent'),
+    badge: el.querySelector('[data-row-status="unread"] [data-row-badge]')?.textContent.trim() ?? null,
+    time: getComputedStyle(el.querySelector('[data-row-time]')).color,
     actions: !!actions && getComputedStyle(actions).opacity === '1',
   }
 })
@@ -40,13 +41,15 @@ describe('chat rows', () => {
 
   for (const theme of ['light', 'dark']) {
     it(`unread, hover, selected, focus and selected+focus are distinct (${theme})`, ui.run({ theme, previews: true, avatars: true, hoverActions: true }, async (page) => {
-      const [unread, read, selected] = [row(page, 'Jamie Chen'), row(page, 'Omar Haddad'), row(page, 'Weekend trip')]
+      const [unread, read, selected] = [row(page, 'Jamie Chen'), row(page, 'Omar Haddad'), row(page, 'Priya Shah')]
       await page.locator('[data-message-id="trip-5"]').focus()
       await page.waitForFunction(() => !document.querySelector('[role="listbox"]')?.hasAttribute('data-focused'))
       const u = await look(unread), r = await look(read), s = await look(selected)
       assert.equal(u.weight, '600', 'an unread name is 600')
       assert.equal(r.weight, '500', 'a read name is 500')
-      assert.ok(u.dot && !r.dot, 'only the unread row has the dot')
+      assert.equal(u.badge, '2', 'the unread row shows its count as a badge')
+      assert.equal(r.badge, null, 'a read row has no badge')
+      assert.notEqual(u.time, r.time, 'the unread time is in the accent text colour')
       assert.equal(u.fill, r.fill, 'unread does not change the row fill')
       assert.notEqual(s.fill, r.fill, 'selected has its own fill')
       assert.ok(!s.ring && !r.ring && !u.ring, 'selection alone draws no ring')
@@ -72,17 +75,17 @@ describe('chat rows', () => {
   }
 
   it('quick actions are reachable by keyboard and keep their names', ui.run({ allow: ['MarkAsUnread', 'Archive'], hoverActions: true }, async (page) => {
-    const selected = row(page, 'Weekend trip')
+    const selected = row(page, 'Priya Shah')
     await page.locator('[data-message-id="trip-5"]').waitFor()
     assert.equal(await item(page, 'Omar Haddad').getByRole('button', { name: 'Archive' }).getAttribute('tabindex'), '-1', 'other rows stay out of the Tab order')
     // UI17: no option owns a focusable control (axe nested-interactive); the actions group names its row.
     const nested = await page.locator('[role="option"][data-chat-row]').evaluateAll((els) =>
       els.filter((el) => el.querySelector('button, a[href], input, select, textarea, [tabindex]')).length)
     assert.equal(nested, 0, 'no chat option contains a focusable control')
-    assert.equal(await item(page, 'Weekend trip').locator('[data-row-actions]').getAttribute('aria-controls'), await selected.getAttribute('id'))
+    assert.equal(await item(page, 'Priya Shah').locator('[data-row-actions]').getAttribute('aria-controls'), await selected.getAttribute('id'))
     await page.getByRole('listbox').focus()
     // Tab passes the Pinned group's toggle, then reaches the selected row's actions.
-    const archive = item(page, 'Weekend trip').getByRole('button', { name: 'Archive', exact: true })
+    const archive = item(page, 'Priya Shah').getByRole('button', { name: 'Archive', exact: true })
     const active = (l) => l.evaluate((el) => el === document.activeElement)
     for (let i = 0; i < 3 && !(await active(archive)); i++) await page.keyboard.press('Tab')
     assert.ok(await active(archive), 'Tab from the list reaches the selected row\'s Archive')
@@ -90,13 +93,13 @@ describe('chat rows', () => {
     const time = selected.locator('.tabular-nums')
     assert.equal(await time.evaluate((el) => getComputedStyle(el).visibility), 'hidden', 'the actions replace the time')
     await page.keyboard.press('Tab')
-    const toggle = item(page, 'Weekend trip').getByRole('button', { name: 'Mark as unread', exact: true })
+    const toggle = item(page, 'Priya Shah').getByRole('button', { name: 'Mark as unread', exact: true })
     assert.ok(await active(toggle))
     await page.keyboard.press('Enter')
     await page.waitForFunction(() => window.__calls.some((c) => c.name === 'MarkAsUnread'))
     assert.deepEqual((await ui.calls(page, 'MarkAsUnread')).map((c) => c.args), [[['t-trip-m']]])
     await page.keyboard.press('Tab')
-    assert.ok(await active(item(page, 'Weekend trip').getByRole('button', { name: 'Snooze', exact: true })))
+    assert.ok(await active(item(page, 'Priya Shah').getByRole('button', { name: 'Snooze', exact: true })))
     await page.keyboard.press('Enter')
     await page.getByRole('menu').waitFor()
     assert.equal(await item(page, 'Jamie Chen').getByRole('button', { name: 'Mark as read', exact: true }).count(), 1, 'an unread row offers Mark as read')
@@ -119,7 +122,27 @@ describe('chat rows', () => {
     assert.deepEqual(single, [[36, 'OH']], 'one person gets a 36 px avatar with two initials')
   }))
 
-  it('by default rows show no avatar, account dot or hover buttons, and the actions stay in the context menu', ui.run({ accounts: 'expanded', allow: ['Archive'] }, async (page) => {
+  it('line two is the latest line with its writer, not the subject', ui.run({ previews: true }, async (page) => {
+    const line = (text) => row(page, text).locator('[data-row-line]').evaluate((el) => ({
+      kind: el.dataset.rowLine, prefix: el.querySelector('[data-row-prefix]')?.textContent.trim() ?? null, text: el.textContent.replace(/\s+/g, ' ').trim(),
+    }))
+    // A group names the writer by first name; a 1:1 chat does not; my own message reads "You".
+    assert.deepEqual(await line('Priya Shah'), { kind: 'snippet', prefix: 'Priya:', text: 'Priya: Booking the cabin tonight. Sunday dinner is on me.' })
+    assert.deepEqual(await line('Omar Haddad'), { kind: 'snippet', prefix: null, text: 'Still available! Happy to meet Saturday morning if that works.' })
+    assert.deepEqual(await line('Grace Okafor'), { kind: 'snippet', prefix: 'You:', text: 'You: Thank you! Toasting the spices first, got it.' })
+    assert.doesNotMatch(await row(page, 'Priya Shah').innerText(), /Weekend trip/, 'no subject beside a snippet')
+    // Screen readers hear the line with its writer and the unread count.
+    assert.match(await row(page, 'Grace Okafor').getAttribute('aria-label'), /^Grace Okafor, You: Thank you!/)
+    assert.match(await row(page, 'Jamie Chen').getAttribute('aria-label'), /Jamie: Has anyone .*, 2 unread/)
+  }))
+
+  it('with previews off line two is the subject', ui.run({ previews: false }, async (page) => {
+    const el = row(page, 'Omar Haddad').locator('[data-row-line]')
+    assert.equal(await el.getAttribute('data-row-line'), 'subject')
+    assert.equal((await el.innerText()).trim(), 'Bike for sale')
+  }))
+
+  it('with avatars off rows show no avatar, account dot or hover buttons, and the actions stay in the context menu', ui.run({ accounts: 'expanded', avatars: false, allow: ['Archive'] }, async (page) => {
     const omar = row(page, 'Omar Haddad')
     assert.equal(await page.locator('[data-chat-row] [data-avatar-tint]').count(), 0, 'no row has an avatar')
     assert.equal(await page.locator('[data-chat-item] [data-row-actions]').count(), 0, 'no row has hover buttons')
@@ -129,9 +152,11 @@ describe('chat rows', () => {
     await omar.click({ button: 'right' })
     assert.ok(await page.getByRole('menuitem', { name: 'Archive', exact: true }).isVisible(), 'Archive stays in the context menu')
     await page.keyboard.press('Escape')
+    // The closing context menu is also a menu: wait until it is gone so the check below sees the snooze menu.
+    await page.getByRole('menu').waitFor({ state: 'detached' })
     await page.getByRole('listbox').focus()
     await page.keyboard.press('h')
-    await page.getByRole('menu').waitFor()
-    assert.ok(await page.getByRole('menuitem').first().isVisible(), 'the H shortcut still opens the snooze menu')
+    const opened = await page.getByRole('menuitem').first().waitFor({ state: 'visible', timeout: 5000 }).then(() => true, () => false)
+    assert.ok(opened, 'the H shortcut still opens the snooze menu')
   }))
 })

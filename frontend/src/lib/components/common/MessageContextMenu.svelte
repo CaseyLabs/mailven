@@ -45,8 +45,9 @@
     extraItems?: Snippet
     // Omit the built-in Archive when extraItems supplies its own.
     hideArchive?: boolean
-    // Replace the built-in Spam and Read/Unread actions, so a caller with its
+    // Replace the built-in Delete, Spam and Read/Unread actions, so a caller with its
     // own undo and refresh handling behaves the same from the menu.
+    onDelete?: () => void
     onSpam?: () => void
     onToggleRead?: () => void
   }
@@ -64,6 +65,7 @@
     children,
     extraItems,
     hideArchive = false,
+    onDelete,
     onSpam,
     onToggleRead,
   }: Props = $props()
@@ -351,7 +353,7 @@
         {$_('contextMenu.archive')}
       </ContextMenuItem>
     {/if}
-    <ContextMenuItem onSelect={handleDelete}>
+    <ContextMenuItem onSelect={onDelete ?? handleDelete}>
       <Icon icon={isTrashFolder ? 'lucide:trash-2' : 'lucide:trash-2'} class="mr-2 h-4 w-4" />
       {$_(isTrashFolder ? 'contextMenu.deletePermanently' : 'contextMenu.delete')}
     </ContextMenuItem>

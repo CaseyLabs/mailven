@@ -452,21 +452,21 @@ func TestSetGetBoolSettings(t *testing.T) {
 			set:    (*Store).SetShowMessagePreview,
 			get:    (*Store).GetShowMessagePreview,
 			value:  true,
-			defVal: false,
+			defVal: true,
 		},
 		{
 			name:   "ChatShowAvatars_true",
 			set:    (*Store).SetChatShowAvatars,
 			get:    (*Store).GetChatShowAvatars,
 			value:  true,
-			defVal: false,
+			defVal: true,
 		},
 		{
 			name:   "ChatShowAvatars_false",
 			set:    (*Store).SetChatShowAvatars,
 			get:    (*Store).GetChatShowAvatars,
 			value:  false,
-			defVal: false,
+			defVal: true,
 		},
 		{
 			name:   "ChatHoverActions_true",
@@ -487,21 +487,21 @@ func TestSetGetBoolSettings(t *testing.T) {
 			set:    (*Store).SetChatMessageAvatars,
 			get:    (*Store).GetChatMessageAvatars,
 			value:  true,
-			defVal: false,
+			defVal: true,
 		},
 		{
 			name:   "ChatMessageAvatars_false",
 			set:    (*Store).SetChatMessageAvatars,
 			get:    (*Store).GetChatMessageAvatars,
 			value:  false,
-			defVal: false,
+			defVal: true,
 		},
 		{
 			name:   "ShowMessagePreview_false",
 			set:    (*Store).SetShowMessagePreview,
 			get:    (*Store).GetShowMessagePreview,
 			value:  false,
-			defVal: false,
+			defVal: true,
 		},
 	}
 
@@ -836,8 +836,8 @@ func TestSetGetChatReadingFont(t *testing.T) {
 			store := NewStore(openTestDB(t))
 
 			got, err := store.GetChatReadingFont()
-			if err != nil || got != ChatReadingFontSerif {
-				t.Fatalf("default = %q, %v; want serif", got, err)
+			if err != nil || got != ChatReadingFontSans {
+				t.Fatalf("default = %q, %v; want sans", got, err)
 			}
 
 			err = store.SetChatReadingFont(tt.font)
@@ -845,7 +845,7 @@ func TestSetGetChatReadingFont(t *testing.T) {
 				if err == nil {
 					t.Fatal("expected error, got nil")
 				}
-				if got, _ := store.GetChatReadingFont(); got != ChatReadingFontSerif {
+				if got, _ := store.GetChatReadingFont(); got != ChatReadingFontSans {
 					t.Errorf("rejected value changed the setting to %q", got)
 				}
 				return
@@ -902,5 +902,28 @@ func TestSetGetChatRichStyle(t *testing.T) {
 				t.Errorf("got %q, %v; want %q", got, err, tt.style)
 			}
 		})
+	}
+}
+
+// CF changed the chat avatar, message-font and preview defaults; values a profile
+// stored before the change are kept.
+func TestChatDefaultsKeepStoredValues(t *testing.T) {
+	store := NewStore(openTestDB(t))
+	for key, value := range map[string]string{KeyChatShowAvatars: "false", KeyChatMessageAvatars: "false", KeyChatReadingFont: "serif", KeyShowMessagePreview: "false"} {
+		if err := store.Set(key, value); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if got, err := store.GetChatShowAvatars(); err != nil || got {
+		t.Errorf("chat_show_avatars = %v, %v; want stored false", got, err)
+	}
+	if got, err := store.GetChatMessageAvatars(); err != nil || got {
+		t.Errorf("chat_message_avatars = %v, %v; want stored false", got, err)
+	}
+	if got, err := store.GetChatReadingFont(); err != nil || got != ChatReadingFontSerif {
+		t.Errorf("chat_reading_font = %q, %v; want stored serif", got, err)
+	}
+	if got, err := store.GetShowMessagePreview(); err != nil || got {
+		t.Errorf("show_message_preview = %v, %v; want stored false", got, err)
 	}
 }

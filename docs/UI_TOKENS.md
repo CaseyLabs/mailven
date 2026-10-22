@@ -48,6 +48,10 @@ Each value is a raw HSL triple wrapped by `hsl()` in its `--color-*` utility
 | `--focus` | #af5539 | #ed997b |
 | `--paper` | #fefcfa | #ede9e2 |
 | `--paper-text` | #2a2620 | #2a2620 |
+| `--bubble-in` | #efe9e1 | #2b3546 |
+| `--bubble-out` | #f6dbcd | #4a3128 |
+| `--bubble-quote-rail` | #cfc5b8 | #4f5d72 |
+| `--divider-pill` | #ece6de | #28323f |
 | `--danger` | #a83634 | #eb827b |
 | `--success` | #397247 | #84be90 |
 
@@ -68,6 +72,10 @@ Roles:
 - **Paper.** `paper` and `paper-text` are the light card that sender-styled HTML
   mail renders on in both themes, and the forced-light composer body. They are
   the only near-white surface in Dark.
+- **Bubbles.** `bubble-in` (theirs, a cool neutral) and `bubble-out` (mine, a
+  terracotta tint) fill message bubbles. They are deliberately quiet against
+  the ground (about 1.2:1), so the text carries them. `bubble-quote-rail` is the
+  quoted-reply rail inside a bubble and `divider-pill` the day pill.
 - **Status.** `danger` (text-coloured, not filled) and `success`. `--info`,
   `--warning` and the `-foreground` status tints stay in `_status.css`.
 
@@ -186,6 +194,10 @@ kept as an alias of `radius-lg`.
 | `--sidebar-width`, `--list-width` | | 232, 340 px | Default pane widths |
 | `--thread-column` | | 760 px | Thread column and anchored composer |
 | `--measure` | | 68ch | Longest reading line |
+| `--radius-bubble` | `rounded-bubble` | 18 px | Bubble outer corners; joined corners in a group use `radius-sm` |
+| `--stream-max` | | 820 px | Centred conversation column in Bubbles |
+| `--bubble-max` | `max-w-(--bubble-max)` | min(72%, 560 px) | Widest text bubble |
+| `--bubble-long-max` | `max-w-(--bubble-long-max)` | min(88%, 640 px) | Widest long-text bubble and stream event line |
 
 The design system's header height is 52 px. `--height-header` stays 61 px
 until the headers move to the DS type styles, because it is computed from
@@ -269,6 +281,9 @@ reported. It exits 1 on any failure.
 | `border-control` on `surface-raised` | 3 | 3.55 | 3.01 |
 | `danger` on `surface-raised` | 4.5 | 6.34 | 4.95 |
 | `paper-text` on `paper` | 4.5 | 14.69 | 12.44 |
+| `text-primary` on `bubble-in` and `bubble-out` | 10 | 10.20 or more | 10.20 or more |
+| `text-secondary`, `text-tertiary`, `accent-text` on both bubbles | 4.5 | 4.72 or more | 4.72 or more |
+| `text-tertiary` on `divider-pill` | 4.5 | pass | pass |
 | avatar ink on its tint (each of eight) | 6.4 Light, 7.6 Dark (to one decimal) | 6.40–6.61 | 7.63–7.74 |
 
 The values are computed from the HSL triples, so they can differ from the
@@ -285,17 +300,60 @@ placeholder uses the composer-scoped `--composer-placeholder` in `app.css`
 
 Reading width is not a token: `data-reading-width` on `<html>` (the "Reading
 width" chat setting) selects the plain variables `--chat-stream` (Narrow and
-Standard `thread-column` 760 px, Wide 54 rem: the left-aligned `.chat-col` column
+Standard `thread-column` 760 px, Wide 54 rem: the `.chat-col` column
 (a 32 px gutter from 900 px, 16 px below) for message blocks, pending sends, day
 separators, the "New" divider, subject headings, email cards and full bodies,
 the conversation header and the anchored composer) in `app.css`. Text inside a message is
 capped at `measure` (68ch) at every width, so the setting changes how wide
-HTML layouts and cards can grow, not the line length.
+HTML layouts and cards can grow, not the line length. In Bubbles
+(`data-display-style="bubbles"` on `<html>`) Narrow and Standard use the
+centred `--stream-max` (820 px) column instead, so both sides have room; Wide
+keeps 54 rem, also centred. Blocks keep the left-aligned column.
+
+## Message bubbles
+
+`chat_display_style` `bubbles` (the default, "Bubbles") renders text messages
+as bubbles in the centred stream (`data-bubble="in|out"` on the row):
+
+- Theirs on the left on `bubble-in`, mine on the right on `bubble-out`, no
+  "You" label. Text is Inter `bubble-body` (15 / 22, or Literata 16 with
+  Message font Serif), padded 8 × 12 px, at most `--bubble-max` wide.
+- Groups (`ThreadItem.groupStart` … `groupEnd`) start 16 px apart, bubbles in a
+  group 4 px. The corners facing the avatar side join at `radius-sm`.
+- The time (`ui-meta` `text-tertiary`, `data-bubble-meta`) shows once, under a
+  group's last bubble. In group conversations (more than one incoming sender)
+  the sender's first name heads each incoming group in its avatar-tint ink
+  (`data-bubble-sender`).
+- With message avatars on, a 28 px avatar sits beside the last incoming bubble
+  of a group (`data-avatar-slot`), level with the bubble above its time.
+- Hover actions sit beside the bubble, outside it. HTML, readable-text and
+  preformatted mail and full bodies keep the block layout below in the group.
+- Quoted replies use a 2 px `bubble-quote-rail`.
+
+Between bubbles (CF-2):
+
+- Days are a centred pill (`data-day-pill`): `ui-meta` `text-tertiary` on
+  `divider-pill`, fully rounded, padded 2 × 10 px, 20 px above.
+- Stream events (`chatEvents.ts`, `data-stream-event`) replace per-message mail
+  headers: a centred `ui-meta` `text-tertiary` line before a message whose
+  sender added or removed people ("Priya added Lena Fischer", "You removed Sam
+  Rivera") or moved to a new subject ("Priya changed the topic to Dinner").
+  Names are `font-medium` `text-secondary`. Re: prefixes and empty subjects
+  never count, the sender never counts as added, and sender chats show none.
+  An event starts a new bubble group.
+- Folded runs of earlier messages are a centred `divider-pill` pill.
+- Text over about eight lines (at 62 characters a line) is long: its bubble
+  widens to `--bubble-long-max`, shows about six lines (132 px) and ends in an
+  `accent-text` "Read full message · N min" button (230 words a minute,
+  `data-read-full`, `aria-expanded`). Opened, it reads in Literata
+  (`.font-long`) whatever the Message font, and the button reads "Show less".
+
+Blocks keep the day rule, show every message in full and have no event lines.
 
 ## Message block
 
-Every message (both stored `chat_display_style` values, `bubbles` and `flat`)
-is one left-aligned block in `--chat-stream` with 16 px side padding:
+`chat_display_style` `flat` ("Blocks") keeps the DSR layout: every message is
+one left-aligned block in `--chat-stream` with 16 px side padding:
 
 - A 32 px avatar column (`w-8`, the avatar only on a run's first message), then
   a header of the sender in `ui-name-strong` (`You` on my messages, marked

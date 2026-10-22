@@ -12,7 +12,7 @@ const cardStyle = `{ window.go.app.App.GetChatRichStyle = async () => 'card' }`
 
 describe('chat reader view', () => {
   for (const accounts of ['expanded', 'collapsed']) {
-    it(`a newsletter renders as readable chat content (Accounts ${accounts})`, ui.run({ accounts, beforeMount: readerFake, allow: ['OpenURL'] }, async (page) => {
+    it(`a newsletter renders as readable chat content (Accounts ${accounts})`, ui.run({ accounts, readingFont: 'serif', beforeMount: readerFake, allow: ['OpenURL'] }, async (page) => {
       const msg = bubble(page, 'trip-5')
       const reader = msg.locator('[data-chat-reader]')
       await reader.waitFor()

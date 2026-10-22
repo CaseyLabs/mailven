@@ -11,8 +11,16 @@ const composerFakes = fs.readFileSync(path.resolve(__dirname, '../../.agents/ski
 const withComposer = (extra = '') => `${composerFakes}\nwindow.__installComposerFakes(window)\n${extra}`
 
 const box = (page) => page.locator('[data-chat-composer] textarea')
-// The whole composer (card and chip row): the chip row's controls and the in-card sender both live inside it.
+// The whole composer (chip, field and Send).
 const replyLine = (page) => page.locator('[data-chat-composer]')
+// Opens the field's ⋯ menu, where the reply target, the sender and the full composer live.
+const options = async (page) => {
+  await page.getByRole('button', { name: 'Message options' }).click()
+  const menu = page.getByRole('menu')
+  await menu.waitFor()
+  return menu
+}
+const chip = (page) => page.locator('[data-composer-chip]')
 const log = (page) => page.evaluate(() => window.__log.join(' | '))
 // Wait up to 5 s for the reply box to hold text; on a timeout the assertion that follows reports the actual value.
 const boxHolds = async (page, text) => {
@@ -24,13 +32,13 @@ const argsOf = async (page, name) => (await ui.calls(page, name)).map((c) => c.a
 
 describe('chat compose', () => {
   it('reply and reply all', ui.run({ beforeMount: withComposer() }, async (page) => {
-    // The trip chat is a group chat, so its reply defaults to Reply All (Priya and Sam).
-    const line = replyLine(page)
-    await line.getByText('2 recipients').waitFor()
-    const toggle = line.getByRole('button', { name: /^All/ })
-    await toggle.click()
-    await line.getByRole('button', { name: /^Priya Shah/ }).waitFor()
-    assert.equal(await line.getByText('2 recipients').count(), 0, 'a plain reply names its one recipient instead of a count')
+    // The trip chat is a group chat, so its reply defaults to Reply All (Priya and Sam): no mail fields show.
+    await page.waitForFunction(() => document.querySelector('[data-chat-composer] textarea')?.placeholder === 'Message Priya, Sam')
+    assert.equal(await chip(page).count(), 0, 'the default target shows no chip')
+    assert.equal(await replyLine(page).getByText(/recipients|Topic:|Reply to:/).count(), 0, 'no mail fields with the defaults')
+    await (await options(page)).getByRole('menuitem', { name: /Reply to Priya Shah/ }).click()
+    await chip(page).getByText('Reply to Priya Shah').waitFor()
+    assert.equal(await box(page).getAttribute('placeholder'), 'Message Priya', 'the placeholder names who the reply reaches')
     await box(page).fill('Count me in.')
     await box(page).press('Control+Enter')
     await page.waitForFunction(() => window.__calls.some((c) => c.name === 'QueueChatReply'))
@@ -39,17 +47,38 @@ describe('chat compose', () => {
       'the reply answers the latest incoming message, with the chosen mode')
   }))
 
-  it('the composer is a card: sender, attach and send inside, chips below', ui.run({
+  it('the chip resets the reply target to the default', ui.run({ beforeMount: withComposer() }, async (page) => {
+    await (await options(page)).getByRole('menuitem', { name: /Reply to Priya Shah/ }).click()
+    const reset = chip(page).getByRole('button', { name: 'Use the usual recipients' })
+    await reset.click()
+    await chip(page).waitFor({ state: 'detached' })
+    await box(page).fill('Back to everyone.')
+    await box(page).press('Control+Enter')
+    await page.waitForFunction(() => window.__calls.some((c) => c.name === 'QueueChatReply'))
+    const [[reply]] = await argsOf(page, 'QueueChatReply')
+    assert.equal(reply.replyAll, true, 'after the reset the reply reaches everyone again')
+  }))
+
+  it('a one-to-one chat offers no reply-target choice', ui.run({ beforeMount: withComposer() }, async (page) => {
+    await page.locator('[data-chat-row]', { hasText: 'Omar Haddad' }).click()
+    await page.waitForFunction(() => document.querySelector('[data-chat-composer] textarea')?.placeholder === 'Message Omar')
+    const menu = await options(page)
+    assert.equal(await menu.getByRole('menuitem', { name: /^Reply to/ }).count(), 0)
+    await menu.getByRole('menuitem', { name: 'Open in full composer' }).waitFor()
+  }))
+
+  it('the composer is a pill: attach and options inside, a round Send beside it', ui.run({
     beforeMount: withComposer(`{ const A = window.go.app.App, ids = A.GetIdentities
       A.GetIdentities = async (acc) => [...await ids(acc), { id: 'id-shop', accountId: acc, email: 'alex.shop@example.com', name: 'Alex Morgan', isDefault: false }]
       A.ChatReplyFrom = async () => 'alex.shop@example.com' }`),
   }, async (page) => {
     const card = box(page).locator('xpath=ancestor::div[@data-composer-card][1]')
-    await box(page).focus() // the toolbar, with the sender, shows once focus is inside the card
-    await card.getByText('from alex.shop@example.com').waitFor()
-    for (const name of ['Attach files', 'Send', 'Open in full composer']) assert.equal(await card.getByRole('button', { name: new RegExp(name, 'i') }).count(), 1, `${name} sits in the card`)
-    const [cardBox, chipBox] = await Promise.all([card.boundingBox(), page.getByText('2 recipients').boundingBox()])
-    assert.ok(chipBox.y >= cardBox.y + cardBox.height, 'the Reply-to chip row sits below the card')
+    for (const name of ['Attach files', 'Message options']) assert.equal(await card.getByRole('button', { name }).count(), 1, `${name} sits in the field`)
+    assert.equal(await card.getByRole('button', { name: 'Send' }).count(), 0, 'Send sits beside the field')
+    const [cardBox, sendBox] = await Promise.all([card.boundingBox(), replyLine(page).getByRole('button', { name: 'Send' }).boundingBox()])
+    assert.ok(sendBox.x >= cardBox.x + cardBox.width, 'Send is to the right of the field')
+    assert.equal(await replyLine(page).getByText(/from alex/).count(), 0, 'the sender is not a visible field')
+    await (await options(page)).getByText('from alex.shop@example.com').waitFor()
   }))
 
   it('draft autosave and restore', ui.run({
@@ -59,15 +88,15 @@ describe('chat compose', () => {
       A.GetChatDraft = async (acc, key) => drafts[key] ?? null }`),
   }, async (page) => {
     await box(page).fill('Half-written reply')
-    await replyLine(page).getByRole('button', { name: /^All/ }).click()
+    await (await options(page)).getByRole('menuitem', { name: /Reply to Priya Shah/ }).click()
     await page.waitForFunction(() => window.__calls.some((c) => c.name === 'SaveChatDraft' && c.args[0].text === 'Half-written reply'))
     await page.locator('[data-chat-row]', { hasText: 'Omar Haddad' }).click()
     await page.waitForFunction(() => window.__calls.some((c) => c.name === 'GetChatDraft' && c.args[1] === 't-omar'))
     assert.equal(await box(page).inputValue(), '', 'another chat starts with its own empty box')
-    await page.locator('[data-chat-row]', { hasText: 'Weekend trip to the coast' }).click()
+    await page.locator('[data-chat-row]', { hasText: 'Priya Shah' }).click()
     await boxHolds(page, 'Half-written reply')
     assert.equal(await box(page).inputValue(), 'Half-written reply', 'reopening the chat restores its draft')
-    await replyLine(page).getByRole('button', { name: /^Priya Shah/ }).waitFor()
+    await chip(page).getByText('Reply to Priya Shah').waitFor()
     const saved = (await argsOf(page, 'SaveChatDraft')).at(-1)[0]
     assert.deepEqual([saved.accountId, saved.threadKey, saved.replyAll], ['acc1', 't-trip', false], 'the draft keeps the reply mode')
   }))
@@ -101,7 +130,7 @@ describe('chat compose', () => {
   }))
 
   it('the chat row shows a sending glyph while a reply waits out its undo delay', ui.run({ beforeMount: withComposer() }, async (page) => {
-    const tripRow = page.locator('[data-chat-row]', { hasText: 'Weekend trip' })
+    const tripRow = page.locator('[data-chat-row]', { hasText: 'Priya Shah' })
     assert.equal(await tripRow.locator('[data-row-status]').count(), 0, 'a read, unsnoozed chat shows no glyph')
     await box(page).fill('Glyph test reply')
     await box(page).press('Control+Enter')
@@ -116,14 +145,14 @@ describe('chat compose', () => {
       A.GetIdentities = async (acc) => [...await ids(acc), { id: 'id-shop', accountId: acc, email: 'alex.shop@example.com', name: 'Alex Morgan', isDefault: false }]
       A.ChatReplyFrom = async () => 'alex.shop@example.com' }`),
   }, async (page) => {
-    await box(page).focus()
-    await replyLine(page).getByText('from alex.shop@example.com').waitFor()
+    await (await options(page)).getByText('from alex.shop@example.com').waitFor()
     assert.deepEqual(await argsOf(page, 'ChatReplyFrom'), [['trip-5']], 'with several identities the backend resolves the alias once')
   }))
 
   it('reply identity: one identity needs no lookup', ui.run({ beforeMount: withComposer() }, async (page) => {
-    await replyLine(page).getByText('2 recipients').waitFor()
-    assert.equal(await replyLine(page).getByText(/^from /).count(), 0, 'the default identity is not named')
+    const menu = await options(page)
+    await menu.getByRole('menuitem', { name: /Reply to everyone/ }).waitFor()
+    assert.equal(await menu.getByText(/^from /).count(), 0, 'the default identity is not named')
     assert.equal((await argsOf(page, 'ChatReplyFrom')).length, 0)
   }))
 

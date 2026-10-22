@@ -776,3 +776,40 @@ func TestThreadStartersTriggers(t *testing.T) {
 		t.Errorf("refresh lookup does not use the index: %s", plan)
 	}
 }
+
+func TestListChatsLatestSender(t *testing.T) {
+	s, _, inboxID, now := chatFixture(t)
+	for scope, want := range map[string]map[string]string{
+		inboxID: {"a@x": "alice@example.com", "e@x": "carol@example.com", "c@x": "bob@example.com"},
+		"sent-1": {"c@x": "test@example.com"},
+	} {
+		chats, err := s.ListChats(scope, ChatSectionAll, now, 0, 50)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, c := range chats {
+			if w, ok := want[c.ThreadKey]; ok && c.LatestSender.Email != w {
+				t.Errorf("scope %s, chat %s: latest sender %q, want %q", scope, c.ThreadKey, c.LatestSender.Email, w)
+			}
+		}
+	}
+}
+
+func TestParseParticipantsLatestSender(t *testing.T) {
+	raw := `[{"name":"Ann","email":"ann@x","date":"2026-01-01 09:00:00","snippet":"first"},
+		{"name":"Bo","email":"bo@x","date":"2026-01-01 11:00:00","snippet":""},
+		{"name":"Cy","email":"cy@x","date":"2026-01-01 10:00:00","snippet":"middle"}]`
+	people, snippet, sender := parseParticipantsJSON(raw)
+	if len(people) != 3 || people[0].Email != "bo@x" {
+		t.Fatalf("participants newest first: %+v", people)
+	}
+	if snippet != "middle" || sender.Email != "cy@x" || sender.Name != "Cy" {
+		t.Errorf("snippet %q from %+v, want the newest non-empty snippet and its sender", snippet, sender)
+	}
+	if _, _, sender = parseParticipantsJSON(`[{"name":"Bo","email":"bo@x","date":"1","snippet":""}]`); sender.Email != "bo@x" {
+		t.Errorf("no snippet: sender %+v, want the newest sender", sender)
+	}
+	if _, _, sender = parseParticipantsJSON(""); sender != (Address{}) {
+		t.Errorf("empty: %+v", sender)
+	}
+}

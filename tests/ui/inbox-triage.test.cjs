@@ -27,7 +27,7 @@ describe('inbox triage', () => {
     assert.deepEqual(await argsOf(page, 'PinChat'), [['acc1', 't-omar', true]], 'Pin pins the thread by its key')
     await undo(page)
     assert.equal((await argsOf(page, 'Undo')).length, 1, 'the toast Undo calls the backend Undo')
-    await menu(page, 'Weekend trip to the coast', 'Unpin')
+    await menu(page, 'Priya Shah', 'Unpin')
     assert.deepEqual((await argsOf(page, 'PinChat', 2))[1], ['acc1', 't-trip', false], 'a pinned chat offers Unpin')
   }))
 

@@ -65,10 +65,10 @@
   let chatReadingWidth = $state<string>('standard')
   let chatDisplayStyle = $state<string>('bubbles')
   let chatRichStyle = $state<string>('reader')
-  let chatShowAvatars = $state<boolean>(false)
+  let chatShowAvatars = $state<boolean>(true)
   let chatHoverActions = $state<boolean>(false)
-  let chatMessageAvatars = $state<boolean>(false)
-  let chatReadingFont = $state<string>('serif')
+  let chatMessageAvatars = $state<boolean>(true)
+  let chatReadingFont = $state<string>('sans')
   let chatIncludeQuote = $state<boolean>(true)
   let chatAutoAdvance = $state<string>('next')
   let chatNotifyPriorityOnly = $state<boolean>(true)
@@ -198,10 +198,10 @@
       chatReadingWidth = readingWidth || 'standard'
       chatDisplayStyle = displayStyle || 'bubbles'
       chatRichStyle = richStyle || 'reader'
-      chatShowAvatars = showAvatars ?? false
+      chatShowAvatars = showAvatars ?? true
       chatHoverActions = hoverActions ?? false
-      chatMessageAvatars = messageAvatars ?? false
-      chatReadingFont = readingFont || 'serif'
+      chatMessageAvatars = messageAvatars ?? true
+      chatReadingFont = readingFont || 'sans'
       chatIncludeQuote = includeQuote ?? true
       chatAutoAdvance = autoAdvance || 'next'
       chatNotifyPriorityOnly = notifyPriority ?? true

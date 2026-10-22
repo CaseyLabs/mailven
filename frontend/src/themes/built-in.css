@@ -33,6 +33,11 @@
     /* Paper: the light card that sender-styled HTML mail renders on in both themes. */
     --paper: 30 66.7% 98.8%;              /* #fefcfa */
     --paper-text: 36 13.5% 14.5%;         /* #2a2620 */
+    /* Chat (CF): bubble fills (incoming, mine), the reply-quote rail and the day pill. */
+    --bubble-in: 34.3 30.4% 91%;          /* #efe9e1 */
+    --bubble-out: 20.5 69.5% 88.4%;       /* #f6dbcd */
+    --bubble-quote-rail: 33.9 19.3% 76.7%; /* #cfc5b8 */
+    --divider-pill: 34.3 26.9% 89.8%;     /* #ece6de */
     /* Status. */
     --danger: 1 52.7% 43.1%;              /* #a83634 */
     --success: 134.7 33.3% 33.5%;         /* #397247 */
@@ -86,6 +91,11 @@
     /* Paper: the light card that sender-styled HTML mail renders on in both themes. */
     --paper: 38.2 23.4% 90.8%;            /* #ede9e2 */
     --paper-text: 36 13.5% 14.5%;         /* #2a2620 */
+    /* Chat (CF): bubble fills (incoming, mine), the reply-quote rail and the day pill. */
+    --bubble-in: 217.8 23.9% 22.2%;       /* #2b3546 */
+    --bubble-out: 15.9 29.8% 22.4%;       /* #4a3128 */
+    --bubble-quote-rail: 216 18.1% 37.8%; /* #4f5d72 */
+    --divider-pill: 213.9 22.3% 20.2%;    /* #28323f */
     /* Status. */
     --danger: 3.7 73.7% 70.2%;            /* #eb827b */
     --success: 132.4 30.9% 63.1%;         /* #84be90 */

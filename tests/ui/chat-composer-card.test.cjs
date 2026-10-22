@@ -11,43 +11,54 @@ const composerFakes = fs.readFileSync(path.resolve(__dirname, '../../.agents/ski
 const beforeMount = `${composerFakes}\nwindow.__installComposerFakes(window)`
 const box = (page) => page.locator('[data-chat-composer] textarea')
 const card = (page) => page.locator('[data-composer-card]')
-const send = (page) => card(page).getByRole('button', { name: 'Send' })
+const send = (page) => page.locator('[data-chat-composer]').getByRole('button', { name: 'Send' })
 
 describe('chat composer card', () => {
-  it('is one "Reply to" line until focused, and collapsing keeps the draft', ui.run({ beforeMount }, async (page) => {
-    assert.match(await box(page).getAttribute('placeholder'), /^Reply to /, 'the collapsed bar names who the reply goes to')
-    const collapsed = await card(page).boundingBox()
-    assert.ok(collapsed.height <= 48, `collapsed card is one line, got ${collapsed.height}px`)
-    assert.equal(await send(page).isVisible(), false, 'the toolbar is hidden while collapsed')
+  it('is a one-line pill that grows to eight lines, and blurring keeps the draft', ui.run({ beforeMount }, async (page) => {
+    assert.equal(await box(page).getAttribute('placeholder'), 'Message Priya, Sam', 'the placeholder names the people')
+    const empty = await card(page).boundingBox()
+    assert.ok(empty.height >= 40 && empty.height <= 44, `the empty field is one line, at least 40px, got ${empty.height}px`)
+    assert.ok(await send(page).isVisible(), 'Send is always shown')
 
-    await box(page).focus()
-    await send(page).waitFor()
-    assert.ok((await card(page).boundingBox()).height > collapsed.height, 'focus expands the card')
-
-    await box(page).fill('Half-written reply')
+    await box(page).fill(Array.from({ length: 20 }, (_, i) => `line ${i + 1}`).join('\n'))
+    const tall = await box(page).evaluate((e) => e.getBoundingClientRect().height)
+    assert.ok(tall >= 160 && tall <= 182, `the field grows to eight lines, then scrolls, got ${tall}px`)
     await box(page).press('Escape')
-    await page.waitForFunction(() => !document.querySelector('[data-composer-card]').hasAttribute('data-expanded'))
-    assert.equal(await send(page).isVisible(), false, 'Escape collapses the card')
-    assert.equal(await box(page).inputValue(), 'Half-written reply', 'collapsing keeps the draft')
-    assert.ok((await card(page).boundingBox()).height <= 48, 'a multi-line draft still collapses to one line')
+    assert.match(await box(page).inputValue(), /^line 1\n/, 'blurring keeps the draft')
+  }))
+
+  it('refits when its width changes', ui.run({ beforeMount }, async (page) => {
+    // Regression: the field sized itself only when the text changed, so one measured while the pane was still
+    // sliding in (narrow, the placeholder wrapping) stayed several lines tall once the pane reached full width.
+    await card(page).evaluate((el) => { el.style.flex = '0 0 90px' })
+    await box(page).fill('x')
+    await box(page).fill('')
+    await card(page).evaluate((el) => { el.style.flex = '' })
+    await page.waitForTimeout(200)
+    const h = (await card(page).boundingBox()).height
+    assert.ok(h >= 40 && h <= 44, `the empty field is one line again at full width, got ${h}px`)
   }))
 
   it('is anchored to the bottom of the thread column, raised and rounded', ui.run({ beforeMount }, async (page) => {
     const b = await card(page).boundingBox()
     const view = page.viewportSize()
-    assert.ok(view.height - (b.y + b.height) < 120, 'the card sits at the bottom of the window (chip row below)')
-    assert.ok(b.width <= 720 + 1, `the card stays inside the 720px thread column, got ${b.width}px`)
+    assert.ok(view.height - (b.y + b.height) < 40, 'the field sits at the bottom of the window')
+    assert.ok(b.width <= 820 + 1, `the field stays inside the 820px stream column, got ${b.width}px`)
     const style = await card(page).evaluate((el) => {
       const s = getComputedStyle(el)
-      return { radius: parseFloat(s.borderTopLeftRadius), shadow: s.boxShadow, border: parseFloat(s.borderTopWidth), bg: s.backgroundColor }
+      return { radius: parseFloat(s.borderTopLeftRadius), shadow: s.boxShadow, border: parseFloat(s.borderTopWidth) }
     })
-    assert.equal(style.radius, 16, 'radius-xl')
+    assert.equal(style.radius, 20, 'a pill at one line')
     assert.notEqual(style.shadow, 'none', 'shadow-2')
     assert.equal(style.border, 0, 'no border; the raised surface and shadow separate it')
   }))
 
-  it('Send is the only filled accent button; controls follow the control heights', ui.run({ beforeMount }, async (page) => {
+  it('Send is a 40px round accent button, the only filled one, disabled while empty', ui.run({ beforeMount }, async (page) => {
+    assert.equal(await send(page).isDisabled(), true, 'disabled while the field is empty')
+    await box(page).fill('   ')
+    assert.equal(await send(page).isDisabled(), true, 'whitespace alone does not enable Send')
     await box(page).fill('Ready to go')
+    assert.equal(await send(page).isDisabled(), false)
     const accent = await page.evaluate(() => {
       const probe = document.createElement('i')
       probe.style.backgroundColor = 'hsl(var(--accent))'
@@ -60,12 +71,14 @@ describe('chat composer card', () => {
       .filter((b) => b.offsetParent && getComputedStyle(b).backgroundColor === c)
       .map((b) => b.textContent.trim() || b.getAttribute('aria-label')), accent)
     assert.deepEqual(filled, ['Send'], 'one filled accent button in the view')
-    assert.equal((await send(page).boundingBox()).height, 36, 'Send is control-lg')
-    assert.equal((await card(page).getByRole('button', { name: /Attach files/i }).boundingBox()).height, 32, 'Attach is control')
+    const s = await send(page).boundingBox()
+    assert.deepEqual([s.width, s.height], [40, 40], 'Send is 40px')
+    assert.ok(parseFloat(await send(page).evaluate((e) => getComputedStyle(e).borderTopLeftRadius)) >= 20, 'Send is round')
+    assert.equal((await card(page).getByRole('button', { name: 'Attach files' }).boundingBox()).height, 32, 'Attach is control')
   }))
 
-  it('a click outside the box still lands while the card collapses', ui.run({ beforeMount }, async (page) => {
-    // Pressing a button in the stream blurs the box on mousedown; the card must not shrink under the pointer.
+  it('a click outside the box still lands', ui.run({ beforeMount }, async (page) => {
+    // Pressing a button in the stream blurs the box on mousedown; the field must not move under the pointer.
     await box(page).fill('Click test')
     await box(page).press('Control+Enter')
     const pending = page.getByRole('status').filter({ hasText: 'Click test' })

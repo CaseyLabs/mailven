@@ -61,6 +61,12 @@ const pairs = (theme) => [
   ['danger', 'surface-hover', TEXT],
   ['accent-text', 'surface-raised', TEXT], // tonal and link buttons in menus and cards
   ['paper-text', 'paper', TEXT],
+  // CF chat bubbles: message text at 10:1 or better, every lighter tier and
+  // links at 4.5:1 on both fills; the day pill's text on its fill.
+  ...['bubble-in', 'bubble-out'].flatMap((bg) => [
+    ['text-primary', bg, 10], ['text-secondary', bg, TEXT], ['text-tertiary', bg, TEXT], ['accent-text', bg, TEXT],
+  ]),
+  ['text-tertiary', 'divider-pill', TEXT],
   // Avatar ink on its tint: the table's floors of 6.4 (Light) and 7.6 (Dark)
   // are rounded to one decimal, so teal's 6.39 meets the 6.4 floor.
   ...tints.map((t) => [`avatar-${t}-ink`, `avatar-${t}`, theme === 'light' ? 6.35 : 7.55]),

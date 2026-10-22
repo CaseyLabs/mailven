@@ -135,18 +135,21 @@ func (m *Message) ToHeader() *MessageHeader {
 
 // Conversation represents a group of related messages (thread)
 type Conversation struct {
-	ThreadID       string     `json:"threadId"`
-	Subject        string     `json:"subject"`
-	Snippet        string     `json:"snippet"`
-	MessageCount   int        `json:"messageCount"`
-	UnreadCount    int        `json:"unreadCount"`
-	HasAttachments bool       `json:"hasAttachments"`
-	IsStarred      bool       `json:"isStarred"`
-	LatestDate     time.Time  `json:"latestDate"`
-	Participants   []Address  `json:"participants"`
-	MessageIDs     []string   `json:"messageIds"`         // Message IDs for context menu actions
-	IsEncrypted    bool       `json:"isEncrypted"`        // Any message in thread is encrypted (S/MIME or PGP)
-	Messages       []*Message `json:"messages,omitempty"` // Only populated when fetching full conversation
+	ThreadID       string    `json:"threadId"`
+	Subject        string    `json:"subject"`
+	Snippet        string    `json:"snippet"`
+	MessageCount   int       `json:"messageCount"`
+	UnreadCount    int       `json:"unreadCount"`
+	HasAttachments bool      `json:"hasAttachments"`
+	IsStarred      bool      `json:"isStarred"`
+	LatestDate     time.Time `json:"latestDate"`
+	Participants   []Address `json:"participants"`
+	// LatestSender sent the message the snippet comes from: the newest message
+	// with a snippet, or the newest message when none has one.
+	LatestSender Address    `json:"latestSender"`
+	MessageIDs   []string   `json:"messageIds"`         // Message IDs for context menu actions
+	IsEncrypted  bool       `json:"isEncrypted"`        // Any message in thread is encrypted (S/MIME or PGP)
+	Messages     []*Message `json:"messages,omitempty"` // Only populated when fetching full conversation
 
 	// For unified inbox view - populated when querying across accounts
 	AccountID    string `json:"accountId,omitempty"`

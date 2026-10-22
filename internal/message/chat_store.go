@@ -527,7 +527,7 @@ func chatPageDetails(tx *sql.Tx, scope, section string, page [][2]string, thread
 			c.MessageIDs = strings.Split(messageIDs.String, ",")
 		}
 		var latestSnippet string
-		c.Participants, latestSnippet = parseParticipantsJSON(participantsJSON.String)
+		c.Participants, latestSnippet, c.LatestSender = parseParticipantsJSON(participantsJSON.String)
 		if latestSnippet != "" {
 			c.Snippet = latestSnippet
 		}

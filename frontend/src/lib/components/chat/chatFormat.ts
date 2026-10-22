@@ -6,6 +6,7 @@ import { format, isThisYear, isToday, isYesterday } from 'date-fns'
 import { _ } from '$lib/i18n'
 import type { message as messageModels } from '../../../../wailsjs/go/models'
 import type { AccountWithFolders } from '$lib/stores/accounts.svelte'
+import type { StreamEvent } from './chatEvents'
 
 export type ReplyMode = 'reply' | 'reply-all' | 'forward'
 
@@ -76,6 +77,18 @@ export function chatSender(people: Person[], email: string): Person {
 // Sent row its recipients.
 export function rowPeople(chat: { participants: Person[]; recipients: Person[]; senderEmail: string }, myEmails: Set<string>, sent: boolean): Person[] {
   return chat.senderEmail ? [chatSender(chat.participants, chat.senderEmail)] : chatPeople(chat.participants, myEmails, chat.recipients, sent)
+}
+
+// rowPrefix names who wrote a row's snippet (CF-3): "you" for my own message,
+// the sender's first name when the row shows more than one person, otherwise
+// nothing (a 1:1 chat or a sender chat already names them).
+export function rowPrefix(sender: Person, people: Person[], myEmails: Set<string>): { mine: true } | { mine: false; name: string } | null {
+  const email = sender.email.trim().toLowerCase()
+  if (!email) return null
+  if (myEmails.has(email)) return { mine: true }
+  if (people.length < 2) return null
+  const name = displayName(sender).trim().split(/\s+/)[0]
+  return name ? { mine: false, name } : null
 }
 
 // canToggleSenderChat: a sender chat can split; a Sent row's people are
@@ -245,10 +258,15 @@ export interface ThreadItem {
   newDay: boolean
   // First message of a same-sender run: show avatar and name.
   groupStart: boolean
+  // Last message of a same-sender run: bubbles show the avatar and time here.
+  groupEnd?: boolean
   // Set on the first message with a subject, and on the first message of
   // every later subject run in a sender chat with two or more distinct
   // subjects: render a heading before it.
   subject?: string
+  // Bubbles only: people added or removed and topic changes since the
+  // previous message (chatEvents.ts), shown as a line before it.
+  events?: StreamEvent[]
 }
 
 // Keep in sync with subjectPrefixRe in internal/message/chat_store.go.
@@ -284,9 +302,11 @@ export function buildThreadItems(messages: messageModels.Message[], labelSubject
     const sameSender = !!prev && prev.mine === mine && (prev.msg.fromEmail || '').toLowerCase() === (msg.fromEmail || '').toLowerCase()
     const groupStart = newDay || !sameSender || subject !== undefined || date.getTime() - prev!.date.getTime() > GROUP_WINDOW_MS
     const item: ThreadItem = { msg, date, mine, newDay, groupStart, subject }
+    if (prev && groupStart) prev.groupEnd = true
     items.push(item)
     prev = item
   })
+  if (prev) (prev as ThreadItem).groupEnd = true
   return items
 }
 

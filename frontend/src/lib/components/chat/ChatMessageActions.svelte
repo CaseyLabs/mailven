@@ -1,6 +1,7 @@
 <script lang="ts">
   // ChatMessageActions — the hover / focus actions over the top-right corner
-  // of a message block: edit draft, reply, the details fold and the message menu.
+  // of a message block (beside a bubble, by `placement`): edit draft, reply, the
+  // details fold and the message menu.
   import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
@@ -23,17 +24,19 @@
     onToggleSource: () => void
     onCopy: () => void
     onToggleDetails: (el: HTMLElement) => void
+    // Position classes; the block's top-right corner by default.
+    placement?: string
   }
 
   let {
     isDraft, hasChat, showOriginal, canDarken, darken, sourceOpen, detailsOpen, detailsId,
-    onEditDraft, onReply, onToggleOriginal, onToggleDark, onToggleSource, onCopy, onToggleDetails,
+    onEditDraft, onReply, onToggleOriginal, onToggleDark, onToggleSource, onCopy, onToggleDetails, placement = 'top-0 right-0',
   }: Props = $props()
 
   const button = 'p-1 rounded-sm text-fg-secondary hover:bg-surface-hover hover:text-fg-primary focus-visible:outline-2 focus-visible:outline-focus'
 </script>
 
-<div class="absolute top-0 right-0 flex items-center gap-0.5 p-0.5 rounded-md bg-surface-raised shadow-1 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 group-has-focus-visible:opacity-100 has-data-[state=open]:opacity-100 group-hover:z-20 group-focus-visible:z-20 group-has-focus-visible:z-20 has-data-[state=open]:z-20 transition-opacity motion-reduce:transition-none">
+<div class="absolute {placement} flex items-center gap-0.5 p-0.5 rounded-md bg-surface-raised shadow-1 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 group-has-focus-visible:opacity-100 has-data-[state=open]:opacity-100 group-hover:z-20 group-focus-visible:z-20 group-has-focus-visible:z-20 has-data-[state=open]:z-20 transition-opacity motion-reduce:transition-none">
   {#if isDraft && onEditDraft}
     <button type="button" class={button} title={$_('viewer.editDraft')} onclick={onEditDraft}>
       <Icon icon="lucide:pencil" class="w-4 h-4" />

@@ -19,6 +19,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 - [DS — Reading-first redesign](#ds): no unresolved issue recorded
+- [CF — Chat-first revision](#cf): [UI21](#ui21), [UI22](#ui22), [UI23](#ui23)
 
 <a id="send"></a>
 
@@ -598,6 +599,36 @@ Project: [DS](PLAN.md#ds).
 ### UI20 — Fixtures and tests depend on the wall clock
 
 - **Status:** resolved 2026-10-21 (branch `fix/ui-followups`). `tests/ui/harness.cjs` installs Playwright's clock at a fixed mid-afternoon UTC start, so relative fixture dates never cross midnight; time still flows. The fonts test opts out (`clock: false`) because the fake clock empties resource timing. Full `make test-ui` passes.
+
+<a id="cf"></a>
+
+## CF — Chat-first revision
+
+Project: [CF](PLAN.md#cf).
+
+<a id="ui21"></a>
+
+### UI21 — Inbox rows rarely show the "You:" prefix
+
+- **Severity / proposed priority / status:** low / P3 / open (found 2026-10-21 in CF-3).
+- **Problem / evidence:** CF-3 prefixes a row's latest line with "You:" when the latest message is mine. `ListChats` aggregates only the messages in the scope folder, so in Inbox a reply I sent (stored in Sent) is not the row's latest message; the prefix shows in the Sent scope, for self-sent mail and in sender chats, but an Inbox row keeps the other person's last line after I reply. `internal/message/store.go` `parseParticipantsJSON` picks the latest sender from that folder-scoped set.
+- **Dependencies / closure:** a thread-level latest message across folders (as `GetConversation` builds) for the list query, measured against list-load cost on large mailboxes. Close when an Inbox row shows "You:" after I reply, with a query test.
+
+<a id="ui22"></a>
+
+### UI22 — No search within an open conversation
+
+- **Severity / proposed priority / status:** low / P3 / open (found 2026-10-21 in CF-3).
+- **Problem / evidence:** the CF-3 header keeps "Search in conversation" beside Archive and ⋯, but Mailven has no in-conversation search, so CF-3 shipped the header without it rather than adding a button with no action.
+- **Dependencies / closure:** design and implement find-in-chat (highlight, next/previous match, keyboard access) as its own milestone; close when the header button and its tests land.
+
+<a id="ui23"></a>
+
+### UI23 — The quick reply cannot change the topic or add Cc/Bcc
+
+- **Severity / proposed priority / status:** low / P3 / open (found 2026-10-21 in CF-4).
+- **Problem / evidence:** CF-4 planned `accent-soft` chips for a changed topic and for Cc/Bcc as well as the reply target, but the chat reply (`QueueChatReply`, chat drafts) carries only text, attachments and Reply/Reply All. Those choices stay in **⋯ › Open in full composer**, so only the reply-target chip exists.
+- **Dependencies / closure:** extend the chat reply and draft model with a subject and Cc/Bcc (backend, bindings, drafts), then add their ⋯ options and chips; close when they land with tests.
 
 ## Recurring problems
 

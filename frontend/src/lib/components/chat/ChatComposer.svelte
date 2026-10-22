@@ -1,12 +1,13 @@
 <script lang="ts">
-  // ChatComposer — the reply box anchored to the bottom of the thread column: a
-  // raised card holding the autosizing text, an Expand button and a toolbar (sender,
-  // Attach, Send), with attachment chips above it and a chip row below ("Reply to:"
-  // target | recipient count | "Topic:" subject). The card is one "Reply to …" line
-  // until focus is inside it, and collapsing keeps the draft. State and saving live
-  // in the ChatComposer controller.
+  // ChatComposer — the messenger-style reply field at the bottom of the thread
+  // column: a pill on surface-raised holding Attach, the autosizing text (one
+  // line, growing to eight) and the ⋯ options menu, with a round Send button
+  // beside it. With the defaults no mail fields show; a chip above the field
+  // appears only when the reply target differs from the default, and its ✕
+  // resets it. State and saving live in the ChatComposer controller.
   import Icon from '@iconify/svelte'
   import { Button } from '$lib/components/ui/button'
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { _ } from '$lib/i18n'
   import { toasts } from '$lib/stores/toast'
   import { getChatSendKey } from '$lib/stores/settings.svelte'
@@ -15,70 +16,69 @@
 
   interface Props {
     composer: ChatComposer
-    // Subject of the message being answered, and the alias or account the
-    // reply goes out from ('' when neither needs naming).
-    subject?: string
+    // The alias or account the reply goes out from ('' when it needs no naming).
     from?: string
     disabled?: boolean
     onEscape?: () => void
     onExpand: () => void
   }
 
-  let { composer, subject = '', from = '', disabled = false, onEscape, onExpand }: Props = $props()
+  let { composer, from = '', disabled = false, onEscape, onExpand }: Props = $props()
 
   let textarea = $state<HTMLTextAreaElement | null>(null)
-  // Expanded while focus is inside the card. Collapsing waits for the pointer to
-  // be released: a press elsewhere (Undo, a message action) blurs the box on
-  // mousedown, and a card that shrank then would slide the target from under the click.
-  let expanded = $state(false)
-  let pointerDown = false
-  const trackPointer = (down: boolean) => () => { pointerDown = down }
-
-  function onFocusOut(e: FocusEvent) {
-    const card = e.currentTarget as HTMLElement
-    if (card.contains(e.relatedTarget as Node | null)) return
-    if (!pointerDown) {
-      expanded = false
-      return
-    }
-    window.addEventListener('pointerup', () => setTimeout(() => {
-      if (!card.contains(document.activeElement)) expanded = false
-    }), { once: true })
-  }
   const ctrlSends = $derived(getChatSendKey() === 'ctrl-enter')
   const sendHint = $derived(ctrlSends ? $_('chat.sendHintCtrl') : $_('chat.sendHintEnter'))
   const canSend = $derived(!disabled && !composer.isEmpty)
 
-  // Name who the reply goes to, so the reply mode is never a guess.
   const MAX_NAMES = 3
   const MAX_TITLE_EMAILS = 10
   const listed = (items: string[], max: number) =>
     items.length > max ? `${items.slice(0, max).join(', ')} ${$_('chat.andMore', { values: { count: items.length - max } })}` : items.join(', ')
-  const people = $derived(composer.recipients)
   const emails = (list: { email: string }[]) => listed(list.map((p) => p.email), MAX_TITLE_EMAILS)
+  const firstName = (p: { name: string; email: string }) => displayName(p).split(/\s+/)[0]
+  const people = $derived(composer.recipients)
   // The textarea's title doubles as its accessible description.
   const title = $derived(people.length > 0 ? `${emails(people)}\n${sendHint}` : sendHint)
-  // "Reply to:" switches between All and the person (or Reply-To) a plain
-  // reply reaches; when both reach the same people there is nothing to choose.
   // Null while unknown or when a plain reply reaches no one.
   const choices = $derived(composer.choices?.reply.length ? composer.choices : null)
-  const replyNames = $derived(choices ? listed(choices.reply.map(displayName), MAX_NAMES) : '')
-  // The collapsed bar reads "Reply to Priya"; before the targets are known it keeps the plain prompt.
-  const placeholder = $derived(replyNames ? $_('chat.replyToPlaceholder', { values: { names: replyNames } }) : $_('chat.typeReply'))
+  const placeholder = $derived(people.length > 0
+    ? $_('chat.messagePlaceholder', { values: { names: listed(people.map(firstName), MAX_NAMES) } })
+    : $_('chat.typeReply'))
+  // Reply and Reply All reach the same people in a one-to-one chat: nothing to choose.
   const sameChoice = $derived.by(() => {
     if (!choices) return true
     const key = (list: { email: string }[]) => list.map((p) => p.email.toLowerCase()).sort().join('\n')
     return key(choices.reply) === key(choices.all)
   })
+  const replyNames = $derived(choices ? listed(choices.reply.map(displayName), MAX_NAMES) : '')
+  const chip = $derived(!sameChoice && !composer.defaultTarget
+    ? (composer.replyAll ? $_('chat.replyChipAll', { values: { count: choices?.all.length ?? 0 } }) : $_('chat.replyChipOne', { values: { names: replyNames } }))
+    : '')
 
-  // Grow with the text up to the textarea's CSS max-height, then scroll.
-  $effect(() => {
-    void composer.text
+  // Grow with the text up to the textarea's CSS max-height (eight lines), then scroll.
+  function fit() {
     if (!textarea) return
     textarea.style.height = 'auto'
     // border-box sizing: scrollHeight excludes the border, so add it back.
     const border = textarea.offsetHeight - textarea.clientHeight
     textarea.style.height = `${textarea.scrollHeight + border}px`
+  }
+  $effect(() => {
+    void composer.text
+    fit()
+  })
+  // Refit when the width changes: a height measured while the pane was still
+  // narrow (sliding in, or a resized window) wraps the text, or the placeholder, too much.
+  $effect(() => {
+    if (!textarea) return
+    let width = textarea.clientWidth
+    const ro = new ResizeObserver(() => {
+      if (!textarea || textarea.clientWidth === width) return
+      width = textarea.clientWidth
+      fit()
+    })
+    ro.observe(textarea)
+    return () => ro.disconnect()
   })
 
   export function focus() {
@@ -114,13 +114,10 @@
   }
 </script>
 
-{#snippet sep()}
-  <span class="shrink-0" aria-hidden="true">|</span>
+{#snippet check(on: boolean)}
+  <Icon icon="lucide:check" class="w-4 h-4 mr-2 shrink-0 {on ? '' : 'invisible'}" aria-hidden="true" />
 {/snippet}
 
-<svelte:window onpointerdowncapture={trackPointer(true)} onpointerupcapture={trackPointer(false)} onpointercancel={trackPointer(false)} />
-
-<!-- Expanded while focus is inside (typing, the shortcut, Attach, Send); otherwise one line. -->
 <div class="w-full pb-3 pt-1" data-chat-composer>
   <div class="chat-col">
     {#if composer.attachments.length > 0}
@@ -143,78 +140,78 @@
       </ul>
     {/if}
 
-        <div
-      class="group/card relative rounded-xl bg-surface-raised shadow-2 focus-within:ring-2 focus-within:ring-ring"
-      data-composer-card
-      data-expanded={expanded || undefined}
-      onfocusin={() => (expanded = true)}
-      onfocusout={onFocusOut}
-    >
-      <textarea
-        bind:this={textarea}
-        class="block w-full max-h-11 overflow-hidden group-data-[expanded]/card:max-h-[40vh] group-data-[expanded]/card:overflow-auto resize-none bg-transparent pl-4 pr-12 py-3 text-ui-body leading-5 focus-visible:outline-none scrollbar-thin"
-        rows="1"
-        {placeholder}
-        aria-label={$_('viewer.reply')}
-        {title}
-        spellcheck="true"
-        {disabled}
-        value={composer.text}
-        oninput={(e) => composer.setText(e.currentTarget.value)}
-        onkeydown={handleKeyDown}
-        onblur={() => void composer.flush()}
-      ></textarea>
-
-      <div class="absolute top-2 right-2 hidden group-data-[expanded]/card:block">
-        <Button variant="icon" size="control-sm" class="w-7 px-0" title={$_('chat.expand')} aria-label={$_('chat.expand')} {disabled} onclick={onExpand}>
-          <Icon icon="lucide:maximize-2" class="w-4 h-4 text-muted-foreground" />
-        </Button>
-      </div>
-
-      <div class="flex items-center justify-end gap-2 px-2 pb-2 min-w-0 hidden group-data-[expanded]/card:flex">
-        <!-- The sender is resolved by the backend (alias the message reached); the sender review dialog still gates a send. -->
-        {#if from}
-          <span class="mr-auto min-w-0 truncate px-1.5 text-xs text-fg-tertiary" title={from}>{$_('chat.replyLineFrom', { values: { sender: from } })}</span>
-        {/if}
-        <Button variant="icon" size="control" class="shrink-0" title={$_('chat.attach')} aria-label={$_('chat.attach')} {disabled} onclick={attach}>
-          <Icon icon="lucide:paperclip" class="w-4 h-4 text-muted-foreground" />
-        </Button>
-        <!-- The wrapper carries the tooltip, which a disabled button may not show. Send is the only filled button. -->
-        <span class="shrink-0" title={`${$_('chat.send')} (${sendHint})`}>
-          <Button variant="primary" size="control-lg" disabled={!canSend} onclick={() => void composer.send()}>
-            <Icon icon="lucide:send" class="w-4 h-4" />
-            <span>{$_('chat.send')}</span>
-          </Button>
+    {#if chip}
+      <div class="flex mb-2 min-w-0">
+        <span class="inline-flex items-center gap-1 h-7 max-w-full pl-3 pr-1 rounded-full bg-accent-soft text-accent-text text-xs font-medium" data-composer-chip title={emails(people)}>
+          <span class="truncate">{chip}</span>
+          <button
+            class="shrink-0 p-0.5 rounded-full hover:bg-accent/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            title={$_('chat.replyChipReset')}
+            aria-label={$_('chat.replyChipReset')}
+            {disabled}
+            onclick={() => composer.resetReplyAll()}
+          >
+            <Icon icon="lucide:x" class="w-3.5 h-3.5" />
+          </button>
         </span>
       </div>
-    </div>
+    {/if}
 
-    <div class="flex items-baseline gap-1.5 mt-1.5 px-1 text-xs text-fg-tertiary min-w-0">
-      {#if choices}
-        <span class="shrink-0">{$_('chat.replyTo')}</span>
-        {#if sameChoice}
-          <span class="truncate min-w-[4rem] shrink-[3] font-medium text-foreground" title={emails(choices.reply)}>{replyNames}</span>
-        {:else}
-          <!-- Shows the selected target; a click switches to the other one. -->
-          <button
-            class="flex items-baseline gap-0.5 {composer.replyAll ? 'shrink-0' : 'min-w-[4rem] shrink-[3]'} font-medium text-foreground hover:underline disabled:opacity-50 disabled:pointer-events-none"
-            title={$_('chat.replySwitchTo', { values: { target: composer.replyAll ? replyNames : $_('chat.replyToAll') } })}
+    <div class="flex items-end gap-2">
+      <div class="flex flex-1 min-w-0 items-end gap-0.5 px-1 rounded-[20px] bg-surface-raised shadow-2 focus-within:ring-2 focus-within:ring-ring" data-composer-card>
+        <Button variant="icon" size="icon" class="my-1 shrink-0 rounded-full" title={$_('chat.attach')} aria-label={$_('chat.attach')} {disabled} onclick={attach}>
+          <Icon icon="lucide:paperclip" class="w-4 h-4 text-muted-foreground" />
+        </Button>
+        <textarea
+          bind:this={textarea}
+          class="block flex-1 min-w-0 min-h-10 max-h-[11.25rem] overflow-auto resize-none bg-transparent px-1 py-2.5 text-ui-body leading-5 focus-visible:outline-none scrollbar-thin"
+          rows="1"
+          {placeholder}
+          aria-label={$_('viewer.reply')}
+          {title}
+          spellcheck="true"
+          {disabled}
+          value={composer.text}
+          oninput={(e) => composer.setText(e.currentTarget.value)}
+          onkeydown={handleKeyDown}
+          onblur={() => void composer.flush()}
+        ></textarea>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger
+            class="my-1 shrink-0 inline-flex items-center justify-center h-control w-8 rounded-full hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+            title={$_('chat.composerOptions')}
+            aria-label={$_('chat.composerOptions')}
             {disabled}
-            onclick={() => composer.toggleReplyAll()}
           >
-            <span class="truncate">{composer.replyAll ? $_('chat.replyToAll') : replyNames}</span>
-            <Icon icon="lucide:chevron-down" class="w-3.5 h-3.5 shrink-0 self-center" aria-hidden="true" />
-          </button>
-          {#if composer.replyAll}
-            {@render sep()}
-            <span class="shrink-0" title={emails(choices.all)}>{$_('chat.replyRecipientCount', { values: { count: choices.all.length } })}</span>
-          {/if}
-        {/if}
-      {/if}
-      {#if subject}
-        {#if choices}{@render sep()}{/if}
-        <span class="truncate min-w-0 shrink max-w-[24rem]" title={subject}>{$_('chat.replyTopic', { values: { subject } })}</span>
-      {/if}
+            <Icon icon="lucide:ellipsis" class="w-4 h-4 text-muted-foreground" />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content align="end" class="max-w-[min(24rem,90vw)]">
+            {#if choices && !sameChoice}
+              <DropdownMenu.Item onSelect={() => { if (!composer.replyAll) composer.toggleReplyAll() }}>
+                {@render check(composer.replyAll)}<span class="truncate" title={emails(choices.all)}>{$_('chat.replyChipAll', { values: { count: choices.all.length } })}</span>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item onSelect={() => { if (composer.replyAll) composer.toggleReplyAll() }}>
+                {@render check(!composer.replyAll)}<span class="truncate" title={emails(choices.reply)}>{$_('chat.replyChipOne', { values: { names: replyNames } })}</span>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+            {/if}
+            {#if from}
+              <!-- The sender is resolved by the backend (alias the message reached); the sender review dialog still gates a send. -->
+              <div class="px-2 py-1.5 text-xs text-fg-tertiary truncate" title={from}>{$_('chat.replyLineFrom', { values: { sender: from } })}</div>
+              <DropdownMenu.Separator />
+            {/if}
+            <DropdownMenu.Item onSelect={onExpand}>
+              <Icon icon="lucide:maximize-2" class="w-4 h-4 mr-2 shrink-0" aria-hidden="true" />{$_('chat.expand')}
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </div>
+      <!-- The wrapper carries the tooltip, which a disabled button may not show. Send is the only filled button. -->
+      <span class="shrink-0" title={`${$_('chat.send')} (${sendHint})`}>
+        <Button variant="primary" size="send" aria-label={$_('chat.send')} disabled={!canSend} onclick={() => void composer.send()}>
+          <Icon icon="lucide:send-horizontal" class="w-[18px] h-[18px]" aria-hidden="true" />
+        </Button>
+      </span>
     </div>
   </div>
 </div>
