@@ -418,6 +418,9 @@ export namespace app {
 	    text: string;
 	    replyAll: boolean;
 	    attachments: smtp.Attachment[];
+	    subject?: string;
+	    cc?: smtp.Address[];
+	    bcc?: smtp.Address[];
 	
 	    static createFrom(source: any = {}) {
 	        return new ChatDraft(source);
@@ -430,6 +433,9 @@ export namespace app {
 	        this.text = source["text"];
 	        this.replyAll = source["replyAll"];
 	        this.attachments = this.convertValues(source["attachments"], smtp.Attachment);
+	        this.subject = source["subject"];
+	        this.cc = this.convertValues(source["cc"], smtp.Address);
+	        this.bcc = this.convertValues(source["bcc"], smtp.Address);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -457,6 +463,9 @@ export namespace app {
 	    text: string;
 	    replyAll: boolean;
 	    attachments: smtp.Attachment[];
+	    subject?: string;
+	    cc?: smtp.Address[];
+	    bcc?: smtp.Address[];
 	    reviewAttemptId?: string;
 	    senderReviewToken?: string;
 	    draftId: string;
@@ -473,6 +482,9 @@ export namespace app {
 	        this.text = source["text"];
 	        this.replyAll = source["replyAll"];
 	        this.attachments = this.convertValues(source["attachments"], smtp.Attachment);
+	        this.subject = source["subject"];
+	        this.cc = this.convertValues(source["cc"], smtp.Address);
+	        this.bcc = this.convertValues(source["bcc"], smtp.Address);
 	        this.reviewAttemptId = source["reviewAttemptId"];
 	        this.senderReviewToken = source["senderReviewToken"];
 	        this.draftId = source["draftId"];

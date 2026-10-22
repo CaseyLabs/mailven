@@ -50,6 +50,7 @@ A hidden sidebar is skipped when cycling panes.
 | `Ctrl+R` | Reply to last message (requires viewed conversation) |
 | `Ctrl+Shift+R` | Reply All to last message (requires viewed conversation) |
 | `Ctrl+F` | Forward last message (requires viewed conversation) |
+| `Ctrl+Shift+F` | Search in the viewed conversation |
 | `Ctrl+U` | Mark as read (keyboard-focused or checked messages) |
 | `Ctrl+Shift+U` | Mark as unread (keyboard-focused or checked messages) |
 | `Ctrl+K` | Archive (keyboard-focused or checked messages) |

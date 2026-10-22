@@ -780,7 +780,7 @@ func TestThreadStartersTriggers(t *testing.T) {
 func TestListChatsLatestSender(t *testing.T) {
 	s, _, inboxID, now := chatFixture(t)
 	for scope, want := range map[string]map[string]string{
-		inboxID: {"a@x": "alice@example.com", "e@x": "carol@example.com", "c@x": "bob@example.com"},
+		inboxID:  {"a@x": "alice@example.com", "e@x": "carol@example.com", "c@x": "bob@example.com"}, // no snippets, so no reply preview
 		"sent-1": {"c@x": "test@example.com"},
 	} {
 		chats, err := s.ListChats(scope, ChatSectionAll, now, 0, 50)
@@ -792,6 +792,39 @@ func TestListChatsLatestSender(t *testing.T) {
 				t.Errorf("scope %s, chat %s: latest sender %q, want %q", scope, c.ThreadKey, c.LatestSender.Email, w)
 			}
 		}
+	}
+}
+
+// TestListChatsLatestSentReply checks that an Inbox row shows my newer reply,
+// stored in Sent, as its latest line (UI21), and keeps its scope date.
+func TestListChatsLatestSentReply(t *testing.T) {
+	s, _, inboxID, now := chatFixture(t)
+	if _, err := s.db.Exec(`UPDATE messages SET snippet = 'line ' || id`); err != nil {
+		t.Fatal(err)
+	}
+	chats, err := s.ListChats(inboxID, ChatSectionAll, now, 0, 50)
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := map[string]bool{}
+	for _, c := range chats {
+		found[c.ThreadKey] = true
+		switch c.ThreadKey {
+		case "c@x":
+			if c.Snippet != "line s1" || c.LatestSender.Email != "test@example.com" {
+				t.Errorf("c@x: snippet %q from %q, want my reply", c.Snippet, c.LatestSender.Email)
+			}
+			if want := now.Add(-4 * time.Hour); !c.LatestDate.Equal(want) {
+				t.Errorf("c@x: date %v, want the scope date %v", c.LatestDate, want)
+			}
+		case "a@x":
+			if c.Snippet != "line a2" || c.LatestSender.Email != "alice@example.com" {
+				t.Errorf("a@x: snippet %q from %q, want Alice's latest", c.Snippet, c.LatestSender.Email)
+			}
+		}
+	}
+	if !found["c@x"] || !found["a@x"] {
+		t.Fatalf("missing chats: %v", chatKeys(chats))
 	}
 }
 

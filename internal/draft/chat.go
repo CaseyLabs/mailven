@@ -7,12 +7,18 @@ import (
 )
 
 // ChatLink ties a chat thread to the draft its docked composer is editing.
-// The typed text is the first TextLen bytes of the draft's text body.
+// The typed text is the first TextLen bytes of the draft's text body. The
+// link keeps no other draft content: SubjectSet marks a subject the user
+// changed, and the last CcExtra Cc and BccExtra Bcc addresses are the ones
+// they added.
 type ChatLink struct {
-	DraftID   string
-	MessageID string // message being replied to
-	ReplyAll  bool
-	TextLen   int
+	DraftID    string
+	MessageID  string // message being replied to
+	ReplyAll   bool
+	TextLen    int
+	SubjectSet bool
+	CcExtra    int
+	BccExtra   int
 }
 
 // chatThreadKey normalizes a thread key like the message store does.
@@ -27,9 +33,9 @@ func (s *Store) SetChatLink(accountID, threadKey string, link ChatLink) error {
 		return fmt.Errorf("empty thread key")
 	}
 	_, err := s.db.Exec(`
-		INSERT INTO chat_drafts (account_id, thread_key, draft_id, message_id, reply_all, text_len)
-		VALUES (?, ?, ?, ?, ?, ?)`+chatLinkUpsert,
-		accountID, threadKey, link.DraftID, link.MessageID, link.ReplyAll, link.TextLen)
+		INSERT INTO chat_drafts (`+chatLinkColumns+`)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`+chatLinkUpsert,
+		accountID, threadKey, link.DraftID, link.MessageID, link.ReplyAll, link.TextLen, link.SubjectSet, link.CcExtra, link.BccExtra)
 	if err != nil {
 		return fmt.Errorf("failed to set chat draft: %w", err)
 	}
@@ -47,7 +53,10 @@ func (s *Store) GetChatLink(accountID, threadKey string) (*ChatLink, error) {
 }
 
 // chatLinkSelect selects chat_drafts rows for scanChatLink.
-const chatLinkSelect = `SELECT draft_id, message_id, reply_all, text_len FROM chat_drafts`
+const chatLinkSelect = `SELECT draft_id, message_id, reply_all, text_len, subject_set, cc_extra, bcc_extra FROM chat_drafts`
+
+// chatLinkColumns lists every chat_drafts column, for INSERTs.
+const chatLinkColumns = `account_id, thread_key, draft_id, message_id, reply_all, text_len, subject_set, cc_extra, bcc_extra`
 
 // chatLinkUpsert ends an INSERT of all chat_drafts columns so that it
 // replaces the link already on the key.
@@ -56,12 +65,15 @@ const chatLinkUpsert = `
 			draft_id = excluded.draft_id,
 			message_id = excluded.message_id,
 			reply_all = excluded.reply_all,
-			text_len = excluded.text_len`
+			text_len = excluded.text_len,
+			subject_set = excluded.subject_set,
+			cc_extra = excluded.cc_extra,
+			bcc_extra = excluded.bcc_extra`
 
 // scanChatLink reads a chatLinkSelect row, or returns nil when there is none.
 func scanChatLink(row *sql.Row) (*ChatLink, error) {
 	var link ChatLink
-	err := row.Scan(&link.DraftID, &link.MessageID, &link.ReplyAll, &link.TextLen)
+	err := row.Scan(&link.DraftID, &link.MessageID, &link.ReplyAll, &link.TextLen, &link.SubjectSet, &link.CcExtra, &link.BccExtra)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
@@ -127,9 +139,9 @@ func (s *Store) restoreChatLink(accountID, threadKey string, link ChatLink) erro
 		return err
 	}
 	_, err = tx.Exec(`
-		INSERT INTO chat_drafts (account_id, thread_key, draft_id, message_id, reply_all, text_len)
-		SELECT ?, ?, ?, ?, ?, ? WHERE EXISTS (SELECT 1 FROM drafts WHERE id = ?)`+chatLinkUpsert,
-		accountID, threadKey, link.DraftID, link.MessageID, link.ReplyAll, link.TextLen, link.DraftID)
+		INSERT INTO chat_drafts (`+chatLinkColumns+`)
+		SELECT ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE EXISTS (SELECT 1 FROM drafts WHERE id = ?)`+chatLinkUpsert,
+		accountID, threadKey, link.DraftID, link.MessageID, link.ReplyAll, link.TextLen, link.SubjectSet, link.CcExtra, link.BccExtra, link.DraftID)
 	if err != nil {
 		return err
 	}

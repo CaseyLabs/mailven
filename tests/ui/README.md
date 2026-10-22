@@ -35,7 +35,9 @@ npm install --prefix ~/.cache/mailven-upnote-ui --no-save playwright@1.63.0
 | `chat-presentation.test.cjs` | Left-aligned message blocks, "You" on my messages and sender runs, quoted text and signature, sender chats with several subjects, combine/split with Undo |
 | `chat-folds.test.cjs` | DS-3 reading: quoted-text and signature folds (each opens alone) and the details button in the message actions (Enter/Space, `aria-expanded`, position hold), the 68ch Literata measure at each reading width, mono for laid-out plain text, the dark-mode paper card and the "New" divider |
 | `chat-reading.test.cjs` | DSR-3 reading: the recipient disclosure by keyboard, 10 px paragraph spacing, the left-aligned 760 px column, and the reading-font and avatars-in-messages settings applying live and saving |
+| `chat-find.test.cjs` | Search in conversation (UI22): the header button and Ctrl+Shift+F, highlighted matches and the "n of m" count, Enter/Shift+Enter and arrows with wrap-around, no matches, Escape closing with focus back on the button, and closing on another chat |
 | `inbox-triage.test.cjs` | Pin, snooze, archive, read/unread, the automatic Low priority group, sender priority overrides, Undo |
+| `chat-compose-extras.test.cjs` | Change topic and Add Cc/Bcc in the reply box (UI23): the ⋯ editors and their focus, Enter/Done/Escape, chips that edit and reset, the subject and addresses on the queued reply, and a draft that keeps them across a chat switch |
 | `chat-compose.test.cjs` | Reply vs Reply All, draft autosave and restore, undo-send, reply identity, a refused reply (ISSUES.md R1) |
 | `mail-api-migration.test.cjs` | Rollback pending state, confirmation cancellation, protocol route display, and both sync-request report outcomes |
 | `google-setup-check.test.cjs` | Settings → Identity → Check Google setup: disabled, missing-scope, not-connected, error and OK states, Enable link, keyboard use, nothing runs until asked |

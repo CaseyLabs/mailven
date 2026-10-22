@@ -1,5 +1,5 @@
-// ChatComposer — state for the docked reply box: text, reply-all choice and
-// attachments per chat, debounced draft autosave (restored when the chat is
+// ChatComposer — state for the docked reply box: text, reply-all choice,
+// a changed topic, added Cc/Bcc and attachments per chat, debounced draft autosave (restored when the chat is
 // reopened), and sends shown as pending bubbles until the thread has them.
 // Sends wait out the backend's undo delay; Undo puts the reply back in the box.
 
@@ -40,6 +40,9 @@ interface Snapshot {
   text: string
   replyAll: boolean
   attachments: smtp.Attachment[]
+  subject: string
+  cc: smtp.Address[]
+  bcc: smtp.Address[]
 }
 
 interface Options {
@@ -78,6 +81,11 @@ export class ChatComposer {
   // null = follow the target's default
   replyAllChoice = $state<boolean | null>(null)
   attachments = $state<smtp.Attachment[]>([])
+  // A changed topic ('' keeps the reply's "Re: …" subject) and addresses
+  // added to the reply's own recipients.
+  subject = $state('')
+  cc = $state<smtp.Address[]>([])
+  bcc = $state<smtp.Address[]>([])
   draftId = $state('')
   // Pending sends of every chat, so switching chats keeps them.
   pending = $state<PendingSend[]>([])
@@ -160,6 +168,9 @@ export class ChatComposer {
       this.text = this.#dirty && this.text ? `${d.text}\n${this.text}` : d.text
       this.replyAllChoice ??= d.replyAll
       this.attachments = [...(d.attachments ?? []), ...this.attachments]
+      this.subject ||= d.subject ?? ''
+      this.cc = mergeAddresses(d.cc ?? [], this.cc)
+      this.bcc = mergeAddresses(d.bcc ?? [], this.bcc)
       this.draftId = d.draftId
       this.#messageId = d.messageId
       this.#draftIds.set(next, d.draftId)
@@ -182,6 +193,16 @@ export class ChatComposer {
 
   resetReplyAll() {
     this.replyAllChoice = null
+    this.#changed()
+  }
+
+  setSubject(subject: string) {
+    this.subject = subject.trim()
+    this.#changed()
+  }
+
+  setCopies(kind: 'cc' | 'bcc', list: smtp.Address[]) {
+    this[kind] = list
     this.#changed()
   }
 
@@ -232,6 +253,9 @@ export class ChatComposer {
       text: snap.text,
       replyAll: snap.replyAll,
       attachments: snap.attachments,
+      subject: snap.subject,
+      cc: snap.cc,
+      bcc: snap.bcc,
       draftId: this.#draftIds.get(snap.key) ?? '',
     })
     this.#draftIds.delete(snap.key)
@@ -288,6 +312,9 @@ export class ChatComposer {
     this.text = this.isEmpty ? p.reply.text : `${this.text}\n${p.reply.text}`
     this.attachments = [...this.attachments, ...(p.reply.attachments ?? [])]
     this.replyAllChoice = p.reply.replyAll
+    this.subject ||= p.reply.subject ?? ''
+    this.cc = mergeAddresses(this.cc, p.reply.cc ?? [])
+    this.bcc = mergeAddresses(this.bcc, p.reply.bcc ?? [])
     const own = this.#draftIds.get(p.key)
     if (p.reply.draftId && !own) {
       this.#draftIds.set(p.key, p.reply.draftId)
@@ -399,6 +426,9 @@ export class ChatComposer {
       text: this.text,
       replyAll: this.replyAll,
       attachments: this.attachments,
+      subject: this.subject,
+      cc: this.cc,
+      bcc: this.bcc,
     }
   }
 
@@ -421,6 +451,21 @@ export class ChatComposer {
     this.text = ''
     this.replyAllChoice = null
     this.attachments = []
+    this.subject = ''
+    this.cc = []
+    this.bcc = []
     this.draftId = this.#draftIds.get(this.key) ?? ''
   }
+}
+
+// mergeAddresses joins two address lists, keeping the first of any address
+// that appears twice.
+function mergeAddresses(a: smtp.Address[], b: smtp.Address[]): smtp.Address[] {
+  const seen = new Set<string>()
+  return [...a, ...b].filter((x) => {
+    const key = x.address.toLowerCase()
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
 }

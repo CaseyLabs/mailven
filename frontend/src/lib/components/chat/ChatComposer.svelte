@@ -2,9 +2,10 @@
   // ChatComposer — the messenger-style reply field at the bottom of the thread
   // column: a pill on surface-raised holding Attach, the autosizing text (one
   // line, growing to eight) and the ⋯ options menu, with a round Send button
-  // beside it. With the defaults no mail fields show; a chip above the field
-  // appears only when the reply target differs from the default, and its ✕
-  // resets it. State and saving live in the ChatComposer controller.
+  // beside it. With the defaults no mail fields show; chips above the field
+  // (ChatComposerExtras) appear only for a reply target that differs from the
+  // default, a changed topic, or added Cc/Bcc, which the ⋯ menu sets. State
+  // and saving live in the ChatComposer controller.
   import Icon from '@iconify/svelte'
   import { Button } from '$lib/components/ui/button'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
@@ -13,6 +14,7 @@
   import { getChatSendKey } from '$lib/stores/settings.svelte'
   import type { ChatComposer } from './chatComposerState.svelte'
   import { displayName } from './chatFormat'
+  import ChatComposerExtras, { type ExtraEditor } from './ChatComposerExtras.svelte'
 
   interface Props {
     composer: ChatComposer
@@ -26,6 +28,9 @@
   let { composer, from = '', disabled = false, onEscape, onExpand }: Props = $props()
 
   let textarea = $state<HTMLTextAreaElement | null>(null)
+  let editing = $state<ExtraEditor>('')
+  // The editor a menu item chose, opened once the menu has closed.
+  let chosenEditor: ExtraEditor = ''
   const ctrlSends = $derived(getChatSendKey() === 'ctrl-enter')
   const sendHint = $derived(ctrlSends ? $_('chat.sendHintCtrl') : $_('chat.sendHintEnter'))
   const canSend = $derived(!disabled && !composer.isEmpty)
@@ -81,6 +86,14 @@
     return () => ro.disconnect()
   })
 
+  // The menu would focus its button on closing: the chosen editor takes focus instead.
+  function openChosenEditor(e: Event) {
+    if (!chosenEditor) return
+    e.preventDefault()
+    editing = chosenEditor
+    chosenEditor = ''
+  }
+
   export function focus() {
     textarea?.focus()
   }
@@ -118,6 +131,12 @@
   <Icon icon="lucide:check" class="w-4 h-4 mr-2 shrink-0 {on ? '' : 'invisible'}" aria-hidden="true" />
 {/snippet}
 
+{#snippet menuItem(icon: string, label: string, editor: ExtraEditor)}
+  <DropdownMenu.Item onSelect={() => (chosenEditor = editor)}>
+    <Icon {icon} class="w-4 h-4 mr-2 shrink-0" aria-hidden="true" />{label}
+  </DropdownMenu.Item>
+{/snippet}
+
 <div class="w-full pb-3 pt-1" data-chat-composer>
   <div class="chat-col">
     {#if composer.attachments.length > 0}
@@ -140,22 +159,7 @@
       </ul>
     {/if}
 
-    {#if chip}
-      <div class="flex mb-2 min-w-0">
-        <span class="inline-flex items-center gap-1 h-7 max-w-full pl-3 pr-1 rounded-full bg-accent-soft text-accent-text text-xs font-medium" data-composer-chip title={emails(people)}>
-          <span class="truncate">{chip}</span>
-          <button
-            class="shrink-0 p-0.5 rounded-full hover:bg-accent/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            title={$_('chat.replyChipReset')}
-            aria-label={$_('chat.replyChipReset')}
-            {disabled}
-            onclick={() => composer.resetReplyAll()}
-          >
-            <Icon icon="lucide:x" class="w-3.5 h-3.5" />
-          </button>
-        </span>
-      </div>
-    {/if}
+    <ChatComposerExtras {composer} replyChip={chip} replyTitle={emails(people)} {disabled} bind:editing onDone={focus} />
 
     <div class="flex items-end gap-2">
       <div class="flex flex-1 min-w-0 items-end gap-0.5 px-1 rounded-[20px] bg-surface-raised shadow-2 focus-within:ring-2 focus-within:ring-ring" data-composer-card>
@@ -185,7 +189,7 @@
           >
             <Icon icon="lucide:ellipsis" class="w-4 h-4 text-muted-foreground" />
           </DropdownMenu.Trigger>
-          <DropdownMenu.Content align="end" class="max-w-[min(24rem,90vw)]">
+          <DropdownMenu.Content align="end" class="max-w-[min(24rem,90vw)]" onCloseAutoFocus={openChosenEditor}>
             {#if choices && !sameChoice}
               <DropdownMenu.Item onSelect={() => { if (!composer.replyAll) composer.toggleReplyAll() }}>
                 {@render check(composer.replyAll)}<span class="truncate" title={emails(choices.all)}>{$_('chat.replyChipAll', { values: { count: choices.all.length } })}</span>
@@ -200,6 +204,10 @@
               <div class="px-2 py-1.5 text-xs text-fg-tertiary truncate" title={from}>{$_('chat.replyLineFrom', { values: { sender: from } })}</div>
               <DropdownMenu.Separator />
             {/if}
+            {@render menuItem('lucide:text-cursor-input', $_('chat.changeTopic'), 'topic')}
+            {@render menuItem('lucide:user-plus', $_('chat.addCc'), 'cc')}
+            {@render menuItem('lucide:eye-off', $_('chat.addBcc'), 'bcc')}
+            <DropdownMenu.Separator />
             <DropdownMenu.Item onSelect={onExpand}>
               <Icon icon="lucide:maximize-2" class="w-4 h-4 mr-2 shrink-0" aria-hidden="true" />{$_('chat.expand')}
             </DropdownMenu.Item>

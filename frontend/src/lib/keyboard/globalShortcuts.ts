@@ -99,6 +99,11 @@ export function createGlobalShortcuts(ctx: ShortcutContext) {
       case 'f': {
         if (!hasConversation) return
         e.preventDefault()
+        // Ctrl+Shift+F — search in the open conversation.
+        if (e.shiftKey) {
+          viewer?.findInConversation()
+          return
+        }
         if (focusedPane === 'viewer' && viewer?.hasFocusedMessage()) {
           viewer.forward()
           return

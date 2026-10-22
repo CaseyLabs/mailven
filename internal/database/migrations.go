@@ -1657,6 +1657,17 @@ var migrations = []Migration{
 		// startup was interrupted, and the account returns to IMAP.
 		SQL: `ALTER TABLE account_mail_api_routes ADD COLUMN activating INTEGER NOT NULL DEFAULT 0;`,
 	},
+	{
+		Version: 66,
+		// Chat reply topic and Cc/Bcc (UI23). Like text_len, the link keeps
+		// only where they sit in the draft, not the values: subject_set marks
+		// a changed subject, and the last cc_extra Cc and bcc_extra Bcc
+		// addresses are the ones the user added.
+		SQL: `
+			ALTER TABLE chat_drafts ADD COLUMN subject_set INTEGER NOT NULL DEFAULT 0;
+			ALTER TABLE chat_drafts ADD COLUMN cc_extra INTEGER NOT NULL DEFAULT 0;
+			ALTER TABLE chat_drafts ADD COLUMN bcc_extra INTEGER NOT NULL DEFAULT 0;`,
+	},
 }
 
 // ThreadKeyExpr is the normalized thread key of a messages row: row is ""

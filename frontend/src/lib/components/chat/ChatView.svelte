@@ -17,6 +17,8 @@
   import { contactPhotos } from '$lib/stores/contactPhotos.svelte'
   import ChatViewHeader from './ChatViewHeader.svelte'
   import ChatStream from './ChatStream.svelte'
+  import ChatFindBar from './ChatFindBar.svelte'
+  import { ChatFind } from './chatFind.svelte'
   import ChatComposer from './ChatComposer.svelte'
   import { ChatThread } from './chatThread.svelte'
   import { ChatComposer as ComposerState } from './chatComposerState.svelte'
@@ -71,6 +73,8 @@
   const imagesLoaded = new Set<string>()
 
   const scroll = new ChatScroll()
+  const find = new ChatFind()
+  let findBar = $state<ChatFindBar | null>(null)
   const thread = new ChatThread({
     onGone: (next) => onActionComplete?.(next),
     onLoaded: () => void scroll.toStart(thread.messages.find((m) => !m.isRead)?.id ?? null),
@@ -206,8 +210,39 @@
   $effect(() => {
     imagesLoaded.clear()
     scroll.reset()
+    untrack(() => find.close())
     thread.open(threadId, folderId, accountId)
   })
+
+  // Re-run an open search as the stream renders new or unfolded text, keeping
+  // the current match.
+  $effect(() => {
+    const root = scroll.content
+    if (!find.open || !root) return
+    let frame = 0
+    const observer = new MutationObserver(() => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => find.search(root, true))
+    })
+    observer.observe(root, { childList: true, subtree: true, characterData: true })
+    return () => {
+      observer.disconnect()
+      cancelAnimationFrame(frame)
+    }
+  })
+
+  function openFind() {
+    if (find.open) {
+      findBar?.focus()
+      return
+    }
+    find.open = true
+  }
+
+  function closeFind() {
+    find.close()
+    header?.focusFind()
+  }
 
   $effect(() => {
     void contactPhotos.ensure(people.map((p) => p.email).concat(thread.messages.map((m) => m.fromEmail), me.email))
@@ -265,6 +300,7 @@
   // switches the reply mode first when given.
   export function focusComposer(replyAll?: boolean) { pendingFocus = { replyAll, until: Date.now() + FOCUS_WAIT_MS } }
   export function openSnooze() { header?.openSnooze() }
+  export function findInConversation() { if (thread.conversation) openFind() }
   export function hasFocusedMessage(): boolean { return scroll.focusedId !== null }
   export function getFocusedMessageId(): string | null { return scroll.focusedId }
   export function getLastMessageId(): string | null { return messageIds.at(-1) ?? null }
@@ -368,6 +404,8 @@
       {onCompose}
       onComposeTo={onComposeToAddress}
       onArchive={() => void actions.archive()}
+      onFind={openFind}
+      findOpen={find.open}
       onForward={forward}
       onDelete={deleteChat}
       onSpam={() => void actions.spam()}
@@ -380,6 +418,10 @@
       onActionComplete={handleMenuActionComplete}
       {onReply}
     />
+
+    {#if find.open}
+      <ChatFindBar bind:this={findBar} {find} onSearch={() => find.search(scroll.content)} onClose={closeFind} />
+    {/if}
 
     <div
       bind:this={scroll.scroller}

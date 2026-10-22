@@ -9,9 +9,11 @@
     side?: 'top' | 'bottom' | 'left' | 'right'
     align?: 'start' | 'center' | 'end'
     sideOffset?: number
+    // Runs when the menu returns focus on closing; preventDefault keeps focus where the handler put it.
+    onCloseAutoFocus?: (e: Event) => void
   }
 
-  let { class: className, children, side = 'bottom', align = 'start', sideOffset = 4 }: Props = $props()
+  let { class: className, children, side = 'bottom', align = 'start', sideOffset = 4, onCloseAutoFocus }: Props = $props()
 </script>
 
 <DropdownMenuPrimitive.Portal>
@@ -19,6 +21,7 @@
     {side}
     {align}
     {sideOffset}
+    {onCloseAutoFocus}
     class={cn(
       'z-50 min-w-[160px] rounded-lg bg-popover p-1 text-popover-foreground shadow-2',
       'data-[state=open]:animate-in data-[state=closed]:animate-out',

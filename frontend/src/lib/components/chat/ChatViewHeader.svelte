@@ -2,7 +2,8 @@
   // ChatViewHeader — the open chat's top bar, one row like a messenger's: Back
   // (when the chat covers the list), the avatar or an overlapping pair, then
   // the people (which open the participant list) over the subject and message
-  // count, then Compose (when set; not on narrow windows), Archive and "⋯".
+  // count, then Compose (when set; not on narrow windows), Search in
+  // conversation, Archive and "⋯".
   // "⋯" is the shared thread context menu (Delete, Mark read/unread, Move,
   // Spam, Reply) plus Snooze, Pin, the sender actions, Forward for
   // multi-message chats and previous/next chat. Archive carries its label from
@@ -43,6 +44,9 @@
     // Starts a message to one participant, from the participant list.
     onComposeTo?: (to: string) => void
     onArchive: () => void
+    // Opens the find bar; findOpen marks the button expanded.
+    onFind: () => void
+    findOpen?: boolean
     onForward: () => void
     onDelete: () => void
     onSpam: () => void
@@ -62,13 +66,15 @@
 
   let {
     people: allPeople, senderEmail, messageIds, accountId, folderId, folderType, isStarred, allRead, isPinned, snoozedUntil, isLowPriority, canTriage,
-    showBackButton, onBack, onCompose, onComposeTo, onArchive, onForward, onDelete, onSpam, onPin, onSnooze, onUnsnooze, onToggleRead, onToggleSenderLow, onToggleSenderChat, onActionComplete, subject = '', onPreviousChat, onNextChat, onReply,
+    showBackButton, onBack, onCompose, onComposeTo, onArchive, onFind, findOpen = false, onForward, onDelete, onSpam, onPin, onSnooze, onUnsnooze, onToggleRead, onToggleSenderLow, onToggleSenderChat, onActionComplete, subject = '', onPreviousChat, onNextChat, onReply,
   }: Props = $props()
 
   // A sender chat shows just its sender.
   const people = $derived(senderEmail ? [chatSender(allPeople, senderEmail)] : allPeople)
 
   let menuAnchor = $state<HTMLElement | null>(null)
+  let findButton = $state<HTMLButtonElement | null>(null)
+  const iconButtonClass = 'p-2 rounded-md hover:bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden disabled:opacity-50 disabled:pointer-events-none'
   let snoozeMenu = $state<ChatSnoozeMenu | null>(null)
   const MAX_NAMES = 6
   const COMPACT_WIDTH = 1100
@@ -93,6 +99,7 @@
   const snoozeLabel = $derived(snoozedUntil ? formatSnoozedUntil(snoozedUntil) : '')
 
   export function openSnooze() { snoozeMenu?.open() }
+  export function focusFind() { findButton?.focus() }
 
   // Open the shared context menu (bits-ui ContextMenu) under the "⋯" button.
   export function openMenu() {
@@ -105,7 +112,7 @@
 {#snippet iconButton(icon: string, label: string, onclick: () => void, active?: boolean, disabled = false)}
   <!-- aria-pressed only for toggles (active passed); plain actions omit it. -->
   <button
-    class="p-2 rounded-md hover:bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden disabled:opacity-50 disabled:pointer-events-none"
+    class={iconButtonClass}
     title={label}
     aria-label={label}
     aria-pressed={active}
@@ -197,6 +204,9 @@
 
   <div class="flex shrink-0 items-center gap-1.5" role="toolbar" aria-label={$_('chat.actions')} data-header-toolbar>
     {#if onCompose && !narrow}<ComposeButton {compact} onclick={onCompose} />{/if}
+    <button bind:this={findButton} class={iconButtonClass} title={$_('chat.findInConversation')} aria-label={$_('chat.findInConversation')} aria-expanded={findOpen} onclick={onFind} data-find-button>
+      <Icon icon="lucide:search" class="w-5 h-5 {findOpen ? 'text-foreground' : 'text-muted-foreground'}" />
+    </button>
     <ToolbarButton icon="lucide:archive" label={$_('viewer.archive')} {compact} onclick={onArchive} />
     <MessageContextMenu
       {messageIds}

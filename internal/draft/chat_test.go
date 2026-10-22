@@ -21,7 +21,7 @@ func TestChatLink(t *testing.T) {
 		t.Fatalf("GetChatLink before set = %v, %v; want nil, nil", got, err)
 	}
 
-	link := ChatLink{DraftID: d.ID, MessageID: "m-1", ReplyAll: true, TextLen: 5}
+	link := ChatLink{DraftID: d.ID, MessageID: "m-1", ReplyAll: true, TextLen: 5, SubjectSet: true, CcExtra: 2, BccExtra: 1}
 	if err := store.SetChatLink(accountID, "<t1@x>", link); err != nil {
 		t.Fatalf("SetChatLink: %v", err)
 	}
@@ -30,7 +30,7 @@ func TestChatLink(t *testing.T) {
 		t.Fatalf("GetChatLink = %+v, %v; want %+v", got, err, link)
 	}
 
-	link.ReplyAll, link.TextLen = false, 3
+	link.ReplyAll, link.TextLen, link.SubjectSet, link.CcExtra = false, 3, false, 0
 	if err := store.SetChatLink(accountID, "t1@x", link); err != nil {
 		t.Fatalf("SetChatLink update: %v", err)
 	}

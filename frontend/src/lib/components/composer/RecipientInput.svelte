@@ -17,9 +17,13 @@
     placeholder?: string
     /** Optional: search contacts function override */
     searchContactsFn?: (query: string, limit: number) => Promise<contact.Contact[]>
+    /** Open suggestions above the field (for fields near the window bottom) */
+    above?: boolean
+    /** Accessible name of the text field */
+    label?: string
   }
 
-  let { recipients = $bindable([]), placeholder = 'Add recipients...', searchContactsFn }: Props = $props()
+  let { recipients = $bindable([]), placeholder = 'Add recipients...', searchContactsFn, above = false, label }: Props = $props()
 
   nextInstanceId += 1
   const instanceId = nextInstanceId
@@ -247,6 +251,11 @@
     dropTargetIndex = null
   }
 
+  /** Turns typed text into a chip now, as leaving the field would. */
+  export function commit() {
+    if (inputValue.trim()) addRecipient(inputValue.trim())
+  }
+
   function handleBlur() {
     // Delay hiding to allow click on suggestion (mousedown-based selection
     // runs before blur and clears inputValue, so the auto-commit below becomes
@@ -334,13 +343,14 @@
       ondrop={(e) => handleDrop(e, recipients.length)}
       type="email"
       {placeholder}
+      aria-label={label}
       class="flex-1 min-w-[150px] bg-transparent text-sm focus-visible:outline-hidden {dropTargetIndex === recipients.length ? 'border-l-2 border-primary' : ''}"
     />
   </div>
 
   <!-- Suggestions dropdown -->
   {#if showSuggestions}
-    <div class="absolute left-0 right-0 top-full mt-1 bg-popover border border-border rounded-md shadow-lg z-50 max-h-60 overflow-auto">
+    <div class="absolute left-0 right-0 {above ? 'bottom-full mb-1' : 'top-full mt-1'} bg-popover border border-border rounded-md shadow-lg z-50 max-h-60 overflow-auto">
       {#each suggestions as suggestion, index (suggestion.email + ':' + index)}
         <button
           onmousedown={() => selectSuggestion(suggestion)}

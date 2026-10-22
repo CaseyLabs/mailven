@@ -29,10 +29,11 @@ Mailven is an independent email client derived from [Aerion](https://github.com/
 
 - Message bubbles by default: other people's messages on the left in a neutral bubble, yours on the right in a warm tint, grouped when one person writes several in a row, with the time under each group (Settings → Chat → Message style → Blocks keeps the one-column layout)
 - Chat events in the stream: people added or removed and topic changes show as centred lines, and days as small pills
+- Search in conversation (`Ctrl+Shift+F`): highlights matches in the open chat with a match count, next/previous and Escape to close
 - Long messages fold to about six lines with "Read full message · N min" and open in place in the reading font
 - People-first chat list: avatars on by default, the people on the first line and the latest message on the second ("You:" or the writer's first name in group chats) instead of the subject, an unread count badge, and the time in the accent colour while unread; Settings → General → Hide message preview shows the subject instead
-- A one-row conversation header: the chat's picture, the people (click for addresses) with the subject and message count below, and only Archive and ⋯ beside them; Delete, Snooze, Mark read, Move and Previous/Next chat are in ⋯ and keep their shortcuts
-- A messenger-style reply field: "Message Priya, Sam", Attach and ⋯ inside, a round Send button beside it; no mail fields with the usual choices, a chip only when you reply to one person instead of everyone, and every other option under ⋯ (Open in full composer for Cc, Bcc and a new subject)
+- A one-row conversation header: the chat's picture, the people (click for addresses) with the subject and message count below, and only Search in conversation, Archive and ⋯ beside them; Delete, Snooze, Mark read, Move and Previous/Next chat are in ⋯ and keep their shortcuts
+- A messenger-style reply field: "Message Priya, Sam", Attach and ⋯ inside, a round Send button beside it; no mail fields with the usual choices, and options under ⋯: reply to one person instead of everyone, change the topic, add Cc or Bcc, and Open in full composer; each choice other than the default shows as a chip whose ✕ undoes it
 
 **Migration to Mailven**
 

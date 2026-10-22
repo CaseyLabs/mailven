@@ -1,5 +1,6 @@
 // The open chat's header (CF-3): one row with the avatar, the people (a button listing the participants) over the subject and
-// message count, then Archive (labelled from 1100px, icon-only below, always named) and "⋯", which holds every other action.
+// message count, then Search in conversation (UI22), Archive (labelled from 1100px, icon-only below, always named) and "⋯",
+// which holds every other action.
 // Writes resolve only for the bindings each test allows; assertions read the recorded binding calls.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
@@ -32,11 +33,11 @@ const people = (page) => header(page).getByRole('heading', { level: 2 }).getByRo
 
 describe('chat header', () => {
   for (const width of [1400, 1100, 1000, 900, 700, 500]) {
-    it(`only Archive and More actions show, named, labelled from 1100px, on one row at ${width}px`, ui.run({ width }, async (page) => {
+    it(`only Search, Archive and More actions show, named, Archive labelled from 1100px, on one row at ${width}px`, ui.run({ width }, async (page) => {
       await open(page, 'Omar Haddad')
       const toolbar = header(page).getByRole('toolbar', { name: 'Chat actions' })
       const names = await toolbar.getByRole('button').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label') || e.textContent.trim()))
-      assert.deepEqual(names.filter((n) => n !== 'Compose'), ['Archive', 'More actions'])
+      assert.deepEqual(names.filter((n) => n !== 'Compose'), ['Search in conversation', 'Archive', 'More actions'])
       const archive = toolbar.getByRole('button', { name: 'Archive', exact: true })
       const label = await archive.locator('span').first().evaluate((el) => el.getBoundingClientRect().width > 1)
       assert.equal(label, width >= 1100, `Archive label ${width >= 1100 ? 'shows' : 'is icon-only'} at ${width}px`)

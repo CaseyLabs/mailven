@@ -423,6 +423,17 @@ mark {
   padding: 0 2px;
 }
 
+/* Find in conversation (chatFind.svelte.ts): the same tint as mark, and a
+   stronger tint plus an underline for the current match, so it does not rely
+   on colour alone. */
+::highlight(chat-find) {
+  background-color: hsl(var(--primary) / 0.25);
+}
+::highlight(chat-find-current) {
+  background-color: hsl(var(--primary) / 0.45);
+  text-decoration: underline 2px;
+}
+
 /* Pane focus flash animation for keyboard navigation */
 @keyframes pane-focus-flash {
   0% {

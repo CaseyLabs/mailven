@@ -473,6 +473,10 @@ func (s *Store) ListChats(scope, section string, now time.Time, offset, limit in
 		}
 	}
 
+	if err := applyLatestSent(tx, byRef); err != nil {
+		return nil, err
+	}
+
 	chats := make([]*Chat, 0, len(page))
 	for _, ref := range page {
 		if c := byRef[chatRef{ref[0], ref[1]}]; c != nil {
@@ -480,6 +484,54 @@ func (s *Store) ListChats(scope, section string, now time.Time, offset, limit in
 		}
 	}
 	return chats, nil
+}
+
+// applyLatestSent lets a thread chat's newest sent message supply its
+// preview and latest sender when it is newer than the chat's messages in
+// scope, so an Inbox row shows my reply (stored in Sent) as its latest line.
+// The row keeps its scope date, so sorting and paging are unchanged. Sender
+// chats are left alone: they list one sender's mail.
+func applyLatestSent(tx *sql.Tx, byRef map[chatRef]*Chat) error {
+	var threads []string
+	for ref, c := range byRef {
+		if senderOfChatKey(ref.key) == "" && c.Snippet != "" {
+			threads = append(threads, ref.key)
+		}
+	}
+	if len(threads) == 0 {
+		return nil
+	}
+	rows, err := tx.Query(`
+		SELECT m.account_id, `+threadKeyExpr("m.")+`, m.date, COALESCE(m.snippet, ''), COALESCE(m.from_name, ''), COALESCE(m.from_email, '')
+		FROM messages m
+		INNER JOIN folders f ON m.folder_id = f.id
+		WHERE f.folder_type = 'sent' AND COALESCE(m.snippet, '') <> '' AND `+threadKeysMatch("m."),
+		threadKeysArgs(threads)...)
+	if err != nil {
+		return fmt.Errorf("failed to query sent chat messages: %w", err)
+	}
+	defer rows.Close()
+	newest := make(map[chatRef]time.Time, len(threads))
+	for rows.Next() {
+		var ref chatRef
+		var date sql.NullString
+		var snippet, name, email string
+		if err := rows.Scan(&ref.account, &ref.key, &date, &snippet, &name, &email); err != nil {
+			return fmt.Errorf("failed to scan sent chat message: %w", err)
+		}
+		c := byRef[ref]
+		if c == nil || !date.Valid {
+			continue
+		}
+		d := parseTimeString(date.String)
+		if !d.After(c.LatestDate) || !d.After(newest[ref]) {
+			continue
+		}
+		newest[ref] = d
+		c.Snippet = snippet
+		c.LatestSender = Address{Name: name, Email: email}
+	}
+	return rows.Err()
 }
 
 // chatPageDetails runs the second pass of ListChats: the JSON aggregates for

@@ -19,7 +19,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 - [DS — Reading-first redesign](#ds): no unresolved issue recorded
-- [CF — Chat-first revision](#cf): [UI21](#ui21), [UI22](#ui22), [UI23](#ui23)
+- [CF — Chat-first revision](#cf): no unresolved issue recorded
 
 <a id="send"></a>
 
@@ -610,25 +610,19 @@ Project: [CF](PLAN.md#cf).
 
 ### UI21 — Inbox rows rarely show the "You:" prefix
 
-- **Severity / proposed priority / status:** low / P3 / open (found 2026-10-21 in CF-3).
-- **Problem / evidence:** CF-3 prefixes a row's latest line with "You:" when the latest message is mine. `ListChats` aggregates only the messages in the scope folder, so in Inbox a reply I sent (stored in Sent) is not the row's latest message; the prefix shows in the Sent scope, for self-sent mail and in sender chats, but an Inbox row keeps the other person's last line after I reply. `internal/message/store.go` `parseParticipantsJSON` picks the latest sender from that folder-scoped set.
-- **Dependencies / closure:** a thread-level latest message across folders (as `GetConversation` builds) for the list query, measured against list-load cost on large mailboxes. Close when an Inbox row shows "You:" after I reply, with a query test.
+- **Status:** resolved 2026-10-22 (branch `fix/cf-followups`). `ListChats` runs a third pass, `applyLatestSent` in `internal/message/chat_store.go`: for the page's thread chats it reads the threads' Sent messages by thread key and, when one is newer than the chat's messages in scope, takes its snippet and sender, so the frontend's "You:" prefix shows in Inbox after I reply. The row keeps its scope date, so order and paging are unchanged; sender chats are unchanged. `TestListChatsLatestSentReply` covers it (fails without the pass). `BenchmarkChatQueries` now seeds Sent replies: at 50k messages ListChats takes about 156 ms combined (unchanged) and 95 ms split (88 ms before).
 
 <a id="ui22"></a>
 
 ### UI22 — No search within an open conversation
 
-- **Severity / proposed priority / status:** low / P3 / open (found 2026-10-21 in CF-3).
-- **Problem / evidence:** the CF-3 header keeps "Search in conversation" beside Archive and ⋯, but Mailven has no in-conversation search, so CF-3 shipped the header without it rather than adding a button with no action.
-- **Dependencies / closure:** design and implement find-in-chat (highlight, next/previous match, keyboard access) as its own milestone; close when the header button and its tests land.
+- **Status:** resolved 2026-10-22 (branch `fix/cf-followups`). The header has a **Search in conversation** button (also `Ctrl+Shift+F`) that opens `ChatFindBar.svelte` under it; `chatFind.svelte.ts` searches the shown message text (bubbles, reader blocks, open quotes and signatures) case-insensitively, marks matches with the CSS Custom Highlight API (the current one also underlined), steps with Enter/Shift+Enter or the arrows with wrap-around, opens a folded long message holding the current match, re-runs as the stream changes, and closes on Escape (focus back on the button) or on opening another chat. Collapsed earlier messages, closed folds and original-layout (iframe) bodies are not searched. `chat-find.test.cjs` (7 tests) and the updated `chat-header` suite pass; visual check in both themes at 1400 and 700 px with Accounts expanded and collapsed. Native WebKitGTK (the Highlight API needs WebKitGTK 2.42 or later) was not run.
 
 <a id="ui23"></a>
 
 ### UI23 — The quick reply cannot change the topic or add Cc/Bcc
 
-- **Severity / proposed priority / status:** low / P3 / open (found 2026-10-21 in CF-4).
-- **Problem / evidence:** CF-4 planned `accent-soft` chips for a changed topic and for Cc/Bcc as well as the reply target, but the chat reply (`QueueChatReply`, chat drafts) carries only text, attachments and Reply/Reply All. Those choices stay in **⋯ › Open in full composer**, so only the reply-target chip exists.
-- **Dependencies / closure:** extend the chat reply and draft model with a subject and Cc/Bcc (backend, bindings, drafts), then add their ⋯ options and chips; close when they land with tests.
+- **Status:** resolved 2026-10-22 (branch `fix/cf-followups`). `ChatReply` and `ChatDraft` carry `subject`, `cc` and `bcc`; `buildChatReplyLink` in `app/chat_reply.go` sets a changed subject (whitespace collapsed; the default "Re: …" is not a change) and adds Cc/Bcc addresses not already on the reply. Migration 66 adds `subject_set`, `cc_extra` and `bcc_extra` to `chat_drafts` so `GetChatDraft` returns only what the reply box added. The reply box's ⋯ has Change topic, Add Cc and Add Bcc; `ChatComposerExtras.svelte` shows their editors and the accent-soft chips (text edits, ✕ undoes) next to the reply-target chip. `TestChatReplyTopicAndCopies`, the updated chat-link and migration rewind tests, and `chat-compose-extras.test.cjs` (6 tests) pass; visual check in both themes at 1400 and 700 px with Accounts expanded and collapsed.
 
 ## Recurring problems
 

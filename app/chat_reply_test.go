@@ -254,6 +254,67 @@ func TestBuildChatReply(t *testing.T) {
 	}
 }
 
+// A changed topic and added Cc/Bcc reach the message and come back from the
+// saved chat draft; the link records only their place, and addresses the
+// reply already sends to are not added twice.
+func TestChatReplyTopicAndCopies(t *testing.T) {
+	a := newChatReplyTestApp(t)
+	a.draftOps = draftOps{accountStore: a.accountStore, draftStore: a.draftStore}
+	r := ChatReply{
+		AccountID: "acct-1", ThreadKey: "orig@example.com", MessageID: "m-1", Text: "Sure", ReplyAll: true,
+		Subject: "  Dinner \n instead ",
+		Cc:      []smtp.Address{{Name: "Dan", Address: " dan@example.com "}, {Address: "Carol@example.com"}, {Address: ""}},
+		Bcc:     []smtp.Address{{Address: "eve@example.com"}, {Address: "DAN@example.com"}},
+	}
+	msg, link, err := a.buildChatReplyLink(r)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if msg.Subject != "Dinner instead" {
+		t.Errorf("Subject = %q", msg.Subject)
+	}
+	want := draft.ChatLink{MessageID: "m-1", ReplyAll: true, TextLen: 4, SubjectSet: true, CcExtra: 1, BccExtra: 1}
+	if link != want {
+		t.Errorf("link = %+v, want %+v", link, want)
+	}
+	if got := msg.Cc[len(msg.Cc)-1]; got.Address != "dan@example.com" || got.Name != "Dan" {
+		t.Errorf("last Cc = %+v", got)
+	}
+	if len(msg.Bcc) != 1 || msg.Bcc[0].Address != "eve@example.com" {
+		t.Errorf("Bcc = %+v", msg.Bcc)
+	}
+
+	enc, err := a.draftOps.encryptDraftBody("acct-1", msg.From.Address, *msg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	d, err := a.draftOps.saveDraftToDB("acct-1", nil, *msg, enc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	link.DraftID = d.ID
+	if err := a.draftStore.SetChatLink("acct-1", r.ThreadKey, link); err != nil {
+		t.Fatal(err)
+	}
+	got, err := a.GetChatDraft("acct-1", r.ThreadKey)
+	if err != nil || got == nil {
+		t.Fatalf("GetChatDraft = %+v, %v", got, err)
+	}
+	if got.Text != "Sure" || got.Subject != "Dinner instead" || len(got.Cc) != 1 || got.Cc[0].Address != "dan@example.com" ||
+		len(got.Bcc) != 1 || got.Bcc[0].Address != "eve@example.com" {
+		t.Errorf("chat draft = %+v", got)
+	}
+
+	// The default subject is not a change, and nothing extra comes back.
+	msg, link, err = a.buildChatReplyLink(ChatReply{AccountID: "acct-1", MessageID: "m-1", Text: "Sure", Subject: "Re: Lunch"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if link.SubjectSet || link.CcExtra != 0 || link.BccExtra != 0 || msg.Subject != "Re: Lunch" {
+		t.Errorf("default reply: link %+v, subject %q", link, msg.Subject)
+	}
+}
+
 // A sender chat reply targets the chosen message, not the chat's latest one:
 // its threading headers come from that message's thread.
 func TestBuildChatReplySenderChat(t *testing.T) {

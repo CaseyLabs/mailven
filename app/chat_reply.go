@@ -16,13 +16,18 @@ import (
 
 // ChatReply is a reply typed in the chat composer.
 type ChatReply struct {
-	AccountID       string            `json:"accountId"`
-	ThreadKey       string            `json:"threadKey"`
-	MessageID       string            `json:"messageId"` // message replied to
-	Text            string            `json:"text"`
-	ReplyAll        bool              `json:"replyAll"`
-	Attachments     []smtp.Attachment `json:"attachments"` // files the user attached
-	ReviewAttemptID string            `json:"reviewAttemptId,omitempty"`
+	AccountID   string            `json:"accountId"`
+	ThreadKey   string            `json:"threadKey"`
+	MessageID   string            `json:"messageId"` // message replied to
+	Text        string            `json:"text"`
+	ReplyAll    bool              `json:"replyAll"`
+	Attachments []smtp.Attachment `json:"attachments"` // files the user attached
+	// Subject replaces the reply's "Re: …" subject when set (a changed topic).
+	Subject string `json:"subject,omitempty"`
+	// Cc and Bcc are addresses added to the reply's own recipients.
+	Cc              []smtp.Address `json:"cc,omitempty"`
+	Bcc             []smtp.Address `json:"bcc,omitempty"`
+	ReviewAttemptID string         `json:"reviewAttemptId,omitempty"`
 	// SenderReviewToken acknowledges the sender evidence returned by
 	// GetChatSenderEvidence; the queue-time and send-time checks still apply.
 	SenderReviewToken string `json:"senderReviewToken,omitempty"`
@@ -36,6 +41,9 @@ type ChatDraft struct {
 	Text        string            `json:"text"`
 	ReplyAll    bool              `json:"replyAll"`
 	Attachments []smtp.Attachment `json:"attachments"`
+	Subject     string            `json:"subject,omitempty"` // a changed topic, else ""
+	Cc          []smtp.Address    `json:"cc,omitempty"`      // added Cc addresses
+	Bcc         []smtp.Address    `json:"bcc,omitempty"`     // added Bcc addresses
 }
 
 // ============================================================================
@@ -121,7 +129,7 @@ func (a *App) saveChatDraft(r ChatReply, replaceLink bool) (string, error) {
 		return "", nil
 	}
 
-	msg, err := a.buildChatReply(r)
+	msg, link, err := a.buildChatReplyLink(r)
 	if err != nil {
 		return "", err
 	}
@@ -135,7 +143,7 @@ func (a *App) saveChatDraft(r ChatReply, replaceLink bool) (string, error) {
 			return res.Draft.ID, err
 		}
 	}
-	link := draft.ChatLink{DraftID: res.Draft.ID, MessageID: r.MessageID, ReplyAll: r.ReplyAll, TextLen: len(r.Text)}
+	link.DraftID = res.Draft.ID
 	if err := a.draftStore.SetChatLink(r.AccountID, r.ThreadKey, link); err != nil {
 		return "", err
 	}
@@ -156,7 +164,11 @@ func (a *App) GetChatDraft(accountID, threadKey string) (*ChatDraft, error) {
 		return nil, a.draftStore.DeleteChatLink(accountID, threadKey)
 	}
 	msg := a.draftOps.toComposeMessage(d)
-	out := &ChatDraft{DraftID: d.ID, MessageID: link.MessageID, ReplyAll: link.ReplyAll, Text: chatDraftText(msg.TextBody, link.TextLen)}
+	out := &ChatDraft{DraftID: d.ID, MessageID: link.MessageID, ReplyAll: link.ReplyAll, Text: chatDraftText(msg.TextBody, link.TextLen),
+		Cc: lastAddresses(msg.Cc, link.CcExtra), Bcc: lastAddresses(msg.Bcc, link.BccExtra)}
+	if link.SubjectSet {
+		out.Subject = msg.Subject
+	}
 	for _, att := range msg.Attachments {
 		if !att.Inline {
 			out.Attachments = append(out.Attachments, att)
@@ -219,9 +231,31 @@ func (a *App) waitChatDraftsFlushed() {
 // ============================================================================
 
 // buildChatReply turns a chat reply into a full reply message: PrepareReply's
-// recipients and threading headers, the typed text, the reply signature, and
-// the quoted original when the chat_include_quote setting is on.
+// recipients and threading headers plus the added Cc/Bcc, the subject or a
+// changed one, the typed text, the reply signature, and the quoted original
+// when the chat_include_quote setting is on.
 func (a *App) buildChatReply(r ChatReply) (*smtp.ComposeMessage, error) {
+	msg, _, err := a.buildChatReplyLink(r)
+	return msg, err
+}
+
+// buildChatReplyLink is buildChatReply that also returns the chat link that
+// locates the typed parts in the message (without a draft ID).
+func (a *App) buildChatReplyLink(r ChatReply) (*smtp.ComposeMessage, draft.ChatLink, error) {
+	link := draft.ChatLink{MessageID: r.MessageID, ReplyAll: r.ReplyAll}
+	msg, err := a.prepareChatReply(r)
+	if err != nil {
+		return nil, link, err
+	}
+	link.TextLen = len(normalizeChatText(r.Text))
+	if subject := strings.Join(strings.Fields(r.Subject), " "); subject != "" && subject != msg.Subject {
+		msg.Subject, link.SubjectSet = subject, true
+	}
+	link.CcExtra, link.BccExtra = addChatRecipients(msg, r.Cc, r.Bcc)
+	return msg, link, nil
+}
+
+func (a *App) prepareChatReply(r ChatReply) (*smtp.ComposeMessage, error) {
 	if r.MessageID == "" {
 		return nil, fmt.Errorf("no message to reply to")
 	}
@@ -244,6 +278,42 @@ func (a *App) buildChatReply(r ChatReply) (*smtp.ComposeMessage, error) {
 	applyIdentityReplyTo(msg, from, accountReplyTo)
 	msg.Attachments = append(msg.Attachments, r.Attachments...)
 	return msg, nil
+}
+
+// addChatRecipients appends cc and bcc to msg's Cc and Bcc, skipping blank
+// addresses and ones msg already sends to, and returns how many it added.
+func addChatRecipients(msg *smtp.ComposeMessage, cc, bcc []smtp.Address) (ccAdded, bccAdded int) {
+	seen := map[string]bool{}
+	for _, list := range [][]smtp.Address{msg.To, msg.Cc, msg.Bcc} {
+		for _, addr := range list {
+			seen[strings.ToLower(strings.TrimSpace(addr.Address))] = true
+		}
+	}
+	add := func(list []smtp.Address, extra []smtp.Address) ([]smtp.Address, int) {
+		n := 0
+		for _, addr := range extra {
+			addr.Address = strings.TrimSpace(addr.Address)
+			key := strings.ToLower(addr.Address)
+			if key == "" || seen[key] {
+				continue
+			}
+			seen[key] = true
+			list = append(list, addr)
+			n++
+		}
+		return list, n
+	}
+	msg.Cc, ccAdded = add(msg.Cc, cc)
+	msg.Bcc, bccAdded = add(msg.Bcc, bcc)
+	return ccAdded, bccAdded
+}
+
+// lastAddresses returns the last n addresses of list, or nil.
+func lastAddresses(list []smtp.Address, n int) []smtp.Address {
+	if n <= 0 || n > len(list) {
+		return nil
+	}
+	return list[len(list)-n:]
 }
 
 // applyIdentityReplyTo sets msg's Reply-To from the identity it is sent as,
