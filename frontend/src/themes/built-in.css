@@ -63,25 +63,25 @@
   [data-theme="dark"] {
     color-scheme: dark;
     /* Surfaces. */
-    --bg: 30 15% 8%;                      /* #171411 */
-    --surface: 34.3 14.3% 9.6%;           /* #1c1915 */
-    --surface-reading: 34.3 12.3% 11.2%;  /* #201d19 */
-    --surface-raised: 38 11% 14%;         /* #282520 */
-    --surface-hover: 30 11.8% 13.3%;      /* #26221e */
-    --surface-selected: 32.7 12.4% 17.5%; /* #322d27 */
+    --bg: 216 23.8% 12.4%;                /* #181e27 */
+    --surface: 219 26.3% 14.9%;           /* #1c2330 */
+    --surface-reading: 218.2 25.6% 16.9%; /* #202836 */
+    --surface-raised: 213.9 22.3% 20.2%;  /* #28323f */
+    --surface-hover: 216.5 24.2% 18.6%;   /* #242d3b */
+    --surface-selected: 216.7 29% 24.3%;  /* #2c3a50 */
     /* Boundaries: border-subtle for menu separators and quote rails, border-control for inputs. */
-    --border-subtle: 33.3 10.1% 17.5%;    /* #312d28 */
-    --border-control: 34.3 6% 45.5%;      /* #7b756d */
+    --border-subtle: 216.4 22.6% 24.3%;   /* #303b4c */
+    --border-control: 215.7 14.6% 49.6%;  /* #6c7b91 */
     /* Text tiers. */
-    --text-primary: 34.3 28% 90.2%;       /* #ede7df */
-    --text-secondary: 32 10.6% 72.4%;     /* #c0b9b1 */
-    --text-tertiary: 32 7.6% 61.4%;       /* #a49d95 */
+    --text-primary: 215 37.5% 93.7%;      /* #e9eef5 */
+    --text-secondary: 215 21.1% 77.6%;    /* #bac4d2 */
+    --text-tertiary: 216 17% 65.5%;       /* #98a4b6 */
     /* Accent: primary action, unread state and focus. Selection is never accent. */
     --accent: 15.8 67% 65.5%;             /* #e28b6c */
     --accent-hover: 15.4 76.2% 72%;       /* #ee9d81 */
     --accent-text: 15.8 76% 70.6%;        /* #ed997b */
     --on-accent: 16 33.3% 8.8%;           /* #1e130f */
-    --accent-soft: 16.4 35.5% 18.2%;      /* #3f271e */
+    --accent-soft: 12 20.8% 18.8%;        /* #3a2a26 */
     --focus: 15.8 76% 70.6%;              /* #ed997b */
     /* Paper: the light card that sender-styled HTML mail renders on in both themes. */
     --paper: 38.2 23.4% 90.8%;            /* #ede9e2 */
@@ -107,8 +107,8 @@
     --avatar-clay: 357.4 19% 23.7%;       /* #483132 */
     --avatar-clay-ink: 357.3 59.5% 85.5%; /* #f0c4c6 */
     /* Elevation: dark adds a faint top-light edge, since shadows vanish on dark grounds. */
-    --elevation-1: 0 1px 2px #00000066, 0 0 0 1px #ede7df0f;
-    --elevation-2: 0 6px 16px #00000080, 0 0 0 1px #ede7df14;
-    --elevation-3: 0 20px 48px #000000a6, 0 0 0 1px #ede7df14;
+    --elevation-1: 0 1px 2px #00000066, 0 0 0 1px #e9eef50f;
+    --elevation-2: 0 6px 16px #00000066, 0 0 0 1px #e9eef514;
+    --elevation-3: 0 20px 48px #000000a6, 0 0 0 1px #e9eef514;
   }
 }

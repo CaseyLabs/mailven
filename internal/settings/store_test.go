@@ -455,6 +455,48 @@ func TestSetGetBoolSettings(t *testing.T) {
 			defVal: false,
 		},
 		{
+			name:   "ChatShowAvatars_true",
+			set:    (*Store).SetChatShowAvatars,
+			get:    (*Store).GetChatShowAvatars,
+			value:  true,
+			defVal: false,
+		},
+		{
+			name:   "ChatShowAvatars_false",
+			set:    (*Store).SetChatShowAvatars,
+			get:    (*Store).GetChatShowAvatars,
+			value:  false,
+			defVal: false,
+		},
+		{
+			name:   "ChatHoverActions_true",
+			set:    (*Store).SetChatHoverActions,
+			get:    (*Store).GetChatHoverActions,
+			value:  true,
+			defVal: false,
+		},
+		{
+			name:   "ChatHoverActions_false",
+			set:    (*Store).SetChatHoverActions,
+			get:    (*Store).GetChatHoverActions,
+			value:  false,
+			defVal: false,
+		},
+		{
+			name:   "ChatMessageAvatars_true",
+			set:    (*Store).SetChatMessageAvatars,
+			get:    (*Store).GetChatMessageAvatars,
+			value:  true,
+			defVal: false,
+		},
+		{
+			name:   "ChatMessageAvatars_false",
+			set:    (*Store).SetChatMessageAvatars,
+			get:    (*Store).GetChatMessageAvatars,
+			value:  false,
+			defVal: false,
+		},
+		{
 			name:   "ShowMessagePreview_false",
 			set:    (*Store).SetShowMessagePreview,
 			get:    (*Store).GetShowMessagePreview,
@@ -772,6 +814,49 @@ func TestSetGetChatDisplayStyle(t *testing.T) {
 			got, err = store.GetChatDisplayStyle()
 			if err != nil || got != tt.style {
 				t.Errorf("got %q, %v; want %q", got, err, tt.style)
+			}
+		})
+	}
+}
+
+func TestSetGetChatReadingFont(t *testing.T) {
+	tests := []struct {
+		name    string
+		font    string
+		wantErr bool
+	}{
+		{name: "serif", font: "serif"},
+		{name: "sans", font: "sans"},
+		{name: "invalid", font: "mono", wantErr: true},
+		{name: "empty", font: "", wantErr: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			store := NewStore(openTestDB(t))
+
+			got, err := store.GetChatReadingFont()
+			if err != nil || got != ChatReadingFontSerif {
+				t.Fatalf("default = %q, %v; want serif", got, err)
+			}
+
+			err = store.SetChatReadingFont(tt.font)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatal("expected error, got nil")
+				}
+				if got, _ := store.GetChatReadingFont(); got != ChatReadingFontSerif {
+					t.Errorf("rejected value changed the setting to %q", got)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+
+			got, err = store.GetChatReadingFont()
+			if err != nil || got != tt.font {
+				t.Errorf("got %q, %v; want %q", got, err, tt.font)
 			}
 		})
 	}

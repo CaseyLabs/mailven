@@ -126,9 +126,9 @@ describe('chat logic', () => {
     assert.deepEqual(r.thread.map((i) => i.newDay), [true, false, false, false, true])
     assert.deepEqual(r.sender.map((i) => i.subject), ['Invoice 12', null, 'Delivery', null], 'a sender chat labels each subject run; Re: continues it')
     assert.deepEqual(r.sender.map((i) => i.groupStart), [true, false, true, false], 'a new subject starts a new run')
-    assert.deepEqual(r.thread.map((i) => i.subject), ['Plans', null, null, null, null], 'a thread labels only its first message with the subject')
+    assert.deepEqual(r.thread.map((i) => i.subject), [null, null, null, null, null], 'a thread labels no message: the header carries its subject')
     assert.deepEqual(r.oneSubject.map((i) => i.subject), ['Invoice 12', null], 'one distinct subject gets one heading')
-    assert.deepEqual(r.emptyFirst.map((i) => i.subject), [null, 'Late'], 'the heading goes on the first message with a subject')
+    assert.deepEqual(r.emptyFirst.map((i) => i.subject), [null, null], 'a thread has no in-stream heading')
     assert.deepEqual(r.subjects, ['Hi', 'Hallo', 'Hej', 'x'])
   }))
 

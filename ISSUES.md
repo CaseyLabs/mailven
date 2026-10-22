@@ -582,7 +582,7 @@ Project: [DS](PLAN.md#ds).
 - **Owner / milestone:** [DS](PLAN.md#ds) / found during [DS-2](PLAN.md#ds-2); see also [DSR-2](PLAN.md#dsr-2), which may close it.
 - **Severity / proposed priority / status:** low / P3 / open.
 - **Location / problem:** `frontend/src/lib/components/chat/ChatRow.svelte`, the `[data-row-actions]` group. The Archive, Mark as read/unread and Snooze buttons sit inside the row's `role="option"`, whose children ARIA treats as presentational, so a screen reader may fold their names into the option or skip them. Keyboard users reach them by Tab (covered by `tests/ui/chat-row.test.cjs`); the same actions stay available through the row's context menu and the list shortcuts.
-- **Evidence / closure:** found by review on 2026-10-20; no assistive-technology run, and the UI suite has no axe audit. Close by restructuring the list so the actions are not owned by the option (for example a grid with row and cell roles, or actions outside the option tied by `aria-controls`), checked with a screen reader or an axe `nested-interactive` rule.
+- **Evidence / closure:** [DSR-2](PLAN.md#dsr-2) made the buttons opt-in (off by default), so the default row has none; with the setting on the nesting is unchanged and this stays open. Found by review on 2026-10-20; no assistive-technology run, and the UI suite has no axe audit. Close by restructuring the list so the actions are not owned by the option (for example a grid with row and cell roles, or actions outside the option tied by `aria-controls`), checked with a screen reader or an axe `nested-interactive` rule.
 
 <a id="ui18"></a>
 
@@ -601,6 +601,15 @@ Project: [DS](PLAN.md#ds).
 - **Severity / proposed priority / status:** low / P3 / open.
 - **Location / problem:** `frontend/src/lib/components/kit/SourceSidebar.svelte` and `kit/SourceItem.svelte`. Items are `role="option"` with `aria-selected`, but their focusable container is the `role="navigation"` `<aside>` from `SidebarFrame`, not a `role="listbox"`, and the container sets no `aria-activedescendant`. A screen reader may not announce the selected source as the keys move it. Since DS-5 the selected option is ringed visually while the `<aside>` has keyboard focus.
 - **Evidence / closure:** found by review on 2026-10-21; predates DS-5; no assistive-technology run. Close by wrapping the items in a `role="listbox"` that owns them with `aria-activedescendant` (or by switching to buttons with `aria-current`), checked with a screen reader or an axe `aria-required-parent` rule, with `sidebar-focus` and `sidebar-states` still passing.
+
+<a id="ui20"></a>
+
+### UI20 — Fixtures and tests depend on the wall clock
+
+- **Owner / milestone:** [DSR](PLAN.md#dsr) / found during [DSR-3](PLAN.md#dsr-3).
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Location / problem:** `.agents/skills/run-mailven/screenshot-fakes.js` dates the trip chat relative to the current time, and the UI harness runs in UTC. When a run crosses midnight UTC between `trip-4` and `trip-5`, `trip-5` starts a new day and shows its sender name, so `chat-presentation.test.cjs` "incoming and outgoing message blocks grouped by sender" fails.
+- **Evidence / closure:** seen once in the DSR-3 acceptance run (2026-10-22 UTC, `trip-5` at 00:03). The same file passed on its own three times, and two full suites passed. The assertion predates DSR-3. During DSR-4 (01:00–01:45 UTC, 2026-10-22) the full `make test-ui` failed `chat-row.test.cjs` "by default rows show no avatar…" (the H shortcut's snooze menu never opened; `waitFor` timed out) on four runs, also on a clean stash of the base. The file passes alone (13 of 13, five runs). The cause is unconfirmed; it appeared in the same after-midnight-UTC window, so a wall-clock link is likely but not shown. Close by pinning the page clock in `harness.cjs` (for example Playwright `page.clock`) or by anchoring the fixture dates to a fixed hour, then rerunning the chat suites.
 
 ## Recurring problems
 

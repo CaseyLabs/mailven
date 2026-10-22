@@ -121,8 +121,8 @@
 <svelte:window onpointerdowncapture={trackPointer(true)} onpointerupcapture={trackPointer(false)} onpointercancel={trackPointer(false)} />
 
 <!-- Expanded while focus is inside (typing, the shortcut, Attach, Send); otherwise one line. -->
-<div class="w-full px-3 pb-3 pt-1" data-chat-composer>
-  <div class="mx-auto w-full max-w-(--chat-stream)">
+<div class="w-full pb-3 pt-1" data-chat-composer>
+  <div class="chat-col">
     {#if composer.attachments.length > 0}
       <ul class="flex flex-wrap gap-1.5 mb-2" aria-label={$_('chat.attachments')}>
         {#each composer.attachments as att, i (i)}

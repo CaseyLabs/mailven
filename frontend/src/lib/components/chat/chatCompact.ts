@@ -1,9 +1,14 @@
-// chatCompact — conversation compaction: runs of older, already-read messages
-// fold into one expandable row. The latest KEEP_RECENT messages, unread
-// messages, drafts and subject-heading messages never fold.
+// chatCompact — conversation compaction: in a very long chat, runs of older,
+// already-read messages fold into one expandable row. Every message shows
+// until the chat has more than FOLD_ABOVE of them (opening a chat renders all
+// of its messages, so only long chats need the fold). The latest KEEP_RECENT
+// messages, unread messages, drafts and subject-heading messages never fold.
 
 import { dayKey, type ThreadItem } from './chatFormat'
 
+// Longest chat that shows every message; the threshold and its measurements are
+// in docs/validation/dsr-3.md.
+export const FOLD_ABOVE = 60
 export const KEEP_RECENT = 5
 export const MIN_RUN = 3
 
@@ -15,7 +20,9 @@ export type StreamEntry =
 // compactItems folds runs of at least MIN_RUN collapsible messages. `keep`
 // holds IDs that stay visible (messages that were unread when opened and have
 // since been read); `expanded` holds the IDs of runs the user opened.
-export function compactItems(items: ThreadItem[], expanded: ReadonlySet<string>, keep: ReadonlySet<string> = new Set()): StreamEntry[] {
+// Chats of `foldAbove` messages or fewer do not fold.
+export function compactItems(items: ThreadItem[], expanded: ReadonlySet<string>, keep: ReadonlySet<string> = new Set(), foldAbove = FOLD_ABOVE): StreamEntry[] {
+  if (items.length <= foldAbove) return items.map((item) => ({ kind: 'message', item }))
   const limit = items.length - KEEP_RECENT
   const collapsible = (item: ThreadItem, i: number) =>
     i < limit && item.msg.isRead && !item.msg.isDraft && !item.subject && !keep.has(item.msg.id)

@@ -4,14 +4,14 @@ const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
 
-// The trip chat gets 14 messages: trip-4 is unread, so the read runs are trip-0..3 and trip-5..8 and the
-// last five (trip-9..13) are the recent tail.
+// The trip chat gets 74 messages (above the 60-message fold threshold): trip-4 is unread, so the read runs are
+// trip-0..3 and trip-5..68 and the last five (trip-69..73) are the recent tail.
 const longTrip = `{ const A = window.go.app.App, get = A.GetConversation
   A.GetConversation = async (id) => {
     const c = await get(id)
     if (id !== 't-trip') return c
     const base = c.messages[0], t = Date.parse(base.date)
-    const messages = Array.from({ length: 14 }, (_, i) => ({ ...base, id: 'trip-' + i, uid: i, date: new Date(t + i * 60e3).toISOString(),
+    const messages = Array.from({ length: 74 }, (_, i) => ({ ...base, id: 'trip-' + i, uid: i, date: new Date(t + i * 60e3).toISOString(),
       isRead: i !== 4, mine: i % 3 === 1, fromName: i % 3 === 1 ? 'Alex Morgan' : 'Priya Shah', fromEmail: i % 3 === 1 ? 'alex@example.com' : 'priya@example.net',
       bodyText: 'Message ' + i, snippet: 'Message ' + i, chat: { text: 'Message ' + i + '. ' + 'More words. '.repeat(8), hasQuoted: false, isRich: false } }))
     return { ...c, messages, messageCount: messages.length }
@@ -23,7 +23,9 @@ const rows = (page) => page.locator('[data-compact-row]')
 describe('chat compaction', () => {
   it('compactItems keeps the tail, unread, drafts and headings; shows the sender after a fold', ui.run({}, async (page) => {
     const r = await page.evaluate(async () => {
-      const { compactItems } = await import('/src/lib/components/chat/chatCompact.ts')
+      const { compactItems: fold, FOLD_ABOVE } = await import('/src/lib/components/chat/chatCompact.ts')
+      // The shapes below fold from the first message; the threshold itself is checked last.
+      const compactItems = (items, expanded, keep) => fold(items, expanded, keep, 0)
       // o[i].day sets the message's day (default day 0); newDay follows buildThreadItems.
       const mk = (n, o = {}) => Array.from({ length: n }, (_, i) => ({ msg: { id: 'm' + i, isRead: true, isDraft: false, ...(o[i] ?? {}) },
         subject: o[i]?.subject, groupStart: false, date: new Date(2026, 0, 5 + (o[i]?.day ?? 0), 9, i) }))
@@ -41,9 +43,13 @@ describe('chat compaction', () => {
         keep: shape(compactItems(mk(10), new Set(), new Set(['m2']))),
         // m0 (a heading, day 0) stays; m1-m4 (days 1-2) fold; m5 is on day 2 like m4.
         hiddenDay: shape(compactItems(mk(10, { ...days([0, 1, 1, 2, 2, 2, 2, 2, 2, 2]), 0: { subject: 'Hikes', day: 0 } }), new Set())),
+        atThreshold: shape(fold(mk(FOLD_ABOVE), new Set())).length,
+        aboveThreshold: shape(fold(mk(FOLD_ABOVE + 1), new Set())).length,
         sameDay: shape(compactItems(mk(10, { ...days([0, 0, 0, 0, 0, 1, 1, 1, 1, 1]), 0: { subject: 'Hikes', day: 0 } }), new Set())),
       }
     })
+    assert.equal(r.atThreshold, 60, 'a chat of FOLD_ABOVE messages shows every one')
+    assert.equal(r.aboveThreshold, 1 + 5, 'one more message folds the older ones into a row')
     assert.deepEqual(r.short, ['m0@', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6'], 'two older messages are below the run minimum')
     assert.deepEqual(r.long, ['run5', 'm5*@', 'm6', 'm7', 'm8', 'm9'], 'five older fold; the message after starts a run and, first shown, carries the date')
     assert.deepEqual(r.open.slice(0, 7), ['run5+', 'm0*@', 'm1', 'm2', 'm3', 'm4', 'm5'], 'an open run lists its messages, the first with its sender')
@@ -71,14 +77,15 @@ describe('chat compaction', () => {
 
   it('folds runs of earlier read messages and never the unread or recent ones', ui.run({ beforeMount: longTrip }, async (page) => {
     await rows(page).first().waitFor()
-    assert.deepEqual(await articles(page), ['trip-0', 'trip-4', 'trip-9', 'trip-10', 'trip-11', 'trip-12', 'trip-13'], 'only the subject-heading opener, the unread message and the latest five show')
-    assert.deepEqual(await rows(page).allInnerTexts(), ['3 earlier messages', '4 earlier messages'])
+    assert.deepEqual(await articles(page), ['trip-4', 'trip-69', 'trip-70', 'trip-71', 'trip-72', 'trip-73'], 'only the unread message and the latest five show')
+    assert.deepEqual(await rows(page).allInnerTexts(), ['4 earlier messages', '64 earlier messages'])
     assert.equal(await rows(page).first().getAttribute('aria-expanded'), 'false')
   }))
 
   it('short chats do not fold', ui.run({}, async (page) => {
     await page.locator('[data-message-id="trip-5"]').waitFor()
     assert.equal(await rows(page).count(), 0, 'six read messages stay visible')
+    assert.equal((await articles(page)).length, 6, 'every message shows expanded')
   }))
 
   it('rows expand and collapse from the keyboard', ui.run({ beforeMount: longTrip }, async (page) => {
@@ -87,12 +94,12 @@ describe('chat compaction', () => {
     await first.focus()
     await page.keyboard.press('Enter')
     assert.equal(await first.getAttribute('aria-expanded'), 'true')
-    assert.match(await first.innerText(), /Hide 3 earlier messages/)
+    assert.match(await first.innerText(), /Hide 4 earlier messages/)
     assert.deepEqual((await articles(page)).slice(0, 5), ['trip-0', 'trip-1', 'trip-2', 'trip-3', 'trip-4'], 'the run shows in order')
     assert.match(await page.locator('[data-message-id="trip-3"]').innerText(), /Message 3\./, "expanded messages render")
     await page.keyboard.press('Space')
     assert.equal(await first.getAttribute('aria-expanded'), 'false')
-    assert.deepEqual((await articles(page)).slice(0, 3), ['trip-0', 'trip-4', 'trip-9'], 'and fold again')
+    assert.deepEqual((await articles(page)).slice(0, 3), ['trip-4', 'trip-69', 'trip-70'], 'and fold again')
   }))
 
   it('Tab reaches folded-run rows between messages, in order', ui.run({ beforeMount: longTrip }, async (page) => {
@@ -101,7 +108,7 @@ describe('chat compaction', () => {
     const at = () => page.evaluate(() => document.activeElement?.dataset.messageId ?? (document.activeElement?.hasAttribute('data-compact-row') ? 'row' : document.activeElement?.tagName))
     const steps = []
     for (const key of ['Tab', 'Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab']) { await page.keyboard.press(key); steps.push(await at()) }
-    assert.deepEqual(steps, ['row', 'trip-9', 'row', 'trip-4', 'row'], 'Tab and Shift+Tab stop on both runs around trip-4')
+    assert.deepEqual(steps, ['row', 'trip-69', 'row', 'trip-4', 'row'], 'Tab and Shift+Tab stop on both runs around trip-4')
     assert.equal(await page.evaluate(() => document.activeElement === document.querySelectorAll('[data-compact-row]')[0]), true, 'the last stop is the first run')
   }))
 

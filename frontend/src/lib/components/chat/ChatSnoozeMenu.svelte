@@ -14,11 +14,14 @@
     onUnsnooze: () => void
     // A zero-size, untabbable trigger that only anchors a menu opened through open().
     hiddenTrigger?: boolean
+    // A labelled toolbar button (icon only when compact) instead of the bare icon.
+    toolbar?: boolean
+    compact?: boolean
     // Called once the menu and its date dialog have both closed.
     onClose?: () => void
   }
 
-  let { snoozedUntil, onSnooze, onUnsnooze, hiddenTrigger = false, onClose }: Props = $props()
+  let { snoozedUntil, onSnooze, onUnsnooze, hiddenTrigger = false, toolbar = false, compact = false, onClose }: Props = $props()
 
   let menuOpen = $state(false)
   let pickOpen = $state(false)
@@ -39,12 +42,13 @@
 
 <DropdownMenu.Root bind:open={menuOpen} onOpenChange={(o) => { if (o) presets = snoozePresets() }}>
   <DropdownMenu.Trigger
-    class={hiddenTrigger ? 'size-0 overflow-hidden' : 'p-2 rounded-md hover:bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden'}
+    class={hiddenTrigger ? 'size-0 overflow-hidden' : toolbar ? `flex items-center gap-2 ${compact ? 'px-2' : 'px-3'} min-h-control rounded-md border border-transparent text-sm font-medium whitespace-nowrap shrink-0 text-foreground hover:bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden` : 'p-2 rounded-md hover:bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden'}
     tabindex={hiddenTrigger ? -1 : undefined}
     title={$_('chat.snooze')}
     aria-label={$_('chat.snooze')}
   >
-    <Icon icon="lucide:alarm-clock" class="{hiddenTrigger ? 'size-0' : 'w-5 h-5'} {snoozedUntil ? 'text-primary' : 'text-muted-foreground'}" />
+    <Icon icon="lucide:alarm-clock" class="{hiddenTrigger ? 'size-0' : toolbar ? 'w-4 h-4' : 'w-5 h-5'} {snoozedUntil ? 'text-primary' : toolbar ? '' : 'text-muted-foreground'}" />
+    {#if toolbar}<span class:sr-only={compact}>{$_('chat.snooze')}</span>{/if}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
     {#each presets as p (p.id)}

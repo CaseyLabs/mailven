@@ -1,7 +1,7 @@
 <script lang="ts">
-  // ChatBubble — one message block in the thread column: avatar, a compact
-  // header (the sender, or "You"), then the body, left-aligned for everyone in
-  // either display style. New text reads in Literata at the measure, with
+  // ChatBubble — one message block in the thread column: an optional avatar
+  // (Settings → Chat), a sender line ("Name 12:45 PM to 10 people ▾", or "You"),
+  // then the body, left-aligned for everyone in either display style. New text reads in Literata at the measure, with
   // quoted history and signatures behind a "Show quoted text" fold; rich mail
   // renders as sanitized reader content, or as a card when the setting asks;
   // signed or encrypted mail uses the chat text of its verified or decrypted
@@ -18,7 +18,7 @@
   import AttachmentList from '$lib/components/viewer/AttachmentList.svelte'
   import MessageContextMenu from '$lib/components/common/MessageContextMenu.svelte'
   import { contactPhotos } from '$lib/stores/contactPhotos.svelte'
-  import { getDarkMailContent, getChatRichStyle } from '$lib/stores/settings.svelte'
+  import { getDarkMailContent, getChatRichStyle, getChatMessageAvatars } from '$lib/stores/settings.svelte'
   import { getIsDarkActive } from '$lib/stores/theme.svelte'
   import ChatRichCard from './ChatRichCard.svelte'
   import ChatReaderMessage from './ChatReaderMessage.svelte'
@@ -29,7 +29,7 @@
   import { copyText } from './chatClipboard'
   import { securityStatus, TONES } from './chatSecurity'
   import { looksPreformatted } from './chatReading'
-  import { linkify, parseRecipients, formatAddress, displaySubject, type ReplyMode, type ThreadItem } from './chatFormat'
+  import { linkify, parseRecipients, formatAddress, displayName, displaySubject, type ReplyMode, type ThreadItem } from './chatFormat'
   import { formatStamp } from '$lib/utils/date'
   import type { ChatThread } from './chatThread.svelte'
 
@@ -70,6 +70,7 @@
   let showOriginal = $state(false)
   let showQuoted = $state(false)
   let showDetails = $state(false)
+  let showRecipients = $state(false)
   let cardExpanded = $state(false)
   let darkOverride = $state(false)
   let source = $state<string | null>(null)
@@ -100,6 +101,17 @@
   const senderName = $derived(msg.fromName || msg.fromEmail || $_('viewer.unknown'))
   const photo = $derived(contactPhotos.get(msg.fromEmail))
   const time = $derived(formatStamp(item.date))
+  // To and Cc, once each, for the sender line's "to N people" disclosure (names only, no addresses).
+  const recipients = $derived.by(() => {
+    const seen = new Set<string>()
+    return [...parseRecipients(msg.toList), ...parseRecipients(msg.ccList)].filter((p) => {
+      const key = (p.email || p.name).toLowerCase()
+      return !seen.has(key) && !!seen.add(key)
+    })
+  })
+  const toLabel = $derived(recipients.length === 1 ? $_('chat.toRecipient', { values: { name: displayName(recipients[0]) } }) : $_('chat.toPeople', { values: { count: recipients.length } }))
+  // Plain text splits at blank lines so paragraphs sit 10px apart; pre-formatted text keeps its lines.
+  const paragraphs = $derived(textFace.includes('font-mono') ? [chat?.text ?? ''] : (chat?.text ?? '').split(/\n{2,}/))
   const security = $derived(securityStatus(msg, thread, $_))
   const badges = $derived(security.filter((l) => l.badge))
   const details = $derived([
@@ -181,7 +193,7 @@
   {onReply}
 >
   <div
-    class="group flex gap-3 mx-auto w-full max-w-(--chat-stream) px-4 rounded-md {item.groupStart ? 'mt-6' : 'mt-1'} focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
+    class="group flex gap-3 chat-col rounded-md {item.groupStart ? 'mt-6' : 'mt-1'} focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
     data-message-id={msg.id}
     data-mine={item.mine ? '' : undefined}
     tabindex="-1"
@@ -190,12 +202,14 @@
     onfocus={() => onFocusChange(true)}
     onblur={() => onFocusChange(false)}
   >
-    <!-- Avatar column; the spacer keeps a sender's grouped messages aligned -->
-    <div class="w-8 shrink-0" aria-hidden="true">
-      {#if item.groupStart}
-        <Avatar email={msg.fromEmail} name={msg.fromName} size={32} photoData={photo?.data} photoMediaType={photo?.mediaType} />
-      {/if}
-    </div>
+    <!-- Avatar column (opt-in); the spacer keeps a sender's grouped messages aligned -->
+    {#if getChatMessageAvatars()}
+      <div class="w-8 shrink-0" aria-hidden="true">
+        {#if item.groupStart}
+          <Avatar email={msg.fromEmail} name={msg.fromName} size={32} photoData={photo?.data} photoMediaType={photo?.mediaType} />
+        {/if}
+      </div>
+    {/if}
 
     <div class="relative flex flex-col gap-1.5 flex-1 min-w-0 items-start">
       {#if item.groupStart || badges.length > 0}
@@ -204,6 +218,16 @@
             <span class="text-ui-name-strong text-fg-primary">{item.mine ? $_('chat.you') : senderName}</span>
             {#if msg.isDraft}<span class="text-ui-meta font-medium text-danger">{$_('chat.draft')}</span>{/if}
             <span class="text-ui-meta text-fg-tertiary tabular-nums">{time}</span>
+            {#if recipients.length > 0}
+              <button
+                type="button"
+                class="inline-flex items-center gap-0.5 rounded-sm text-ui-meta text-fg-tertiary hover:text-fg-primary focus-visible:outline-2 focus-visible:outline-focus"
+                aria-expanded={showRecipients}
+                aria-controls="recipients-{msg.id}"
+                data-recipients-toggle
+                onclick={(e) => fold(e.currentTarget, () => (showRecipients = !showRecipients))}
+              >{toLabel}<Icon icon={showRecipients ? 'lucide:chevron-up' : 'lucide:chevron-down'} class="w-3 h-3" aria-hidden="true" /></button>
+            {/if}
           {/if}
           {#each badges as b (b.icon + b.text)}
             <span class="inline-flex items-center gap-1 px-1.5 py-px self-center rounded-full border text-caption leading-4 {TONES[b.tone]}" title={b.text}>
@@ -212,6 +236,12 @@
             </span>
           {/each}
         </div>
+      {/if}
+
+      {#if showRecipients && item.groupStart}
+        <ul id="recipients-{msg.id}" class="flex flex-wrap gap-x-3 gap-y-0.5 text-ui-meta text-fg-secondary" aria-label={$_('chat.recipients')} data-recipients>
+          {#each recipients as p (p.email || p.name)}<li>{displayName(p)}</li>{/each}
+        </ul>
       {/if}
 
       <ChatSecurityBanners {msg} {thread} lines={security} />
@@ -231,7 +261,9 @@
         {:else if bare}
           <!-- Attachment-only mail: the attachment list below is the message -->
         {:else if mode === 'bubble'}
-          <div class="{textFace} text-fg-primary max-w-(--measure) whitespace-pre-wrap wrap-anywhere" data-message-text>{@render text(chat!.text)}</div>
+          <div class="{textFace} text-fg-primary max-w-(--measure) flex flex-col gap-2.5 wrap-anywhere" data-message-text>
+            {#each paragraphs as para, i (i)}<p class="whitespace-pre-wrap">{@render text(para)}</p>{/each}
+          </div>
         {:else if mode === 'reader'}
           <ChatReaderMessage blocks={chat!.reader!} inlineAttachments={pgp?.inlineAttachments ?? smime?.inlineAttachments} fromEmail={msg.fromEmail} {onOpenLink} {onImagesLoaded} />
         {:else if mode === 'card'}

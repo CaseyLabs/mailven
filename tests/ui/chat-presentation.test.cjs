@@ -31,6 +31,16 @@ const senderFake = `{ const A = window.go.app.App, get = A.GetSenderChat
     return { ...c, messages, messageCount: messages.length }
   } }`
 
+// A long sender chat on one subject, tall enough to scroll.
+const longSenderFake = `{ const A = window.go.app.App, get = A.GetSenderChat
+  A.GetSenderChat = async (acc, sender) => {
+    const c = await get(acc, sender)
+    const base = c.messages[0], t = Date.parse(base.date)
+    const messages = Array.from({ length: 14 }, (_, i) => ({ ...base, id: 'news-' + i, subject: 'Ten autumn hikes', isRead: true,
+      date: new Date(t - (14 - i) * 60e3).toISOString(), chat: { text: 'Hike ' + i + '. ' + 'More words. '.repeat(20), hasQuoted: false, isRich: false } }))
+    return { ...c, messages, messageCount: messages.length }
+  } }`
+
 describe('chat presentation', () => {
   it('incoming and outgoing message blocks grouped by sender', ui.run({}, async (page) => {
     await bubble(page, 'trip-5').waitFor()
@@ -43,20 +53,24 @@ describe('chat presentation', () => {
     assert.match(await bubble(page, 'trip-2').innerText(), /Sam Rivera/, 'a different sender starts a new run')
     assert.doesNotMatch(await bubble(page, 'trip-1').innerText(), /Alex Morgan/, 'my messages do not show my name')
     assert.equal(await bubble(page, 'trip-1').locator('.text-ui-name-strong').innerText(), 'You', 'my messages are labelled You')
-    const lefts = await page.locator('[role="article"][data-message-id]').evaluateAll((els) => els.map((e) => Math.round(e.querySelector('[aria-hidden="true"].w-8').getBoundingClientRect().left)))
+    const lefts = await page.locator('[role="article"][data-message-id]').evaluateAll((els) => els.map((e) => Math.round(e.querySelector('[data-message-text]').getBoundingClientRect().left)))
     assert.equal(new Set(lefts).size, 1, `every message is left-aligned in one column: ${lefts}`)
     assert.doesNotMatch(await bubble(page, 'trip-5').innerText(), /Priya Shah/, 'a same-sender follow-up joins the run without a name')
   }))
 
-  it('the subject heads the stream, not the header', ui.run({}, async (page) => {
+  it('the subject heads the header, not the stream', ui.run({}, async (page) => {
     await bubble(page, 'trip-5').waitFor()
-    assert.deepEqual(await subjects(page), ['Weekend trip to the coast'], 'one subject heading, above the first message')
-    const header = page.locator('header', { has: page.getByRole('heading', { level: 2 }) })
-    assert.doesNotMatch(await header.innerText(), /Weekend trip/, 'the header shows only participants and actions')
+    assert.deepEqual(await subjects(page), [], 'a thread has no in-stream subject heading')
+    const title = page.getByRole('heading', { level: 2 })
+    assert.equal(await title.innerText(), 'Weekend trip to the coast', 'the header carries the subject')
+    const header = page.locator('[data-chat-header]')
+    assert.doesNotMatch(await header.innerText(), /Priya Shah:|wrote/, 'and no sender')
   }))
 
-  it('the subject heading sticks to the top of the stream while scrolling', ui.run({ height: 500 }, async (page) => {
-    await bubble(page, 'trip-5').waitFor()
+  it('the subject heading sticks to the top of the stream while scrolling', ui.run({ height: 500, beforeMount: longSenderFake }, async (page) => {
+    await page.getByRole('button', { name: 'Low priority (2)' }).click()
+    await row(page, 'Trail Magazine').click()
+    await bubble(page, 'news-13').waitFor()
     const log = page.getByRole('log')
     const heading = log.getByRole('heading', { level: 3 })
     await log.evaluate((el) => { el.scrollTop = el.scrollHeight })
@@ -64,7 +78,7 @@ describe('chat presentation', () => {
     const [l, h] = [await log.boundingBox(), await heading.boundingBox()]
     assert.ok(Math.abs(h.y - l.y) <= 1, `heading pinned to the top of the stream: ${h.y} vs ${l.y}`)
     const top = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('h3')?.textContent?.trim(), { x: h.x + 30, y: h.y + h.height / 2 })
-    assert.equal(top, 'Weekend trip to the coast', 'the heading paints over the messages scrolling under it')
+    assert.equal(top, 'Ten autumn hikes', 'the heading paints over the messages scrolling under it')
   }))
 
   it('quoted text and signature hide behind the fold', ui.run({ beforeMount: quotedFake }, async (page) => {

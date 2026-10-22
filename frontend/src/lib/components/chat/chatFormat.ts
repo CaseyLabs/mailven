@@ -265,20 +265,18 @@ export function baseSubject(subject: string): string {
   return displaySubject(subject).toLowerCase()
 }
 
-// buildThreadItems groups messages into bubble runs. The first message with a
-// subject is labelled with it (the header shows only names). labelSubjects (a
-// sender chat, which mixes threads) also labels the first message of each
-// later subject run, and starts a new bubble run there, when the chat has two
-// or more distinct subjects. Empty subjects continue the previous run.
+// buildThreadItems groups messages into bubble runs. The header carries the
+// subject, so only labelSubjects (a sender chat, which mixes threads and has no
+// single subject) labels messages: each subject run starts with a heading and
+// a new bubble run. Empty subjects continue the previous run.
 export function buildThreadItems(messages: messageModels.Message[], labelSubjects = false): ThreadItem[] {
   const bases = messages.map((m) => baseSubject(m.subject || ''))
-  const multiSubject = labelSubjects && new Set(bases.filter(Boolean)).size >= 2
   const items: ThreadItem[] = []
   let prev: ThreadItem | null = null
   let prevBase: string | null = null
   messages.forEach((msg, i) => {
     const base = bases[i]
-    const subject = base && (prevBase === null || (multiSubject && base !== prevBase)) ? displaySubject(msg.subject) : undefined
+    const subject = base && labelSubjects && (prevBase === null || base !== prevBase) ? displaySubject(msg.subject) : undefined
     if (base) prevBase = base
     const date = new Date(msg.date)
     const mine = !!msg.mine

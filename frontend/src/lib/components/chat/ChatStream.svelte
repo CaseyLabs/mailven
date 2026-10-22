@@ -74,7 +74,7 @@
   {/each}
 {/snippet}
 
-<div class="w-full">
+<div class="w-full" data-chat-stream>
   {#each sections as section, si (section.id ?? 'lead')}
     <section>
       {#if section.subject !== undefined}<ChatSubjectHeading subject={section.subject} />{/if}
@@ -85,7 +85,7 @@
           {@const item = entry.item}
           {#if item.newDay || item.msg.id === firstNew}
             <!-- One row above the message, so scroll anchoring keeps the day label and divider in view. -->
-            <div class="mx-auto w-full max-w-(--chat-stream) px-4">
+            <div class="chat-col">
               {#if item.newDay}<ChatDaySeparator date={item.date} tight={item.subject !== undefined} />{/if}
               {#if item.msg.id === firstNew}
                 <div class="flex items-center gap-2 pt-4 pb-1.5" role="separator" aria-label={$_('chat.newDivider')} data-new-divider>

@@ -106,6 +106,46 @@ func (a *App) SetAlwaysShowMessageCheckbox(enabled bool) error {
 	return a.settingsStore.SetAlwaysShowMessageCheckbox(enabled)
 }
 
+// GetChatShowAvatars returns whether chat-list rows show an avatar
+func (a *App) GetChatShowAvatars() (bool, error) {
+	return a.settingsStore.GetChatShowAvatars()
+}
+
+// SetChatShowAvatars shows or hides avatars in chat-list rows
+func (a *App) SetChatShowAvatars(enabled bool) error {
+	return a.settingsStore.SetChatShowAvatars(enabled)
+}
+
+// GetChatHoverActions returns whether chat-list rows show quick actions on hover
+func (a *App) GetChatHoverActions() (bool, error) {
+	return a.settingsStore.GetChatHoverActions()
+}
+
+// SetChatHoverActions enables or disables hover quick actions on chat rows
+func (a *App) SetChatHoverActions(enabled bool) error {
+	return a.settingsStore.SetChatHoverActions(enabled)
+}
+
+// GetChatMessageAvatars returns whether messages in an open chat show the sender's avatar
+func (a *App) GetChatMessageAvatars() (bool, error) {
+	return a.settingsStore.GetChatMessageAvatars()
+}
+
+// SetChatMessageAvatars shows or hides avatars beside messages in an open chat
+func (a *App) SetChatMessageAvatars(enabled bool) error {
+	return a.settingsStore.SetChatMessageAvatars(enabled)
+}
+
+// GetChatReadingFont returns the face for message text in an open chat ("serif" or "sans")
+func (a *App) GetChatReadingFont() (string, error) {
+	return a.settingsStore.GetChatReadingFont()
+}
+
+// SetChatReadingFont sets the face for message text in an open chat
+func (a *App) SetChatReadingFont(font string) error {
+	return a.settingsStore.SetChatReadingFont(font)
+}
+
 // GetShowMessagePreview returns whether message-list rows show the body preview line
 func (a *App) GetShowMessagePreview() (bool, error) {
 	return a.settingsStore.GetShowMessagePreview()

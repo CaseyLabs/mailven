@@ -191,9 +191,25 @@ Options for the chat-style mail list, thread view, and reply box.
 
 **Ctrl+Enter** (default) sends from the reply box, and Enter adds a new line. **Enter** sends instead, with Shift+Enter for a new line.
 
+### Show Avatars in the Chat List
+
+Off by default. Rows show the people, subject and time with no picture or initials; turn it on to add an avatar to each row (rows are then taller).
+
+### Show Quick Actions on Hover
+
+Off by default. When on, pointing at a row shows Archive, Mark as read/unread and Snooze buttons. With it off, the same actions stay in the row's right-click menu and on the keyboard shortcuts.
+
+### Show Avatars in Messages
+
+Off by default. When on, each message in an open chat has the sender's picture or initials beside it.
+
+### Message Font
+
+The typeface for message text in an open chat: **Serif (Literata)** (default) or **Sans (Inter)**. It applies as soon as you save. Email in its original layout keeps the sender's fonts.
+
 ### Message Style
 
-**Bubbles** (default) and **Flat** now show the same thread: every message left-aligned with its avatar, the sender's name and time, and your own messages labelled **You**. The setting keeps your choice for a later style.
+**Bubbles** (default) and **Flat** now show the same thread: every message left-aligned with the sender's name and time (and the avatar when **Show avatars in messages** is on), and your own messages labelled **You**. The setting keeps your choice for a later style.
 
 ### Email Layout
 

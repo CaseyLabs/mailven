@@ -1,5 +1,6 @@
 // Display styles: chat_display_style keeps its stored values ('bubbles', 'flat'), and since DS-3 both render
-// the one left-aligned message block with the avatar column and "You" on my messages.
+// the one left-aligned message block with "You" on my messages; the avatar column appears only with the
+// DSR-3 messageAvatars setting.
 const fs = require('node:fs')
 const path = require('node:path')
 const { describe, it } = require('node:test')
@@ -9,7 +10,7 @@ const ui = require('./harness.cjs')
 const flatStyle = `{ window.go.app.App.GetChatDisplayStyle = async () => 'flat' }`
 const composerFakes = fs.readFileSync(path.resolve(__dirname, '../../.agents/skills/run-mailven/composer-fakes.js'), 'utf8')
 // Settings → Save writes every setting; the fake rejects writes unless allowed.
-const SETTINGS_SAVE = ['SetReadReceiptResponsePolicy', 'SetMarkAsReadDelay', 'SetAccentBarUnread', 'SetAccentUnreadStyle', 'SetAlwaysLoadImages', 'SetAlwaysShowMessageCheckbox', 'SetAutostart', 'SetChatAutoAdvance', 'SetChatCombineSenders', 'SetChatDisplayStyle', 'SetChatRichStyle', 'SetChatIncludeQuote', 'SetChatNotifyPriorityOnly', 'SetChatReadingWidth', 'SetChatSendKey', 'SetChatShowLowGroup', 'SetComposerFormat', 'SetComposerMode', 'SetDarkComposerBody', 'SetDarkMailContent', 'SetLanguage', 'SetMailtoMode', 'SetMessageListDensity', 'SetNativeTitleBar', 'SetRunBackground', 'SetShowMessageListCircles', 'SetShowMessageListProfilePics', 'SetShowMessagePreview', 'SetShowTitleBar', 'SetShowViewerCircles', 'SetSpellcheckEnabled', 'SetSpellcheckLanguages', 'SetStartHidden', 'SetThemeMode']
+const SETTINGS_SAVE = ['SetReadReceiptResponsePolicy', 'SetMarkAsReadDelay', 'SetAccentBarUnread', 'SetAccentUnreadStyle', 'SetAlwaysLoadImages', 'SetAlwaysShowMessageCheckbox', 'SetAutostart', 'SetChatAutoAdvance', 'SetChatCombineSenders', 'SetChatHoverActions', 'SetChatMessageAvatars', 'SetChatReadingFont', 'SetChatShowAvatars', 'SetChatDisplayStyle', 'SetChatRichStyle', 'SetChatIncludeQuote', 'SetChatNotifyPriorityOnly', 'SetChatReadingWidth', 'SetChatSendKey', 'SetChatShowLowGroup', 'SetComposerFormat', 'SetComposerMode', 'SetDarkComposerBody', 'SetDarkMailContent', 'SetLanguage', 'SetMailtoMode', 'SetMessageListDensity', 'SetNativeTitleBar', 'SetRunBackground', 'SetShowMessageListCircles', 'SetShowMessageListProfilePics', 'SetShowMessagePreview', 'SetShowTitleBar', 'SetShowViewerCircles', 'SetSpellcheckEnabled', 'SetSpellcheckLanguages', 'SetStartHidden', 'SetThemeMode']
 
 // One row per message: bubble fills, the avatar column, the header name and whether it is mine.
 const blocks = (page) => page.locator('[role="article"][data-message-id]').evaluateAll((els) =>
@@ -17,12 +18,12 @@ const blocks = (page) => page.locator('[role="article"][data-message-id]').evalu
     avatar: !!e.querySelector('[aria-hidden="true"].w-8'), name: e.querySelector('.text-ui-name-strong')?.textContent?.trim() ?? null })))
 
 // DS-3: both stored styles render the one left-aligned message block; my messages are labelled "You".
-async function assertMessageBlocks(page) {
+async function assertMessageBlocks(page, avatars = false) {
   await page.locator('[data-message-id="trip-5"]').waitFor()
   const all = await blocks(page)
   assert.ok(all.length > 0)
   assert.ok(all.every((m) => !m.bubble), 'no bubble fills or rounded bubbles')
-  assert.ok(all.every((m) => m.avatar), 'every message keeps the avatar column')
+  assert.ok(all.every((m) => m.avatar === avatars), `avatar column ${avatars ? 'shown' : 'hidden'} on every message`)
   const mine = await page.evaluate(async () => {
     const c = await window.go.app.App.GetConversation('t-trip')
     return c.messages.filter((m) => m.mine).map((m) => m.id)
@@ -34,16 +35,19 @@ async function assertMessageBlocks(page) {
 }
 
 describe('chat display styles', () => {
-  it('the default style renders left-aligned message blocks', ui.run({}, async (page) => {
+  it('the default style renders left-aligned message blocks without avatars', ui.run({}, async (page) => {
     await assertMessageBlocks(page)
   }))
 
-  it('flat renders the same message blocks', ui.run({ beforeMount: flatStyle }, async (page) => {
-    const flat = await assertMessageBlocks(page)
-    assert.ok(flat.every((m) => m.avatar), 'the avatar column stays in flat mode')
+  it('avatars in messages show the avatar column', ui.run({ messageAvatars: true }, async (page) => {
+    await assertMessageBlocks(page, true)
   }))
 
-  it('a pending reply matches my message block', ui.run({ beforeMount: `${composerFakes}\nwindow.__installComposerFakes(window)` }, async (page) => {
+  it('flat renders the same message blocks', ui.run({ beforeMount: flatStyle }, async (page) => {
+    await assertMessageBlocks(page)
+  }))
+
+  it('a pending reply matches my message block', ui.run({ messageAvatars: true, beforeMount: `${composerFakes}\nwindow.__installComposerFakes(window)` }, async (page) => {
     const box = page.locator('[data-chat-composer] textarea')
     await box.fill('Pending reply')
     await box.press('Control+Enter')

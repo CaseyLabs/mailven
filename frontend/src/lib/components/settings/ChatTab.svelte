@@ -11,6 +11,10 @@
     readingWidth: string
     displayStyle: string
     richStyle: string
+    showAvatars: boolean
+    hoverActions: boolean
+    messageAvatars: boolean
+    readingFont: string
     includeQuote: boolean
     autoAdvance: string
     notifyPriorityOnly: boolean
@@ -23,6 +27,10 @@
     readingWidth = $bindable(),
     displayStyle = $bindable(),
     richStyle = $bindable(),
+    showAvatars = $bindable(),
+    hoverActions = $bindable(),
+    messageAvatars = $bindable(),
+    readingFont = $bindable(),
     includeQuote = $bindable(),
     autoAdvance = $bindable(),
     notifyPriorityOnly = $bindable(),
@@ -49,6 +57,11 @@
   const richStyleOptions = $derived([
     { value: 'reader', label: $_('settingsChat.richStyleReader') },
     { value: 'card', label: $_('settingsChat.richStyleCard') },
+  ])
+
+  const readingFontOptions = $derived([
+    { value: 'serif', label: $_('settingsChat.readingFontSerif') },
+    { value: 'sans', label: $_('settingsChat.readingFontSans') },
   ])
 
   const autoAdvanceOptions = $derived([
@@ -119,6 +132,45 @@
       </Select.Content>
     </Select.Root>
     <p class="text-xs text-muted-foreground">{$_('settingsChat.readingWidthDescription')}</p>
+  </div>
+
+  <div class="space-y-2">
+    <Label>{$_('settingsChat.readingFont')}</Label>
+    <Select.Root value={readingFont} onValueChange={(v) => { if (v) readingFont = v }}>
+      <Select.Trigger aria-label={$_('settingsChat.readingFont')}>
+        <Select.Value placeholder={$_('settingsChat.readingFont')}>{label(readingFontOptions, readingFont)}</Select.Value>
+      </Select.Trigger>
+      <Select.Content>
+        {#each readingFontOptions as opt (opt.value)}
+          <Select.Item value={opt.value} label={opt.label} />
+        {/each}
+      </Select.Content>
+    </Select.Root>
+    <p class="text-xs text-muted-foreground">{$_('settingsChat.readingFontDescription')}</p>
+  </div>
+
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <Label for="chat-message-avatars">{$_('settingsChat.messageAvatars')}</Label>
+      <p class="text-xs text-muted-foreground">{$_('settingsChat.messageAvatarsDescription')}</p>
+    </div>
+    <Switch id="chat-message-avatars" checked={messageAvatars} onCheckedChange={(v) => (messageAvatars = v)} />
+  </div>
+
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <Label for="chat-show-avatars">{$_('settingsChat.showAvatars')}</Label>
+      <p class="text-xs text-muted-foreground">{$_('settingsChat.showAvatarsDescription')}</p>
+    </div>
+    <Switch id="chat-show-avatars" checked={showAvatars} onCheckedChange={(v) => (showAvatars = v)} />
+  </div>
+
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <Label for="chat-hover-actions">{$_('settingsChat.hoverActions')}</Label>
+      <p class="text-xs text-muted-foreground">{$_('settingsChat.hoverActionsDescription')}</p>
+    </div>
+    <Switch id="chat-hover-actions" checked={hoverActions} onCheckedChange={(v) => (hoverActions = v)} />
   </div>
 
   <div class="flex items-center justify-between gap-4">

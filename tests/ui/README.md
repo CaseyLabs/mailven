@@ -31,8 +31,10 @@ npm install --prefix ~/.cache/mailven-upnote-ui --no-save playwright@1.63.0
 | `logic.test.cjs` | Pure chat logic (`chatFormat.ts`, `chatSnooze.ts`): reply recipients and default mode, reply identity, bubble grouping, subject headings, list groups, snooze presets |
 | `chat-reader.test.cjs` | Rich mail in the reader view: sanitized blocks in the message block (both styles), blocked remote images and Load images, links through the app, Show more/less, Show original, the card setting (fake in `reader-fake.cjs`) |
 | `chat-secure.test.cjs` | Signed and decrypted mail as chat text with their badges from faked S/MIME and PGP view results, Show original, Original layout, failed decryption |
+| `chat-row.test.cjs` | Chat rows: 56/48 px heights (64/52 with avatars on), unread, hover, selected and focus states, keyboard-reachable quick actions, the paired group avatar, and no avatar, account dot or hover buttons by default |
 | `chat-presentation.test.cjs` | Left-aligned message blocks, "You" on my messages and sender runs, quoted text and signature, sender chats with several subjects, combine/split with Undo |
 | `chat-folds.test.cjs` | DS-3 reading: quoted-text fold and the details button in the message actions (Enter/Space, `aria-expanded`, position hold), the 68ch Literata measure at each reading width, mono for laid-out plain text, the dark-mode paper card and the "New" divider |
+| `chat-reading.test.cjs` | DSR-3 reading: the recipient disclosure by keyboard, 10 px paragraph spacing, the left-aligned 760 px column, and the reading-font and avatars-in-messages settings applying live and saving |
 | `inbox-triage.test.cjs` | Pin, snooze, archive, read/unread, the automatic Low priority group, sender priority overrides, Undo |
 | `chat-compose.test.cjs` | Reply vs Reply All, draft autosave and restore, undo-send, reply identity, a refused reply (ISSUES.md R1) |
 | `mail-api-migration.test.cjs` | Rollback pending state, confirmation cancellation, protocol route display, and both sync-request report outcomes |
@@ -65,7 +67,7 @@ with its reason, never in a broad pattern.
 
 Use `ui.run(options, async (page, config) => { ... })` from `harness.cjs`. The options are:
 
-- `width`, `height`, `theme`, `accounts`, `previews`
+- `width`, `height`, `theme`, `accounts`, `previews`, `avatars`, `hoverActions`, `messageAvatars`, `readingFont`
 - `allow`: binding names that resolve instead of rejecting
 - `beforeMount`: browser source that runs after the fakes and before the app, for example to wrap
   `window.go.app.App.GetConversation`

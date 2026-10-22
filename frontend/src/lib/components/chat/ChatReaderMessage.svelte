@@ -108,7 +108,7 @@
   {/if}
 {/snippet}
 
-<div class="flex flex-col gap-3 max-w-(--measure) font-read text-read-body text-fg-primary wrap-anywhere" data-chat-reader>
+<div class="flex flex-col gap-2.5 max-w-(--measure) font-read text-read-body text-fg-primary wrap-anywhere" data-chat-reader>
   {#if hasRemoteImages && !showImages}
     <!-- pr-16 keeps the button clear of the message's hover actions in the corner. -->
     <div class="pr-16 -mb-2">

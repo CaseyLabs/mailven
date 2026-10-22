@@ -3,7 +3,10 @@
 Named values for colour, type, spacing, radius, elevation and sizes. Change a
 value in one place and every use follows. The values come from the DS
 [design system](https://claude.ai/artifact/UwQS72qVnHhLuxpkU1sVbc) (DS-1,
-2026-10-20); from then on this repository is authoritative.
+2026-10-20); from then on this repository is authoritative. DSR-1
+(2026-10-21) moved the Dark surfaces, borders, text tiers and `accent-soft` to the
+cooler [revision palette](https://claude.ai/artifact/8tvJbQiBQYQRhAmxbbWkrz);
+Light, the accent family, paper, status and avatar tints are unchanged.
 
 - `frontend/src/themes/built-in.css` holds the colour and elevation values for
   Light and Dark as raw HSL triples (the design-system hex is in a comment).
@@ -26,22 +29,22 @@ Each value is a raw HSL triple wrapped by `hsl()` in its `--color-*` utility
 
 | Token | Light | Dark |
 |---|---|---|
-| `--bg` | #f1ece6 | #171411 |
-| `--surface` | #f8f4ef | #1c1915 |
-| `--surface-reading` | #fcf9f5 | #201d19 |
-| `--surface-raised` | #fefcfa | #282520 |
-| `--surface-hover` | #eee9e1 | #26221e |
-| `--surface-selected` | #e6ded4 | #322d27 |
-| `--border-subtle` | #e3ddd5 | #312d28 |
-| `--border-control` | #8d857a | #7b756d |
-| `--text-primary` | #2a2620 | #ede7df |
-| `--text-secondary` | #544f47 | #c0b9b1 |
-| `--text-tertiary` | #645e56 | #a49d95 |
+| `--bg` | #f1ece6 | #181e27 |
+| `--surface` | #f8f4ef | #1c2330 |
+| `--surface-reading` | #fcf9f5 | #202836 |
+| `--surface-raised` | #fefcfa | #28323f |
+| `--surface-hover` | #eee9e1 | #242d3b |
+| `--surface-selected` | #e6ded4 | #2c3a50 |
+| `--border-subtle` | #e3ddd5 | #303b4c |
+| `--border-control` | #8d857a | #6c7b91 |
+| `--text-primary` | #2a2620 | #e9eef5 |
+| `--text-secondary` | #544f47 | #bac4d2 |
+| `--text-tertiary` | #645e56 | #98a4b6 |
 | `--accent` | #af5539 | #e28b6c |
 | `--accent-hover` | #9d482d | #ee9d81 |
 | `--accent-text` | #984429 | #ed997b |
 | `--on-accent` | #fefbf7 | #1e130f |
-| `--accent-soft` | #fbe2d9 | #3f271e |
+| `--accent-soft` | #fbe2d9 | #3a2a26 |
 | `--focus` | #af5539 | #ed997b |
 | `--paper` | #fefcfa | #ede9e2 |
 | `--paper-text` | #2a2620 | #2a2620 |
@@ -87,15 +90,20 @@ slots and `.avatar-1…14` classes were removed in DS-6 (nothing read them since
 DS-2), so a custom theme's values for them have no effect. Ink on its tint reaches 6.4:1 in Light
 and 7.6:1 in Dark.
 
-**Rows.** `ChatRow` is a fixed-height tile (`h-row` 64 px; 52 px at compact,
-which micro maps to; large uses 64) inset 8 px with `radius-md`. Hover fills
+**Rows.** `ChatRow` is a fixed-height tile inset 8 px with `radius-md`: 56 px
+(48 at compact) by default, or 64 px (52 at compact) when Settings → Chat turns
+avatars on; micro maps to compact and large to the default
+(`chatRowHeight` in `chatRowLayout.ts`). There is no account dot; in a unified
+list the account name is in the row's accessible label and tooltip. Hover fills
 `surface-hover`, selected fills `surface-selected` with no ring, and the active
 row of a focused list adds a 2 px inset `focus` ring. Unread is a 600 name
-(`ui-name-strong`), a `text-secondary` preview and the 8 px `accent` dot. The
-quick actions (Archive, Mark as read/unread, Snooze) replace the time and dot
-on hover and focus-within; their group spans both lines on the row fill. A
-group thread shows two 20 px avatars, the front one ringed in the row fill, so
-both initials stay visible.
+(`ui-name-strong`), a `text-secondary` preview and the 8 px `accent` dot. With
+the opt-in "Show quick actions on hover" setting, the quick actions (Archive,
+Mark as read/unread, Snooze) replace the time and dot on hover and
+focus-within; their group spans both lines on the row fill. Without it there
+are no row buttons, and the actions stay in the context menu and the list
+shortcuts. A group thread shows two 20 px avatars (avatars on only), the front
+one ringed in the row fill, so both initials stay visible.
 
 **Elevation.** `shadow-1` (resting cards), `shadow-2` (anchored composer,
 menus, popovers, tooltips) and `shadow-3` (dialogs) read `--elevation-1…3`,
@@ -166,7 +174,7 @@ kept as an alias of `radius-lg`.
 
 | Token | Utility | Value | Role |
 |---|---|---|---|
-| `--height-row` | `h-row` | 64 px | Inbox row (two lines); compact density is 52 px |
+| `--height-row` | `h-row` | 64 px | Inbox row with avatars on (two lines); compact density is 52 px. Without avatars rows are 56 px (48 compact) |
 | `--height-nav` | `h-nav` | 32 px | Sidebar and menu items |
 | `--height-control-sm` | `h-control-sm` | 28 px | Toolbar icon buttons, row hover actions; `ChatListHeader` |
 | `--height-control` | `min-h-control` | 32 px | Default button and input; Accounts column rows, list search, composer, `ToolbarButton` |
@@ -176,7 +184,7 @@ kept as an alias of `radius-lg`.
 | `--size-icon` | | 16 px | Interface icons (1.75 px stroke) |
 | `--focus-width` | | 2 px | Focus ring width |
 | `--sidebar-width`, `--list-width` | | 232, 340 px | Default pane widths |
-| `--thread-column` | | 720 px | Thread column and anchored composer |
+| `--thread-column` | | 760 px | Thread column and anchored composer |
 | `--measure` | | 68ch | Longest reading line |
 
 The design system's header height is 52 px. `--height-header` stays 61 px
@@ -187,7 +195,7 @@ Some pixel budgets are computed from line heights, so update them when the
 type scale changes: `--height-header`, `PILL_PX`/`MORE_PX`/`BAND_PX` in
 Calendar's `MonthView.svelte` (`MORE_PX` is 17 px since the "+N more" line
 became `ui-meta`), the fixed row heights in `ChatRow.svelte` (two 20 + 18 px
-lines in 64 or 52 px), the one-line event
+lines in 56, 48, 64 or 52 px), the one-line event
 blocks in `TimelineView.svelte`, and the default size shown by the composer
 and signature toolbars.
 
@@ -242,24 +250,24 @@ reported. It exits 1 on any failure.
 
 | Pair | Minimum | Light | Dark |
 |---|---|---|---|
-| `text-primary` on `surface` | 4.5 | 13.74 | 14.26 |
-| `text-secondary` on `surface` | 4.5 | 7.41 | 9.03 |
-| `text-tertiary` on `surface` | 4.5 | 5.85 | 6.54 |
-| `text-tertiary` on `surface-selected` | 4.5 | 4.81 | 5.08 |
-| `text-tertiary` on `surface-raised` | 4.5 | 6.25 | 5.72 |
-| `text-primary` on `surface-reading` | 4.5 | 14.35 | 13.66 |
+| `text-primary` on `surface` | 4.5 | 13.74 | 13.51 |
+| `text-secondary` on `surface` | 4.5 | 7.41 | 8.93 |
+| `text-tertiary` on `surface` | 4.5 | 5.85 | 6.25 |
+| `text-tertiary` on `surface-selected` | 4.5 | 4.81 | 4.56 |
+| `text-tertiary` on `surface-raised` | 4.5 | 6.25 | 5.14 |
+| `text-primary` on `surface-reading` | 4.5 | 12 Dark, 4.5 Light | 12.68 |
 | `on-accent` on `accent` | 4.5 | 4.87 | 7.06 |
 | `on-accent` on `accent-hover` | 4.5 | 5.99 | 8.47 |
-| `accent-text` on `surface-reading` | 4.5 | 6.28 | 7.55 |
-| `accent-text` on `surface-selected` | 4.5 | 4.95 | 6.12 |
-| `accent-text` on `surface-hover` | 4.5 | 5.45 | 7.11 |
-| `accent-text` on `accent-soft` | 4.5 | 5.33 | 6.22 |
-| `focus` on `surface` | 3 | 4.59 | 7.88 |
-| `focus` on `surface-selected` | 3 | 3.77 | 6.12 |
-| `accent` (unread dot) on `surface` | 3 | 4.59 | 6.80 |
-| `accent` (unread dot) on `surface-selected` | 3 | 3.77 | 5.28 |
-| `border-control` on `surface-raised` | 3 | 3.55 | 3.36 |
-| `danger` on `surface-raised` | 4.5 | 6.34 | 5.84 |
+| `accent-text` on `surface-reading` | 4.5 | 6.28 | 6.65 |
+| `accent-text` on `surface-selected` | 4.5 | 4.95 | 5.17 |
+| `accent-text` on `surface-hover` | 4.5 | 5.45 | 6.25 |
+| `accent-text` on `accent-soft` | 4.5 | 5.33 | 6.14 |
+| `focus` on `surface` | 3 | 4.59 | 7.09 |
+| `focus` on `surface-selected` | 3 | 3.77 | 5.17 |
+| `accent` (unread dot) on `surface` | 3 | 4.59 | 6.12 |
+| `accent` (unread dot) on `surface-selected` | 3 | 3.77 | 4.46 |
+| `border-control` on `surface-raised` | 3 | 3.55 | 3.01 |
+| `danger` on `surface-raised` | 4.5 | 6.34 | 4.95 |
 | `paper-text` on `paper` | 4.5 | 14.69 | 12.44 |
 | avatar ink on its tint (each of eight) | 6.4 Light, 7.6 Dark (to one decimal) | 6.40–6.61 | 7.63–7.74 |
 
@@ -277,9 +285,10 @@ placeholder uses the composer-scoped `--composer-placeholder` in `app.css`
 
 Reading width is not a token: `data-reading-width` on `<html>` (the "Reading
 width" chat setting) selects the plain variables `--chat-stream` (Narrow and
-Standard `thread-column` 720 px, Wide 54 rem: the centred column for message
-blocks, pending sends, day separators, the "New" divider, email cards and full
-bodies, the conversation header and the anchored composer) in `app.css`. Text inside a message is
+Standard `thread-column` 760 px, Wide 54 rem: the left-aligned `.chat-col` column
+(a 32 px gutter from 900 px, 16 px below) for message blocks, pending sends, day
+separators, the "New" divider, subject headings, email cards and full bodies,
+the conversation header and the anchored composer) in `app.css`. Text inside a message is
 capped at `measure` (68ch) at every width, so the setting changes how wide
 HTML layouts and cards can grow, not the line length.
 

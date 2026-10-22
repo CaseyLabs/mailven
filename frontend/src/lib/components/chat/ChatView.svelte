@@ -39,6 +39,9 @@
     onExpandDraft?: (draftId: string) => void
     onActionComplete?: (autoSelectNext?: boolean) => void
     onToggleSenderChat?: () => void
+    // Open the previous / next chat in the list.
+    onPreviousChat?: () => void
+    onNextChat?: () => void
     isFocused?: boolean
     isFlashing?: boolean
     showBackButton?: boolean
@@ -51,7 +54,7 @@
 
   let {
     threadId = null, folderId = null, folderType = null, accountId = null, showAccount = false,
-    onReply, onCompose, onComposeToAddress, onEditDraft, onExpandDraft, onActionComplete, onToggleSenderChat,
+    onReply, onCompose, onComposeToAddress, onEditDraft, onExpandDraft, onActionComplete, onToggleSenderChat, onPreviousChat, onNextChat,
     isFocused = false, isFlashing = false, showBackButton = false, onBack, onEscape, focusedMessageIdInFocus = null,
   }: Props = $props()
 
@@ -343,6 +346,9 @@
       bind:this={header}
       senderEmail={senderEmailOf(threadId)}
       {people}
+      subject={displaySubject(thread.messages.find((m) => m.subject)?.subject)}
+      {onPreviousChat}
+      {onNextChat}
       {messageIds}
       accountId={accountId ?? ''}
       folderId={folderId ?? ''}

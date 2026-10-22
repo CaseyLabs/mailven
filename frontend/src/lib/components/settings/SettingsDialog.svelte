@@ -5,9 +5,9 @@
   import * as Tabs from '$lib/components/ui/tabs'
   import { Button } from '$lib/components/ui/button'
   // @ts-ignore - wailsjs path
-  import { GetReadReceiptResponsePolicy, SetReadReceiptResponsePolicy, GetMarkAsReadDelay, SetMarkAsReadDelay, GetMessageListDensity, SetMessageListDensity, GetThemeMode, SetThemeMode, GetShowTitleBar, SetShowTitleBar, GetRunBackground, SetRunBackground, GetStartHidden, SetStartHidden, GetAutostart, SetAutostart, GetLanguage, SetLanguage, GetComposerMode, SetComposerMode, GetMailtoMode, SetMailtoMode, GetComposerFormat, SetComposerFormat, GetNativeTitleBar, SetNativeTitleBar, GetAlwaysLoadImages, SetAlwaysLoadImages, GetDarkMailContent, SetDarkMailContent, GetDarkComposerBody, SetDarkComposerBody, GetAccentBarUnread, SetAccentBarUnread, GetAccentUnreadStyle, SetAccentUnreadStyle, GetShowMessageListCircles, SetShowMessageListCircles, GetShowMessageListProfilePics, SetShowMessageListProfilePics, GetAlwaysShowMessageCheckbox, SetAlwaysShowMessageCheckbox, GetShowMessagePreview, SetShowMessagePreview, GetShowViewerCircles, SetShowViewerCircles, GetSpellcheckEnabled, SetSpellcheckEnabled, GetSpellcheckLanguages, SetSpellcheckLanguages, GetChatSendKey, SetChatSendKey, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle, SetChatReadingWidth, SetChatDisplayStyle, SetChatRichStyle, GetChatIncludeQuote, SetChatIncludeQuote, GetChatAutoAdvance, SetChatAutoAdvance, GetChatNotifyPriorityOnly, SetChatNotifyPriorityOnly, GetChatShowLowGroup, SetChatShowLowGroup, GetChatCombineSenders, SetChatCombineSenders, QuitApp } from '../../../../wailsjs/go/app/App.js'
+  import { GetReadReceiptResponsePolicy, SetReadReceiptResponsePolicy, GetMarkAsReadDelay, SetMarkAsReadDelay, GetMessageListDensity, SetMessageListDensity, GetThemeMode, SetThemeMode, GetShowTitleBar, SetShowTitleBar, GetRunBackground, SetRunBackground, GetStartHidden, SetStartHidden, GetAutostart, SetAutostart, GetLanguage, SetLanguage, GetComposerMode, SetComposerMode, GetMailtoMode, SetMailtoMode, GetComposerFormat, SetComposerFormat, GetNativeTitleBar, SetNativeTitleBar, GetAlwaysLoadImages, SetAlwaysLoadImages, GetDarkMailContent, SetDarkMailContent, GetDarkComposerBody, SetDarkComposerBody, GetAccentBarUnread, SetAccentBarUnread, GetAccentUnreadStyle, SetAccentUnreadStyle, GetShowMessageListCircles, SetShowMessageListCircles, GetShowMessageListProfilePics, SetShowMessageListProfilePics, GetAlwaysShowMessageCheckbox, SetAlwaysShowMessageCheckbox, GetShowMessagePreview, SetShowMessagePreview, GetShowViewerCircles, SetShowViewerCircles, GetSpellcheckEnabled, SetSpellcheckEnabled, GetSpellcheckLanguages, SetSpellcheckLanguages, GetChatSendKey, SetChatSendKey, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle, GetChatShowAvatars, SetChatShowAvatars, GetChatHoverActions, SetChatHoverActions, GetChatMessageAvatars, SetChatMessageAvatars, GetChatReadingFont, SetChatReadingFont, SetChatReadingWidth, SetChatDisplayStyle, SetChatRichStyle, GetChatIncludeQuote, SetChatIncludeQuote, GetChatAutoAdvance, SetChatAutoAdvance, GetChatNotifyPriorityOnly, SetChatNotifyPriorityOnly, GetChatShowLowGroup, SetChatShowLowGroup, GetChatCombineSenders, SetChatCombineSenders, QuitApp } from '../../../../wailsjs/go/app/App.js'
   import { addToast } from '$lib/stores/toast'
-  import { setMessageListDensity as updateDensityStore, setThemeMode as updateThemeStore, setShowTitleBar as updateShowTitleBarStore, setRunBackground as updateRunBackgroundStore, setStartHidden as updateStartHiddenStore, setAutostart as updateAutostartStore, setLanguage as updateLanguageStore, setComposerMode as updateComposerModeStore, setMailtoMode as updateMailtoModeStore, setComposerFormat as updateComposerFormatStore, setNativeTitleBar as updateNativeTitleBarStore, setAlwaysLoadImages as updateAlwaysLoadImagesStore, setDarkMailContent as updateDarkMailContentStore, setDarkComposerBody as updateDarkComposerBodyStore, setAccentBarUnread as updateAccentBarUnreadStore, setAccentUnreadStyle as updateAccentUnreadStyleStore, setShowMessageListCircles as updateShowMessageListCirclesStore, setShowMessageListProfilePics as updateShowMessageListProfilePicsStore, setAlwaysShowMessageCheckbox as updateAlwaysShowMessageCheckboxStore, setShowMessagePreview as updateShowMessagePreviewStore, setShowViewerCircles as updateShowViewerCirclesStore, setSpellcheckEnabled as updateSpellcheckEnabledStore, setSpellcheckLanguages as updateSpellcheckLanguagesStore, setChatSendKey as updateChatSendKeyStore, setChatReadingWidth as updateChatReadingWidthStore, setChatDisplayStyle as updateChatDisplayStyleStore, setChatRichStyle as updateChatRichStyleStore, type ChatReadingWidth, type ChatDisplayStyle, type ChatRichStyle, setChatAutoAdvance as updateChatAutoAdvanceStore, setChatShowLowGroup as updateChatShowLowGroupStore, type ChatSendKey, type ChatAutoAdvance, type MessageListDensity, type ThemeMode, type ComposerMode, type ComposerFormat, DEFAULT_THEME } from '$lib/stores/settings.svelte'
+  import { setMessageListDensity as updateDensityStore, setThemeMode as updateThemeStore, setShowTitleBar as updateShowTitleBarStore, setRunBackground as updateRunBackgroundStore, setStartHidden as updateStartHiddenStore, setAutostart as updateAutostartStore, setLanguage as updateLanguageStore, setComposerMode as updateComposerModeStore, setMailtoMode as updateMailtoModeStore, setComposerFormat as updateComposerFormatStore, setNativeTitleBar as updateNativeTitleBarStore, setAlwaysLoadImages as updateAlwaysLoadImagesStore, setDarkMailContent as updateDarkMailContentStore, setDarkComposerBody as updateDarkComposerBodyStore, setAccentBarUnread as updateAccentBarUnreadStore, setAccentUnreadStyle as updateAccentUnreadStyleStore, setShowMessageListCircles as updateShowMessageListCirclesStore, setShowMessageListProfilePics as updateShowMessageListProfilePicsStore, setAlwaysShowMessageCheckbox as updateAlwaysShowMessageCheckboxStore, setShowMessagePreview as updateShowMessagePreviewStore, setShowViewerCircles as updateShowViewerCirclesStore, setSpellcheckEnabled as updateSpellcheckEnabledStore, setSpellcheckLanguages as updateSpellcheckLanguagesStore, setChatSendKey as updateChatSendKeyStore, setChatReadingWidth as updateChatReadingWidthStore, setChatDisplayStyle as updateChatDisplayStyleStore, setChatRichStyle as updateChatRichStyleStore, setChatShowAvatars as updateChatShowAvatarsStore, setChatHoverActions as updateChatHoverActionsStore, setChatMessageAvatars as updateChatMessageAvatarsStore, setChatReadingFont as updateChatReadingFontStore, type ChatReadingFont, type ChatReadingWidth, type ChatDisplayStyle, type ChatRichStyle, setChatAutoAdvance as updateChatAutoAdvanceStore, setChatShowLowGroup as updateChatShowLowGroupStore, type ChatSendKey, type ChatAutoAdvance, type MessageListDensity, type ThemeMode, type ComposerMode, type ComposerFormat, DEFAULT_THEME } from '$lib/stores/settings.svelte'
   import { filterSupportedDicts } from '$lib/spellcheck/locales'
   import { syncSpellcheckLanguagesIfActive, defaultSpellcheckLanguages } from '$lib/spellcheck/settings'
   import { applyThemeFromMode } from '$lib/stores/theme.svelte'
@@ -65,6 +65,10 @@
   let chatReadingWidth = $state<string>('standard')
   let chatDisplayStyle = $state<string>('bubbles')
   let chatRichStyle = $state<string>('reader')
+  let chatShowAvatars = $state<boolean>(false)
+  let chatHoverActions = $state<boolean>(false)
+  let chatMessageAvatars = $state<boolean>(false)
+  let chatReadingFont = $state<string>('serif')
   let chatIncludeQuote = $state<boolean>(true)
   let chatAutoAdvance = $state<string>('next')
   let chatNotifyPriorityOnly = $state<boolean>(true)
@@ -121,7 +125,7 @@
     loading = true
     hasSaved = false
     try {
-      const [policy, delayMs, density, theme, titleBar, runBg, startHid, autoSt, lang, comp, mail, compFmt, nativeTB, alwaysImages, darkMail, darkComposer, accentBar, accentStyle, listCircles, listProfilePics, alwaysCheckbox, messagePreview, viewerCircles, scEnabled, scLangs, sendKey, includeQuote, autoAdvance, notifyPriority, showLow, combineSenders, readingWidth, displayStyle, richStyle] = await Promise.all([
+      const [policy, delayMs, density, theme, titleBar, runBg, startHid, autoSt, lang, comp, mail, compFmt, nativeTB, alwaysImages, darkMail, darkComposer, accentBar, accentStyle, listCircles, listProfilePics, alwaysCheckbox, messagePreview, viewerCircles, scEnabled, scLangs, sendKey, includeQuote, autoAdvance, notifyPriority, showLow, combineSenders, readingWidth, displayStyle, richStyle, showAvatars, hoverActions, messageAvatars, readingFont] = await Promise.all([
         GetReadReceiptResponsePolicy(),
         GetMarkAsReadDelay(),
         GetMessageListDensity(),
@@ -156,6 +160,10 @@
         GetChatReadingWidth(),
         GetChatDisplayStyle(),
         GetChatRichStyle(),
+        GetChatShowAvatars(),
+        GetChatHoverActions(),
+        GetChatMessageAvatars(),
+        GetChatReadingFont(),
       ])
       readReceiptResponsePolicy = policy
       // Convert ms to seconds for display
@@ -190,6 +198,10 @@
       chatReadingWidth = readingWidth || 'standard'
       chatDisplayStyle = displayStyle || 'bubbles'
       chatRichStyle = richStyle || 'reader'
+      chatShowAvatars = showAvatars ?? false
+      chatHoverActions = hoverActions ?? false
+      chatMessageAvatars = messageAvatars ?? false
+      chatReadingFont = readingFont || 'serif'
       chatIncludeQuote = includeQuote ?? true
       chatAutoAdvance = autoAdvance || 'next'
       chatNotifyPriorityOnly = notifyPriority ?? true
@@ -241,6 +253,10 @@
       await SetChatReadingWidth(chatReadingWidth)
       await SetChatDisplayStyle(chatDisplayStyle)
       await SetChatRichStyle(chatRichStyle)
+      await SetChatShowAvatars(chatShowAvatars)
+      await SetChatHoverActions(chatHoverActions)
+      await SetChatMessageAvatars(chatMessageAvatars)
+      await SetChatReadingFont(chatReadingFont)
       await SetChatIncludeQuote(chatIncludeQuote)
       await SetChatAutoAdvance(chatAutoAdvance)
       await SetChatNotifyPriorityOnly(chatNotifyPriorityOnly)
@@ -277,6 +293,10 @@
       updateChatReadingWidthStore(chatReadingWidth as ChatReadingWidth)
       updateChatDisplayStyleStore(chatDisplayStyle as ChatDisplayStyle)
       updateChatRichStyleStore(chatRichStyle as ChatRichStyle)
+      updateChatShowAvatarsStore(chatShowAvatars)
+      updateChatHoverActionsStore(chatHoverActions)
+      updateChatMessageAvatarsStore(chatMessageAvatars)
+      updateChatReadingFontStore(chatReadingFont as ChatReadingFont)
       updateChatAutoAdvanceStore(chatAutoAdvance as ChatAutoAdvance)
       updateChatShowLowGroupStore(chatShowLowGroup)
       addToast({
@@ -422,6 +442,10 @@
               bind:readingWidth={chatReadingWidth}
               bind:displayStyle={chatDisplayStyle}
               bind:richStyle={chatRichStyle}
+              bind:showAvatars={chatShowAvatars}
+              bind:hoverActions={chatHoverActions}
+              bind:messageAvatars={chatMessageAvatars}
+              bind:readingFont={chatReadingFont}
               bind:includeQuote={chatIncludeQuote}
               bind:autoAdvance={chatAutoAdvance}
               bind:notifyPriorityOnly={chatNotifyPriorityOnly}

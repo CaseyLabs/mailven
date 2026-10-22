@@ -26,7 +26,7 @@
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger
-    class="min-w-0 max-w-full px-1 rounded-md text-body font-semibold text-fg-primary truncate hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
+    class="min-w-0 max-w-full -ml-1 px-1 rounded-md text-xs text-fg-secondary truncate hover:bg-muted hover:text-fg-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
     title={$_('chat.showPeople')}
   >
     {title}

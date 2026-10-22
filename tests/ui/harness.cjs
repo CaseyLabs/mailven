@@ -22,7 +22,7 @@ const expectedError = /^blocked: /
 // Human-readable configuration, used in failure messages and screenshot names.
 const describeConfig = (o) => `${o.theme} ${o.width}px accounts=${o.accounts} previews=${o.previews ? 'on' : 'off'}${o.style ? ` style=${o.style}` : ''}`
 
-const defaults = { width: 1400, height: 800, theme: 'dark', accounts: 'expanded', previews: false, ready: '.chat-row' }
+const defaults = { width: 1400, height: 800, theme: 'dark', accounts: 'expanded', previews: false, avatars: false, hoverActions: false, messageAvatars: false, readingFont: 'serif', ready: '.chat-row' }
 
 // Browser-side setup, after the fake backend and before the app's modules run.
 const setupSource = (o) => `${fakes}
@@ -31,6 +31,10 @@ window.__installFakes(window);
   const A = window.go.app.App
   A.IsExtensionEnabled = async (name) => ['contacts', 'calendar'].includes(name)
   A.GetShowMessagePreview = async () => ${JSON.stringify(o.previews)}
+  A.GetChatShowAvatars = async () => ${JSON.stringify(o.avatars)}
+  A.GetChatHoverActions = async () => ${JSON.stringify(o.hoverActions)}
+  A.GetChatMessageAvatars = async () => ${JSON.stringify(o.messageAvatars)}
+  A.GetChatReadingFont = async () => ${JSON.stringify(o.readingFont)}
   // Backend-free mode lifts the dev-build Dark override, so the app applies this theme itself.
   A.GetThemeMode = async () => ${JSON.stringify(o.theme)}
   const getUI = A.GetUIState
@@ -77,7 +81,7 @@ exports.openSettings = async (page) => {
 }
 
 // run(options, fn) returns a node:test function that opens the app, runs fn(page, config, t) and closes it.
-// options: width, height, theme ('dark'|'light'), accounts ('expanded'|'collapsed'), previews (bool),
+// options: width, height, theme ('dark'|'light'), accounts ('expanded'|'collapsed'), previews (bool), avatars (bool, chat-list avatars), hoverActions (bool, row quick actions), messageAvatars (bool, avatars beside messages), readingFont ('serif'|'sans'),
 // style (label suffix for a variant), allow (binding names that resolve), beforeMount (browser source), ready (selector), path (URL path).
 exports.run = (options, fn) => async (t) => {
   if (!baseURL) throw new Error('MAILVEN_UI_URL is not set; run the suite with `make test-ui` or `node tests/ui/run.mjs`')

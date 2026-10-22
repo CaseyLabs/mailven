@@ -44,7 +44,7 @@ const pairs = (theme) => [
   ['text-tertiary', 'surface', TEXT],
   ['text-tertiary', 'surface-selected', TEXT],
   ['text-tertiary', 'surface-raised', TEXT],
-  ['text-primary', 'surface-reading', TEXT],
+  ['text-primary', 'surface-reading', theme === 'dark' ? 12 : TEXT], // DSR-1: dark reading pane >= 12:1
   ['on-accent', 'accent', TEXT],
   ['on-accent', 'accent-hover', TEXT],
   ['accent-text', 'surface-reading', TEXT],

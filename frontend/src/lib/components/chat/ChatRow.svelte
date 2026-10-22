@@ -1,8 +1,9 @@
 <script lang="ts">
-  // ChatRow — one chat in the chat list: people first (avatar + names), then
-  // subject, then the latest line unless Settings hides previews. Right-click
-  // opens the shared message context menu for the whole thread, with the
-  // triage actions (Archive, Pin, Snooze, sender moves) on top.
+  // ChatRow — one chat in the chat list: people first (names, plus an avatar
+  // when Settings turn avatars on), then subject, then the latest line unless
+  // Settings hides previews. Right-click opens the shared message context menu
+  // for the whole thread, with the triage actions (Archive, Pin, Snooze, sender
+  // moves) on top.
   import { tick } from 'svelte'
   import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
@@ -12,7 +13,7 @@
   import { ContextMenuItem } from '$lib/components/ui/context-menu'
   import { contactPhotos } from '$lib/stores/contactPhotos.svelte'
   import { getLayoutMode } from '$lib/stores/layout.svelte'
-  import { getMessageListDensity, getShowMessagePreview } from '$lib/stores/settings.svelte'
+  import { getChatHoverActions, getChatShowAvatars, getMessageListDensity, getShowMessagePreview } from '$lib/stores/settings.svelte'
   import type { ChatItem, ChatPerson } from '$lib/stores/chat.svelte'
   import ChatSnoozeMenu from './ChatSnoozeMenu.svelte'
   import { canToggleSenderChat, displayName, displaySubject, rowPeople } from './chatFormat'
@@ -20,6 +21,7 @@
   import { formatSnoozedUntil } from './chatSnooze'
   import { isSendingChat } from './chatComposerState.svelte'
   import { rowStatus } from './chatStatus'
+  import { chatRowHeight } from './chatRowLayout'
 
   interface Props {
     chat: ChatItem
@@ -76,23 +78,29 @@
     return extra > 0 ? `${names} ${$_('chat.andMore', { values: { count: extra } })}` : names
   })
 
-  // Two lines (name and time; subject and preview) in a fixed-height tile:
-  // 64 px, or 52 px at compact. Micro maps to compact and large to the
-  // default; the stored density values are unchanged.
+  // Two lines (name and time; subject and preview) in a fixed-height tile.
+  // Without avatars (the default) the tile is 56 px, or 48 px at compact; with
+  // them 64 and 52. Micro maps to compact and large to the default; the stored
+  // density values are unchanged.
   const density = $derived(getMessageListDensity())
   const compact = $derived(density === 'compact' || density === 'micro')
-  const rowPx = $derived(compact ? 52 : 64)
+  const showAvatars = $derived(getChatShowAvatars())
+  const hoverActions = $derived(getChatHoverActions())
+  const rowPx = $derived(chatRowHeight(compact, showAvatars))
   const avatarPx = $derived(compact ? 32 : 36)
   const hasUnread = $derived(chat.unreadCount > 0)
   // Search results always show the matching text.
   const showPreview = $derived(getShowMessagePreview() || !!chat.highlightedSnippet)
-  // Rings that must blend into the row's fill (paired avatar, account dot).
+  // Rings that must blend into the row's fill (paired avatar, unread corner dot).
   const fillRing = $derived(selected ? 'ring-surface-selected' : 'ring-surface group-hover/row:ring-surface-hover group-focus-within/row:ring-surface-hover')
   const time = $derived(formatListDate(chat.latestDate))
   const snoozeTime = $derived(chat.snoozedUntil ? formatSnoozedUntil(chat.snoozedUntil) : '')
 
   // The highest-priority state, shown as one glyph at the row's right edge.
   const status = $derived(rowStatus(chat, isSendingChat(chat.accountId, chat.threadKey)))
+
+  // With hover actions on, the time and status slot give way to the buttons.
+  const hideOnHover = 'group-hover/row:invisible group-focus-within/row:invisible'
 
   const subject = $derived(displaySubject(chat.subject) || $_('viewer.noSubject'))
   // Screen-reader summary of the row's visual signals.
@@ -189,6 +197,7 @@
     data-unread={hasUnread || undefined}
     draggable={getLayoutMode() !== 'narrow'}
     data-density={density}
+    title={showAccount ? chat.accountName : undefined}
     style:height="{rowPx}px"
     style:contain-intrinsic-size="auto {rowPx}px"
     class="chat-row group/row relative flex items-center gap-3 px-3 mx-2 my-0.5 rounded-md cursor-pointer outline-hidden transition-colors duration-[80ms] motion-reduce:transition-none {selected ? 'bg-surface-selected text-fg-primary group-data-[focused]/list:ring-2 group-data-[focused]/list:ring-inset group-data-[focused]/list:ring-focus' : 'hover:bg-surface-hover focus-within:bg-surface-hover'}"
@@ -196,29 +205,24 @@
     onkeydown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSelect() } }}
     ondragstart={handleDragStart}
   >
-    <!-- Avatar: one person, or an overlapping pair for a group. The front
-         circle is ringed in the row's own fill. -->
-    <div class="relative shrink-0" style:width="{avatarPx}px" style:height="{avatarPx}px" aria-hidden="true">
-      {#if people.length > 1}
-        <div class="absolute top-0 left-0">{@render avatar(people[0], 20, 1)}</div>
-        <div class="absolute bottom-0 right-0 rounded-full ring-2 {fillRing}">{@render avatar(people[1], 20, 1)}</div>
-      {:else}
-        {@render avatar(people[0], avatarPx)}
-      {/if}
-      {#if showAccount && chat.accountColor}
-        <span
-          class="absolute -bottom-0.5 -left-0.5 w-2.5 h-2.5 rounded-full ring-2 {fillRing}"
-          style="background-color: {chat.accountColor}"
-          title={chat.accountName}
-        ></span>
-      {/if}
-    </div>
+    {#if showAvatars}
+      <!-- Avatar: one person, or an overlapping pair for a group. The front
+           circle is ringed in the row's own fill. -->
+      <div class="relative shrink-0" style:width="{avatarPx}px" style:height="{avatarPx}px" aria-hidden="true">
+        {#if people.length > 1}
+          <div class="absolute top-0 left-0">{@render avatar(people[0], 20, 1)}</div>
+          <div class="absolute bottom-0 right-0 rounded-full ring-2 {fillRing}">{@render avatar(people[1], 20, 1)}</div>
+        {:else}
+          {@render avatar(people[0], avatarPx)}
+        {/if}
+      </div>
+    {/if}
 
     <div class="flex-1 min-w-0">
       <!-- Line one: people and time -->
       <div class="flex items-baseline gap-2">
         <span class="flex-1 min-w-0 truncate text-fg-primary {hasUnread ? 'text-ui-name-strong' : 'text-ui-name'}" data-row-name>{title}</span>
-        <span class="shrink-0 text-ui-meta tabular-nums text-fg-tertiary group-hover/row:invisible group-focus-within/row:invisible">{time}</span>
+        <span class="shrink-0 text-ui-meta tabular-nums text-fg-tertiary {hoverActions ? hideOnHover : ''}">{time}</span>
       </div>
       <!-- Line two: subject, preview, status icons and the status slot -->
       <div class="flex items-center gap-1.5">
@@ -234,7 +238,7 @@
         {@render statusIcons()}
         <!-- Status glyph: one slot, kept even when empty so rows align.
              Unread under a higher-priority glyph shows as a small dot on its corner. -->
-        <span class="relative flex items-center justify-center w-4 shrink-0 group-hover/row:invisible group-focus-within/row:invisible" data-row-status={status ?? undefined} aria-hidden="true">
+        <span class="relative flex items-center justify-center w-4 shrink-0 {hoverActions ? hideOnHover : ''}" data-row-status={status ?? undefined} aria-hidden="true">
           {#if status === 'sending'}
             <span title={$_('chat.sending')}><Icon icon="lucide:loader-circle" class="w-4 h-4 animate-spin text-fg-tertiary" /></span>
           {:else if status === 'snoozed'}
@@ -249,19 +253,21 @@
       </div>
     </div>
 
-    <!-- Quick actions replace the time and status slot on hover and when one
-         has focus. The group spans both lines so it masks them cleanly, inset
-         2 px to keep the focus ring. Tab reaches the selected row's actions. -->
-    <div
-      class="absolute inset-y-0.5 right-0.5 pl-2 pr-1.5 flex items-center gap-0.5 rounded-r-md opacity-0 pointer-events-none group-hover/row:opacity-100 group-hover/row:pointer-events-auto group-focus-within/row:opacity-100 group-focus-within/row:pointer-events-auto {selected ? 'bg-surface-selected' : 'bg-surface-hover'}"
-      role="group"
-      aria-label={$_('chat.quickActions')}
-      data-row-actions
-    >
-      {@render quickAction($_('viewer.archive'), 'lucide:archive', actions.onArchive)}
-      {@render quickAction(hasUnread ? $_('viewer.markAsRead') : $_('viewer.markAsUnread'), hasUnread ? 'lucide:mail-open' : 'lucide:mail', actions.onToggleRead)}
-      {@render quickAction($_('chat.snooze'), 'lucide:alarm-clock', () => void openSnooze())}
-    </div>
+    {#if hoverActions}
+      <!-- Quick actions replace the time and status slot on hover and when one
+           has focus. The group spans both lines so it masks them cleanly, inset
+           2 px to keep the focus ring. Tab reaches the selected row's actions. -->
+      <div
+        class="absolute inset-y-0.5 right-0.5 pl-2 pr-1.5 flex items-center gap-0.5 rounded-r-md opacity-0 pointer-events-none group-hover/row:opacity-100 group-hover/row:pointer-events-auto group-focus-within/row:opacity-100 group-focus-within/row:pointer-events-auto {selected ? 'bg-surface-selected' : 'bg-surface-hover'}"
+        role="group"
+        aria-label={$_('chat.quickActions')}
+        data-row-actions
+      >
+        {@render quickAction($_('viewer.archive'), 'lucide:archive', actions.onArchive)}
+        {@render quickAction(hasUnread ? $_('viewer.markAsRead') : $_('viewer.markAsUnread'), hasUnread ? 'lucide:mail-open' : 'lucide:mail', actions.onToggleRead)}
+        {@render quickAction($_('chat.snooze'), 'lucide:alarm-clock', () => void openSnooze())}
+      </div>
+    {/if}
 
     {#if snoozeMounted}
       <!-- Hidden anchor so the snooze menu opens at the row's top-right. -->

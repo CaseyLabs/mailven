@@ -5,6 +5,7 @@
   // display style, labelled "You".
   import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
+  import { getChatMessageAvatars } from '$lib/stores/settings.svelte'
   import type { PendingSend } from './chatComposerState.svelte'
 
   interface Props {
@@ -29,8 +30,8 @@
 </script>
 
 <!-- Lines up with a synced message block of mine: avatar spacer, then "You". -->
-<div class="flex gap-3 mx-auto w-full max-w-(--chat-stream) px-4 {groupStart ? 'mt-6' : 'mt-1'}" role="status">
-  <div class="w-8 shrink-0" aria-hidden="true"></div>
+<div class="flex gap-3 chat-col {groupStart ? 'mt-6' : 'mt-1'}" role="status">
+  {#if getChatMessageAvatars()}<div class="w-8 shrink-0" aria-hidden="true"></div>{/if}
   <div class="flex flex-col items-start gap-1.5 flex-1 min-w-0">
     {#if groupStart}
       <span class="text-ui-name-strong text-fg-primary">{$_('chat.you')}</span>

@@ -1,14 +1,13 @@
 <script lang="ts">
-  // ChatViewHeader — the open chat's top bar, a single row. Centre: the title,
-  // every participant (the subject heads the stream instead), which opens the
-  // participant list, with a "Snoozed until" chip when snoozed. Left: Back
-  // (when the chat covers the list), then the actions, ending with a "⋯"
-  // button that opens the shared thread context menu, which holds Snooze, Pin, Reply, Spam, Read/Unread and the sender actions
-  // (Reply also sits on each bubble and in the reply box). Forward joins it for
-  // multi-message chats, which the menu itself does not offer.
-  // The actions: Compose (when set; not on narrow panes, where the title needs
-  // the room and the list header offers it), the bordered Archive action, Delete
-  // and "⋯".
+  // ChatViewHeader — the open chat's top bar, two rows. Row 1 is the toolbar:
+  // Back (when the chat covers the list), Compose (when set; not on narrow
+  // windows), Archive, Delete, Snooze, Mark read/unread, "⋯" (the shared thread
+  // context menu: Pin, Reply, Spam, the sender actions, and Forward for
+  // multi-message chats) and previous/next chat. The buttons carry labels from
+  // 1100 px of window width and are icon-only (named for screen readers) below.
+  // Row 2 is the subject (a sender chat names its sender), then "N people" —
+  // which opens the participant list — and the message count. The sender
+  // belongs to each message, not the header.
   import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
   import ComposeButton from '$lib/components/common/ComposeButton.svelte'
@@ -53,12 +52,16 @@
     onToggleSenderLow: () => void
     onToggleSenderChat?: () => void
     onActionComplete: (autoSelectNext?: boolean) => void
+    // The chat's subject; empty for a sender chat, which mixes subjects.
+    subject?: string
+    onPreviousChat?: () => void
+    onNextChat?: () => void
     onReply?: (mode: ReplyMode, messageId: string) => void
   }
 
   let {
     people: allPeople, senderEmail, messageIds, accountId, folderId, folderType, isStarred, allRead, isPinned, snoozedUntil, isLowPriority, canTriage, isTrash,
-    showBackButton, onBack, onCompose, onComposeTo, onArchive, onForward, onDelete, onSpam, onPin, onSnooze, onUnsnooze, onToggleRead, onToggleSenderLow, onToggleSenderChat, onActionComplete, onReply,
+    showBackButton, onBack, onCompose, onComposeTo, onArchive, onForward, onDelete, onSpam, onPin, onSnooze, onUnsnooze, onToggleRead, onToggleSenderLow, onToggleSenderChat, onActionComplete, subject = '', onPreviousChat, onNextChat, onReply,
   }: Props = $props()
 
   // A sender chat shows just its sender.
@@ -67,21 +70,26 @@
   let menuAnchor = $state<HTMLElement | null>(null)
   let snoozeMenu = $state<ChatSnoozeMenu | null>(null)
   const MAX_NAMES = 6
-  const COMPACT_WIDTH = 860
+  const COMPACT_WIDTH = 1100
   const NARROW_WIDTH = 600
-  let width = $state(0)
-  // Icon-only toolbar buttons when the pane is too narrow for labels.
-  const compact = $derived(width > 0 && width < COMPACT_WIDTH)
-  const narrow = $derived(width > 0 && width < NARROW_WIDTH)
+  // Window width, not pane width: the list and the sidebar share the window, so
+  // the pane stays narrow even when the window has room for labels.
+  let windowWidth = $state(0)
+  // Icon-only toolbar buttons (names stay accessible) below COMPACT_WIDTH.
+  const compact = $derived(windowWidth > 0 && windowWidth < COMPACT_WIDTH)
+  const narrow = $derived(windowWidth > 0 && windowWidth < NARROW_WIDTH)
   // The shared menu offers Forward only for single-message threads.
   const forwardInMenu = $derived(messageIds.length > 1)
   const senderInMenu = $derived(canTriage && isLowPriority !== null && people.length > 0)
 
-  const title = $derived.by(() => {
+  // The subject heads the chat; a sender chat has none, so it names its sender.
+  const heading = $derived.by(() => {
+    if (subject && !senderEmail) return subject
     if (people.length === 0) return $_('viewer.unknown')
     const names = people.slice(0, MAX_NAMES).map(displayName).join(', ')
     return people.length > MAX_NAMES ? `${names} ${$_('chat.andMore', { values: { count: people.length - MAX_NAMES } })}` : names
   })
+  const peopleLabel = $derived($_('chat.peopleCount', { values: { count: Math.max(people.length, 1) } }))
   const snoozeLabel = $derived(snoozedUntil ? formatSnoozedUntil(snoozedUntil) : '')
 
   export function openSnooze() { snoozeMenu?.open() }
@@ -140,56 +148,66 @@
   {/if}
 {/snippet}
 
-<header bind:clientWidth={width} class="flex min-h-header">
-  <!-- Centred like the stream and reply box, so wide panes line up. The equal
-       outer columns keep the title centred; the actions sit to its left. -->
-  <div class="mx-auto w-full max-w-(--chat-stream) grid grid-cols-[1fr_minmax(0,auto)_1fr] items-center gap-3 px-3 py-2">
-    <div class="flex items-center gap-2">
-      {#if showBackButton}
-        {@render iconButton('lucide:arrow-left', $_('responsive.back'), () => onBack?.())}
-      {/if}
-      {#if onCompose && !narrow}<ComposeButton {compact} onclick={onCompose} />{/if}
-      <ToolbarButton icon="lucide:archive" label={$_('viewer.archive')} {compact} onclick={onArchive} />
-      <ToolbarButton
-        ghost
-        icon={isTrash ? 'lucide:trash-2' : 'lucide:trash-2'}
-        label={$_('viewer.delete')}
-        title={$_(isTrash ? 'viewer.deletePermanently' : 'viewer.delete')}
-        {compact}
-        onclick={onDelete}
-      />
-      <MessageContextMenu
-        {messageIds}
-        {accountId}
-        currentFolderId={folderId}
-        {folderType}
-        {isStarred}
-        isRead={allRead}
-        {onActionComplete}
-        {onReply}
-        {onSpam}
-        {onToggleRead}
-        extraItems={forwardInMenu || canTriage ? extraItems : undefined}
-      >
-        <span bind:this={menuAnchor} class="inline-flex shrink-0">
-          {@render iconButton('lucide:ellipsis', $_('chat.moreActions'), openMenu)}
-        </span>
-      </MessageContextMenu>
-      {#if canTriage}
-        <!-- Anchors the snooze menu opened from "⋯" or the H key; its state shows beside the title. -->
-        <ChatSnoozeMenu bind:this={snoozeMenu} hiddenTrigger {snoozedUntil} {onSnooze} {onUnsnooze} />
-      {/if}
-    </div>
+<svelte:window bind:innerWidth={windowWidth} />
 
-    <div class="min-w-0 flex items-center justify-center gap-1">
-      <h2 class="min-w-0 flex"><ChatPeopleMenu {people} {title} {onComposeTo} /></h2>
+<header class="flex flex-col" data-chat-header>
+  <div class="chat-col flex items-center gap-1.5 py-2" role="toolbar" aria-label={$_('chat.actions')} data-header-toolbar>
+    {#if showBackButton}
+      {@render iconButton('lucide:arrow-left', $_('responsive.back'), () => onBack?.())}
+    {/if}
+    {#if onCompose && !narrow}<ComposeButton {compact} onclick={onCompose} />{/if}
+    <ToolbarButton icon="lucide:archive" label={$_('viewer.archive')} {compact} onclick={onArchive} />
+    <ToolbarButton
+      ghost
+      icon="lucide:trash-2"
+      label={$_('viewer.delete')}
+      title={$_(isTrash ? 'viewer.deletePermanently' : 'viewer.delete')}
+      {compact}
+      onclick={onDelete}
+    />
+    {#if canTriage}
+      <ChatSnoozeMenu bind:this={snoozeMenu} toolbar {compact} {snoozedUntil} {onSnooze} {onUnsnooze} />
+    {/if}
+    <ToolbarButton
+      ghost
+      icon={allRead ? 'lucide:mail' : 'lucide:mail-open'}
+      label={allRead ? $_('viewer.markAsUnread') : $_('viewer.markAsRead')}
+      {compact}
+      onclick={onToggleRead}
+    />
+    <MessageContextMenu
+      {messageIds}
+      {accountId}
+      currentFolderId={folderId}
+      {folderType}
+      {isStarred}
+      isRead={allRead}
+      {onActionComplete}
+      {onReply}
+      {onSpam}
+      {onToggleRead}
+      extraItems={forwardInMenu || canTriage ? extraItems : undefined}
+    >
+      <span bind:this={menuAnchor} class="inline-flex shrink-0">
+        {@render iconButton('lucide:ellipsis', $_('chat.moreActions'), openMenu)}
+      </span>
+    </MessageContextMenu>
+    <span class="flex-1"></span>
+    {#if onPreviousChat}{@render iconButton('lucide:chevron-up', $_('chat.previousChat'), onPreviousChat)}{/if}
+    {#if onNextChat}{@render iconButton('lucide:chevron-down', $_('chat.nextChat'), onNextChat)}{/if}
+  </div>
+
+  <div class="chat-col pt-1 pb-3" data-header-subject>
+    <h2 class="text-[20px] leading-7 font-semibold text-fg-primary wrap-break-word" data-header-title>{heading}</h2>
+    <div class="flex flex-wrap items-center gap-x-1 text-xs text-fg-secondary">
+      <ChatPeopleMenu {people} title={peopleLabel} {onComposeTo} />
+      <span aria-hidden="true">·</span>
+      <span>{$_('chat.messageCount', { values: { count: messageIds.length } })}</span>
       {#if snoozeLabel}
-        <span class="shrink-0 inline-flex items-center gap-1 text-xs text-fg-secondary">
+        <span class="ml-2 inline-flex items-center gap-1">
           <Icon icon="lucide:alarm-clock" class="w-3.5 h-3.5" />{$_('chat.snoozedUntil', { values: { time: snoozeLabel } })}
         </span>
       {/if}
     </div>
-
-    <div aria-hidden="true"></div>
   </div>
 </header>

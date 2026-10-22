@@ -13,7 +13,7 @@
   let { count, open, onToggle }: Props = $props()
 </script>
 
-<div class="mx-auto w-full max-w-(--chat-stream) px-4">
+<div class="chat-col">
   <button
     type="button"
     data-compact-row

@@ -259,6 +259,29 @@
   --chat-stream: 54rem;
 }
 
+/* The thread column is left-aligned at a gutter (DSR-3): the header, messages,
+   day dividers, fold rows and the anchored composer share it. Narrow windows
+   keep a 16px gutter. */
+@layer components {
+  .chat-col {
+    width: 100%;
+    max-width: var(--chat-stream);
+    padding-inline: 1rem;
+  }
+  @media (min-width: 900px) {
+    .chat-col {
+      padding-inline: 2rem;
+    }
+  }
+}
+
+/* Settings → Chat → Message font: Sans swaps the reading face for the interface
+   face in the open chat. Unlayered, so it wins over the font-read utility
+   (which @theme inline bakes in as a literal family). */
+:root[data-reading-font='sans'] [data-chat-stream] .font-read {
+  font-family: var(--font-ui);
+}
+
 @layer base {
   *,
   ::after,
@@ -303,7 +326,7 @@
     --focus-width: 2px;
     --sidebar-width: 232px;
     --list-width: 340px;
-    --thread-column: 720px;
+    --thread-column: 760px;
     --measure: 68ch;
   }
 

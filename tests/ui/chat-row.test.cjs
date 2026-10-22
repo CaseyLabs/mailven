@@ -1,5 +1,6 @@
-// Chat list rows (DS-2): two lines at 64 px (52 px at compact, which micro maps to), the unread treatment, distinct
-// hover, selected, focus and selected+focus states, keyboard-reachable quick actions and the paired group avatar.
+// Chat list rows (DS-2, DSR-2): two lines at 56 px (48 px at compact, which micro maps to), or 64 and 52 px with the
+// avatar setting on; the unread treatment, distinct hover, selected, focus and selected+focus states, keyboard-reachable
+// quick actions and the paired group avatar. Avatars and hover actions are opt-in, so tests for them turn them on.
 // The trip chat starts selected; Jamie's book-club chat is unread and a group; Omar's chat is read.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
@@ -18,13 +19,16 @@ const look = (r) => r.evaluate((el) => {
     ring: /rgb\([^)]*\) 0px 0px 0px 2px inset/.test(s.boxShadow),
     weight: getComputedStyle(el.querySelector('[data-row-name]')).fontWeight,
     dot: !!el.querySelector('[data-row-status="unread"] .bg-accent'),
-    actions: getComputedStyle(actions).opacity === '1',
+    actions: !!actions && getComputedStyle(actions).opacity === '1',
   }
 })
 
 describe('chat rows', () => {
-  for (const [d, px] of [['standard', 64], ['large', 64], ['compact', 52], ['micro', 52]]) {
-    it(`${d} rows are ${px} px`, ui.run({ beforeMount: density(d), previews: true }, async (page) => {
+  const heights = (avatars) => avatars
+    ? [['standard', 64], ['large', 64], ['compact', 52], ['micro', 52]]
+    : [['standard', 56], ['large', 56], ['compact', 48], ['micro', 48]]
+  for (const avatars of [false, true]) for (const [d, px] of heights(avatars)) {
+    it(`${d} rows are ${px} px with avatars ${avatars ? 'on' : 'off'}`, ui.run({ beforeMount: density(d), previews: true, avatars }, async (page) => {
       const heights = await page.locator('[data-chat-row]').evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))
       assert.ok(heights.length > 5)
       assert.deepEqual([...new Set(heights)], [px], 'every row has the same height, with or without previews')
@@ -33,7 +37,7 @@ describe('chat rows', () => {
   }
 
   for (const theme of ['light', 'dark']) {
-    it(`unread, hover, selected, focus and selected+focus are distinct (${theme})`, ui.run({ theme, previews: true }, async (page) => {
+    it(`unread, hover, selected, focus and selected+focus are distinct (${theme})`, ui.run({ theme, previews: true, avatars: true, hoverActions: true }, async (page) => {
       const [unread, read, selected] = [row(page, 'Jamie Chen'), row(page, 'Omar Haddad'), row(page, 'Weekend trip')]
       await page.locator('[data-message-id="trip-5"]').focus()
       await page.waitForFunction(() => !document.querySelector('[role="listbox"]')?.hasAttribute('data-focused'))
@@ -65,7 +69,7 @@ describe('chat rows', () => {
     }))
   }
 
-  it('quick actions are reachable by keyboard and keep their names', ui.run({ allow: ['MarkAsUnread', 'Archive'] }, async (page) => {
+  it('quick actions are reachable by keyboard and keep their names', ui.run({ allow: ['MarkAsUnread', 'Archive'], hoverActions: true }, async (page) => {
     const selected = row(page, 'Weekend trip')
     await page.locator('[data-message-id="trip-5"]').waitFor()
     assert.equal(await row(page, 'Omar Haddad').getByRole('button', { name: 'Archive' }).getAttribute('tabindex'), '-1', 'other rows stay out of the Tab order')
@@ -91,7 +95,7 @@ describe('chat rows', () => {
     assert.equal(await row(page, 'Jamie Chen').getByRole('button', { name: 'Mark as read', exact: true }).count(), 1, 'an unread row offers Mark as read')
   }))
 
-  it('a group chat shows an overlapping pair with one initial each', ui.run({}, async (page) => {
+  it('a group chat shows an overlapping pair with one initial each', ui.run({ avatars: true }, async (page) => {
     const avatars = await row(page, 'Jamie Chen').locator('[data-avatar-tint]').evaluateAll((els) =>
       els.map((e) => ({ size: e.getBoundingClientRect().width, text: e.textContent.trim() })))
     assert.deepEqual(avatars, [{ size: 20, text: 'J' }, { size: 20, text: 'L' }])
@@ -106,5 +110,21 @@ describe('chat rows', () => {
     assert.ok(clear, 'the back initial is not covered')
     const single = await row(page, 'Omar Haddad').locator('[data-avatar-tint]').evaluateAll((els) => els.map((e) => [e.getBoundingClientRect().width, e.textContent.trim()]))
     assert.deepEqual(single, [[36, 'OH']], 'one person gets a 36 px avatar with two initials')
+  }))
+
+  it('by default rows show no avatar, account dot or hover buttons, and the actions stay in the context menu', ui.run({ accounts: 'expanded', allow: ['Archive'] }, async (page) => {
+    const omar = row(page, 'Omar Haddad')
+    assert.equal(await page.locator('[data-chat-row] [data-avatar-tint]').count(), 0, 'no row has an avatar')
+    assert.equal(await page.locator('[data-chat-row] [data-row-actions]').count(), 0, 'no row has hover buttons')
+    assert.equal(await page.locator('[data-chat-row] [style*="background-color"][title]').count(), 0, 'no row has an account dot')
+    await omar.hover()
+    assert.equal(await omar.locator('.tabular-nums').evaluate((el) => getComputedStyle(el).visibility), 'visible', 'hover leaves the time in place')
+    await omar.click({ button: 'right' })
+    assert.ok(await page.getByRole('menuitem', { name: 'Archive', exact: true }).isVisible(), 'Archive stays in the context menu')
+    await page.keyboard.press('Escape')
+    await page.getByRole('listbox').focus()
+    await page.keyboard.press('h')
+    await page.getByRole('menu').waitFor()
+    assert.ok(await page.getByRole('menuitem').first().isVisible(), 'the H shortcut still opens the snooze menu')
   }))
 })

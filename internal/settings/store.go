@@ -41,6 +41,10 @@ const (
 	KeyAlwaysShowMessageCheckbox  = "always_show_message_checkbox"   // reserve a fixed checkbox column instead of the hover/swipe slide-reveal (default off)
 	KeyShowMessagePreview         = "show_message_preview"           // show the body preview line in message-list rows (default off)
 	KeyShowViewerCircles          = "show_viewer_circles"
+	KeyChatShowAvatars            = "chat_show_avatars"         // show avatars in chat-list rows (default off)
+	KeyChatHoverActions           = "chat_hover_actions"        // show quick-action buttons when a chat row is hovered (default off)
+	KeyChatMessageAvatars         = "chat_message_avatars"      // show sender avatars beside messages in an open chat (default off)
+	KeyChatReadingFont            = "chat_reading_font"         // "serif" or "sans": the face for message text in an open chat (default serif)
 	KeySpellcheckEnabled          = "spellcheck_enabled"        // composer spellcheck master toggle (defaults on)
 	KeySpellcheckLanguages        = "spellcheck_languages"      // JSON array of enabled dictionary codes, e.g. ["en","en-gb"]
 	KeySpellcheckCustomWords      = "spellcheck_custom_words"   // JSON array of user-added dictionary words
@@ -122,6 +126,9 @@ const (
 
 	ChatRichStyleReader = "reader"
 	ChatRichStyleCard   = "card"
+
+	ChatReadingFontSerif = "serif"
+	ChatReadingFontSans  = "sans"
 )
 
 // Chat reading widths
@@ -495,6 +502,44 @@ func (s *Store) SetShowMessagePreview(enabled bool) error {
 	return s.Set(KeyShowMessagePreview, v)
 }
 
+// GetChatShowAvatars returns whether chat-list rows show an avatar. Default: false.
+func (s *Store) GetChatShowAvatars() (bool, error) {
+	value, err := s.Get(KeyChatShowAvatars)
+	if err != nil {
+		return false, err
+	}
+	return value == "true", nil
+}
+
+// SetChatShowAvatars shows or hides avatars in chat-list rows
+func (s *Store) SetChatShowAvatars(enabled bool) error {
+	v := "false"
+	if enabled {
+		v = "true"
+	}
+	return s.Set(KeyChatShowAvatars, v)
+}
+
+// GetChatHoverActions returns whether chat-list rows show quick-action
+// buttons on hover. The actions stay in the context menu and shortcuts
+// either way. Default: false.
+func (s *Store) GetChatHoverActions() (bool, error) {
+	value, err := s.Get(KeyChatHoverActions)
+	if err != nil {
+		return false, err
+	}
+	return value == "true", nil
+}
+
+// SetChatHoverActions enables or disables hover quick actions on chat rows
+func (s *Store) SetChatHoverActions(enabled bool) error {
+	v := "false"
+	if enabled {
+		v = "true"
+	}
+	return s.Set(KeyChatHoverActions, v)
+}
+
 // GetShowViewerCircles returns whether colored sender circles
 // are shown in the conversation viewer. Default: true.
 func (s *Store) GetShowViewerCircles() (bool, error) {
@@ -751,6 +796,44 @@ func (s *Store) SetChatRichStyle(style string) error {
 		return s.Set(KeyChatRichStyle, style)
 	}
 	return fmt.Errorf("invalid chat rich style: %s", style)
+}
+
+// GetChatMessageAvatars returns whether messages in an open chat show the
+// sender's avatar. Default: false.
+func (s *Store) GetChatMessageAvatars() (bool, error) {
+	value, err := s.Get(KeyChatMessageAvatars)
+	if err != nil {
+		return false, err
+	}
+	return value == "true", nil
+}
+
+// SetChatMessageAvatars shows or hides avatars beside messages in an open chat
+func (s *Store) SetChatMessageAvatars(enabled bool) error {
+	v := "false"
+	if enabled {
+		v = "true"
+	}
+	return s.Set(KeyChatMessageAvatars, v)
+}
+
+// GetChatReadingFont returns the face for message text in an open chat:
+// "serif" (default, Literata) or "sans".
+func (s *Store) GetChatReadingFont() (string, error) {
+	value, err := s.Get(KeyChatReadingFont)
+	if value == ChatReadingFontSans {
+		return value, err
+	}
+	return ChatReadingFontSerif, err
+}
+
+// SetChatReadingFont sets the face for message text in an open chat.
+func (s *Store) SetChatReadingFont(font string) error {
+	switch font {
+	case ChatReadingFontSerif, ChatReadingFontSans:
+		return s.Set(KeyChatReadingFont, font)
+	}
+	return fmt.Errorf("invalid chat reading font: %s", font)
 }
 
 // GetChatIncludeQuote returns whether chat replies quote the replied-to

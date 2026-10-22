@@ -6,7 +6,9 @@
   let { date, tight = false }: { date: Date; tight?: boolean } = $props()
 </script>
 
-<div class="flex items-center gap-2 {tight ? 'pt-1' : 'pt-4'} pb-1.5 text-xs text-fg-tertiary" role="separator">
-  <span class="shrink-0">{formatDay(date)}</span>
-  <div class="flex-1 h-px bg-divider"></div>
+<div class="chat-col">
+  <div class="flex items-center gap-2 {tight ? 'pt-1' : 'pt-4'} pb-1.5 text-xs text-fg-tertiary" role="separator">
+    <span class="shrink-0">{formatDay(date)}</span>
+    <div class="flex-1 h-px bg-divider"></div>
+  </div>
 </div>

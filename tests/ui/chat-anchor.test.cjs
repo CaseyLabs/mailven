@@ -4,17 +4,22 @@ const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
 
-// 14 messages: trip-0..6 are "Hikes" on one day; trip-7 (unread) opens "Gear" on the next day.
-const twoSubjects = `{ const A = window.go.app.App, get = A.GetConversation
-  A.GetConversation = async (id) => {
-    const c = await get(id)
-    if (id !== 't-trip') return c
+// 14 messages in Trail Magazine's sender chat (the only chat with in-stream subject headings): trip-0..6 are
+// "Hikes" on one day; trip-7 (unread) opens "Gear" on the next day.
+const twoSubjects = `{ const A = window.go.app.App, get = A.GetSenderChat
+  A.GetSenderChat = async (acc, sender) => {
+    const c = await get(acc, sender)
     const base = c.messages[0], t = Date.parse(base.date)
     const messages = Array.from({ length: 14 }, (_, i) => ({ ...base, id: 'trip-' + i, uid: i, subject: i < 7 ? 'Hikes' : 'Gear',
       date: new Date(t + (i < 7 ? 0 : 86400e3) + i * 60e3).toISOString(), isRead: i !== 7, mine: false, fromName: 'Priya Shah', fromEmail: 'priya@example.net',
       bodyText: 'Message ' + i, snippet: 'Message ' + i, chat: { text: 'Message ' + i + '. ' + 'More words. '.repeat(20), hasQuoted: false, isRich: false } }))
     return { ...c, messages, messageCount: messages.length }
   } }`
+
+const openSenderChat = async (page) => {
+  await page.getByRole('button', { name: 'Low priority (2)' }).click()
+  await page.locator('[data-chat-row]', { hasText: 'Trail Magazine' }).click()
+}
 
 const boxes = (page) => page.evaluate(() => {
   const msg = document.querySelector('[data-message-id="trip-7"]')
@@ -30,6 +35,7 @@ const boxes = (page) => page.evaluate(() => {
 describe('chat unread anchor', () => {
   for (const accounts of ['expanded', 'collapsed']) {
     it(`the day label clears the sticky heading after the jump (Accounts ${accounts})`, ui.run({ height: 500, accounts, beforeMount: twoSubjects }, async (page) => {
+      await openSenderChat(page)
       await page.locator('[data-message-id="trip-7"]').waitFor()
       await page.waitForTimeout(2300)
       const b = await boxes(page)
@@ -44,6 +50,7 @@ describe('chat unread anchor', () => {
 describe('chat message actions under the sticky heading', () => {
   for (const accounts of ['expanded', 'collapsed']) {
     it(`the toolbar receives clicks above the heading (Accounts ${accounts})`, ui.run({ height: 500, accounts, beforeMount: twoSubjects }, async (page) => {
+      await openSenderChat(page)
       await page.locator('[data-message-id="trip-9"]').waitFor()
       await page.waitForTimeout(2300)
       // Scroll so trip-9's top sits 6 px below the heading's top edge, i.e. mostly under the heading.
@@ -51,6 +58,7 @@ describe('chat message actions under the sticky heading', () => {
         const msg = document.querySelector('[data-message-id="trip-9"]')
         let sc = msg.parentElement
         while (sc && getComputedStyle(sc).overflowY !== 'auto') sc = sc.parentElement
+        sc.scrollTop += 80 // the section's own heading sticks only once it reaches the top
         const stuck = [...document.querySelectorAll('[data-subject-heading]')].find((h) => h.getBoundingClientRect().top >= sc.getBoundingClientRect().top - 1 && h.getBoundingClientRect().top < sc.getBoundingClientRect().top + 1)
         sc.scrollTop += msg.getBoundingClientRect().top - (stuck.getBoundingClientRect().bottom - 6)
       })

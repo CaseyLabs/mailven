@@ -318,6 +318,8 @@
         onExpandDraft={expandChatDraft}
         onActionComplete={(autoSelectNext) => messageListRef?.handleActionComplete(autoSelectNext)}
         onToggleSenderChat={() => messageListRef?.toggleSelectedSenderChat()}
+        onPreviousChat={() => messageListRef?.selectPrevious(true)}
+        onNextChat={() => messageListRef?.selectNext(true)}
         isFocused={getFocusedPane() === 'viewer'}
         isFlashing={isPaneFlashing('viewer')}
         showBackButton={isResponsive()}

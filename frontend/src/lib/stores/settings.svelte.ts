@@ -2,7 +2,7 @@
 // Provides reactive state for application settings
 
 // @ts-ignore - wailsjs path
-import { GetMessageListDensity, GetMessageListSortOrder, GetThemeMode, GetShowTitleBar, GetRunBackground, GetStartHidden, GetAutostart, GetLanguage, GetComposerMode, GetMailtoMode, GetComposerFormat, GetNativeTitleBar, GetAlwaysLoadImages, GetDarkMailContent, GetDarkComposerBody, GetAccentBarUnread, GetAccentUnreadStyle, GetShowMessageListCircles, GetShowMessageListProfilePics, GetAlwaysShowMessageCheckbox, GetShowMessagePreview, GetShowViewerCircles, GetSpellcheckEnabled, GetSpellcheckLanguages, GetSpellcheckCustomWords, GetChatSendKey, GetChatAutoAdvance, GetChatShowLowGroup, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle } from '../../../wailsjs/go/app/App'
+import { GetMessageListDensity, GetMessageListSortOrder, GetThemeMode, GetShowTitleBar, GetRunBackground, GetStartHidden, GetAutostart, GetLanguage, GetComposerMode, GetMailtoMode, GetComposerFormat, GetNativeTitleBar, GetAlwaysLoadImages, GetDarkMailContent, GetDarkComposerBody, GetAccentBarUnread, GetAccentUnreadStyle, GetShowMessageListCircles, GetShowMessageListProfilePics, GetAlwaysShowMessageCheckbox, GetShowMessagePreview, GetShowViewerCircles, GetSpellcheckEnabled, GetSpellcheckLanguages, GetSpellcheckCustomWords, GetChatSendKey, GetChatAutoAdvance, GetChatShowLowGroup, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle, GetChatShowAvatars, GetChatHoverActions, GetChatMessageAvatars, GetChatReadingFont } from '../../../wailsjs/go/app/App'
 import { setLocale as setI18nLocale, resolveLocale } from '$lib/i18n'
 import { filterSupportedDicts } from '$lib/spellcheck/locales'
 import { loadDateFnsLocale, getDateFnsLocale } from '$lib/i18n/dateFnsLocale'
@@ -14,6 +14,7 @@ export type ChatSendKey = 'enter' | 'ctrl-enter'
 export type ChatReadingWidth = 'narrow' | 'standard' | 'wide'
 export type ChatDisplayStyle = 'bubbles' | 'flat'
 export type ChatRichStyle = 'reader' | 'card'
+export type ChatReadingFont = 'serif' | 'sans'
 export type ChatAutoAdvance = 'next' | 'previous'
 export type MessageListDensity = 'micro' | 'compact' | 'standard' | 'large'
 export type MessageListSortOrder = 'newest' | 'oldest'
@@ -54,6 +55,12 @@ let showMessageListProfilePics = $state<boolean>(false)
 let alwaysShowMessageCheckbox = $state<boolean>(false)
 let showMessagePreview = $state<boolean>(false)
 let showViewerCircles = $state<boolean>(true)
+// Chat-list row extras; both are opt-in.
+let chatShowAvatars = $state<boolean>(false)
+let chatHoverActions = $state<boolean>(false)
+// Open-chat reading options: sender avatars are opt-in, and the text face is Serif or Sans.
+let chatMessageAvatars = $state<boolean>(false)
+let chatReadingFont = $state<ChatReadingFont>('serif')
 
 // Getter functions to access the state
 export function getMessageListDensity(): MessageListDensity {
@@ -199,6 +206,22 @@ export function getAlwaysShowMessageCheckbox(): boolean {
   return alwaysShowMessageCheckbox
 }
 
+export function getChatShowAvatars(): boolean {
+  return chatShowAvatars
+}
+
+export function getChatHoverActions(): boolean {
+  return chatHoverActions
+}
+
+export function getChatMessageAvatars(): boolean {
+  return chatMessageAvatars
+}
+
+export function getChatReadingFont(): ChatReadingFont {
+  return chatReadingFont
+}
+
 export function getShowMessagePreview(): boolean {
   return showMessagePreview
 }
@@ -308,6 +331,25 @@ export function setAlwaysShowMessageCheckbox(v: boolean) {
   alwaysShowMessageCheckbox = v
 }
 
+export function setChatShowAvatars(v: boolean) {
+  chatShowAvatars = v
+}
+
+export function setChatHoverActions(v: boolean) {
+  chatHoverActions = v
+}
+
+export function setChatMessageAvatars(v: boolean) {
+  chatMessageAvatars = v
+}
+
+// Stores the face and applies it: app.css maps data-reading-font on <html> to
+// the open chat's message text.
+export function setChatReadingFont(v: ChatReadingFont) {
+  chatReadingFont = v
+  document.documentElement.dataset.readingFont = v
+}
+
 export function setShowMessagePreview(v: boolean) {
   showMessagePreview = v
 }
@@ -319,7 +361,7 @@ export function setShowViewerCircles(v: boolean) {
 // Load settings from backend (call on app startup)
 export async function loadSettings(): Promise<ThemeMode> {
   try {
-    const [density, sortOrder, theme, titleBar, runBg, startHid, autoSt, lang, compMode, mailMode, compFormat, nativeTB, alwaysImages, darkMail, darkComposer, accentBar, accentStyle, listCircles, listProfilePics, alwaysCheckbox, messagePreview, viewerCircles, scEnabled, scLangs, scWords, sendKey, autoAdvance, showLowGroup, readingWidth, displayStyle, richStyle] = await Promise.all([
+    const [density, sortOrder, theme, titleBar, runBg, startHid, autoSt, lang, compMode, mailMode, compFormat, nativeTB, alwaysImages, darkMail, darkComposer, accentBar, accentStyle, listCircles, listProfilePics, alwaysCheckbox, messagePreview, viewerCircles, scEnabled, scLangs, scWords, sendKey, autoAdvance, showLowGroup, readingWidth, displayStyle, richStyle, showAvatars, hoverActions, messageAvatars, readingFont] = await Promise.all([
       GetMessageListDensity(),
       GetMessageListSortOrder(),
       GetThemeMode(),
@@ -351,6 +393,10 @@ export async function loadSettings(): Promise<ThemeMode> {
       GetChatReadingWidth(),
       GetChatDisplayStyle(),
       GetChatRichStyle(),
+      GetChatShowAvatars(),
+      GetChatHoverActions(),
+      GetChatMessageAvatars(),
+      GetChatReadingFont(),
     ])
     messageListDensity = (density as MessageListDensity) || 'standard'
     messageListSortOrder = (sortOrder as MessageListSortOrder) || 'newest'
@@ -372,6 +418,10 @@ export async function loadSettings(): Promise<ThemeMode> {
     showMessageListProfilePics = listProfilePics ?? false
     alwaysShowMessageCheckbox = alwaysCheckbox ?? false
     showMessagePreview = messagePreview ?? false
+    chatShowAvatars = showAvatars ?? false
+    chatHoverActions = hoverActions ?? false
+    chatMessageAvatars = messageAvatars ?? false
+    setChatReadingFont(readingFont === 'sans' ? 'sans' : 'serif')
     showViewerCircles = viewerCircles ?? true
     spellcheckEnabled = scEnabled ?? true
     spellcheckLanguages = filterSupportedDicts(scLangs ?? [])

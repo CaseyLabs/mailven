@@ -514,12 +514,24 @@ export function GetChatDraft(arg1, arg2) {
   return window['go']['app']['App']['GetChatDraft'](arg1, arg2);
 }
 
+export function GetChatHoverActions() {
+  return window['go']['app']['App']['GetChatHoverActions']();
+}
+
 export function GetChatIncludeQuote() {
   return window['go']['app']['App']['GetChatIncludeQuote']();
 }
 
+export function GetChatMessageAvatars() {
+  return window['go']['app']['App']['GetChatMessageAvatars']();
+}
+
 export function GetChatNotifyPriorityOnly() {
   return window['go']['app']['App']['GetChatNotifyPriorityOnly']();
+}
+
+export function GetChatReadingFont() {
+  return window['go']['app']['App']['GetChatReadingFont']();
 }
 
 export function GetChatReadingWidth() {
@@ -536,6 +548,10 @@ export function GetChatSendKey() {
 
 export function GetChatSenderEvidence(arg1) {
   return window['go']['app']['App']['GetChatSenderEvidence'](arg1);
+}
+
+export function GetChatShowAvatars() {
+  return window['go']['app']['App']['GetChatShowAvatars']();
 }
 
 export function GetChatShowLowGroup() {
@@ -1370,12 +1386,24 @@ export function SetChatDisplayStyle(arg1) {
   return window['go']['app']['App']['SetChatDisplayStyle'](arg1);
 }
 
+export function SetChatHoverActions(arg1) {
+  return window['go']['app']['App']['SetChatHoverActions'](arg1);
+}
+
 export function SetChatIncludeQuote(arg1) {
   return window['go']['app']['App']['SetChatIncludeQuote'](arg1);
 }
 
+export function SetChatMessageAvatars(arg1) {
+  return window['go']['app']['App']['SetChatMessageAvatars'](arg1);
+}
+
 export function SetChatNotifyPriorityOnly(arg1) {
   return window['go']['app']['App']['SetChatNotifyPriorityOnly'](arg1);
+}
+
+export function SetChatReadingFont(arg1) {
+  return window['go']['app']['App']['SetChatReadingFont'](arg1);
 }
 
 export function SetChatReadingWidth(arg1) {
@@ -1388,6 +1416,10 @@ export function SetChatRichStyle(arg1) {
 
 export function SetChatSendKey(arg1) {
   return window['go']['app']['App']['SetChatSendKey'](arg1);
+}
+
+export function SetChatShowAvatars(arg1) {
+  return window['go']['app']['App']['SetChatShowAvatars'](arg1);
 }
 
 export function SetChatShowLowGroup(arg1) {
