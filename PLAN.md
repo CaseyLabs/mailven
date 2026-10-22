@@ -15,7 +15,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
 | [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [1](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
-| [DS — Reading-first redesign](#ds) | done | P3 | [3](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17, UI18 and UI19 resolved 2026-10-21 |
+| [DS — Reading-first redesign](#ds) | done | P3 | [0](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17, UI18 and UI19 resolved 2026-10-21 |
 | [DSR — Reading redesign revision](#dsr) | done | P3 | 0 | DSR-1–4 done (2026-10-21) |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
