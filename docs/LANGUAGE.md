@@ -6,6 +6,7 @@ Mailven's interface is English-only. The i18n machinery from Aerion is kept so a
 
 - Every UI string is a key in `frontend/src/lib/i18n/locales/en.json`, read with `$_('namespace.key')` (svelte-i18n). Extensions ship their own `extensions/<name>/frontend/i18n/locales/en.json` under a top-level namespace; `frontend/src/lib/i18n/index.ts` discovers each extension's `i18n/index.ts` through `import.meta.glob`.
 - Update the English files only when adding or changing a string. Check `npm run check` and `npm run build`.
+- Wording rules (reading level, plain terms, "Turn on/off", errors that say what to do) are in [UX_GUIDELINES.md](UX_GUIDELINES.md).
 - `supportedLocales` in `i18n/index.ts` lists the shipped UI locales. With one entry, Settings → General hides the language picker. A saved language that is not listed (for example from an imported Aerion database) resolves to `en` without error.
 - `i18n/dateFnsLocale.ts` loads the date-fns locale for a non-English UI locale; English uses date-fns' default.
 

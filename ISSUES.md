@@ -20,6 +20,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 - [DS — Reading-first redesign](#ds): no unresolved issue recorded
 - [CF — Chat-first revision](#cf): no unresolved issue recorded
+- [UX — Plain-language settings and messages](#ux): [UX1](#ux1)
 
 <a id="send"></a>
 
@@ -632,6 +633,21 @@ Project: [CF](PLAN.md#cf).
 ### UI23 — The quick reply cannot change the topic or add Cc/Bcc
 
 - **Status:** resolved 2026-10-22 (branch `fix/cf-followups`). `ChatReply` and `ChatDraft` carry `subject`, `cc` and `bcc`; `buildChatReplyLink` in `app/chat_reply.go` sets a changed subject (whitespace collapsed; the default "Re: …" is not a change) and adds Cc/Bcc addresses not already on the reply. Migration 66 adds `subject_set`, `cc_extra` and `bcc_extra` to `chat_drafts` so `GetChatDraft` returns only what the reply box added. The reply box's ⋯ has Change topic, Add Cc and Add Bcc; `ChatComposerExtras.svelte` shows their editors and the accent-soft chips (text edits, ✕ undoes) next to the reply-target chip. `TestChatReplyTopicAndCopies`, the updated chat-link and migration rewind tests, and `chat-compose-extras.test.cjs` (6 tests) pass; visual check in both themes at 1400 and 700 px with Accounts expanded and collapsed.
+
+<a id="ux"></a>
+
+## UX — Plain-language settings and messages
+
+Project: [UX](PLAN.md#ux).
+
+<a id="ux1"></a>
+
+### UX1 — Settings switches look instant but wait for Save
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-0](PLAN.md#ux-0) recommends the fix; [UX-1](PLAN.md#ux-1) and [UX-2](PLAN.md#ux-2) apply it. Found 2026-11-08 while planning UX, verified by reading the code.
+- **Severity / proposed priority / status:** unspecified / P3 / open.
+- **Resolution criteria:** on the General, Composer, Chat and Images tabs, every control's type matches when its change applies ([UX-CTRL-1](docs/UX_GUIDELINES.md#ux-ctrl)): switches apply at once, and controls inside the Save/Cancel form are checkboxes, radios or selects.
+- **Evidence / impact / reproduction:** `SettingsDialog.svelte` shows Save/Cancel on the `general`, `composer`, `chat` and `images` tabs (around line 483) and writes their values in `handleSave` (line 218); Cancel discards them and reverts the theme preview (`revertLivePreview` and `handleCancel`, lines 327–337). Those tabs hold 20 fixed `<Switch>` controls plus one per spellcheck dictionary: General 11 (8 in `GeneralTab.svelte` and 3 in `GeneralBackgroundSections.svelte`: run in background, start hidden, start at login), Chat 7, Composer 1 plus one per dictionary (the loop in `ComposerTab.svelte`), and Images 1. The dictionary switches pick several items from a list, so they should be checkboxes whichever Save model is chosen (UX-CTRL-1). A switch suggests the change is already applied, so closing the dialog without Save silently loses it.
 
 ## Recurring problems
 

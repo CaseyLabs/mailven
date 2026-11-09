@@ -18,6 +18,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [DS — Reading-first redesign](#ds) | done | P3 | [0](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17, UI18 and UI19 resolved 2026-10-21 |
 | [DSR — Reading redesign revision](#dsr) | done | P3 | 0 | DSR-1–4 done (2026-10-21) |
 | [CF — Chat-first revision](#cf) | done | P3 | [0](ISSUES.md#cf) | CF-1–5 done (2026-10-21); UI21–UI23 resolved (2026-10-22) |
+| [UX — Plain-language settings and messages](#ux) | proposed | P3 (UX-5 P2) | [1](ISSUES.md#ux) | UX-0 (inventory and audit) first; nothing selected |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
 | [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
 
@@ -33,7 +34,7 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 **Active:** none. [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** none selected. SEND-2 still needs separately authorized live verification.
+**Next recommended:** none selected. SEND-2 still needs separately authorized live verification. The [UX](#ux) project was proposed on 2026-11-08; [UX-0](#ux-0) is its first candidate and needs selection.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -799,6 +800,106 @@ Defaults (accepted 2026-10-21):
 - **Scope:** the full visual matrix (Mail, Contacts, Calendar and Settings in both themes, Accounts expanded and collapsed, narrow and standard, `bubbles` and `flat`); retaken `docs/ss*.png` screenshots from synthetic data; user-guide updates for bubbles, the header, rows, the composer and the changed Appearance defaults; CHANGELOG.
 - **Acceptance:** every matrix screenshot is reviewed and passes the UI audit and contrast check. Screenshots show no real personal data, and the user guide matches the app.
 - **Validation:** full UI suite, `make lint`, `make test`, `run-mailven` native WebKitGTK screenshots (or recorded as unrun), and `tools/check-doc-links.py`.
+
+<a id="ux"></a>
+
+## UX — Plain-language settings and messages
+
+- **Objective / outcome:** Settings, toasts, account setup and security messages use plain words that say what each choice does for you, the controls behave the way they look, and expert detail stays reachable one step away. It follows the rules in [UX_GUIDELINES](docs/UX_GUIDELINES.md), derived from Thunderbird's 2026 desktop settings research, and cites their IDs (`UX-COPY-*`, `UX-CTRL-*`, `UX-SEC-*`, …). Work goes one tab or flow at a time: copy and control types first, then layout.
+- **Status / proposed priority:** proposed 2026-11-08 / P3; UX-5 (security wording) P2. No milestone is selected.
+- **Dependencies / blockers:** UX-0 comes first and is a prerequisite for UX-1–UX-6. UX-6's decision comes before UX-7. UX-8 comes last. No external gates.
+- **Issues:** [UX1](ISSUES.md#ux1).
+- **Technical references:** [UX_GUIDELINES](docs/UX_GUIDELINES.md) (rules, glossary, §10 where things live and example rewrites), [LANGUAGE](docs/LANGUAGE.md), [validation procedures](docs/VALIDATION.md), [PROVIDERS](docs/PROVIDERS.md), [UI_TOKENS](docs/UI_TOKENS.md).
+
+Decision (owner, 2026-11-08) and guardrails from the guide:
+
+- UX-0 recommends how to resolve the Save/Cancel versus switch mismatch ([UX1](ISSUES.md#ux1)): checkboxes inside the Save form, or settings that apply at once. The owner approves one before UX-1 starts.
+- English locale files only, keeping the i18n key structure; change values, and add a new key (removing the old one in the same commit) only when a key's meaning changes.
+- Persisted identifiers are never renamed, whatever their labels become (see AGENTS.md).
+- Plain language never removes capability: every expert option stays reachable, behind Advanced where needed.
+
+Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 for changed help and description strings (exceptions justified in the milestone); a jargon scan of changed primary labels; the control audit; frontend lint, Svelte/TypeScript check and the full UI suite; `run-mailven` in Light and Dark with Accounts expanded and collapsed, or recorded as unrun; 2–3 written scenarios per area completed from the UI text alone; and the user guide updated in the same commit. Human comprehension tests (§9 of the guide) are recorded as unverifiable unless testers are arranged.
+
+<a id="ux-0"></a>
+
+### UX-0 — Inventory and audit
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** none.
+- **Scope:** an audit table (UX-PROC-2/3) in `docs/plans/ux-0.md` for every key in the `settings*`, `account`, `identity`, `security`, `toast`, `viewer`, `sidebar` (sync status), `messageList` (sync and resync actions), `images`, `certificate`, `mailApi`, `sentPolicy`, `oauth`, `contactSource`, `spellcheck`, `setupDiagnostic` and `googleGuide` namespaces, and in extension `en.json` files that Settings shows. Together these cover the strings UX-1 to UX-6 change. Each row records the key, current text, component, accuracy, jargon terms, FK grade, control type, whether it applies now or on Save, and a proposed rewrite. It lists the control-type mismatches and notification settings by tab, and recommends a Save model for UX1. No UI change.
+- **Acceptance:** every key in scope has a row; grades and jargon hits come from a repeatable script kept with the plan; the mismatches and the Save-model recommendation are listed with evidence; the owner records a decision on UX1.
+- **Validation:** rerun the script and spot-check 20 rows against `en.json` and the components; `tools/check-doc-links.py`.
+
+<a id="ux-1"></a>
+
+### UX-1 — General tab copy and controls
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** UX-0 and the owner's Save-model decision.
+- **Scope:** rewrite `settingsGeneral` copy (UX-COPY-*), apply the Save-model decision to its controls (UX-CTRL-1/2), mark defaults (UX-CTRL-4), add units (UX-CTRL-9) and make dependencies visible, such as profile pictures under colored circles (UX-CTRL-7). Includes the title-bar and remote-images examples in §10.2 of the guide.
+- **Acceptance:** the §11 checklist passes for every changed string and control; no bare Enable/Disable; dependent settings are disabled or nested with an explanation; settings persist as before; UX1 is resolved for this tab.
+- **Validation:** shared validation above, plus the `settings-*` suites and UI regression tests for any changed control behaviour.
+
+<a id="ux-2"></a>
+
+### UX-2 — Chat, Composer and Images tabs
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** UX-0 and the Save-model decision; independent of UX-1.
+- **Scope:** the UX-1 treatment for `settingsChat`, the Composer tab and the Images tab. The remote-pictures choice states the default, the risk and the result where it is made (UX-SEC-1/2), with buttons that name the choice.
+- **Acceptance:** as UX-1 for these tabs; the image-loading warning follows UX-SEC-2; UX1 is resolved for all four tabs.
+- **Validation:** shared validation above.
+
+<a id="ux-3"></a>
+
+### UX-3 — Toasts and errors
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** UX-0.
+- **Scope:** every `toast` and `sidebar.sync*` message says what happened, then what to do (UX-COPY-8), using the glossary terms; technical detail moves behind "Show details" where a toast has it.
+- **Acceptance:** no protocol names, raw error text or "Please" in a toast's main line; each error names a next step or says none is needed.
+- **Validation:** shared validation above; the jargon scan covers the whole `toast` namespace.
+
+<a id="ux-4"></a>
+
+### UX-4 — Account setup and server settings
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** UX-0.
+- **Scope:** `account`, `identity` and `settingsAccounts` copy and the account form and server tabs: plain labels ("Receiving mail", "Sending mail", "Sign in with {provider}"), with protocol, port and OAuth client detail moved to Advanced (UX-COPY-4, UX-CTRL-5). The raw checkboxes in `IdentityEditor`, `AccountServerFolderSync`, `SendAsSection` and `MailAPISection` are audited against UX-CTRL-1. Every fact is checked against [PROVIDERS](docs/PROVIDERS.md) and the code (UX-COPY-11).
+- **Acceptance:** no protocol name in a primary label unless it follows a plain term in parentheses; every expert field is still reachable; account setup and editing tests pass; the provider guides use the same terms.
+- **Validation:** shared validation above, plus `google-add-account` and the `settings-*` suites.
+
+<a id="ux-5"></a>
+
+### UX-5 — Security banners and the Security tab
+
+- **Status / proposed priority:** proposed / P2 (misleading security wording is a correctness risk). **Dependencies / gates:** UX-0.
+- **Scope:** `security` and `viewer` S/MIME and PGP strings and the account Security tab. Banners lead with what you can act on (verified, couldn't verify, warning), and the mechanism goes in the detail layer (UX-SEC-3); severity uses icon, word and colour together (UX-SEC-4); no wording claims more than the code proves (UX-SEC-5).
+- **Acceptance:** each banner state is checked against the verification code that produces it, and the mapping is recorded in the milestone; no state is shown by colour alone; S/MIME and PGP details stay reachable.
+- **Validation:** shared validation above, plus the `chat-secure` suite.
+
+<a id="ux-6"></a>
+
+### UX-6 — Notification settings
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** UX-0 (its notification inventory).
+- **Scope:** Mailven has one notification setting (*Notify only for priority mail*, in Chat) and no notification area. Decide whether notifications need an area of their own and which controls it should hold. If yes, specify it for UX-7 or build it here; their copy follows UX-COPY-*.
+- **Acceptance:** an owner decision is recorded; if the settings move, each lives in exactly one place (UX-IA-4) and keeps its stored value.
+- **Validation:** shared validation above if UI changes; otherwise `tools/check-doc-links.py`.
+
+<a id="ux-7"></a>
+
+### UX-7 — Grouping, search and progressive disclosure
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** UX-1–UX-4 and UX-6's decision.
+- **Scope:** group settings by task (UX-IA-1), add settings search over labels, help text and glossary synonyms (UX-IA-2), collapse expert options under Advanced (UX-CTRL-5), add "Reset to default" where it makes sense (UX-CTRL-4), and give every preview a one-line text summary (UX-CTRL-6). Same structure at every window width (UX-IA-5).
+- **Acceptance:** searching a technical term such as "IMAP" finds its plain-language setting; every setting is reachable by keyboard and search; components stay under 500 lines.
+- **Validation:** shared validation above, plus new search and reset tests.
+
+<a id="ux-8"></a>
+
+### UX-8 — Accessibility pass
+
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** UX-1–UX-7.
+- **Scope:** UX-A11Y-1–6 across Settings and the areas changed by UX-1–UX-7: keyboard order and focus, ARIA roles and states, contrast in both themes including dark-mode links in mail content, target sizes of at least 24 px, no colour-only information, and reduced motion.
+- **Acceptance:** every audited control passes or has a recorded issue; the contrast check covers any new pairs.
+- **Validation:** shared validation above and `node tools/contrast-check.mjs`.
 
 <a id="ai"></a>
 

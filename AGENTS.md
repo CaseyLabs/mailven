@@ -37,6 +37,7 @@ Toolchain and command reference: [Development Setup](CONTRIBUTING.md#development
 - Go: log with zerolog, and prefer guard clauses and switches over long `else if` chains.
 - Frontend: use Svelte 5 runes (`$state`, `$derived`), keep components under 500 lines, and preserve keyboard accessibility.
 - Localization: the UI is English-only, with en-US, en-GB and en-CA spellcheck dictionaries; email content stays fully international (any language, charset and script). Update English locale files only, and leave non-English locale files out of searches and reviews unless the task concerns localization. Preserve the existing i18n structure. See `docs/LANGUAGE.md` when changing localized strings.
+- User-facing wording and Settings controls: before changing text users can see or a Settings control, read `docs/UX_GUIDELINES.md` and cite the rule IDs you apply.
 
 ## Testing
 
