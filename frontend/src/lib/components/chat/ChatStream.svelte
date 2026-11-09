@@ -4,7 +4,11 @@
   // the --chat-stream column.
   // A "New" divider sits above the first message that was unread on open, and
   // bubbles show membership and topic changes (item.events) as centred lines.
-  // Each subject run is a section whose heading sticks while it scrolls past.
+  // Each subject run is a section whose heading sticks while it scrolls past,
+  // and ends with a Reply button that answers that subject in the reply box.
+  // Pending replies join the last section, except replies to an earlier
+  // subject, which follow it under their own heading as the sent copy will.
+  import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
   import ChatBubble from './ChatBubble.svelte'
   import { SvelteSet } from 'svelte/reactivity'
@@ -14,7 +18,7 @@
   import ChatStreamEvent from './ChatStreamEvent.svelte'
   import ChatSubjectHeading from './ChatSubjectHeading.svelte'
   import type { ChatThread } from './chatThread.svelte'
-  import type { ChatComposer } from './chatComposerState.svelte'
+  import type { ChatComposer, PendingSend } from './chatComposerState.svelte'
   import { compactItems, subjectSections } from './chatCompact'
   import { pendingGroupStart, type Person, type ReplyMode, type ThreadItem } from './chatFormat'
 
@@ -33,6 +37,9 @@
     holdPosition?: (el: HTMLElement, change: () => void) => void
     onFocusChange: (id: string, focused: boolean) => void
     onReply?: (mode: ReplyMode, messageId: string, imagesLoaded?: boolean) => void
+    // Points the reply box at the subject of the given message; unset when
+    // the chat cannot be replied to.
+    onReplyToSubject?: (messageId: string) => void
     onComposeToAddress?: (to: string) => void
     onEditDraft?: (draftId: string) => void
     onActionComplete: (autoSelectNext?: boolean) => void
@@ -41,7 +48,7 @@
 
   let {
     items, thread, composer, me, accountId, folderId, folderType, imagesLoaded, resetKey = null, holdPosition,
-    onFocusChange, onReply, onComposeToAddress, onEditDraft, onActionComplete, onOpenLink,
+    onFocusChange, onReply, onReplyToSubject, onComposeToAddress, onEditDraft, onActionComplete, onOpenLink,
   }: Props = $props()
 
   // Opened runs, by the ID of their first message.
@@ -66,6 +73,22 @@
     return i > 0 ? items[i].msg.id : null
   })
 
+  // Pending replies to an earlier subject, grouped by that subject's heading.
+  const lastSection = $derived(sections.at(-1))
+  const earlier = $derived.by(() => {
+    const groups = new Map<string, { subject: string; list: PendingSend[] }>()
+    for (const p of composer.pendingHere) {
+      if (!p.replyTo || p.replyTo === lastSection?.id) continue
+      const s = sections.find((x) => x.id === p.replyTo && x.subject !== undefined)
+      if (!s) continue
+      const g = groups.get(p.replyTo) ?? { subject: s.subject!, list: [] }
+      g.list.push(p)
+      groups.set(p.replyTo, g)
+    }
+    return groups
+  })
+  const latest = $derived(composer.pendingHere.filter((p) => !earlier.get(p.replyTo)?.list.includes(p)))
+
   function toggle(id: string, el: HTMLElement) {
     const change = () => void (expanded.delete(id) || expanded.add(id))
     if (holdPosition) holdPosition(el, change)
@@ -73,9 +96,9 @@
   }
 </script>
 
-{#snippet pending()}
-  {#each composer.pendingHere as p, i (p.id)}
-    <ChatPendingBubble pending={p} groupStart={i === 0 && pendingGroupStart(items.at(-1), me, p.sentAt)} onRetry={() => composer.retry(p.id)} onEdit={() => composer.edit(p.id)} onUndo={() => void composer.undo(p.id)} />
+{#snippet pending(list: PendingSend[], headed = false)}
+  {#each list as p, i (p.id)}
+    <ChatPendingBubble pending={p} groupStart={i === 0 && (headed || pendingGroupStart(items.at(-1), me, p.sentAt))} onRetry={() => composer.retry(p.id)} onEdit={() => composer.edit(p.id)} onUndo={() => void composer.undo(p.id)} />
   {/each}
 {/snippet}
 
@@ -120,12 +143,33 @@
           />
         {/if}
       {/each}
-      <!-- Pending replies join the last section, under its heading. -->
       {#if si === sections.length - 1}
-        {@render pending()}
+        {@render pending(latest)}
+      {/if}
+      {#if section.subject !== undefined && onReplyToSubject}
+        {@const id = section.id!}
+        <div class="chat-col pt-2 pb-1">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-accent-soft text-accent-text text-ui-body font-medium hover:bg-accent-soft/70 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={$_('chat.replyToSubjectLabel', { values: { subject: section.subject } })}
+            title={$_('chat.replyToSubjectLabel', { values: { subject: section.subject } })}
+            onclick={() => onReplyToSubject(id)}
+            data-subject-reply
+          >
+            <Icon icon="lucide:reply" class="w-4 h-4" aria-hidden="true" />
+            {$_('chat.replyToSubject')}
+          </button>
+        </div>
       {/if}
     </section>
   {:else}
-    {@render pending()}
+    {@render pending(latest)}
+  {/each}
+  {#each earlier as [id, group] (id)}
+    <section data-pending-subject>
+      <ChatSubjectHeading subject={group.subject} />
+      {@render pending(group.list, true)}
+    </section>
   {/each}
 </div>

@@ -1,6 +1,6 @@
 // The open chat's header (CF-3): one row with the avatar, the people (a button listing the participants) over the subject and
-// message count, then Search in conversation (UI22), Archive (labelled from 1100px, icon-only below, always named) and "⋯",
-// which holds every other action.
+// message count, then Search in conversation (UI22), Archive, Delete and Spam (labelled from 1100px, icon-only below,
+// always named) and "⋯", which holds every other action.
 // Writes resolve only for the bindings each test allows; assertions read the recorded binding calls.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
@@ -33,14 +33,16 @@ const people = (page) => header(page).getByRole('heading', { level: 2 }).getByRo
 
 describe('chat header', () => {
   for (const width of [1400, 1100, 1000, 900, 700, 500]) {
-    it(`only Search, Archive and More actions show, named, Archive labelled from 1100px, on one row at ${width}px`, ui.run({ width }, async (page) => {
+    it(`only Search, Archive, Delete, Spam and More actions show, named, labelled from 1100px, on one row at ${width}px`, ui.run({ width }, async (page) => {
       await open(page, 'Omar Haddad')
       const toolbar = header(page).getByRole('toolbar', { name: 'Chat actions' })
       const names = await toolbar.getByRole('button').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label') || e.textContent.trim()))
-      assert.deepEqual(names.filter((n) => n !== 'Compose'), ['Search in conversation', 'Archive', 'More actions'])
-      const archive = toolbar.getByRole('button', { name: 'Archive', exact: true })
-      const label = await archive.locator('span').first().evaluate((el) => el.getBoundingClientRect().width > 1)
-      assert.equal(label, width >= 1100, `Archive label ${width >= 1100 ? 'shows' : 'is icon-only'} at ${width}px`)
+      assert.deepEqual(names.filter((n) => n !== 'Compose'), ['Search in conversation', 'Archive', 'Delete', 'Spam', 'More actions'])
+      for (const name of ['Archive', 'Delete', 'Spam']) {
+        const button = toolbar.getByRole('button', { name, exact: true })
+        const label = await button.locator('span').first().evaluate((el) => el.getBoundingClientRect().width > 1)
+        assert.equal(label, width >= 1100, `${name} label ${width >= 1100 ? 'shows' : 'is icon-only'} at ${width}px`)
+      }
       const box = await header(page).boundingBox()
       assert.ok(box.height <= 64, `the header is one row (${box.height}px)`)
     }))
@@ -91,6 +93,17 @@ describe('chat header', () => {
     await archive.focus()
     await page.keyboard.press('Enter')
     assert.equal((await argsOf(page, 'Archive')).length, 1, 'Archive runs from the keyboard')
+  }))
+
+  it('Delete and Spam act on the whole chat from the header', ui.run({ allow: ['Trash', 'MarkAsSpam', 'Undo'] }, async (page) => {
+    await open(page, 'Priya Shah')
+    const toolbar = header(page).getByRole('toolbar', { name: 'Chat actions' })
+    await toolbar.getByRole('button', { name: 'Spam', exact: true }).click()
+    const [spamIds] = await argsOf(page, 'MarkAsSpam')
+    assert.equal(spamIds?.[0]?.length, 6, 'Spam marks every message of the chat')
+    await open(page, 'Omar Haddad')
+    await toolbar.getByRole('button', { name: 'Delete', exact: true }).click()
+    assert.equal((await argsOf(page, 'Trash')).length, 1, 'Delete moves the chat to Trash')
   }))
 
   it('the title lists every participant and composes to one', ui.run({ beforeMount: clipboard }, async (page) => {

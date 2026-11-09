@@ -3,11 +3,13 @@
   // (when the chat covers the list), the avatar or an overlapping pair, then
   // the people (which open the participant list) over the subject and message
   // count, then Compose (when set; not on narrow windows), Search in
-  // conversation, Archive and "⋯".
+  // conversation, Archive, Delete, Spam ("Not Spam" in the Spam folder) and
+  // "⋯".
   // "⋯" is the shared thread context menu (Delete, Mark read/unread, Move,
   // Spam, Reply) plus Snooze, Pin, the sender actions, Forward for
-  // multi-message chats and previous/next chat. Archive carries its label from
-  // 1100 px of window width and is icon-only (named for screen readers) below.
+  // multi-message chats and previous/next chat. Archive, Delete and Spam carry
+  // their labels from 1100 px of window width and are icon-only (named for
+  // screen readers) below.
   // A sender chat names its sender and shows no subject.
   import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
@@ -208,6 +210,13 @@
       <Icon icon="lucide:search" class="w-5 h-5 {findOpen ? 'text-foreground' : 'text-muted-foreground'}" />
     </button>
     <ToolbarButton icon="lucide:archive" label={$_('viewer.archive')} {compact} onclick={onArchive} />
+    <ToolbarButton icon="lucide:trash-2" label={$_(folderType === 'trash' ? 'viewer.deletePermanently' : 'viewer.delete')} {compact} onclick={onDelete} />
+    <ToolbarButton
+      icon={folderType === 'spam' ? 'lucide:mail-check' : 'lucide:octagon-alert'}
+      label={$_(folderType === 'spam' ? 'viewer.notSpam' : 'viewer.spam')}
+      {compact}
+      onclick={onSpam}
+    />
     <MessageContextMenu
       {messageIds}
       {accountId}

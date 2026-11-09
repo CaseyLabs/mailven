@@ -29,6 +29,9 @@ export interface PendingSend {
   sentAt: number
   // Backend send ID while queued, for undo.
   sendId: string
+  // The subject heading the reply was pointed at ('' = the latest), so Edit
+  // and Undo keep the pick.
+  replyTo: string
   reply: app.ChatReply
 }
 
@@ -87,6 +90,9 @@ export class ChatComposer {
   cc = $state<smtp.Address[]>([])
   bcc = $state<smtp.Address[]>([])
   draftId = $state('')
+  // The heading of a subject run the reply answers instead of the latest
+  // message, set by a subject's Reply button in a sender chat ('' = the latest).
+  replyTo = $state('')
   // Pending sends of every chat, so switching chats keeps them.
   pending = $state<PendingSend[]>([])
 
@@ -100,6 +106,9 @@ export class ChatComposer {
   // Saves run one at a time so each sees the draft ID of the previous one.
   #saving: Promise<void> = Promise.resolve()
   #draftIds = new Map<string, string>()
+  // Subject picks by chat, kept while switching chats. Drafts do not store
+  // them, so a reopened app follows the latest message again.
+  #picks = new Map<string, string>()
   // Drafts of failed sends merged into the box, deleted once a save holds
   // their text.
   #orphans = new Map<string, string[]>()
@@ -159,6 +168,7 @@ export class ChatComposer {
     this.#accountId = accountId ?? ''
     this.#threadKey = threadKey ?? ''
     this.#reset()
+    this.replyTo = this.#picks.get(next) ?? ''
     if (!next) return
     await this.#saving
     try {
@@ -194,6 +204,15 @@ export class ChatComposer {
   resetReplyAll() {
     this.replyAllChoice = null
     this.#changed()
+  }
+
+  // pick points the reply at the subject run headed by headingID ('' for the
+  // latest); the reply mode returns to that target's default. A box with any
+  // content or a saved draft saves again, so the draft answers the new target.
+  pick(headingID: string) {
+    this.#setPick(headingID)
+    this.replyAllChoice = null
+    if (!this.isEmpty || this.subject || this.cc.length || this.bcc.length || this.#draftIds.has(this.key)) this.#changed()
   }
 
   setSubject(subject: string) {
@@ -243,8 +262,10 @@ export class ChatComposer {
   async send() {
     const snap = this.#snapshot(this.#opts.target()?.messageId)
     if (!snap || this.isEmpty) return
+    const replyTo = this.replyTo
     // Clear the box now; a save already running still lands before the send.
     this.#reset()
+    this.#picks.delete(snap.key)
     await this.#saving
     const reply = new app.ChatReply({
       accountId: snap.accountId,
@@ -269,6 +290,7 @@ export class ChatComposer {
       error: '',
       sentAt: Date.now(),
       sendId: '',
+      replyTo,
       reply,
     }
     this.pending = [...this.pending, p]
@@ -315,6 +337,7 @@ export class ChatComposer {
     this.subject ||= p.reply.subject ?? ''
     this.cc = mergeAddresses(this.cc, p.reply.cc ?? [])
     this.bcc = mergeAddresses(this.bcc, p.reply.bcc ?? [])
+    if (p.replyTo && !this.replyTo) this.#setPick(p.replyTo)
     const own = this.#draftIds.get(p.key)
     if (p.reply.draftId && !own) {
       this.#draftIds.set(p.key, p.reply.draftId)
@@ -349,6 +372,7 @@ export class ChatComposer {
     await ReleaseChatDraft(this.#accountId, this.#threadKey)
     this.#draftIds.delete(key)
     this.#reset()
+    this.#picks.delete(key)
     return id
   }
 
@@ -439,6 +463,12 @@ export class ChatComposer {
     this.#timer = setTimeout(() => void this.flush(), SAVE_DELAY_MS)
   }
 
+  #setPick(headingID: string) {
+    this.replyTo = headingID
+    if (headingID) this.#picks.set(this.key, headingID)
+    else this.#picks.delete(this.key)
+  }
+
   #clearTimer() {
     if (this.#timer) clearTimeout(this.#timer)
     this.#timer = null
@@ -450,6 +480,7 @@ export class ChatComposer {
     this.#messageId = ''
     this.text = ''
     this.replyAllChoice = null
+    this.replyTo = ''
     this.attachments = []
     this.subject = ''
     this.cc = []

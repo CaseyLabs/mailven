@@ -78,7 +78,8 @@
 
   let showOriginal = $state(false)
   let showQuoted = $state(false)
-  let showLong = $state(false)
+  // Long bubble text opens in full; Show less folds it.
+  let showLong = $state(true)
   let showSignature = $state(false)
   let showDetails = $state(false)
   let showRecipients = $state(false)
@@ -114,7 +115,7 @@
     const [top, bottom] = item.mine ? ['rounded-tr-sm', 'rounded-br-sm'] : ['rounded-tl-sm', 'rounded-bl-sm']
     return `px-3 py-2 rounded-bubble ${item.mine ? 'bg-bubble-out' : 'bg-bubble-in'} ${item.groupStart ? '' : top} ${item.groupEnd ? '' : bottom}`
   })
-  // Long text in a bubble folds to about six lines with its reading time (CF-2).
+  // Long text in a bubble can fold to about six lines with its reading time (CF-2).
   const longMinutes = $derived(bubbles && mode === 'bubble' ? longText(chat!.text) : null)
   // Plain text laid out with spaces keeps its alignment in mono.
   const textFace = $derived.by(() => {

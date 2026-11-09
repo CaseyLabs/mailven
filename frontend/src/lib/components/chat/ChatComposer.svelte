@@ -20,12 +20,14 @@
     composer: ChatComposer
     // The alias or account the reply goes out from ('' when it needs no naming).
     from?: string
+    // The subject a subject's Reply button chose ('' for the latest).
+    replyingTo?: string
     disabled?: boolean
     onEscape?: () => void
     onExpand: () => void
   }
 
-  let { composer, from = '', disabled = false, onEscape, onExpand }: Props = $props()
+  let { composer, from = '', replyingTo = '', disabled = false, onEscape, onExpand }: Props = $props()
 
   let textarea = $state<HTMLTextAreaElement | null>(null)
   let editing = $state<ExtraEditor>('')
@@ -159,7 +161,7 @@
       </ul>
     {/if}
 
-    <ChatComposerExtras {composer} replyChip={chip} replyTitle={emails(people)} {disabled} bind:editing onDone={focus} />
+    <ChatComposerExtras {composer} {replyingTo} replyChip={chip} replyTitle={emails(people)} {disabled} bind:editing onDone={focus} />
 
     <div class="flex items-end gap-2">
       <div class="flex flex-1 min-w-0 items-end gap-0.5 px-1 rounded-[20px] bg-surface-raised shadow-2 focus-within:ring-2 focus-within:ring-ring" data-composer-card>

@@ -1,8 +1,13 @@
 // Chat presentation in the open chat: left-aligned message blocks and sender runs ("You" on mine), quoted text
-// and signatures behind their own folds, the sticky subject heading, subject headings in a sender chat, and combining/splitting sender chats.
+// and signatures behind their own folds, the sticky subject heading, subject headings in a sender chat with a Reply closing each subject, and combining/splitting sender chats.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
+const fs = require('node:fs')
+const path = require('node:path')
+
+const composerFakes = fs.readFileSync(path.resolve(__dirname, '../../.agents/skills/run-mailven/composer-fakes.js'), 'utf8')
+const withComposer = (extra = '') => `${composerFakes}\nwindow.__installComposerFakes(window)\n${extra}`
 
 const bubble = (page, id) => page.locator(`[data-message-id="${id}"]`)
 const row = (page, text) => page.locator('[data-chat-row]', { hasText: text })
@@ -30,6 +35,27 @@ const senderFake = `{ const A = window.go.app.App, get = A.GetSenderChat
       m(3, 'Members-only gear sale', 'Twenty percent off boots.', 60e3)]
     return { ...c, messages, messageCount: messages.length }
   } }`
+
+// A sender chat whose first subject comes back after another one: two separate runs.
+const repeatFake = `{ const A = window.go.app.App, get = A.GetSenderChat
+  A.GetSenderChat = async (acc, sender) => {
+    const c = await get(acc, sender)
+    const base = c.messages[0], t = Date.parse(base.date)
+    const m = (i, subject, ago) => ({ ...base, id: 'news-' + i, subject, snippet: subject, bodyText: subject,
+      date: new Date(t - ago).toISOString(), chat: { text: subject + ' ' + i, hasQuoted: false, isRich: false } })
+    const messages = [m(1, 'Invoice', 3 * 60e3), m(2, 'Ten autumn hikes', 2 * 60e3), m(3, 'Invoice', 60e3)]
+    return { ...c, messages, messageCount: messages.length }
+  } }`
+
+const openTrail = async (page, last = 'news-3') => {
+  await page.getByRole('button', { name: 'Low priority (2)' }).click()
+  await row(page, 'Trail Magazine').click()
+  await bubble(page, last).waitFor()
+}
+const queuedReplies = async (page, n) => {
+  await page.waitForFunction((k) => window.__calls.filter((c) => c.name === 'QueueChatReply').length >= k, n)
+  return (await ui.calls(page, 'QueueChatReply')).map((c) => c.args[0])
+}
 
 // A long sender chat on one subject, tall enough to scroll.
 const longSenderFake = `{ const A = window.go.app.App, get = A.GetSenderChat
@@ -107,6 +133,82 @@ describe('chat presentation', () => {
     const sections = await page.getByRole('log').locator('section').evaluateAll((els) => els.map((s) => [...s.querySelectorAll('[data-message-id]')].map((m) => m.dataset.messageId)))
     assert.deepEqual(sections, [['news-1', 'news-2'], ['news-3']], 'each subject run is its own section, so the next heading pushes the last away')
     assert.doesNotMatch(await bubble(page, 'news-2').innerText(), /Trail Magazine/)
+  }))
+
+  it('each subject ends with a Reply that answers that subject in the reply box', ui.run({ beforeMount: withComposer(senderFake) }, async (page) => {
+    await page.getByRole('button', { name: 'Low priority (2)' }).click()
+    await row(page, 'Trail Magazine').click()
+    await bubble(page, 'news-3').waitFor()
+    const replies = page.getByRole('log').locator('[data-subject-reply]')
+    assert.deepEqual(await replies.evaluateAll((els) => els.map((e) => e.getAttribute('aria-label'))),
+      ['Reply to “Ten autumn hikes”', 'Reply to “Members-only gear sale”'], 'one Reply per subject, named for it')
+    const ends = await page.getByRole('log').locator('section').evaluateAll((els) => els.map((s) => s.lastElementChild.querySelector('[data-subject-reply]') !== null))
+    assert.deepEqual(ends, [true, true], 'the Reply closes its subject, before the next heading')
+    const chip = page.locator('[data-composer-chip]')
+    assert.equal(await chip.count(), 0, 'the reply box answers the latest subject by default')
+
+    await replies.first().click()
+    await chip.filter({ hasText: 'Replying to: Ten autumn hikes' }).waitFor()
+    assert.equal(await page.evaluate(() => document.activeElement?.closest('[data-chat-composer]') !== null), true, 'the reply box takes focus')
+    await page.locator('[data-chat-composer] textarea').fill('Count me in for the ridge walk.')
+    await page.locator('[data-chat-composer] textarea').press('Control+Enter')
+    await page.waitForFunction(() => window.__calls.some((c) => c.name === 'QueueChatReply'))
+    const [reply] = await queuedReplies(page, 1)
+    assert.equal(reply.messageId, 'news-2', 'the reply answers the latest message of the picked subject')
+    assert.equal(await chip.count(), 0, 'sending returns the box to the latest subject')
+    const pending = page.locator('[data-pending-subject]')
+    assert.match(await pending.innerText(), /Ten autumn hikes[\s\S]*Count me in/, 'the pending reply follows the stream under its own subject')
+    assert.equal(await page.getByRole('log').locator('section').nth(1).getByText('Count me in').count(), 0, 'not under the latest subject')
+
+    await pending.getByRole('button', { name: 'Undo' }).click()
+    await chip.filter({ hasText: 'Replying to: Ten autumn hikes' }).waitFor()
+    await page.locator('[data-chat-composer] textarea').press('Control+Enter')
+    assert.equal((await queuedReplies(page, 2))[1].messageId, 'news-2', 'Undo keeps the picked subject')
+    await page.locator('[data-pending-subject]').getByRole('button', { name: 'Undo' }).click()
+    await page.locator('[data-chat-composer] textarea').fill('')
+    await chip.filter({ hasText: 'Replying to' }).getByRole('button', { name: 'Reply to the latest message instead' }).click()
+
+    await replies.first().click()
+    await chip.filter({ hasText: 'Replying to' }).getByRole('button', { name: 'Reply to the latest message instead' }).click()
+    assert.equal(await chip.count(), 0, 'the chip clears the pick')
+    await replies.last().click()
+    assert.equal(await chip.count(), 0, 'the latest subject needs no chip')
+  }))
+
+  it('a Reply answers its own run when a subject comes back', ui.run({ beforeMount: withComposer(repeatFake) }, async (page) => {
+    await openTrail(page)
+    await page.getByRole('log').locator('[data-subject-reply]').first().click()
+    await page.locator('[data-composer-chip]', { hasText: 'Replying to: Invoice' }).waitFor()
+    await page.locator('[data-chat-composer] textarea').fill('About the first one.')
+    await page.locator('[data-chat-composer] textarea').press('Control+Enter')
+    assert.equal((await queuedReplies(page, 1))[0].messageId, 'news-1', 'not the later run with the same subject')
+  }))
+
+  it('picking a subject moves a draft that holds only copies', ui.run({ beforeMount: withComposer(senderFake) }, async (page) => {
+    await openTrail(page)
+    await page.getByRole('button', { name: 'Message options' }).click()
+    await page.getByRole('menu').getByRole('menuitem', { name: 'Add Cc' }).click()
+    await page.keyboard.type('dana@example.com')
+    await page.keyboard.press('Escape')
+    await page.waitForFunction(() => window.__calls.some((c) => c.name === 'SaveChatDraft'))
+    await page.getByRole('log').locator('[data-subject-reply]').first().click()
+    await page.waitForFunction(() => window.__calls.filter((c) => c.name === 'SaveChatDraft').at(-1).args[0].messageId === 'news-2')
+  }))
+
+  it('a restored draft follows the latest message', ui.run({
+    beforeMount: withComposer(`${senderFake}
+      window.go.app.App.GetChatDraft = async () => ({ draftId: 'chat-draft-1', messageId: 'news-2', text: 'Saved earlier.', replyAll: false, attachments: [] })`),
+  }, async (page) => {
+    await openTrail(page)
+    await page.waitForFunction(() => document.querySelector('[data-chat-composer] textarea')?.value === 'Saved earlier.')
+    assert.equal(await page.locator('[data-composer-chip]', { hasText: 'Replying to' }).count(), 0, 'no subject the user did not pick')
+    await page.locator('[data-chat-composer] textarea').press('Control+Enter')
+    assert.equal((await queuedReplies(page, 1))[0].messageId, 'news-3')
+  }))
+
+  it('a single-subject chat has no subject Reply', ui.run({}, async (page) => {
+    await bubble(page, 'trip-5').waitFor()
+    assert.equal(await page.locator('[data-subject-reply]').count(), 0)
   }))
 
   it('combine and split sender chats, with undo', ui.run({

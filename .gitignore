@@ -4,6 +4,7 @@ mailven
 mailven.exe
 /mailven-creds
 IDEAS.md
+refs/
 
 # Wails build artifacts
 build/bin/

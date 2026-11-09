@@ -1,6 +1,6 @@
 // Stream events and long messages (CF-2): in Bubbles, people added or removed and topic changes show as centred
-// lines, days as centred pills, and long text folds to about six lines with "Read full message · N min". Blocks
-// keep the DSR day rule and show no events or folds.
+// lines, days as centred pills, and long text opens in full with "Show less" folding it to about six lines
+// ("Read full message · N min" reopens it). Blocks keep the DSR day rule and show no events or folds.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const ui = require('./harness.cjs')
@@ -60,32 +60,32 @@ describe('chat stream events', () => {
 })
 
 describe('chat long messages', () => {
-  it('long text folds to about six lines with its reading time and opens in place', ui.run({ beforeMount: eventTrip }, async (page) => {
+  it('long text opens in full and folds to about six lines with its reading time', ui.run({ beforeMount: eventTrip }, async (page) => {
     const text = page.locator('[data-message-id="trip-5"] [data-long]')
     const button = page.locator('[data-message-id="trip-5"] [data-read-full]')
     await button.waitFor()
-    assert.equal(await text.getAttribute('data-long'), 'folded')
-    assert.match(await button.textContent(), /^Read full message · 2 min$/)
-    assert.equal(await button.getAttribute('aria-expanded'), 'false')
+    assert.equal(await text.getAttribute('data-long'), 'open', 'long text starts in full')
+    assert.equal((await button.textContent()).trim(), 'Show less')
+    assert.equal(await button.getAttribute('aria-expanded'), 'true')
     assert.equal(await button.getAttribute('aria-controls'), await text.getAttribute('id'))
-    const folded = await text.evaluate((e) => e.getBoundingClientRect().height)
-    assert.ok(folded > 120 && folded <= 133, `about six lines folded (${folded}px)`)
+    const open = await text.evaluate((e) => e.getBoundingClientRect().height)
     const width = await page.locator('[data-message-id="trip-5"] [data-message-text]').evaluate((e) => e.getBoundingClientRect().width)
     assert.ok(width > 560 && width <= 640, `a long bubble widens past bubble-max to at most 640px (${width}px)`)
-    // Short bubbles keep the sans face; opening the letter swaps to the reading face.
-    assert.doesNotMatch(await text.evaluate((e) => getComputedStyle(e).fontFamily), /Literata/)
+    assert.match(await text.evaluate((e) => getComputedStyle(e).fontFamily), /Literata/, 'the open letter reads in Literata')
 
     await button.focus()
     await page.keyboard.press('Enter')
-    await page.locator('[data-message-id="trip-5"] [data-long="open"]').waitFor()
-    assert.equal(await button.getAttribute('aria-expanded'), 'true')
-    assert.equal((await button.textContent()).trim(), 'Show less')
-    const open = await text.evaluate((e) => e.getBoundingClientRect().height)
-    assert.ok(open > folded * 2, `opens to the full text (${open}px)`)
-    assert.match(await text.evaluate((e) => getComputedStyle(e).fontFamily), /Literata/, 'the open letter reads in Literata')
+    await page.locator('[data-message-id="trip-5"] [data-long="folded"]').waitFor()
+    assert.equal(await button.getAttribute('aria-expanded'), 'false')
+    assert.match(await button.textContent(), /^Read full message · 2 min$/)
+    const folded = await text.evaluate((e) => e.getBoundingClientRect().height)
+    assert.ok(folded > 120 && folded <= 133, `about six lines folded (${folded}px)`)
+    assert.ok(open > folded * 2, `open shows the full text (${open}px vs ${folded}px)`)
+    // Folded, the letter keeps the sans face of short bubbles.
+    assert.doesNotMatch(await text.evaluate((e) => getComputedStyle(e).fontFamily), /Literata/)
 
     await page.keyboard.press('Enter')
-    await page.locator('[data-message-id="trip-5"] [data-long="folded"]').waitFor()
+    await page.locator('[data-message-id="trip-5"] [data-long="open"]').waitFor()
   }))
 
   it('short messages show no fold', ui.run({}, async (page) => {

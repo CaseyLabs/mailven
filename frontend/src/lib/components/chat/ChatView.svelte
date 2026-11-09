@@ -22,7 +22,7 @@
   import ChatComposer from './ChatComposer.svelte'
   import { ChatThread } from './chatThread.svelte'
   import { ChatComposer as ComposerState } from './chatComposerState.svelte'
-  import { buildThreadItems, displaySubject, myAddresses, replyAlias, replyRecipients, replyTarget, threadPeople, type ReplyMode } from './chatFormat'
+  import { buildThreadItems, displaySubject, myAddresses, replyAlias, replyRecipients, replyTarget, subjectRun, threadPeople, type ReplyMode, type ReplyRecipients, type ReplyTarget } from './chatFormat'
   import { withEvents } from './chatEvents'
   import { getChatDisplayStyle } from '$lib/stores/settings.svelte'
   import { ChatScroll } from './chatScroll.svelte'
@@ -82,12 +82,21 @@
   })
 
   const myEmails = $derived(myAddresses(accountStore.accounts))
-  const target = $derived(replyTarget(thread.messages, myEmails))
+  const composer = new ComposerState({ target: () => target, recipients: () => recipients })
+  const senderChat = $derived(!!senderEmailOf(threadId))
+  const latestTarget = $derived(replyTarget(thread.messages, myEmails))
+  // A sender chat mixes subjects: a subject's Reply button (composer.replyTo,
+  // the subject's heading) points the reply at the latest message of that run.
+  const picked: ReturnType<typeof subjectRun> = $derived(senderChat && composer.replyTo ? subjectRun(thread.messages, composer.replyTo) : null)
+  const pickedTarget: ReplyTarget | null = $derived(picked ? replyTarget(picked.messages, myEmails) : null)
+  const target: ReplyTarget | null = $derived(pickedTarget ?? latestTarget)
+  // The picked subject, for the reply box's chip, while the pick changes the target.
+  const replyingTo = $derived(picked && pickedTarget && pickedTarget.messageId !== latestTarget?.messageId ? picked.subject : '')
   // The account's identity addresses, which PrepareReply leaves out of a
   // reply; null until loaded.
   let identities = $state<{ email: string; name: string; isDefault: boolean }[] | null>(null)
   const identityEmails = $derived(identities ? new Set(identities.map((id) => id.email.trim().toLowerCase())) : null)
-  const recipients = $derived(target ? replyRecipients(thread.messages, target.messageId, identityEmails ?? myEmails) : null)
+  const recipients: ReplyRecipients | null = $derived(target ? replyRecipients(thread.messages, target.messageId, identityEmails ?? myEmails) : null)
   const targetMessage = $derived(target ? thread.messages.find((m) => m.id === target.messageId) : undefined)
   // The non-default identity the reply goes out from, else ''. The To/Cc
   // match shows at once; Bcc and forwarding-header aliases come from the backend.
@@ -102,11 +111,9 @@
   // Me as a pending reply's avatar shows: the identity it goes out from, else the account.
   const sender = $derived(identities?.find((id) => (alias ? id.email.trim() === alias : id.isDefault)))
   const me = $derived(sender ? { name: sender.name, email: sender.email } : { name: account?.name || '', email: account?.email || '' })
-  const composer = new ComposerState({ target: () => target, recipients: () => recipients })
   // The docked composer shows its own draft; hide draft copies while it has one.
   const shown = $derived(composer.draftId ? thread.messages.filter((m) => !m.isDraft) : thread.messages)
   const items = $derived.by(() => {
-    const senderChat = !!senderEmailOf(threadId)
     const built = buildThreadItems(focusedMessageIdInFocus ? shown.filter((m) => m.id === focusedMessageIdInFocus) : shown, senderChat)
     // Bubbles show membership and topic changes as lines; a sender chat mixes threads, so it has none.
     return getChatDisplayStyle() === 'bubbles' && !senderChat ? withEvents(built, new Set([...myEmails, me.email])) : built
@@ -313,6 +320,12 @@
   export function markRead() { void actions.toggleRead() }
 
   export const archive = () => actions.archive()
+  // A subject's Reply button: answer that subject in the reply box.
+  function replyToSubject(messageId: string) {
+    composer.pick(messageId)
+    void tick().then(() => composerRef?.focus())
+  }
+
   export function reply() { replyAs('reply') }
   export function replyAll() { replyAs('reply-all') }
   export function forward() { replyAs('forward') }
@@ -446,6 +459,7 @@
           holdPosition={(el, change) => void scroll.holdPosition(el, change)}
           onFocusChange={(id, f) => { if (f) scroll.focusedId = id; else if (scroll.focusedId === id) scroll.focusedId = null }}
           {onReply}
+          onReplyToSubject={canReply ? replyToSubject : undefined}
           {onComposeToAddress}
           {onEditDraft}
           onActionComplete={handleMenuActionComplete}
@@ -454,7 +468,7 @@
       </div>
     </div>
 
-    <ChatComposer bind:this={composerRef} {composer} from={replyFrom} disabled={!canReply} {onEscape} onExpand={() => void expand()} />
+    <ChatComposer bind:this={composerRef} {composer} from={replyFrom} {replyingTo} disabled={!canReply} {onEscape} onExpand={() => void expand()} />
   {/if}
 </div>
 

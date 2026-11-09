@@ -15,7 +15,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10)
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded
-- [MAINT — Maintenance and documentation](#maint): [D2](#d2)
+- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [MA12](#ma12)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 - [DS — Reading-first redesign](#ds): no unresolved issue recorded
@@ -530,6 +530,15 @@ Project: [MAINT](PLAN.md#maint).
 - **Owner / milestone:** [MAINT](PLAN.md#maint) / [MAINT-14](PLAN.md#maint-14) (shared helpers, done: `formatAddress` and `copyText`) and [MAINT-18](PLAN.md#maint-18); found 2026-10-16 by code reviews of 80107a7 and [UIX-8](PLAN.md#uix-8), verified by reading the code.
 - **Severity / proposed priority / status:** low / P3 / resolved 2026-10-16.
 - **Resolution:** [MAINT-14](PLAN.md#maint-14) added the shared `copyText` and `formatAddress`; [MAINT-18](PLAN.md#maint-18) made `chatThread.svelte.ts` use the generated `app.SMIMEViewResult`/`app.PGPViewResult` (and dropped its hand-copied `DecryptedAttachment`) and removed the duplicate `entry.kind` test in `subjectSections`. Evidence: [validation](docs/validation/maint-18.md).
+
+<a id="ma12"></a>
+
+### MA12 — UI tests load their fakes from the run-mailven skill
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / unassigned; found 2026-11-08 by a code review of the per-subject Reply change, verified by reading the code.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Resolution criteria:** shared UI test fakes live under `tests/ui/` (or one shared fixtures directory that both the tests and run-mailven use), and the suites no longer read files from `.agents/skills/`.
+- **Evidence / impact / reproduction:** `tests/ui/harness.cjs` and the `chat-compose`, `chat-compose-extras`, `chat-composer-card`, `chat-flat` and `chat-presentation` suites read `fake-backend.js`, `screenshot-fakes.js`, `composer-fakes.js` and `pw.js` from `.agents/skills/run-mailven/`. Moving or renaming those agent-skill helpers breaks the test suite at load time.
 
 <a id="tf1"></a>
 

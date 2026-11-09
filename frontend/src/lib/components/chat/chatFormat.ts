@@ -283,6 +283,17 @@ export function baseSubject(subject: string): string {
   return displaySubject(subject).toLowerCase()
 }
 
+// subjectRun returns the subject run of a sender chat whose heading is the
+// message headingID: its subject and the messages from it up to the next
+// heading. Null when no heading has that ID.
+export function subjectRun(messages: messageModels.Message[], headingID: string): { subject: string; messages: messageModels.Message[] } | null {
+  const items = buildThreadItems(messages, true)
+  const start = items.findIndex((it) => it.msg.id === headingID && it.subject !== undefined)
+  if (start < 0) return null
+  const end = items.findIndex((it, i) => i > start && it.subject !== undefined)
+  return { subject: items[start].subject!, messages: messages.slice(start, end < 0 ? undefined : end) }
+}
+
 // buildThreadItems groups messages into bubble runs. The header carries the
 // subject, so only labelSubjects (a sender chat, which mixes threads and has no
 // single subject) labels messages: each subject run starts with a heading and

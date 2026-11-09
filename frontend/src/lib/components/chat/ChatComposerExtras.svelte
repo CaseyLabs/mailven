@@ -1,6 +1,7 @@
 <script lang="ts">
   // ChatComposerExtras — the accent-soft chips above the chat reply field for
-  // choices that differ from a plain reply: the reply target, a changed
+  // choices that differ from a plain reply: the subject answered (in a sender
+  // chat, after a subject's Reply button), the reply target, a changed
   // topic, and added Cc and Bcc. Each chip's ✕ undoes its choice; the topic
   // and Cc/Bcc chips open their editor, as the ⋯ menu items do. The editor
   // shows under the chips while `editing` names it; Enter or Done keeps the
@@ -16,6 +17,8 @@
 
   interface Props {
     composer: ChatComposer
+    // The picked subject ('' when the reply answers the latest message).
+    replyingTo?: string
     // The reply-target chip's text ('' for none) and its recipients' emails.
     replyChip: string
     replyTitle: string
@@ -25,7 +28,7 @@
     onDone: () => void
   }
 
-  let { composer, replyChip, replyTitle, disabled = false, editing = $bindable(), onDone }: Props = $props()
+  let { composer, replyingTo = '', replyChip, replyTitle, disabled = false, editing = $bindable(), onDone }: Props = $props()
 
   const MAX_NAMES = 3
   let topicInput = $state<HTMLInputElement | null>(null)
@@ -99,8 +102,11 @@
   </span>
 {/snippet}
 
-{#if replyChip || composer.subject || composer.cc.length || composer.bcc.length}
+{#if replyingTo || replyChip || composer.subject || composer.cc.length || composer.bcc.length}
   <div class="flex flex-wrap gap-1.5 mb-2 min-w-0">
+    {#if replyingTo}
+      {@render chip($_('chat.replyingToChip', { values: { subject: replyingTo } }), replyingTo, $_('chat.replyingToReset'), () => composer.pick(''))}
+    {/if}
     {#if replyChip}
       {@render chip(replyChip, replyTitle, $_('chat.replyChipReset'), () => composer.resetReplyAll())}
     {/if}
