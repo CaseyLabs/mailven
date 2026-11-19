@@ -89,14 +89,13 @@ describe('chat reading', () => {
     assert.match(family, /Literata/, 'Serif is Literata')
   }))
 
-  it('Save applies the reading font and avatars at once and persists them', ui.run({ allow: SAVE, displayStyle: 'flat', readingFont: 'serif', messageAvatars: false }, async (page) => {
+  it('the reading font and avatars apply at once and persist', ui.run({ allow: SAVE, displayStyle: 'flat', readingFont: 'serif', messageAvatars: false }, async (page) => {
     await bubble(page, 'trip-5').waitFor()
     assert.equal(await bubble(page, 'trip-5').locator('[aria-hidden="true"].w-8').count(), 0, 'no message avatars when stored off')
     const dialog = await chatSettings(page)
     await page.getByRole('button', { name: 'Message font' }).click()
     await page.getByRole('option', { name: /^Sans/ }).click()
-    await dialog.getByRole('switch', { name: 'Show avatars in messages' }).click()
-    await page.getByRole('button', { name: 'Save' }).click()
+    await dialog.getByRole('switch', { name: 'Show pictures next to messages' }).click()
     await page.waitForFunction(() => document.documentElement.dataset.readingFont === 'sans')
     await page.waitForFunction(() => document.querySelector('[data-message-id="trip-5"] [aria-hidden="true"].w-8'))
     const family = await bubble(page, 'trip-5').locator('.font-read').first().evaluate((el) => getComputedStyle(el).fontFamily)

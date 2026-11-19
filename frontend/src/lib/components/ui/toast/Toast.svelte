@@ -10,6 +10,8 @@
 
   let { toast, onClose }: Props = $props()
 
+  let showDetails = $state(false)
+
   const icons = {
     success: 'lucide:circle-check',
     error: 'lucide:circle-alert',
@@ -40,6 +42,20 @@
 
   <div class="flex-1 min-w-0">
     <p class="text-sm text-foreground">{toast.message}</p>
+
+    {#if toast.details}
+      <button
+        type="button"
+        class="mt-1 inline-flex min-h-6 items-center text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+        aria-expanded={showDetails}
+        onclick={() => (showDetails = !showDetails)}
+      >
+        {showDetails ? $_('toast.hideDetails') : $_('toast.showDetails')}
+      </button>
+      {#if showDetails}
+        <p class="mt-1 text-xs text-muted-foreground break-words select-text">{toast.details}</p>
+      {/if}
+    {/if}
 
     {#if toast.actions && toast.actions.length > 0}
       <div class="flex gap-2 mt-2">

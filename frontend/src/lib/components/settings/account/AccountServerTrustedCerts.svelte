@@ -77,7 +77,7 @@
   <div class="space-y-2">
     <button
       type="button"
-      class="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
+      class="flex min-h-6 items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
       onclick={handleTrustedCertsToggle}
     >
       <Icon

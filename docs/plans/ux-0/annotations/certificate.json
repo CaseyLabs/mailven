@@ -1,0 +1,72 @@
+{
+ "certificate.title": {
+  "accurate": "yes",
+  "proposed": "Can't verify this server",
+  "notes": "SEC-3, SEC-5: states the conclusion."
+ },
+ "certificate.host": {
+  "accurate": "yes",
+  "proposed": "Server",
+  "notes": "Glossary: server, not host."
+ },
+ "certificate.description": {
+  "accurate": "yes",
+  "proposed": "Mailven can't confirm this server is who it claims to be. Only continue if you trust it.",
+  "notes": "SEC-2: concrete risk, then choice."
+ },
+ "certificate.subject": {
+  "accurate": "yes",
+  "proposed": "Issued to",
+  "notes": "COPY-4; colon belongs in layout."
+ },
+ "certificate.issuer": {
+  "accurate": "yes",
+  "proposed": "Issued by",
+  "notes": "COPY-4"
+ },
+ "certificate.fingerprint": {
+  "accurate": "yes",
+  "proposed": "Fingerprint",
+  "notes": "Expert detail; put under Details (CTRL-5)."
+ },
+ "certificate.validPeriod": {
+  "accurate": "yes",
+  "proposed": "Valid from",
+  "notes": "COPY-10; pairs with 'to'."
+ },
+ "certificate.dnsNames": {
+  "accurate": "yes",
+  "proposed": "Also valid for",
+  "notes": "COPY-4: DNS is jargon; expert detail."
+ },
+ "certificate.reason": {
+  "accurate": "yes",
+  "proposed": "Problem",
+  "notes": "COPY-6; value comes from backend errorReason (raw text, COPY-8)."
+ },
+ "certificate.expired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is; SEC-4 shows text plus red colour."
+ },
+ "certificate.to": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "certificate.decline": {
+  "accurate": "yes",
+  "proposed": "Don't connect",
+  "notes": "CTRL: button names action; safe default."
+ },
+ "certificate.acceptOnce": {
+  "accurate": "yes",
+  "proposed": "Trust for this session",
+  "notes": "Verified: session-only (app/certificate.go:17-33)."
+ },
+ "certificate.acceptAlways": {
+  "accurate": "yes",
+  "proposed": "Always trust this certificate",
+  "notes": "Verified: stored with fingerprint for the host (certificate.go:25)."
+ }
+}

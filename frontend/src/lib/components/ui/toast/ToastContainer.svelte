@@ -28,7 +28,7 @@
 </script>
 
 <div
-  class="fixed bottom-4 inset-x-4 z-50 flex flex-col gap-2 max-w-sm ml-auto pointer-events-none {expanded
+  class="fixed bottom-4 inset-x-4 z-[60] flex flex-col gap-2 max-w-sm ml-auto pointer-events-none {expanded
     ? 'max-h-[70vh] overflow-y-auto pointer-events-auto'
     : ''}"
 >

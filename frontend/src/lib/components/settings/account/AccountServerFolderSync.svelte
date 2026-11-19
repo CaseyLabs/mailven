@@ -1,11 +1,11 @@
 <script lang="ts">
   import Icon from '@iconify/svelte'
-  import { Label } from '$lib/components/ui/label'
-  import Switch from '$lib/components/ui/switch/Switch.svelte'
+  import Checkbox from '$lib/components/ui/checkbox/Checkbox.svelte'
+  import type { FolderSubscriptionChanges } from './folderSubscriptionChanges'
   // @ts-ignore - wailsjs path
   import { account } from '../../../../../wailsjs/go/models'
   // @ts-ignore - wailsjs path
-  import { GetFolders, SubscribeFolder, UnsubscribeFolder, SubscribeAllFolders } from '../../../../../wailsjs/go/app/App'
+  import { GetFolders } from '../../../../../wailsjs/go/app/App'
   // @ts-ignore - wailsjs path
   import { folder } from '../../../../../wailsjs/go/models'
   import { _ } from '$lib/i18n'
@@ -16,6 +16,7 @@
     onSyncAllFoldersChange: (value: boolean) => void
     syncFoldersEnabled: boolean
     onSyncFoldersEnabledChange: (value: boolean) => void
+    folderChanges: FolderSubscriptionChanges
   }
 
   let {
@@ -24,6 +25,7 @@
     onSyncAllFoldersChange,
     syncFoldersEnabled = $bindable(),
     onSyncFoldersEnabledChange,
+    folderChanges = $bindable(),
   }: Props = $props()
 
   // Folder sync subscription state
@@ -52,30 +54,24 @@
     }
   }
 
-  async function handleSyncAllToggle(checked: boolean) {
+  // Nothing is sent to the server here. The changes wait in `folderChanges`
+  // until the dialog's Save button applies them.
+  function handleSyncAllToggle(checked: boolean) {
     syncAllFolders = checked
     onSyncAllFoldersChange(checked)
-    if (!checked) return
-    try {
-      await SubscribeAllFolders(editAccount.id)
-      // Refresh folder list to show updated subscription state
-      syncFolders = await GetFolders(editAccount.id)
-    } catch (err) {
-      console.error('Failed to subscribe to all folders:', err)
-    }
+    folderChanges = { ...folderChanges, subscribeAll: checked }
   }
 
-  async function handleFolderSubscriptionToggle(f: folder.Folder, subscribed: boolean) {
-    const action = subscribed ? SubscribeFolder : UnsubscribeFolder
-    try {
-      await action(editAccount.id, f.id)
-      // Update local state
-      syncFolders = syncFolders.map(sf =>
-        sf.id === f.id ? { ...sf, subscribed } as folder.Folder : sf
-      )
-    } catch (err) {
-      console.error('Failed to update folder subscription:', err)
-    }
+  function isSubscribed(f: folder.Folder): boolean {
+    return f.id in folderChanges.folders ? folderChanges.folders[f.id] : !!f.subscribed
+  }
+
+  function handleFolderSubscriptionToggle(f: folder.Folder, subscribed: boolean) {
+    const folders = { ...folderChanges.folders }
+    // Back to what the server already has: nothing to save for this folder.
+    if (!!f.subscribed === subscribed) delete folders[f.id]
+    else folders[f.id] = subscribed
+    folderChanges = { ...folderChanges, folders }
   }
 </script>
 
@@ -83,7 +79,7 @@
   <div class="space-y-2">
     <button
       type="button"
-      class="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
+      class="flex min-h-6 items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
       onclick={handleFolderSyncToggle}
     >
       <Icon
@@ -98,14 +94,13 @@
       <div class="space-y-4 pl-6 pt-2 border-l border-border ml-2">
         <!-- Manage folder sync toggle (opt-in) -->
         <div class="space-y-1">
-          <div class="flex items-center gap-3">
-            <Label>{$_('account.manageFolderSync')}</Label>
-            <Switch
-              ariaLabel={$_('account.manageFolderSync')}
+          <label class="flex min-h-6 items-center gap-3 text-sm">
+            <Checkbox
               bind:checked={syncFoldersEnabled}
               onCheckedChange={(v) => { syncFoldersEnabled = v; onSyncFoldersEnabledChange(v); if (v) loadSyncFolders() }}
             />
-          </div>
+            <span class="font-medium">{$_('account.manageFolderSync')}</span>
+          </label>
           <p class="text-xs text-muted-foreground">
             {$_('account.manageFolderSyncHelp')}
           </p>
@@ -113,14 +108,13 @@
 
         {#if syncFoldersEnabled}
           <!-- Sync All Folders toggle -->
-          <div class="flex items-center gap-3">
-            <Label>{$_('account.syncAllFolders')}</Label>
-            <Switch
-              ariaLabel={$_('account.syncAllFolders')}
+          <label class="flex min-h-6 items-center gap-3 text-sm">
+            <Checkbox
               bind:checked={syncAllFolders}
               onCheckedChange={handleSyncAllToggle}
             />
-          </div>
+            <span>{$_('account.syncAllFolders')}</span>
+          </label>
 
           <!-- Folder checklist (when sync all is off) -->
           {#if !syncAllFolders}
@@ -133,13 +127,11 @@
               <div class="space-y-1 max-h-48 overflow-y-auto">
                 {#each syncFolders as f (f.id)}
                   {@const isCore = coreFolderTypes.includes(f.type)}
-                  <label class="flex items-center gap-2 cursor-pointer py-0.5 {isCore ? 'opacity-60' : ''}">
-                    <input
-                      type="checkbox"
-                      checked={isCore || f.subscribed}
+                  <label class="flex min-h-6 items-center gap-2 cursor-pointer py-0.5 {isCore ? 'opacity-60' : ''}">
+                    <Checkbox
+                      checked={isCore || isSubscribed(f)}
                       disabled={isCore}
-                      onchange={(e) => handleFolderSubscriptionToggle(f, (e.target as HTMLInputElement).checked)}
-                      class="rounded border-border"
+                      onCheckedChange={(v) => handleFolderSubscriptionToggle(f, v)}
                     />
                     <span class="text-sm truncate">{f.path}</span>
                     {#if isCore}

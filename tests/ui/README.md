@@ -41,6 +41,8 @@ npm install --prefix ~/.cache/mailven-upnote-ui --no-save playwright@1.63.0
 | `chat-compose.test.cjs` | Reply vs Reply All, draft autosave and restore, undo-send, reply identity, a refused reply (ISSUES.md R1) |
 | `mail-api-migration.test.cjs` | Rollback pending state, confirmation cancellation, protocol route display, and both sync-request report outcomes |
 | `google-setup-check.test.cjs` | Settings → Identity → Check Google setup: disabled, missing-scope, not-connected, error and OK states, Enable link, keyboard use, nothing runs until asked |
+| `settings-search.test.cjs` | UX-7: Settings search (technical name, synonym and help-text matches, keyboard to a result in Advanced, Escape), the Advanced sections on General, Composer and Chat, and Reset to default (disabled at defaults, restores a group, matches the Go defaults) |
+| `ux-a11y.test.cjs` | UX-8: accessibility audit of every Settings tab, the Edit account tabs and Add Account in Light and Dark (shared audit plus roles and states, 24 px targets, no colour-only switch state), toasts, Advanced and search semantics, and dark-mail link contrast |
 
 ## Results
 

@@ -45,6 +45,11 @@
   {disabled}
 >
   <span
-    class="inline-block h-5 w-5 transform rounded-full bg-background shadow-lg transition-transform {checked ? 'translate-x-5' : 'translate-x-1'}"
-  ></span>
+    class="inline-flex h-5 w-5 transform items-center justify-center rounded-full bg-background text-primary shadow-lg transition-transform {checked ? 'translate-x-5' : 'translate-x-1'}"
+  >
+    <!-- A check mark shows the on state without relying on colour (UX-CTRL-2). -->
+    {#if checked}
+      <svg viewBox="0 0 12 12" class="h-3 w-3" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5l2.5 2.5 4.5-5.5" /></svg>
+    {/if}
+  </span>
 </button>

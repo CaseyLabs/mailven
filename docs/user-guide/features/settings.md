@@ -8,154 +8,97 @@ Configure Mailven to work the way you prefer.
 
 Open settings with **Settings** at the top of the sidebar (the Accounts column in Mail, and the Contacts and Calendar sidebars), below Mail and any enabled extensions. If the sidebar is collapsed, open it with the sidebar button at the left of the list header.
 
+## Find a setting
+
+Type in **Search settings** at the top of the dialog. Mailven looks through setting names, their descriptions and other words people use for them, so "IMAP" finds **Receiving mail** and "tray" finds **Keep running in the background**. Press **Down Arrow** to move into the results and **Enter** to open one. Mailven opens the right tab, opens its **Advanced** section if needed, and marks the setting. Press **Escape** to clear the search.
+
+Each tab keeps the common choices in view. Less common ones are under **Advanced**: window and startup options on General, email links and read receipts on Composer, and hover buttons, combining senders and the Low priority group on Chat. Where a group has choices you can undo, **Reset to default** puts that group back to how a new install starts. It is dimmed when nothing in the group has changed.
+
 ## General Tab
 ---
 
-### Title Bar
+Every change on this tab applies as soon as you make it. There is no Save button; use **Close** when you are done. If a change cannot be saved, Mailven puts the control back and shows a message.
 
-- **Mailven** - Built-in title bar matching Mailven's themes
-- **System** (Default, Requires Restart) - Use the operating system's title bar and window decorations
-- **Disable** - Some users that are running tiling window managers or simply prefer a more minimalistic look and feel, the title bar can be completely disabled.
+A choice marked "(default)" is what a new install starts with.
 
-### Language
+### Display
 
-The Mailven interface is English only, so there is no language picker. Email content can be in any language, charset or script. For spellchecking in the composer, choose **English (US)**, **English (UK)** or **English (Canada)**.
+**Title bar** (under **Advanced**) - Choose which title bar Mailven shows:
 
-### Theme
+- **Mailven title bar** - Mailven's own title bar, matching its themes.
+- **System title bar** (default) - Your computer's standard title bar and window frame. Mailven asks you to quit and reopen it to finish this change; choose **Quit Mailven** or **Not now**.
+- **None** - Hide the title bar to get more space for your mail. This suits tiling window managers.
 
-Choose your visual theme:
+**Language** - The Mailven interface is English only, so there is no language picker. Email content can be in any language, charset or script. For spellchecking in the composer, choose **English (US)**, **English (UK)** or **English (Canada)**.
 
-- **System** - Follows your operating system's light/dark preference
-- **Light** - Always use the light theme (warm neutral surfaces with a terracotta accent)
-- **Dark** (Default) - Always use the dark theme (warm dark surfaces with the same accent)
+**Theme** - Choose light or dark, or match your computer's setting:
 
-### Dark mail content
+- **Match system** - Follows your operating system's light/dark preference.
+- **Light** - Always light (warm neutral surfaces with a terracotta accent).
+- **Dark** (default) - Always dark (warm dark surfaces with the same accent).
 
-Apply a dark filter to email message content when Mailven is in dark mode. On by default.
+**Dark email content** - When Mailven is dark, show email with a dark filter so it is easier on the eyes. Each message then has a sun icon in its header; click it to show that one email in light colours if the filter breaks how it looks. It is dimmed, with a note, while the dark theme is not showing.
 
-There are two schools of preferences for dark mode. One is to have dark UI but light e-mail content and the other is to have everything in dark mode. This setting provides a way for the user to choose which school they belong to.
+**Dark writing area** - When Mailven is dark, use a dark background where you write a message. Turn it off to keep the writing area white. It is dimmed, with a note, while the dark theme is not showing.
 
-When this toggle is on, each message will render in dark mode and have a ☀️ icon on the right side of the header which you can click on to temporarily render the email in light mode in case the dark mode filter breaks the e-mail rendering.
+### Chat list
 
-### Dark composer body
+**Chat list spacing** - Change how much space each row in the chat list uses: **Micro**, **Compact**, **Standard** (default) or **Large**.
 
-Use a dark background for the composer message body when Mailven is in dark mode.
+**Hide message previews** - Hide the first lines of the latest message under each chat's subject. Off by default. Search results still show the matching text so you can see why a message matched.
 
-This setting is on by default, so the composer body follows the dark theme. Turn it off if you prefer a white composer background in dark mode.
+### Mark as read
 
-### Always show checkbox next to message
+**When I open a chat, mark it as read** - Choose **Never (only when I mark it myself)**, **Immediately**, or **After 0.5, 1 (default), 2, 3 or 5 seconds**. A short delay lets you glance at a chat without marking it as read.
 
-Reserve a fixed checkbox column in the message list instead of revealing it on hover or swipe.
+### Background and startup (under Advanced)
 
-By default, inside the message list column, the area where the checkbox on the left of the message is located is covered by the message and on mouseover, the message will shift to the right and show that area. In mobile layout, swiping to the right will auto select the message which solves the problem of not being able to do mouse over on a mobile device. If you prefer the original design where the checkbox area is always shown with the checkboxes always visiable in mobile layout, toggle this setting on.
+**Keep running in the background** - Keep Mailven running after you close its window. Turning this off also turns off **Start with the window hidden**.
 
-### Hide message preview
+**Start with the window hidden** - Mailven starts with no window open. It is dimmed, with a note, until **Keep running in the background** is on.
 
-Show each chat's subject under the people instead of the latest message's first line (in the chat list), or hide the preview line below the subject (in the classic message list).
+**Start Mailven when I log in** - Open Mailven each time you log in to your computer.
 
-Off by default, so each chat in the list shows its latest line, prefixed with "You:" for your own message or the writer's first name in a group chat. A setting you changed before is kept. Search results always show the matching preview text, regardless of this setting, so you can see why a message matched.
-
-### Show colored circles in message list
-
-Show colored circles with sender initials in the message list.
-
-Enabled by default.
-
-This is where you can disable the colored contact circles on the message list of Mailven to get a more minimalistic look especially if you don't feel like you get value from the color contact circles.
-
-### Show colored circles in conversation viewer
-
-Show colored circles with sender initials in the conversation viewer.
-
-Enabled by default.
-
-This is where you can disable the colored contact circles in the conversation viewer if you think the contact circles are unneccesary noise.
-
-### Show contact photos in message list
-
-Show the contact's profile picture (falling back to a colored circle) in the message list. Requires "Show colored circles in message list".
-
-### Optional accent for unread messages
-
-When enabled, this puts an additional accent marker based on your themes secondary color to each unread message for better visual grepping of what's read and unread if enabled. This feature is disabled by default. By default (when disabled), the only difference between read and unread is bold versus normal text.
-
-There are currently 3 different accent markers that you can choose from:
-
-- Dot
-- Glow Dot
-- Bar
-
-### Message Density
-
-Control how compact the message list appears:
-
-- **Standard** - Default: two-line rows, 64 pixels tall
-- **Compact** - Tighter two-line rows, 52 pixels tall
-- **Micro** - Same as Compact
-- **Large** - Same as Standard
-
-### Auto-Mark as Read
-
-Set how long a message must be open before it is marked as read:
-
-- **Never (only when I mark it myself)**
-- **Immediately** - Mark read as soon as opened
-- **After 0.5, 1, 2, 3 or 5 seconds** - Lets you glance at a message without marking it read
-
-### Background
-
-**Run in background** - Enable this if you want Mailven to not exit but run in the background when you close the Mailven window. This setting is also a pre-requisite for the next toggle to be enabled.
-**Starts hidden on launch** - Enable this if you want Mailven to launch in the background on first launch without showing the window.
-
-### Startup
-
-**Autostart on login** - Enable this if you want Mailven to automatically launch when you login to your system.
-
-### Tray Icon
-
-Tray icon has not been implemented yet but is in the roadmap down the road.
+A tray icon is on the roadmap but not built yet.
 
 ## Composer Tab
 ---
 
-### Default Compose Mode
+Every change on this tab applies as soon as you make it. There is no Save button; use **Close** when you are done. If a change cannot be saved, Mailven puts the control back and shows a message. A choice marked "(default)" is what a new install starts with.
 
-Choose whether composing opens in the main window or a separate window when you press the **Compose** button or **Ctrl+N**.
+### Where new messages open
 
-Options:
-
-- **In window** (Default)
-- **Detached window**
-
-### External mailto Links
-
-Choose how `mailto` links from other apps are handled.
+Choose whether a new message opens in the main window or a separate window when you press the **Compose** button or **Ctrl+N**.
 
 Options:
 
-- **In window** (Default)
-- **Detached window**
+- **In the main window** (default)
+- **In a separate window**. This also sets **Email links from other apps** to a separate window; you can change that afterwards.
 
-### Default Message Format
+### Email links from other apps (under Advanced)
 
-New messages will use this format by default in the composer. You can still switch per message.
+Choose where a message opens when you click an email (`mailto`) link in another app. The options are the same as above.
+
+### Format for new messages
+
+New messages start in this format. You can change it for any message.
 
 Options:
 
-- **Rich text** (Default)
+- **Formatted text** (default)
 - **Plain text**
 
-### Read Receipts
+### Read receipts (under Advanced)
 
-Configure how Mailven handles read receipt requests:
+A read receipt tells the sender you opened their message. Choose what Mailven does when a sender asks for one:
 
-- **Never send** (Default) - Ignore all read receipt requests
-- **Ask** - Prompt when a sender requests a read receipt
-- **Always send** - Automatically send read receipts
+- **Never send read receipts** (default) - Ignore all requests
+- **Ask me each time** - Prompt when a sender requests a read receipt
+- **Always send read receipts** - Send them automatically
 
-### Spellcheck
+### Spelling
 
-This is the configuration for the spellcheck functionality. Currently, spellcheck only supports languages that use Latin alphabet. Spellcheck with the English language is turned on by default. You can turn this feature completely off by toggling it off. If you need spellcheck support for languages other than English, toggle the language you need on under the **Dictionary** sub-section. Here are the currently supported languages:
+Mailven underlines misspelled words while you write. **Check spelling** is on by default. Spell checking supports languages that use the Latin alphabet. Turn on the dictionaries you need; Mailven accepts a word if any turned-on dictionary knows it. With **Check spelling** off, the dictionaries are dimmed and say "Turn on "Check spelling" first." Dictionaries:
 
 - English (US)
 - English (UK)
@@ -166,119 +109,120 @@ This is the configuration for the spellcheck functionality. Currently, spellchec
 - Norsk Bokmål
 - Nederlands
 
-#### Added words
+#### Words you added
 
-This is where you can view and edit the custom words that are added to your dictionary as legitimate words.
+The words you added to your dictionary. Remove one to have it checked again.
 
-### Default Reply-To
+### Send replies to
 
-This is where to set your default **reply-to** address for each account which will be used by every e-mail you send.
+For each account you turn on, replies to your messages go to the address you enter instead of your own.
 
-### Default CC
+### Always add to CC
 
-This is where to set your default **CC** address for each account which will be used by every e-mail you send.
+For each account you turn on, Mailven adds these addresses to CC on new messages, replies and forwards.
 
-### Default BCC
+### Always add to BCC
 
-This is where to set your default **BCC** address for each account which will be used by every e-mail you send.
+For each account you turn on, Mailven adds these addresses to BCC (hidden copies) on new messages, replies and forwards.
 
 ## Chat Tab
 ---
 
-Options for the chat-style mail list, thread view, and reply box.
+Options for the chat-style mail list, thread view, and reply box. Every change applies as soon as you make it; there is no Save button. A choice marked "(default)" is what a new install starts with.
 
-### Send Key
+### Key that sends a reply
 
-**Ctrl+Enter** (default) sends from the reply box, and Enter adds a new line. **Enter** sends instead, with Shift+Enter for a new line.
+**Ctrl+Enter (or Cmd+Enter) sends, Enter adds a line** (default). **Enter sends, Shift+Enter adds a line** sends with Enter instead.
 
-### Show Avatars in the Chat List
+### Show pictures in the chat list
 
-On by default. Each row shows the sender's picture or initials (two overlapped avatars for a group chat); turn it off for shorter rows with no picture.
+On by default. Each row shows the sender's picture or initials (two overlapped pictures for a group chat); turn it off for shorter rows with no picture.
 
-### Show Quick Actions on Hover
+### Show quick actions on hover (under Advanced)
 
 Off by default. When on, pointing at a row shows Archive, Mark as read/unread and Snooze buttons. With it off, the same actions stay in the row's right-click menu and on the keyboard shortcuts.
 
-### Show Avatars in Messages
+### Show pictures next to messages
 
 On by default. Each run of messages from someone else has their picture or initials beside its last message (Bubbles), or beside every run's first message (Blocks).
 
-### Message Font
+### Message font
 
-The typeface for message text in an open chat: **Sans (Inter)** (default) or **Serif (Literata)**. It applies as soon as you save. Email in its original layout keeps the sender's fonts.
+The typeface for message text in an open chat: **Sans (Inter)** (default) or **Serif (Literata)**. Email in its original design keeps the sender's fonts.
 
-### Message Style
+### Message style
 
-**Bubbles** (default) shows other people's messages as bubbles on the left and yours on the right, in a different colour. Consecutive messages from one person join into one run, with the time once under it and, in a group chat, their first name once above it. **Blocks** shows every message left-aligned with the sender's name and time (and the avatar when **Show avatars in messages** is on), with your own messages labelled **You**.
+**Bubbles** (default) shows other people's messages as bubbles on the left and yours on the right, in a different colour. Consecutive messages from one person join into one run, with the time once under it and, in a group chat, their first name once above it. **Blocks** shows every message left-aligned with the sender's name and time (and the picture when **Show pictures next to messages** is on), with your own messages labelled **You**.
 
-### Email Layout
+### How email looks in a chat
 
-**Readable text** (default) shows all mail as chat content: plain mail as text; newsletters, receipts and long mail as headings, paragraphs, lists, links and pictures without the page layout; and signed mail, and encrypted mail once decrypted, the same way, with its security badge or banner. **Original layout** shows newsletters and long mail as a short card that expands into the original layout, and signed or encrypted mail in full. Either way, **Show original** in a message's ⋯ menu shows that message in full.
+**Simple text** (default) shows all mail as chat content: plain mail as text; newsletters, receipts and long mail as headings, paragraphs, lists, links and pictures without the page design; and signed mail, and encrypted mail once decrypted, the same way, with its security badge or banner. **Original design** shows newsletters and long mail as a short card that expands into the original design, and signed or encrypted mail in full. Either way, **Show original** in a message's ⋯ menu shows that message in full.
 
-### Reading Width
+### Reading width
 
 How wide the message column can grow in an open chat: **Narrow**, **Standard** (default) or **Wide**. Message text keeps a comfortable line length at every setting; **Wide** widens email cards and full email bodies, which stay wide enough for a 600 px HTML email at every setting. **Narrow** and **Standard** share the same column, which the chat header and reply box follow.
 
-### Include Quoted History
+### Include the message you reply to
 
-On by default. Chat replies quote the replied-to message below your text, so recipients using traditional email clients keep the context. The quote stays hidden in the chat view.
+On by default. Chat replies add the message you reply to below your text, so people on other email apps keep the context. It stays hidden in the chat view.
 
-### After Archive, Snooze, Delete, or Move
+### After you archive, snooze, delete or move a chat
 
 Which chat opens when the current one leaves the list (dragging a chat onto a sidebar folder does not open another): the next (older) chat, which is the default, or the previous (newer) chat.
 
-### Combine Messages from Each Sender
+### Combine messages from each sender (under Advanced)
 
 On by default. All the threads a sender starts show as one chat; threads started from your own addresses stay separate. When off, threads show separately unless you combined that sender. Choices made from a chat's menu (**Combine messages from this sender** or **Show as separate threads**) apply whichever way this is set. When a thread joins a sender's chat (after an upgrade or turning this on), its pin, snooze and unsent chat reply move to that chat; when a sender's chat goes back to separate threads (turning this off or splitting one sender), the chat's pin, snooze and reply link move to the newest inbox thread that sender started (or are dropped if there is none), and the draft stays in Drafts. A pin, snooze or reply link already on that thread is kept.
 
-### Show Low Priority Group
+### Show a Low priority group (under Advanced)
 
 On by default. The All filter lists newsletters and bulk mail in a Low priority group, collapsed until you expand it. When off, they appear only under the Low priority filter, and a pinned low-priority chat appears only under Low priority too.
 
-### Notify Only for Priority Mail
+### Only notify for priority mail
 
 On by default. New-mail notifications skip newsletters and bulk mail, and senders you moved to Low priority. Snoozed chats always notify when they return.
 
 ## Images Tab
 ---
 
-### Always Load Remote Images
+Every change on this tab applies as soon as you make it. There is no Save button; use **Close** when you are done.
 
-If toggled on, image blocking for all emails will be disabled. Remote images will load automatically instead of requiring the users to manually load images or setting always load rules based on domain or address.
+### Always load pictures from the internet
 
-### Addresses
+Off by default. Mailven blocks these pictures, so senders can't tell when you open an email. Turn it on to load them in every email. Mailven asks first: "Load pictures automatically?" It explains that senders can see when you open their email and roughly where you are, and that pictures can be used to track you. Choose **Load automatically** to turn it on or **Keep blocking** to leave it off. Turning it off needs no question.
 
-This is a list of e-mail addresses that have been marked as **Always Load** images from. You can remove any address that you no longer want to auto-load images on emails for.
+### Senders
+
+Senders whose pictures you chose to **Always Load** in an email. **Stop always loading** removes one; their pictures are blocked again unless **Always load pictures from the internet** is on.
 
 ### Domains
 
-This is a list of domains that have been marked as **Always Load** images from. You can remove any domain that you no longer want to auto-load images on emails for.
-
+Domains whose pictures you chose to **Always Load** in an email. **Stop always loading** removes one.
 
 ## Accounts Tab
 ---
 
 Manage your email accounts.
 
-### Add Account
+### Add account
 
-Click **Add Account** to add a new email account. See [First Account Setup](/docs/getting-started/first-account) for details.
+Click **Add account** to add a new email account. See [First Account Setup](/docs/getting-started/first-account) for details.
 
-### Edit Account
+### Edit account
 
 Click **Edit** on any account to modify:
 
 #### General Tab
 
 - **Account Color** - Color used in unified inbox
-- **Account Name** - Display name for this account
-- **Default Display Name** - The name people see the e-mail is from when you send e-mails
+- **Account name** - What this account is called in Mailven
+- **Your name on sent mail** - The name people see when you send mail
 - **Email Address** - Your email address (read-only for OAuth accounts)
 - **Username** - Username of your account
-- **Credentials**:
+- **Sign-in details**:
     - **Password** - Password of your account
-    - **Re-authorize** - Re-authorize oauth account 
-- **Sync Period** - How far back to sync (1 week to 1 year, or all; default 1 month)
+    - **Sign in again** - Sign in again to your provider (for accounts that sign in through your provider's website)
+- **How far back to download** - How far back Mailven downloads mail (1 week to 1 year, or all; default 1 month)
 
 #### Identity Tab
 
@@ -292,10 +236,10 @@ You can have multiple identities per account (e.g., for aliases).
 
 Each identity can also have a **Reply-To** address. Replies to your messages go there instead of the account default. Leave it empty to use the default.
 
-For Gmail accounts, a **Gmail send-as addresses** section lists the addresses from Gmail's *Send mail as* list. Gmail only sends as an address it has verified; for any other it rewrites the sender to the account address. To set one up:
+For Gmail accounts, an **Other addresses you can send from in Gmail** section lists the addresses from Gmail's *Send mail as* list. Gmail only sends as an address it has verified; for any other it rewrites the sender to the account address. To set one up:
 
 1. In Gmail, go to **Settings → Accounts → Send mail as → Add another email address** and verify it.
-2. In Mailven, press **Refresh** in the send-as section, then **Add** next to the address (optionally importing its Gmail signature).
+2. In Mailven, press **Check Gmail** in that section, then **Add** next to the address (optionally importing its Gmail signature).
 
 Identities show a **Verified**, **Pending**, or **Not in Gmail** badge. Mailven refreshes the list once a day in the background.
 
@@ -303,38 +247,50 @@ If you are using an Microsoft 365 account, there will be an additional section i
 
 #### Server Tab
 
-For non-OAuth accounts:
+For accounts that sign in with a password:
 
-- **Incoming Mail** - IMAP server, port, and security
-- **Outgoing Mail** - SMTP server, port, and security
-- **Check for New Mail** - How often to check for new messages outside of IDLE
-- **Request Read Receipts** - When to request read receipts for outgoing messages
-- **Server Mapping** - Map special folders if not auto-detected:
+- **Receiving mail (IMAP)** - Server, port and secure connection
+- **Sending mail (SMTP)** - Server, port and secure connection. Turn on **Don't send mail from this account** to use the account only for receiving.
+- **Check for new mail** - How often Mailven checks, besides getting new mail right away when your provider supports it
+- **Ask for read receipts** - Whether Mailven asks recipients' mail apps to tell you when they open your messages
+- **Special folders** - Choose the folder to use for each role if Mailven doesn't find it:
     - Sent folder
     - Drafts folder
     - Trash folder
     - Archive folder (if none is mapped or detected, as on Gmail, Archive moves messages out of the Inbox to All Mail)
     - Spam folder
-- **Folder sync subscriptions** - Configure additional folders to be synced automatically
-    - Manage folder sync - This is disabled by default. Enable it to see the UI to configure which folders to auto-sync
-        - Sync all folders - Disabled by default. Enable it to sync all imap folders
-        - Or just check only the folders you want to auto-sync
-- **Trusted Certificates** - Manually trusted TLS certificates for all mail, contacts, and calendar servers, including hosts reached during discovery. Each entry shows the host; removing an entry revokes trust for that host only.
+- **Folders to keep up to date** - Choose more folders for Mailven to update automatically. These choices are checkboxes and apply when you select **Save changes**; **Cancel** drops them.
+    - **Choose which folders Mailven keeps up to date** - Off by default. Turn it on to pick folders. When it is off, Mailven updates only Inbox, Drafts and Sent.
+        - **Keep all folders up to date** - Off by default.
+        - Or tick only the folders you want
+- **Trusted certificates** - Certificates (TLS) you chose to trust for all mail, contacts, and calendar servers, including hosts reached during discovery. Each entry shows the host; removing an entry revokes trust for that host only.
 - **Mail API route** - Gmail and Microsoft 365 (work/school) accounts can optionally switch from IMAP/SMTP to the provider's mail API. *Authorize API access* grants a separate permission, then *Review migration* shows what will happen and any blockers. Before anything changes a snapshot of the local database is saved; existing messages are matched and kept, and drafts and queued mail are preserved. If an active API grant is rejected, sync and queued actions pause; use *Reauthorize API access* in the same settings section to restore access without switching routes. *Return to IMAP / SMTP* switches the account back to its protocol route; nothing is replayed to the provider and unfinished API actions are listed. The result says whether an IMAP sync request was made; that request does not confirm that sync started or finished. If no request was made, use Sync manually. There is no automatic fallback between routes, and no route promises delivery or inbox placement. Hidden (Bcc) recipient privacy and provider message-size limits on the API routes are not yet verified against live providers. A linked shared mailbox can authorize API access under its parent account's sign-in, but it cannot be activated or migrated until its live Graph checks are recorded. Returning to IMAP/SMTP does not undo provider changes or restore the snapshot. To go back to the saved snapshot, use *Restore database to snapshot…* in the same section: it is an offline, whole-database restore (all accounts, not just this one) that discards local changes made since the snapshot and leaves provider-side changes in place. You must acknowledge a consent dialog, Mailven saves a backup of the current database and closes, and the restore happens the next time you open it, after which a banner offers *Undo restore* from that backup. See [Snapshot restoration](../../MAIL_APIS.md#snapshot-restoration). See [provider requirements and route limits](../../PROVIDERS.md#switching-routes-and-current-limits).
 
 #### Security Tab
 
-- **PGP** - PGP/GPG signing and encryption settings of your account
-    - **Import Secret Keys** - Import your PGP secret key
-    - **Key Servers** - A list of key servers to use. There are 3 defaults already. You can also add your own here
-    - **Recipient Keys**
-        - **Import** - Import public keys of your contacts 
-        - **Search** - Search for public keys. Starts with WKD and then searches key servers 
-        - **List** - There's a list below the above 2 buttons that shows the current stored public keys
-- **S/MIME** - S/MIME cert based signing and encryption settings for your account
-    - **Online certificate revocation checks** - Off by default and applies to all accounts. When enabled, verifies current OCSP responses or complete CRLs for the signer and intermediate certificates. Requests may reveal when you view or download signed mail. Good/revoked results are cached for at most one hour and never beyond their next update. Unchecked, unavailable, stale, or unsupported revocation status is shown as a warning; a revoked certificate is shown as an error. The preference applies on the next verification when viewing or downloading a message; background sync extracts message content without online checks. Certificates already reported revoked remain blocked for automatic encryption until a successful online verification clears that result. Checks use direct HTTP(S) connections to public endpoints; proxy-only networks can report unavailable status.
-    - **Import .p12** - Import your .p12 certificate. Imported certificate will appear below
-    - **Import** - Import recipient certificates here. Imported or auto-collected public certs will appear below. Auto-collected certs are used for encryption only when they chain to a trusted certificate authority; import a self-signed or otherwise untrusted cert to accept it for encryption
+- **Keys (PGP)** - Signing and encryption with PGP (also called GPG) keys for your account
+    - **Import your key** - Import your own PGP key
+    - **Key servers** - Servers Mailven asks for other people's keys, in the order shown. There are 3 defaults already. You can add your own
+    - **Keys for recipients**
+        - **Import** - Import the public keys of your contacts
+        - **Find a key by email address** - Mailven checks the address's own domain first, then the key servers
+        - **List** - The list below shows the public keys Mailven has saved
+- **Certificates (S/MIME)** - Signing and encryption with certificates (S/MIME) for your account
+    - **Check online whether certificates were cancelled** - Off by default and applies to all accounts. When on, Mailven asks the certificate's issuer whether a signer's certificate was cancelled (revoked), using OCSP responses or complete CRLs for the signer and intermediate certificates. The issuer can see when you view or download signed mail. Good and revoked results are cached for at most one hour and never beyond their next update. When off, or when the answer is unavailable, stale or unsupported, signed mail shows "Couldn't verify"; a cancelled certificate shows "Warning". The setting applies the next time you view or download a message; background sync reads message content without online checks. Certificates already reported cancelled stay blocked for automatic encryption until a later online check clears them. Checks use direct HTTP(S) connections to public endpoints, so a network that only allows a proxy can report the answer as unavailable
+    - **Import .p12** - Import your own certificate. It appears in the list below
+    - **Import** - Import certificates for recipients. Imported and saved certificates appear below. Mailven uses a saved certificate for encryption only when its issuer is trusted; import a self-issued or otherwise untrusted certificate to accept it for encryption
+
+#### Message security banners
+
+A signed or encrypted message shows a short line about what Mailven found. Each line has an icon, a word and a colour, so you don't need to tell colours apart. The second line says whether the check used S/MIME or PGP.
+
+| You see | It means |
+|---|---|
+| **Verified: signed by someone** (S/MIME) | The signature is valid, the certificate comes from an issuer Mailven trusts, online checks found it wasn't cancelled, and it names the sender |
+| **Signed by someone with a key Mailven knows** (PGP) | The signature matches a key Mailven has saved for that address. Mailven can't tell whether the key really belongs to that person |
+| **Couldn't verify** | The signature may be fine, but Mailven couldn't confirm everything: it didn't check whether the certificate was cancelled, the issuer isn't trusted, the certificate is self-issued, or Mailven doesn't have the signing key |
+| **Warning** | Something is wrong: the signature doesn't match the message, the certificate was cancelled or expired, the key has expired, or the signer isn't the sender shown in From |
+| **Encrypted message** | Mailven decrypted the message with your certificate or key. If it couldn't, a Warning says so |
 
 ### Remove Account
 

@@ -12,7 +12,7 @@
 
 <div class="space-y-4 mt-8 pt-6 border-t border-border">
   <button
-    class="w-full flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
+    class="w-full min-h-6 flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
     onclick={() => s.smimeCollapsed = !s.smimeCollapsed}
   >
     <Icon icon={s.smimeCollapsed ? 'lucide:chevron-right' : 'lucide:chevron-down'} class="w-4 h-4 shrink-0" />

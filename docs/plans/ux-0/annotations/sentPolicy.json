@@ -1,0 +1,105 @@
+{
+ "sentPolicy.title": {
+  "accurate": "yes",
+  "proposed": "Sent copies",
+  "notes": "COPY-4, COPY-9: 'policy' is jargon. Section sits in Identity tab, not Composer."
+ },
+ "sentPolicy.guidance": {
+  "accurate": "yes",
+  "proposed": "Choose where Mailven keeps a copy of each message you send. Some providers save a copy in Sent for you. If both save one, you get two copies, so check your provider's settings first. You can pick more than one folder.",
+  "notes": "COPY-1, COPY-6."
+ },
+ "sentPolicy.route": {
+  "accurate": "yes",
+  "proposed": "Sent through",
+  "notes": "CTRL-5: value shows raw host:port and protocol (SentPolicySection.svelte:38); move to Advanced."
+ },
+ "sentPolicy.unreviewed": {
+  "accurate": "yes",
+  "proposed": "You haven't chosen yet. Mailven won't save a copy itself, and warns you when it can't find a copy of a sent message.",
+  "notes": "COPY-2. Matches sent_policy.go:152 warning."
+ },
+ "sentPolicy.provider": {
+  "accurate": "yes",
+  "proposed": "Your provider saves a copy",
+  "notes": "COPY-12."
+ },
+ "sentPolicy.append": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "sentPolicy.unresolved": {
+  "accurate": "yes",
+  "proposed": "Not chosen",
+  "notes": "COPY-9: 'decided' vs 'chosen'."
+ },
+ "sentPolicy.mailbox": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "'Account' label fine."
+ },
+ "sentPolicy.folder": {
+  "accurate": "yes",
+  "proposed": "Save the copy in",
+  "notes": "COPY-10."
+ },
+ "sentPolicy.mode": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "sentPolicy.choose": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Placeholder; also used as fallback text in copy rows."
+ },
+ "sentPolicy.add": {
+  "accurate": "yes",
+  "proposed": "Add folder",
+  "notes": "COPY-9: 'destination'.",
+  "applies": "on Save"
+ },
+ "sentPolicy.remove": {
+  "accurate": "yes",
+  "proposed": "Remove folder",
+  "notes": "Change applies after Save.",
+  "applies": "on Save"
+ },
+ "sentPolicy.save": {
+  "accurate": "yes",
+  "proposed": "Save",
+  "notes": "COPY-10: 'Save Sent copy policy' is long. Own Save button, not dialog Save.",
+  "applies": "on Save"
+ },
+ "sentPolicy.refresh": {
+  "accurate": "yes",
+  "proposed": "Check for copies",
+  "notes": "Glossary: check. COPY-9."
+ },
+ "sentPolicy.evidenceGuidance": {
+  "accurate": "yes",
+  "proposed": "Mailven checks for each sent message in these folders among the mail it has already downloaded, so a copy can show up late. If saving a copy is interrupted, Mailven doesn't try again. A copy in Sent doesn't mean the message arrived.",
+  "notes": "COPY-4, COPY-1. Matches sent_policy.go:152 ('No automatic APPEND')."
+ },
+ "sentPolicy.state.pending": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "sentPolicy.state.unknown": {
+  "accurate": "yes",
+  "proposed": "Mailven may not have finished saving the copy. Check the folder before you copy the message yourself.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "sentPolicy.state.observed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "sentPolicy.state.appended": {
+  "accurate": "yes",
+  "proposed": "Copy saved. Waiting for it to show up in the folder",
+  "notes": "COPY-4."
+ }
+}

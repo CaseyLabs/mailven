@@ -20,7 +20,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 - [DS — Reading-first redesign](#ds): no unresolved issue recorded
 - [CF — Chat-first revision](#cf): no unresolved issue recorded
-- [UX — Plain-language settings and messages](#ux): [UX1](#ux1)
+- [UX — Plain-language settings and messages](#ux): [UX1](#ux1), [UX2](#ux2), [UX3](#ux3), [UX4](#ux4), [UX5](#ux5), [UX6](#ux6), [UX7](#ux7)
 
 <a id="send"></a>
 
@@ -642,15 +642,125 @@ Project: [UX](PLAN.md#ux).
 
 <a id="ux1"></a>
 
-### UX1 — Settings switches look instant but wait for Save
+### UX1 — Settings controls don't show when changes apply
 
-- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-0](PLAN.md#ux-0) recommends the fix; [UX-1](PLAN.md#ux-1) and [UX-2](PLAN.md#ux-2) apply it. Found 2026-11-08 while planning UX, verified by reading the code.
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-0](PLAN.md#ux-0) recommends the fix; [UX-1](PLAN.md#ux-1) and [UX-2](PLAN.md#ux-2) apply it to Settings, [UX-4](PLAN.md#ux-4) to the account dialog. Found 2026-11-08 while planning UX; widened 2026-11-09 by the [UX-0 control audit](docs/plans/ux-0.md#control-audit).
+- **Severity / proposed priority / status:** unspecified / P3 / resolved 2026-11-18 by UX-4. **Update 2026-11-18:** all four Settings tabs now apply at once and show only Close (General in UX-1, Composer, Chat and Images in UX-2); UX-4 gave the account dialog's General and Server tabs checkboxes, and folder subscriptions now wait for Save. **Decision (owner, 2026-11-09):** instant apply for the Settings tabs; the account dialog keeps Save with checkboxes ([rationale](docs/plans/ux-0.md#save-model)).
+- **Resolution criteria:** on the General, Composer, Chat and Images tabs and the account dialog's General and Server tabs, every control's type matches when its change applies ([UX-CTRL-1](docs/UX_GUIDELINES.md#ux-ctrl)): switches apply at once, controls inside a Save/Cancel form are checkboxes, radios or selects, and nothing inside such a form applies before Save unless it says so.
+- **Evidence / impact / reproduction:** `SettingsDialog.svelte` shows Save/Cancel on the `general`, `composer`, `chat` and `images` tabs (around line 483) and writes their values in `handleSave` (line 218); Cancel discards them and reverts the theme preview (`revertLivePreview` and `handleCancel`, lines 327–337). Those tabs hold 20 fixed `<Switch>` controls plus one per spellcheck dictionary: General 11 (8 in `GeneralTab.svelte` and 3 in `GeneralBackgroundSections.svelte`: run in background, start hidden, start at login), Chat 7, Composer 1 plus one per dictionary (the loop in `ComposerTab.svelte`), and Images 1. The dictionary switches pick several items from a list, so they should be checkboxes whichever Save model is chosen (UX-CTRL-1). A switch suggests the change is already applied, so closing the dialog without Save silently loses it. The reverse also happens inside the same form: the Composer tab's default To/Cc/Bcc switches, removing a custom dictionary word and removing an image-allowlist entry apply at once, so Cancel does not undo them. The account dialog's Server tab is another Save/Cancel form with 3 switches (no outgoing server, outgoing uses the incoming sign-in, choose which folders sync); there, *Sync all folders* (`SubscribeAllFolders`) and the per-folder checkboxes subscribe on the server at once, and Cancel does not undo them. The add-account form has 2 more switches. Full table: [UX-0 control audit](docs/plans/ux-0.md#control-audit).
+
+<a id="ux2"></a>
+
+### UX2 — Six General settings change nothing
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-1](PLAN.md#ux-1). Found 2026-11-09 by the UX-0 annotation pass; verified by searching every reader of each store getter.
+- **Severity / proposed priority / status:** unspecified / P3 / resolved 2026-11-15 by UX-1 (controls, strings and store entries removed; stored values stay in the backend).
+- **Resolution criteria:** each control on the General tab changes something the user can see, or is removed together with its strings (stored values may stay).
+- **Evidence / impact / reproduction:** Settings → General shows *Colored circles in message list*, *Colored circles in viewer*, *Profile pictures*, *Always show message checkbox*, *Accent unread* (switches) and *Accent style* (select). They are saved (`internal/settings/store.go:37`–`39` and neighbours), but `getShowMessageListCircles`, `getShowViewerCircles`, `getShowMessageListProfilePics`, `getAlwaysShowMessageCheckbox`, `getAccentBarUnread` and `getAccentUnreadStyle` (`frontend/src/lib/stores/settings.svelte.ts:191`–`231`) have no caller outside Settings since the chat-first redesign replaced the message list. Users change them and nothing happens. `hideMessagePreview` still works (`ChatRow.svelte:94`), but its help text names the "message list".
+
+<a id="ux3"></a>
+
+### UX3 — PGP banners and help state things the code doesn't do
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-5](PLAN.md#ux-5). Found 2026-11-09 by the UX-0 annotation pass; verified by reading `internal/pgp/verifier.go`.
+- **Severity / proposed priority / status:** unspecified / P2 / open.
+- **Resolution criteria:** every PGP banner and help string matches the verifier: the text or the code is changed so that no message shows a promise the code doesn't keep.
+- **Evidence / impact / reproduction:** `security.noRecipientPGPKeysHelp` says keys "are automatically saved when you receive PGP-signed messages", but `cacheSenderKey` runs only after a signature verifies against a key Mailven already has (`verifier.go:166`–`192`), so receiving signed mail never adds a new key. `viewer.pgpUnknownKey` shows "Unknown key {keyId}", but `extractKeyIDFromSignature` always returns `""` (`verifier.go:255`), so the ID is always blank. `StatusRevokedKey` (`internal/pgp/model.go:19`) is never set, so `viewer.pgpRevokedKey` never appears. `viewer.pgpSignedBy` shows a green "Signed by {email}" for any key in the keyring, including keys found by WKD or a key server, without saying the key was not checked by the user (UX-SEC-5).
+
+<a id="ux4"></a>
+
+### UX4 — Force re-sync deletes local copies without asking
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-3](PLAN.md#ux-3). Found 2026-11-09 by the UX-0 annotation pass; verified by reading the code.
 - **Severity / proposed priority / status:** unspecified / P3 / open.
-- **Resolution criteria:** on the General, Composer, Chat and Images tabs, every control's type matches when its change applies ([UX-CTRL-1](docs/UX_GUIDELINES.md#ux-ctrl)): switches apply at once, and controls inside the Save/Cancel form are checkboxes, radios or selects.
-- **Evidence / impact / reproduction:** `SettingsDialog.svelte` shows Save/Cancel on the `general`, `composer`, `chat` and `images` tabs (around line 483) and writes their values in `handleSave` (line 218); Cancel discards them and reverts the theme preview (`revertLivePreview` and `handleCancel`, lines 327–337). Those tabs hold 20 fixed `<Switch>` controls plus one per spellcheck dictionary: General 11 (8 in `GeneralTab.svelte` and 3 in `GeneralBackgroundSections.svelte`: run in background, start hidden, start at login), Chat 7, Composer 1 plus one per dictionary (the loop in `ComposerTab.svelte`), and Images 1. The dictionary switches pick several items from a list, so they should be checkboxes whichever Save model is chosen (UX-CTRL-1). A switch suggests the change is already applied, so closing the dialog without Save silently loses it.
+- **Resolution criteria:** the folder menu's re-download action asks first and says what is removed and that it downloads again (UX-CTRL matrix, one-off destructive action).
+- **Evidence / impact / reproduction:** `FolderContextMenu.svelte:95` calls `handleSyncFolder(true)` straight from the menu; `ForceSyncFolder` (`app/sync.go:170`) clears every stored body and deletes every attachment in the folder before downloading again. Offline, or for a large folder, the mail is unreadable until the download finishes.
+
+<a id="ux5"></a>
+
+### UX5 — Status and error text that is wrong as shown
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-3](PLAN.md#ux-3) (sidebar, toasts), [UX-2](PLAN.md#ux-2) (calendar settings, compose mode). Found 2026-11-09 by the UX-0 annotation pass; each verified in the cited file.
+- **Severity / proposed priority / status:** unspecified / P3 / open.
+- **Resolution criteria:** each case below shows correct, complete English.
+- **Evidence / impact / reproduction:** (1) Calendar settings shows "Synced just now ago": `lastSyncLabel` passes the literal `'just now'` into "Synced {time} ago" and builds `m`/`h`/`d` in code (`extensions/calendar/frontend/components/CalendarSettingsSourcesSection.svelte:157`–`167`). (2) `sidebar.syncError` says "Sync error. Try again...", but the button opens the sync status dialog and does not retry (`AccountSection.svelte:193`). (3) `toast.failedToPrepare` shows a raw mode code such as `reply-all` (`appComposer.svelte.ts:148`). (4) Several toasts append raw `err.message` (`SendAsSection.svelte:32`, `:46`; `GoogleSetupCheck.svelte:33`; `ContactsSettingsDialog.svelte:81`, `:101`; `chatThread.svelte.ts:409`), against UX-COPY-8. (5) Choosing *Detached window* for compose mode also changes the mailto mode without saying so (`SettingsDialog.svelte:430`).
+
+<a id="ux6"></a>
+
+### UX6 — Locale keys with no use
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-1](PLAN.md#ux-1)–[UX-5](PLAN.md#ux-5), each for its namespaces. Found 2026-11-09 by `docs/plans/ux-0/audit.py`.
+- **Severity / proposed priority / status:** unspecified / P3 / open.
+- **Resolution criteria:** each key the audit marks `unused?` is either removed from `en.json` or shown to be used (and the script taught to find it).
+- **Evidence / impact / reproduction:** 29 in-scope keys are quoted by no source file and built by no template literal, for example `viewer.print`, `viewer.markAsSpam`, `toast.trashEmptied`, `messageList.syncNow` and `contactSource.enableWriteAccess`; rerun `python3 docs/plans/ux-0/audit.py` and search the audit for `unused?`. They cost translators and auditors time and can mislead.
+
+<a id="ux7"></a>
+
+### UX7 — Language picker offers one choice
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-1](PLAN.md#ux-1). Found 2026-11-09 by the UX-0 control audit.
+- **Severity / proposed priority / status:** unspecified / P3 / resolved 2026-11-18 by UX-4 (the diagnostic shows the one route as text). **Update 2026-11-15:** UX-1 hides the General Language select while one language ships; only the setup diagnostic's disabled *Server settings* select remains, for [UX-4](PLAN.md#ux-4).
+- **Resolution criteria:** Settings → General shows no control that has only one possible value, or explains why it is there.
+- **Evidence / impact / reproduction:** `supportedLocales` holds only English (`frontend/src/lib/i18n/index.ts:19`), so the Language select (`GeneralTab.svelte:180`) has one option. The same pattern appears in the setup diagnostic's disabled *Server settings* select (`SetupDiagnosticSection.svelte:52`).
+
+<a id="ux8"></a>
+
+### UX8 — Title bar restart prompt can ask for a restart that isn't needed
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-2](PLAN.md#ux-2), which also changes `SettingsDialog.svelte`. Found 2026-11-15 in the UX-1 review; the behaviour predates UX-1.
+- **Severity / proposed priority / status:** low / P3 / resolved 2026-11-18 by UX-2 (the startup title bar is recorded once per app run in the settings store; Settings offers a restart only when the choice differs from it).
+- **Resolution criteria:** Settings offers a restart only when the chosen title bar differs from the one the running window started with.
+- **Evidence / impact / reproduction:** `SettingsDialog.svelte` sets `originalNativeTitleBar` in `loadSettings`, which runs every time the dialog opens. Choose **System title bar**, pick **Not now**, close and reopen Settings, then choose **Mailven title bar** again. Mailven asks to quit even though the window already has that title bar. Fix: record the startup value once per app run, for example in the settings store.
+
+<a id="ux9"></a>
+
+### UX9 — PGP revocation is never checked, and the "revoked key" banner can't appear
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-5](PLAN.md#ux-5), which mapped each banner to its verification code. Found 2026-11-16.
+- **Severity / proposed priority / status:** unspecified / P2 / open (uncertain: whether the OpenPGP library already rejects revoked keys, which would show "couldn't confirm this signature" instead).
+- **Resolution criteria:** a signature from a revoked PGP key shows the revoked-key banner (or the status is removed with its string), covered by a verifier test.
+- **Evidence / impact / reproduction:** `internal/pgp/model.go` defines `StatusRevokedKey`, but `internal/pgp/verifier.go` only returns `StatusExpiredKey`, `StatusUnknownKey`, `StatusInvalid` and `StatusSigned`; `IsKeyExpired` checks expiry only. Not reproduced with a revoked test key.
+
+<a id="ux10"></a>
+
+### UX10 — Some failure messages outside the toast namespace still lack a next step
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / [UX-3](PLAN.md#ux-3) rewrote the `toast` and `sidebar.sync*` strings and every toast main line that showed raw error text; this is the remainder, left for [UX-4](PLAN.md#ux-4) (`identity`) and a later pass. Found 2026-11-18.
+- **Severity / proposed priority / status:** low / P3 / open. **Update 2026-11-18:** UX-4 rewrote the `identity.*` failure strings (item 1's `identity` part is done); `composer.failedTo*` and the other items remain.
+- **Resolution criteria:** each failure toast and failed-state message below says what happened and what to do, with raw error text behind "Show details" (UX-COPY-8).
+- **Evidence / impact / reproduction:** (1) `identity.failedTo*`, `identity.googleCheck*`, `identity.sendAsAddFailed`, `identity.sendAsRefreshFailed`, `composer.failedTo*` and the `security.failedTo*` strings still read "Failed to X" with no next step; they are shown by `addToast` calls outside the `toast` namespace. (2) `ChatPendingBubble.svelte` shows the raw send error (`pending.error`) in the chat bubble; it is not a toast, so it needs its own "Show details" layer. (3) The update status dialog's phase labels (`phaseLabel`, for example "Fetching headers 50%") still use "headers"; `tests/ui/sync-status.test.cjs` asserts that text. (4) `OAuthCredsSlotEditor.svelte` asks for confirmation with a hard-coded English `confirm()` string.
+
+
+<a id="ux11"></a>
+
+### UX11 — Settings → Accounts "OAuth Credentials" section is hard-coded English with protocol names
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / unassigned (a later UX pass). Found 2026-11-18 while checking the UX-4 user guides.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Resolution criteria:** the section's heading, help text and buttons come from `en.json`, and the heading leads with a plain term ([UX-COPY-4](docs/UX_GUIDELINES.md)); the user guides and the `google-setup-guide` and `google-client-import` tests use the new heading.
+- **Evidence / impact / reproduction:** `CoreOAuthSection.svelte:36` renders the literal "OAuth Credentials" and "(advanced)", and its help paragraph ("The OAuth Client ID and Secret…") is hard-coded, so the UX-0 audit and the UX-TEST-2 jargon scan never see it. It is already collapsed, so the expert detail is in the right layer; only the wording and localization are off. `docs/user-guide/getting-started/first-account/google-oauth-credentials.md` names the heading.
+
+<a id="ux12"></a>
+
+### UX12 — `AccountDialog.svelte` is over the 500-line component limit
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / unassigned. Found 2026-11-18 during the UX-7 acceptance check.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Resolution criteria:** `frontend/src/lib/components/settings/AccountDialog.svelte` is under 500 lines, split along existing section boundaries, with the Accounts UI tests still passing.
+- **Evidence / impact / reproduction:** `wc -l` reports 502 lines. It predates UX-7, which did not change it. Maintenance only.
+
+<a id="ux13"></a>
+
+### UX13 — Composer attachment remove button is invisible when focused by keyboard
+
+- **Owner / milestone:** [UX](PLAN.md#ux) / unassigned. Found 2026-11-18 by the [UX-8](PLAN.md#ux-8) sweep for `opacity-0 group-hover:opacity-100` (UX-A11Y-1); the Composer was outside UX-8's audited areas.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Resolution criteria:** the remove button in `ComposerAttachmentList.svelte` is visible whenever it has keyboard focus (add `focus-visible:opacity-100`), is at least 24×24 px (UX-A11Y-4), and a UI test covers both.
+- **Evidence / impact / reproduction:** the button has `opacity-0 group-hover:opacity-100` and no focus style, so a keyboard user tabs onto an invisible control. It is `p-0.5` around a 14 px icon, about 18 px square. Not reproduced in a browser; read from the source.
 
 ## Recurring problems
 
 Track environment/tooling symptoms, workaround and count here; on a second occurrence or a costly first occurrence, promote the solution into applicable guidance and remove the tally.
 
 - **Full UI suite timeouts under load** (count 1, 2026-10-21): one full `node tests/ui/run.mjs` run failed `chat-reading` "Save applies the reading font…" and `chat-row` "standard rows are 56 px…" after ~22 s each; both files and a second full run passed (263/263). Workaround: rerun the failing files; if it recurs, look at harness timeouts or worker count.
+- **`chat-anchor` day-label flake** (count 1, 2026-11-18): a full UI run failed "the day label clears the sticky heading after the jump (Accounts collapsed)" with `Cannot read properties of null (reading 'previousElementSibling')`; the file passed alone. Workaround: rerun the file; if it recurs, wait for the day label before reading its sibling.

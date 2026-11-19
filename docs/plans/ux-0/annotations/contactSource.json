@@ -1,0 +1,291 @@
+{
+ "contactSource.title": {
+  "accurate": "yes",
+  "proposed": "Address books",
+  "notes": "COPY-9, glossary: 'Address book' for contact source"
+ },
+ "contactSource.noSources": {
+  "accurate": "yes",
+  "proposed": "No address books yet. An address book is a list of contacts Mailven keeps up to date, such as Google Contacts or a CardDAV server. Choose Add address book to connect one, then you can pick names when you write.",
+  "notes": "COPY-4, COPY-9, COPY-1: grade 4 already; align term and button name"
+ },
+ "contactSource.addSource": {
+  "accurate": "yes",
+  "proposed": "Add address book",
+  "notes": "COPY-9, COPY-10: glossary term, sentence case",
+  "applies": "now"
+ },
+ "contactSource.editSource": {
+  "accurate": "yes",
+  "proposed": "Edit address book",
+  "notes": "COPY-9, COPY-10"
+ },
+ "contactSource.deleteTitle": {
+  "accurate": "yes",
+  "proposed": "Delete address book",
+  "notes": "COPY-9, COPY-10"
+ },
+ "contactSource.deleteConfirmName": {
+  "accurate": "unverified: ContactSources.svelte:243 says local removal; server impact not checked in backend",
+  "proposed": "Delete \"{name}\"? Mailven will remove the contacts it downloaded from this address book. They stay on the server.",
+  "notes": "COPY-5, UX-SEC-5: 'remove synced contacts' unclear if server is touched"
+ },
+ "contactSource.forceSync": {
+  "accurate": "yes",
+  "proposed": "Download everything again",
+  "notes": "Glossary: 'Download everything again' for force re-sync"
+ },
+ "contactSource.forceSyncConfirmTitle": {
+  "accurate": "yes",
+  "proposed": "Download everything again from \"{name}\"?",
+  "notes": "Glossary, COPY-9"
+ },
+ "contactSource.forceSyncConfirmDescription": {
+  "accurate": "unverified: backfill purpose not checked in the sync code",
+  "proposed": "Mailven will download every contact from \"{name}\" again. This fills in details such as phone, address, company and notes that may be missing for contacts saved by an older version of Mailven. It can take a few minutes for large address books.",
+  "notes": "COPY-2, COPY-1: grade 8.8 to lower; drop 'backfills', 'Re-fetch'"
+ },
+ "contactSource.name": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label. Fine.",
+  "control": "Input"
+ },
+ "contactSource.namePlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Example text. Fine."
+ },
+ "contactSource.serverUrl": {
+  "accurate": "yes",
+  "proposed": "Server address",
+  "notes": "COPY-4: URL is jargon; expert-level field, consider Advanced (CTRL-5)"
+ },
+ "contactSource.username": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label."
+ },
+ "contactSource.password": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label."
+ },
+ "contactSource.syncInterval": {
+  "accurate": "yes",
+  "proposed": "Update how often",
+  "notes": "Glossary: Update, not Sync; COPY-10"
+ },
+ "contactSource.selectInterval": {
+  "accurate": "yes",
+  "proposed": "Choose how often",
+  "notes": "COPY-10; prompt for the select"
+ },
+ "contactSource.manualOnly": {
+  "accurate": "yes",
+  "proposed": "Only when I choose",
+  "notes": "COPY-7: states what happens; 'Manual only' is a fragment"
+ },
+ "contactSource.every15Min": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear with units (CTRL-9)."
+ },
+ "contactSource.every30Min": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear with units (CTRL-9)."
+ },
+ "contactSource.everyHour": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear with units (CTRL-9)."
+ },
+ "contactSource.every2Hours": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear with units (CTRL-9)."
+ },
+ "contactSource.every6Hours": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear with units (CTRL-9)."
+ },
+ "contactSource.daily": {
+  "accurate": "yes",
+  "proposed": "Every day",
+  "notes": "CTRL-9: matches 'Every ...' pattern, COPY-9"
+ },
+ "contactSource.discovering": {
+  "accurate": "yes",
+  "proposed": "Looking for address books…",
+  "notes": "COPY-2: say what is happening; 'Discovering' is jargon"
+ },
+ "contactSource.syncFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't update this address book",
+  "notes": "COPY-8: say what happened; shown above the error text (ContactSources.svelte:176)"
+ },
+ "contactSource.neverSynced": {
+  "accurate": "yes",
+  "proposed": "Not updated yet",
+  "notes": "Glossary: Update, not sync"
+ },
+ "contactSource.syncedAgo": {
+  "accurate": "yes",
+  "proposed": "Updated {time}",
+  "notes": "Glossary; {time} already includes 'ago' suffix (ContactSources.svelte:37)"
+ },
+ "contactSource.sourceName": {
+  "accurate": "yes",
+  "proposed": "Address book name",
+  "notes": "COPY-9"
+ },
+ "contactSource.description": {
+  "accurate": "yes",
+  "proposed": "Keep your contacts up to date so Mailven can suggest names when you write",
+  "notes": "COPY-6, glossary, COPY-2"
+ },
+ "contactSource.serverUrlHelp": {
+  "accurate": "yes",
+  "proposed": "Enter the server address, or the full address of the address book. (CardDAV)",
+  "notes": "COPY-4: CardDAV moves to parentheses; 'addressbook' is one word in UI"
+ },
+ "contactSource.passwordKeepCurrent": {
+  "accurate": "yes",
+  "proposed": "Password (leave blank to keep the current one)",
+  "notes": "COPY-10; minor wording",
+  "control": "Input"
+ },
+ "contactSource.connectDiscover": {
+  "accurate": "yes",
+  "proposed": "Connect and find address books",
+  "notes": "COPY-2, COPY-9: avoid '&' and 'Discover'"
+ },
+ "contactSource.reDiscover": {
+  "accurate": "yes",
+  "proposed": "Find address books again",
+  "notes": "COPY-2, COPY-9"
+ },
+ "contactSource.addressbooksToSync": {
+  "accurate": "yes",
+  "proposed": "Address books to keep up to date",
+  "notes": "Glossary, COPY-9"
+ },
+ "contactSource.noAddressbooksFound": {
+  "accurate": "yes",
+  "proposed": "Mailven found no address books at this address. Check the address and try again.",
+  "notes": "COPY-8: what happened, then what to do"
+ },
+ "contactSource.discoveryFailed": {
+  "accurate": "yes",
+  "proposed": "Mailven couldn't find your address books. Check the address, username and password, then try again.",
+  "notes": "COPY-8; current text states no next step"
+ },
+ "contactSource.fillUrlUserPass": {
+  "accurate": "yes",
+  "proposed": "Enter the server address, username and password.",
+  "notes": "COPY-10: drop 'Please', URL jargon"
+ },
+ "contactSource.fillUrlAccount": {
+  "accurate": "yes",
+  "proposed": "Enter the server address and choose an account to sign in with.",
+  "notes": "COPY-4, glossary: no OAuth"
+ },
+ "contactSource.authentication": {
+  "accurate": "yes",
+  "proposed": "How to sign in",
+  "notes": "COPY-10; plain wording",
+  "control": "Button pair acting as radio group (ContactSourceCardDav.svelte:28-47)"
+ },
+ "contactSource.authPassword": {
+  "accurate": "yes",
+  "proposed": "Password",
+  "notes": "Plain label."
+ },
+ "contactSource.authOAuth": {
+  "accurate": "yes",
+  "proposed": "Sign in with a connected account",
+  "notes": "COPY-4, glossary: Sign in with {provider}; drop OAuth"
+ },
+ "contactSource.oauthAccount": {
+  "accurate": "yes",
+  "proposed": "Connected account",
+  "notes": "COPY-4, glossary"
+ },
+ "contactSource.noCustomAccounts": {
+  "accurate": "yes",
+  "proposed": "No connected accounts are available. Add a mail account that uses your own sign-in setup first, then you can use it for this address book.",
+  "notes": "COPY-4: CardDAV/OAuth removed; custom OAuth is advanced (CTRL-5)"
+ },
+ "contactSource.linkToExisting": {
+  "accurate": "yes",
+  "proposed": "Use your existing {provider} account",
+  "notes": "COPY-2, COPY-9"
+ },
+ "contactSource.reauthNeeded": {
+  "accurate": "yes",
+  "proposed": "Sign in again",
+  "notes": "Glossary: Sign in again; COPY-10"
+ },
+ "contactSource.or": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain divider."
+ },
+ "contactSource.signInDifferent": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "contactSource.signInProvider": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Matches glossary."
+ },
+ "contactSource.waitingForSignIn": {
+  "accurate": "yes",
+  "proposed": "Waiting for you to sign in. Check your browser.",
+  "notes": "COPY-7: sentence form"
+ },
+ "contactSource.signedInAs": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "contactSource.change": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "contactSource.update": {
+  "accurate": "yes",
+  "proposed": "Save",
+  "notes": "COPY-9: 'Update' clashes with glossary (check for new mail); edit-dialog submit button (ContactSourceDialog.svelte:94)"
+ },
+ "contactSource.linked": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain badge."
+ },
+ "contactSource.autoName": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "contactSource.minutesFallback": {
+  "accurate": "yes",
+  "proposed": "Every {value} minutes",
+  "notes": "CTRL-9, COPY-7: matches 'Every ...' options"
+ },
+ "contactSource.enableWriteAccess": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "contactSource.enableWriteAccessDescription": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ }
+}

@@ -28,6 +28,10 @@ const attachmentOnly = secureFake('pgp', `{ bodyHtml: '', bodyText: '', pgpStatu
   attachments: [{ filename: 'route-plan.pdf', contentType: 'application/pdf', size: 2048, isInline: false, contentId: '' }],
   chat: { text: '', hasQuoted: false, isRich: false } }`)
 const failed = secureFake('pgp', `{ bodyHtml: '', bodyText: '', pgpStatus: 'decrypt_failed', pgpSignerEmail: '', pgpSignerKeyId: '', pgpEncrypted: true }`)
+const unchecked = secureFake('smime', `{ bodyHtml: '<p>See you at the trailhead.</p>', bodyText: 'See you at the trailhead.', smimeStatus: 'revocation_unchecked',
+  smimeSignerEmail: 'ana@example.com', smimeSignerSubject: '', smimeEncrypted: false, chat: ${chat} }`)
+const unknownKey = secureFake('pgp', `{ bodyHtml: '<p>See you at the trailhead.</p>', bodyText: 'See you at the trailhead.', pgpStatus: 'unknown_key', pgpSignerEmail: '',
+  pgpSignerKeyId: 'ABCD1234', pgpEncrypted: false, chat: ${chat} }`)
 const originalLayout = `{ window.go.app.App.GetChatRichStyle = async () => 'card' }`
 
 const lastId = (page) => page.locator('[data-message-id]').last().getAttribute('data-message-id')
@@ -39,7 +43,7 @@ describe('signed and encrypted mail in chat', () => {
       await msg.getByText('See you at the trailhead.').waitFor()
       assert.equal(await msg.locator('iframe').count(), 0, 'no full HTML body')
       assert.equal(await msg.locator('[data-message-text]').count(), 1, 'renders as chat text')
-      await msg.locator('[title="Signed by ana@example.com with S/MIME"]').waitFor()
+      await msg.locator('[title="Verified: signed by ana@example.com (Checked using S/MIME)"]').waitFor()
       assert.doesNotMatch(await msg.innerText(), /old plan/, 'quoted history hidden')
       await msg.getByRole('button', { name: 'Show quoted text' }).click()
       await msg.getByText('On Monday Ana wrote: old plan').waitFor()
@@ -50,7 +54,7 @@ describe('signed and encrypted mail in chat', () => {
     const msg = bubble(page, await lastId(page))
     await msg.getByText('See you at the trailhead.').waitFor()
     assert.equal(await msg.locator('iframe').count(), 0, 'no full body')
-    await msg.locator('[title="This message was encrypted with PGP"]').waitFor()
+    await msg.locator('[title="Encrypted message (Checked using PGP)"]').waitFor()
     await msg.hover()
     await msg.getByRole('button', { name: 'Message actions' }).click()
     await page.getByRole('menuitem', { name: 'Show original' }).click()
@@ -67,7 +71,7 @@ describe('signed and encrypted mail in chat', () => {
 
   it('Original layout keeps signed mail in full', ui.run({ beforeMount: `${signed}\n${originalLayout}` }, async (page) => {
     const msg = bubble(page, await lastId(page))
-    await msg.locator('[title="Signed by ana@example.com with S/MIME"]').waitFor()
+    await msg.locator('[title="Verified: signed by ana@example.com (Checked using S/MIME)"]').waitFor()
     assert.equal(await msg.getByRole('button', { name: 'Show quoted text' }).count(), 0, 'no chat bubble')
     await msg.hover()
     await msg.getByRole('button', { name: 'Message actions' }).click()
@@ -76,7 +80,25 @@ describe('signed and encrypted mail in chat', () => {
 
   it('a failed decryption keeps its banner and the full body', ui.run({ beforeMount: failed }, async (page) => {
     const msg = bubble(page, await lastId(page))
-    await msg.getByText('PGP decryption failed').waitFor()
+    await msg.getByText('Warning.').waitFor()
+    await msg.getByText("Mailven couldn't decrypt this message.").waitFor()
+    await msg.getByText('Checked using PGP').first().waitFor()
     assert.equal(await msg.getByRole('button', { name: 'Show quoted text' }).count(), 0, 'no chat bubble')
+  }))
+
+  // UX-SEC-3/4: a banner leads with a word and the conclusion; the method sits on its own line.
+  it('an unchecked S/MIME signature shows a word, a plain sentence and the method', ui.run({ beforeMount: unchecked }, async (page) => {
+    const msg = bubble(page, await lastId(page))
+    await msg.getByText("Couldn't verify.").waitFor()
+    await msg.getByText("Mailven didn't check whether the signer's certificate was cancelled.").waitFor()
+    await msg.getByText('Checked using S/MIME').waitFor()
+    assert.doesNotMatch(await msg.innerText(), /revocation/i, 'no jargon in the main line')
+  }))
+
+  it('a PGP signature from an unknown key shows a word and the key', ui.run({ beforeMount: unknownKey }, async (page) => {
+    const msg = bubble(page, await lastId(page))
+    await msg.getByText("Couldn't verify.").waitFor()
+    await msg.getByText("Mailven doesn't have the key that signed this message (key ABCD1234)", { exact: false }).waitFor()
+    await msg.getByText('Checked using PGP').waitFor()
   }))
 })

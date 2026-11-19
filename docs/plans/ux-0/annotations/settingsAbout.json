@@ -1,0 +1,42 @@
+{
+ "settingsAbout.version": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsAbout.github": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Product name; fine."
+ },
+ "settingsAbout.privacyPolicy": {
+  "accurate": "yes",
+  "proposed": "Privacy policy",
+  "notes": "COPY-10."
+ },
+ "settingsAbout.termsOfUse": {
+  "accurate": "yes",
+  "proposed": "Terms of use",
+  "notes": "COPY-10."
+ },
+ "settingsAbout.alpha": {
+  "accurate": "unverified: depends on release stage",
+  "proposed": "Alpha software. Expect some rough edges.",
+  "notes": "COPY-2."
+ },
+ "settingsAbout.builtOn": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Attribution; keep Aerion (AGENTS.md)."
+ },
+ "settingsAbout.by": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Attribution; keep."
+ },
+ "settingsAbout.failedToLoad": {
+  "accurate": "yes",
+  "proposed": "Mailven couldn't load its version details. Try again later.",
+  "notes": "COPY-8: what happened, then what to do."
+ }
+}

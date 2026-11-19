@@ -11,7 +11,7 @@
 
 <div class="space-y-4">
   <button
-    class="w-full flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
+    class="w-full min-h-6 flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
     onclick={() => s.pgpCollapsed = !s.pgpCollapsed}
   >
     <Icon icon={s.pgpCollapsed ? 'lucide:chevron-right' : 'lucide:chevron-down'} class="w-4 h-4 shrink-0" />

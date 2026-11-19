@@ -49,8 +49,11 @@
   <h3 class="text-sm font-medium flex items-center gap-2"><Icon icon="lucide:stethoscope" class="w-4 h-4" />{$_('setupDiagnostic.title')}</h3>
   <p class="text-xs text-muted-foreground">{$_('setupDiagnostic.guidance')}</p>
   <NamedSelect label={$_('setupDiagnostic.from')} value={selectedFrom} options={identities.map(i => ({ value: i.email, label: i.email }))} placeholder={$_('setupDiagnostic.chooseIdentity')} disabled={busy} onValueChange={(v) => { from = v }} />
-  <NamedSelect label={$_('setupDiagnostic.route')} value="imap-smtp" options={[{ value: 'imap-smtp', label: $_('setupDiagnostic.existingRoute') }]} disabled />
-  <label class="flex items-center gap-2 text-sm"><input type="checkbox" bind:checked={owned} disabled={busy} />{$_('setupDiagnostic.owned')}</label>
+  <div class="space-y-1 text-sm">
+    <span>{$_('setupDiagnostic.route')}</span>
+    <p class="text-muted-foreground">{$_('setupDiagnostic.existingRoute')}</p>
+  </div>
+  <label class="flex min-h-6 items-center gap-2 text-sm"><input type="checkbox" bind:checked={owned} disabled={busy} />{$_('setupDiagnostic.owned')}</label>
   {#if owned}
     <label class="block space-y-1 text-sm"><span>{$_('setupDiagnostic.domain')}</span><input class="block w-full rounded border border-border bg-background p-2" bind:value={domain} disabled={busy} maxlength="253" /></label>
     <label class="block space-y-1 text-sm"><span>{$_('setupDiagnostic.selectors')}</span><input class="block w-full rounded border border-border bg-background p-2" bind:value={selectors} disabled={busy} maxlength="640" /></label>

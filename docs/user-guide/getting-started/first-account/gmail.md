@@ -19,7 +19,7 @@ OAuth is the easiest and most secure way to connect your Gmail account.
 2. A browser window will open to Google's sign-in page
 3. Sign in to your Google account
 4. Review the permissions and click **Allow**
-5. Return to Mailven and click **Add Account**
+5. Return to Mailven and click **Add account**
 
 ### Permissions Requested
 
@@ -56,12 +56,12 @@ App passwords require 2-Step Verification, but enabling it does not guarantee th
 
 ### Adding to Mailven
 
-1. Click **+ Add Account** in the sidebar (or go to **Settings > Accounts > Add Account**)
+1. Click **+ Add Account** in the sidebar (or go to **Settings > Accounts > Add account**)
 2. Select **Gmail** from the provider dropdown
 3. Choose the **App Password** authentication method
 4. Enter your Gmail address
 5. Paste the app password you generated
-6. Click **Add Account**
+6. Click **Add account**
 
 Mailven records the permissions returned by the provider separately from those requested. If a known grant lacks a required permission, only the affected feature is unavailable and its error explains the missing access. Mail authorization does not prove contacts access. Older accounts can have unknown permission evidence: their configured mail route remains available, while contacts may need explicit authorization. A new sign-in that omits permission evidence is also recorded as unknown. Mailven does not start reauthorization automatically.
 
@@ -69,7 +69,7 @@ Mailven records the permissions returned by the provider separately from those r
 
 Every Google OAuth account needs Gmail API enabled in the Google Cloud project that owns your OAuth client, even when mail stays on IMAP/SMTP. Mailven reads your Gmail "Send mail as" list through it to decide whether a sender address needs review; if the API is disabled, Mailven says "Gmail API is disabled in Google Cloud project …" with a link that enables it, and sender review stays required. Re-authorizing does not fix that. Calendar and contacts report the same message for Google Calendar API and Google People API. App-password accounts use no Google API.
 
-To see which APIs work, open **Settings → Accounts → Edit → Identity** and press **Check Google setup**. It makes read-only requests to Gmail, and to People and Calendar when the account has a grant for them, and reports each as working, disabled (with an **Enable API** button), missing permission (with **Re-authorize**), not set up, or an error. After enabling an API, wait a minute and check again; no restart is needed. Mailven also runs the check once after you first sign in, and shows a message only when something needs fixing. It never runs on a timer.
+To see which APIs work, open **Settings → Accounts → Edit → Identity** and press **Check Google connection**. It makes read-only requests to Gmail, and to People and Calendar when the account has a grant for them, and reports each as working, disabled (with an **Enable API** button), missing permission (with **Re-authorize**), not set up, or an error. After enabling an API, wait a minute and check again; no restart is needed. Mailven also runs the check once after you first sign in, and shows a message only when something needs fixing. It never runs on a timer.
 
 ## Optional Gmail API route
 
@@ -91,7 +91,7 @@ Mailven refreshes OAuth access tokens automatically during normal use. An expire
 
 1. Go to **Settings > Accounts**
 2. Click **Edit** on your Gmail account
-3. Click **Re-authorize**
+3. Click **Sign in again**
 4. Complete the OAuth flow again
 
 ### Sync Issues

@@ -7,7 +7,7 @@ const openIdentity = async (page) => {
   const dialog = await ui.openSettings(page)
   await dialog.getByRole('tab', { name: 'Accounts', exact: true }).click()
   await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
-  const account = page.getByRole('dialog', { name: 'Edit Account', exact: true })
+  const account = page.getByRole('dialog', { name: 'Edit account', exact: true })
   await account.getByRole('tab', { name: 'Identity', exact: true }).click()
   return account
 }
@@ -132,10 +132,12 @@ test('Empty contact sources explain what a source is', ui.run({
   await dialog.getByRole('button', { name: 'Add Contact Source', exact: true }).waitFor()
 }))
 
-// Item 5: a help line adds information beyond its label.
-test('Circle and accent help lines do not repeat their labels', ui.run({}, async (page) => {
+// UX2: the six General settings nothing read are gone, and the chat-list help uses the chat-list name.
+test('General has no controls for settings that change nothing', ui.run({}, async (page) => {
   const dialog = await ui.openSettings(page)
   const text = await dialog.innerText()
-  assert.ok(!/Show colored circles with sender initials in the/.test(text))
-  assert.ok(text.includes("Each circle holds the sender's initials."))
+  for (const gone of [/colored circles/i, /profile pictures|contact photos/i, /Accent (for|style)/i, /checkbox next to message/i]) {
+    assert.ok(!gone.test(text), `General still mentions ${gone}`)
+  }
+  assert.ok(text.includes('Hide the first lines of the latest message under each chat'))
 }))

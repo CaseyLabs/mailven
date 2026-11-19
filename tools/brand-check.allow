@@ -47,6 +47,11 @@ tests/ui/google-add-account.test.cjs :: 'aerion-shipped' :: D6 OAuth choice ID i
 tests/ui/settings-stale-responses.test.cjs :: 'aerion-shipped' :: D6 OAuth choice ID in the UI15 stale-response fixture
 frontend/src/lib/i18n/locales/en.json :: titleBarAerion|"aerion": :: Message keys for the D6 'aerion' title-bar setting and OAuth badge
 frontend/src/lib/components/settings/GeneralTab.svelte :: 'aerion'|titleBarAerion :: D6 'aerion' title-bar setting value and its message keys
+docs/plans/ux-0/annotations/settingsGeneral.json :: titleBarAerion :: UX-0 audit annotations keyed by the D6 title-bar message keys
+docs/plans/ux-0/audit/settingsGeneral.md :: titleBarAerion :: Generated UX-0 audit rows for the D6 title-bar message keys
+docs/plans/ux-0/annotations/settingsAbout.json :: keep Aerion :: UX-0 note to keep the attribution
+docs/plans/ux-0/audit/settingsAbout.md :: keep Aerion :: Generated UX-0 audit row noting the attribution
+docs/UX_GUIDELINES.md :: 'aerion'. title-bar setting :: Rule against renaming the D6 persisted identifiers
 extensions/contacts/**/*.go :: .aerion. :: D6 'aerion' contact source
 extensions/contacts/frontend/** :: 'aerion'|"aerion" :: D6 'aerion' contact source
 internal/contact/*.go :: "aerion" :: D6 'aerion' contact source
@@ -68,3 +73,4 @@ frontend/src/lib/stores/contactSources.svelte.ts :: "aerion" local :: Comment ab
 docs/PLAN-migration.md :: Aerion :: Migration plan, a history document
 PLAN.md :: The Aerion questionnaire :: GOAUTH-5 names the historical CASA Tier 2 questionnaire inherited from Aerion
 docs/validation/goauth-5.md :: Aerion CASA Tier 2 questionnaire :: Heading naming the inherited historical questionnaire (docs/history/AERION_CASA_TIER2.md)
+docs/plans/ux-1.md :: persisted `'aerion'` title-bar identifier :: UX-1 checkpoint records why earlier brand-check entries were added

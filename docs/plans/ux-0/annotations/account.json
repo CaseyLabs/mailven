@@ -1,0 +1,885 @@
+{
+ "account.microsoftAccountType": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label.",
+  "applies": "on Save"
+ },
+ "account.microsoftChooseType": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label."
+ },
+ "account.microsoftPersonal": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear."
+ },
+ "account.microsoftBusiness": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear."
+ },
+ "account.microsoftSetupHelp": {
+  "accurate": "unverified: depends on Microsoft policy; \"custom server fields are preserved\" not checked",
+  "proposed": "",
+  "notes": "COPY-1/3/4: long; grade high; move protocol detail to Advanced (CTRL-5). Drop \"Custom server fields are preserved\" or explain. Applied in UX-4."
+ },
+ "account.addTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4."
+ },
+ "account.editTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4."
+ },
+ "account.editSharedMailboxTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4."
+ },
+ "account.addDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6: also covers sending; COPY-12 name app. Applied in UX-4."
+ },
+ "account.editDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2 active; identities needs glossary (see identity namespace). Applied in UX-4."
+ },
+ "account.general": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Tab name.",
+  "control": "Tab"
+ },
+ "account.identity": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Tab name; consider \"Names and signatures\" (UX-IA-1).",
+  "control": "Tab"
+ },
+ "account.server": {
+  "accurate": "yes",
+  "proposed": "Servers",
+  "notes": "Tab holds incoming/outgoing servers; plural clearer (COPY-4).",
+  "control": "Tab"
+ },
+ "account.security": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Tab name; shared by AccountSecurityTab.",
+  "control": "Tab"
+ },
+ "account.accountName": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.accountNamePlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10: \"e.g.,\" is jargon. Applied in UX-4."
+ },
+ "account.colorHelp": {
+  "accurate": "unverified: only mention of \"unified inbox\" in en.json; check the UI still has one",
+  "proposed": "",
+  "notes": "COPY-6, COPY-12. Verify where account color appears before rewording. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.displayName": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary/P2: says what it does for you. Label is \"Default Display Name\". Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.displayNamePlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; neutral example name. Applied in UX-4."
+ },
+ "account.displayNameHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2 active; \"recipients\" to \"people\". Applied in UX-4."
+ },
+ "account.emailAddress": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.emailReadOnly": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8/10; \"cannot\" to \"can't\". Applied in UX-4."
+ },
+ "account.username": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label; ok. Expert-only for most providers (CTRL-5).",
+  "applies": "on Save"
+ },
+ "account.usernamePlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "account.credentials": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: avoid \"Credentials\" (COPY-10). Applied in UX-4."
+ },
+ "account.accountIdentification": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; \"Identification\" unclear. Applied in UX-4."
+ },
+ "account.password": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label.",
+  "applies": "on Save"
+ },
+ "account.enterAppPassword": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Placeholder; \"app password\" needs one-line explainer where first used. Applied in UX-4."
+ },
+ "account.enterPassword": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine. Applied in UX-4."
+ },
+ "account.reauthorize": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: Re-authorize to Sign in again. CTRL-9 of toast. Applied in UX-4.",
+  "control": "Button",
+  "applies": "now"
+ },
+ "account.authentication": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary; label for the sign-in status block. Applied in UX-4.",
+  "control": "Label (heading)"
+ },
+ "account.customOAuthHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: OAuth; whole section is expert-only, put under Advanced (CTRL-5). Applied in UX-4."
+ },
+ "account.customOAuthIssuer": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only (CTRL-5); move to Advanced."
+ },
+ "account.customOAuthIssuerHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only; Advanced (CTRL-5). Check code reads that path. Applied in UX-4."
+ },
+ "account.customOAuthDiscover": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4 jargon; \"Discover\" is ok in Advanced. Applied in UX-4."
+ },
+ "account.customOAuthDiscovered": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: \"endpoints\". Applied in UX-4."
+ },
+ "account.customOAuthManual": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: \"endpoints\". Applied in UX-4."
+ },
+ "account.customOAuthAuthUrl": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only technical field; keep under Advanced (CTRL-5)."
+ },
+ "account.customOAuthTokenUrl": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only technical field; keep under Advanced (CTRL-5)."
+ },
+ "account.customOAuthUserinfoUrl": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only technical field; keep under Advanced (CTRL-5)."
+ },
+ "account.customOAuthClientId": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only (CTRL-5); Advanced."
+ },
+ "account.customOAuthClientSecret": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only (CTRL-5); Advanced."
+ },
+ "account.customOAuthClientSecretPlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: PKCE, \"public client\" in Advanced help. Applied in UX-4."
+ },
+ "account.customOAuthScopes": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4; expert-only, Advanced. Applied in UX-4."
+ },
+ "account.customOAuthScopesHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6; refresh-token jargon avoided. Applied in UX-4."
+ },
+ "account.customOAuthRedirectUri": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only; Advanced (CTRL-5). Applied in UX-4."
+ },
+ "account.customOAuthRedirectUriHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Per UX_GUIDELINES 10.2: CTRL-5, COPY-4; drop RFC reference to Advanced. Applied in UX-4."
+ },
+ "account.oauthConnected": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary/COPY-4: drop \"OAuth\". Text has no {provider}. Applied in UX-4."
+ },
+ "account.folderSync": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: Update, not Sync (COPY-4/9). Applied in UX-4.",
+  "control": "Collapsible heading button"
+ },
+ "account.manageFolderSync": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary; label reads as statement (CTRL-1 label). Applied in UX-4.",
+  "applies": "now (inside Save form)"
+ },
+ "account.manageFolderSyncHelp": {
+  "accurate": "unverified: depends on backend default subscription behaviour (inbox, drafts, sent per code coreFolderTypes)",
+  "proposed": "",
+  "notes": "Per UX_GUIDELINES 10.2: COPY-2, COPY-3. Folder checkboxes and Update all apply at once, not on Save (CTRL-1). Applied in UX-4."
+ },
+ "account.syncAllFolders": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary Update; \"Sync\" jargon. Applied in UX-4.",
+  "applies": "now"
+ },
+ "account.alwaysSynced": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary. Applied in UX-4."
+ },
+ "account.folderMapping": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain term for mapping special folders (COPY-4); or \"Special folders\". Applied in UX-4."
+ },
+ "account.neverRequest": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7: values as sentences; option of \"Read receipts\" select. Applied in UX-4.",
+  "control": "Select option"
+ },
+ "account.askEachTime": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7. Applied in UX-4.",
+  "control": "Select option"
+ },
+ "account.alwaysRequest": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7. Applied in UX-4.",
+  "control": "Select option"
+ },
+ "account.folderSent": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label of the folder role; ok under a \"Folder roles\" heading.",
+  "applies": "on Save"
+ },
+ "account.folderDrafts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label of the folder role; ok under a \"Folder roles\" heading.",
+  "applies": "on Save"
+ },
+ "account.folderTrash": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label of the folder role; ok under a \"Folder roles\" heading.",
+  "applies": "on Save"
+ },
+ "account.folderSpam": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label; \"Spam/Junk\" fine, ok.",
+  "applies": "on Save"
+ },
+ "account.folderArchive": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label of the folder role; ok under a \"Folder roles\" heading.",
+  "applies": "on Save"
+ },
+ "account.folderAllMail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label of the folder role; ok under a \"Folder roles\" heading.",
+  "applies": "on Save"
+ },
+ "account.folderStarred": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label of the folder role; ok under a \"Folder roles\" heading.",
+  "applies": "on Save"
+ },
+ "account.deleteTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; confirm dialog title as question. Applied in UX-4."
+ },
+ "account.deleteConfirm": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; remove \"Are you sure\". Applied in UX-4."
+ },
+ "account.deleteWarning": {
+  "accurate": "unverified: backend removal scope (local messages, folders, settings, stored sign-in) not checked",
+  "proposed": "",
+  "notes": "COPY-2, SEC-5: say \"this computer\"; tell what is lost. Verify scope. Applied in UX-4."
+ },
+ "account.deleteAccount": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Button names the action (CTRL table); sentence case. Applied in UX-4."
+ },
+ "account.chooseProvider": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "account.chooseProviderHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6, COPY-12. Applied in UX-4."
+ },
+ "account.changeProvider": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "account.advancedSettings": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4.",
+  "control": "Collapsible button"
+ },
+ "account.incomingMail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Per 10.2: COPY-4; protocol after plain term. Applied in UX-4."
+ },
+ "account.outgoingMail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Per 10.2: COPY-4; protocol after plain term. Applied in UX-4."
+ },
+ "account.port": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Expert-only; keep under Advanced (CTRL-5).",
+  "applies": "on Save"
+ },
+ "account.syncPeriod": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary; \"Sync Period\" jargon. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.syncPeriodHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4/6. Applied in UX-4."
+ },
+ "account.sync1week": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.sync2weeks": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.sync1month": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.sync2months": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.sync3months": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.sync6months": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.sync1year": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.syncAllMessages": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clear option."
+ },
+ "account.manualOnly": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Says what happens (COPY-7); \"Manual only\" is vague. Applied in UX-4."
+ },
+ "account.every5Min": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.every15Min": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.every30Min": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.everyHour": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Option with unit (CTRL-9)."
+ },
+ "account.checkNewMail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case; matches glossary. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.checkNewMailHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: IDLE push; internal/imap/idle.go exists. COPY-6. Applied in UX-4."
+ },
+ "account.requestReadReceipts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: Read receipt; sentence case. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.requestReadReceiptsHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6: add what it does; accurate as is. Applied in UX-4."
+ },
+ "account.folderMappingHelp2": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: IMAP. Applied in UX-4."
+ },
+ "account.saveAccountFirst": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.loadingFolders": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Typography ellipsis. Applied in UX-4."
+ },
+ "account.noFoldersAvailable": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.detected": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4/7: plain. Applied in UX-4."
+ },
+ "account.none": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain option."
+ },
+ "account.testConnection": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; consistent with glossary. Applied in UX-4.",
+  "control": "Button",
+  "applies": "now"
+ },
+ "account.connectionSuccessful": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; avoid exclamation. Applied in UX-4."
+ },
+ "account.connectionFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8: what happened. Follow with what to do (check server and password). Applied in UX-4."
+ },
+ "account.certificateDeclined": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8, SEC-3: say consequence. Applied in UX-4."
+ },
+ "account.connectionTestFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8: what then. Applied in UX-4."
+ },
+ "account.saveFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8: what then. Applied in UX-4."
+ },
+ "account.addAccount": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.appPassword": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.signIn": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label.",
+  "control": "Button"
+ },
+ "account.signInWith": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Matches glossary.",
+  "control": "Button"
+ },
+ "account.redirectToSignIn": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Clearer; text has no {provider}, so use \"Mailven opens your browser to sign in\". Applied in UX-4."
+ },
+ "account.waitingForAuth": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-12. Applied in UX-4."
+ },
+ "account.completeSignIn": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8. Applied in UX-4."
+ },
+ "account.linkCopied": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Toast/label \"Copied\"; fine."
+ },
+ "account.connectedSuccessfully": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.authFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8; add what to do (try again). Applied in UX-4."
+ },
+ "account.tryAgain": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain.",
+  "control": "Button"
+ },
+ "account.leaveEmptyToKeep": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.notesGoogle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4."
+ },
+ "account.googleClientShipped": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Client jargon (COPY-4); fine in a note. Uses curly apostrophe. Applied in UX-4."
+ },
+ "account.googleClientCustom": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-12. Applied in UX-4."
+ },
+ "account.googleClientNeeded": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-1, COPY-4; \"client\" jargon. Add a link to what a client is (CTRL-8). Applied in UX-4."
+ },
+ "account.notesYahoo": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-3. Applied in UX-4."
+ },
+ "account.notesIcloud": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case. Applied in UX-4."
+ },
+ "account.notesProton": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Brand spelling \"Proton Mail\"; COPY-12. Applied in UX-4."
+ },
+ "account.notesFastmail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; arrow. Applied in UX-4."
+ },
+ "account.notesAppPassword": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.syncSettings": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: Update, not Sync. Applied in UX-4."
+ },
+ "account.syncOptions": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary. Applied in UX-4."
+ },
+ "account.oauthReauthorized": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary; no exclamation. Applied in UX-4.",
+  "control": "Toast"
+ },
+ "account.oauthFreshToken": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: drop \"OAuth token\". Applied in UX-4."
+ },
+ "account.oauthSecurelyConnected": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.authorizing": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary. Applied in UX-4."
+ },
+ "account.reauthorizeHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4/6. Applied in UX-4."
+ },
+ "account.signInAgainHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6. Applied in UX-4."
+ },
+ "account.usernameHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4."
+ },
+ "account.pleaseCompleteSignIn": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 avoid \"Please\". Applied in UX-4."
+ },
+ "account.accountNameRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8: action. Applied in UX-4."
+ },
+ "account.displayNameRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8; matches \"Your name on sent mail\". Applied in UX-4."
+ },
+ "account.emailRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8. Applied in UX-4."
+ },
+ "account.invalidEmail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8. Applied in UX-4."
+ },
+ "account.passwordRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8. Applied in UX-4."
+ },
+ "account.usernameRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8. Applied in UX-4."
+ },
+ "account.imapHostRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4/8. Applied in UX-4."
+ },
+ "account.smtpHostRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4/8. Applied in UX-4."
+ },
+ "account.invalidPort": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8, CTRL-9. Applied in UX-4."
+ },
+ "account.noOutgoingServer": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-3; describes effect. Applied in UX-4.",
+  "applies": "now (inside Save form)"
+ },
+ "account.noOutgoingServerHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2/3/5. Applied in UX-4."
+ },
+ "account.replyForwardWith": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-4.",
+  "applies": "on Save"
+ },
+ "account.replyForwardWithHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6. Applied in UX-4."
+ },
+ "account.replyForwardWithDefault": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "account.smtpAuthentication": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4. Applied in UX-4."
+ },
+ "account.authMechanism": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4; expert, Advanced (CTRL-5). Applied in UX-4."
+ },
+ "account.smtpUseSameAsIncoming": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary. Applied in UX-4."
+ },
+ "account.smtpUsernamePlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Example value; fine. Applied in UX-4."
+ },
+ "account.smtpPasswordPlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4. Applied in UX-4."
+ },
+ "account.smtpCredsNote": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4; must match heading (smtpAuthentication) if renamed. Applied in UX-4."
+ },
+ "account.trustedCertificates": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Sentence case; consider \"Servers you chose to trust\". Applied in UX-4."
+ },
+ "account.trustedCertsHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: TLS; COPY-6. Applied in UX-4."
+ },
+ "account.loadingCerts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Ellipsis. Applied in UX-4."
+ },
+ "account.noTrustedCerts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2. Applied in UX-4."
+ },
+ "account.certFingerprint": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Detail layer; fine."
+ },
+ "account.certExpires": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "account.removeTrustedCert": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Confirm button names action (CTRL table). Applied in UX-4.",
+  "control": "Button",
+  "applies": "now"
+ },
+ "account.removeTrustedCertDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-5, COPY-12. Applied in UX-4."
+ },
+ "account.connectionSecurity": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added in UX-4."
+ },
+ "account.customOAuthAdvanced": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added in UX-4."
+ },
+ "account.signInWithProvider": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added in UX-4."
+ }
+}

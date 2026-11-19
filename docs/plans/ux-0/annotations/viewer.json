@@ -1,0 +1,447 @@
+{
+ "viewer.selectConversation": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.failedToLoad": {
+  "accurate": "yes",
+  "proposed": "Couldn't open this conversation. Try again.",
+  "notes": "COPY-8"
+ },
+ "viewer.tryAgain": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.noSubject": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.messagesInConversation": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.unknown": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is; also lowercased into banners (chatSecurity.ts:41)."
+ },
+ "viewer.reply": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.replyAll": {
+  "accurate": "yes",
+  "proposed": "Reply all",
+  "notes": "COPY-10: sentence case."
+ },
+ "viewer.forward": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.archive": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.delete": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.deletePermanently": {
+  "accurate": "yes",
+  "proposed": "Delete permanently",
+  "notes": "COPY-10; also the confirm button, which names the action."
+ },
+ "viewer.markAsSpam": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.markAsNotSpam": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.spam": {
+  "accurate": "yes",
+  "proposed": "Mark as spam",
+  "notes": "CTRL: button names the action; matches toast.markedAsSpam (COPY-9)."
+ },
+ "viewer.notSpam": {
+  "accurate": "yes",
+  "proposed": "Not spam",
+  "notes": "Fine as is; name matches toast."
+ },
+ "viewer.star": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.removeStar": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.markAsRead": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.markAsUnread": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.expandAll": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.collapseAll": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.print": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.editDraft": {
+  "accurate": "yes",
+  "proposed": "Edit draft",
+  "notes": "COPY-10"
+ },
+ "viewer.copyEmail": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.copySource": {
+  "accurate": "yes",
+  "proposed": "Copy source",
+  "notes": "Expert detail; keep under View source."
+ },
+ "viewer.readReceiptRequested": {
+  "accurate": "yes",
+  "proposed": "The sender asked to be told when you open this message.",
+  "notes": "Glossary: read receipt tells the sender you opened it. COPY-2"
+ },
+ "viewer.sendReceipt": {
+  "accurate": "yes",
+  "proposed": "Send read receipt",
+  "notes": "Glossary"
+ },
+ "viewer.ignoreReceipt": {
+  "accurate": "yes",
+  "proposed": "Don't send",
+  "notes": "CTRL: names the action."
+ },
+ "viewer.sendingReadReceipt": {
+  "accurate": "yes",
+  "proposed": "Sending read receipt...",
+  "notes": "Glossary"
+ },
+ "viewer.processingSMIME": {
+  "accurate": "yes",
+  "proposed": "Checking this message's security...",
+  "notes": "COPY-4: protocol name out of the main line."
+ },
+ "viewer.smimeEncryptedWith": {
+  "accurate": "yes",
+  "proposed": "Encrypted. Mailven unlocked it with your certificate.",
+  "notes": "SEC-3. Details: S/MIME."
+ },
+ "viewer.smimeSignedBy": {
+  "accurate": "yes",
+  "proposed": "Verified: signed by {email}",
+  "notes": "SEC-3, SEC-5. Set only if signature, trusted chain, revocation check and From address all pass (smime/verifier.go)."
+ },
+ "viewer.smimeRevocationUnchecked": {
+  "accurate": "yes",
+  "proposed": "Signed by {email}. Mailven didn't check whether the signer's certificate was cancelled.",
+  "notes": "SEC-3, SEC-5. Online checks are off by default, so this is the common state (settings/store.go:1167); add what to do."
+ },
+ "viewer.smimeRevocationUnknown": {
+  "accurate": "yes",
+  "proposed": "Signed by {email}. Mailven couldn't check whether the signer's certificate was cancelled.",
+  "notes": "SEC-3, SEC-5. Check failed or offline (smime/revocation.go)."
+ },
+ "viewer.smimeRevokedCert": {
+  "accurate": "yes",
+  "proposed": "Don't trust this message. The certificate {email} signed with was cancelled.",
+  "notes": "SEC-2, SEC-4: concrete risk and action."
+ },
+ "viewer.smimeUnknownSigner": {
+  "accurate": "yes",
+  "proposed": "Couldn't verify the sender. This message is signed ({email}), but Mailven doesn't trust the issuer of the certificate.",
+  "notes": "SEC-3. Set when chain fails any other check (smime/verifier.go:238); {email} may be 'unknown'."
+ },
+ "viewer.smimeSelfSigned": {
+  "accurate": "yes",
+  "proposed": "Couldn't verify the sender. {email}'s certificate wasn't issued by a trusted authority.",
+  "notes": "SEC-3, COPY-4: 'self-signed' to details."
+ },
+ "viewer.smimeExpiredCert": {
+  "accurate": "yes",
+  "proposed": "Don't trust the sender. {email}'s certificate has expired.",
+  "notes": "Verified: chain checked at view time, not signing time (smime/verifier.go:312-316). Expired 'bad' tone."
+ },
+ "viewer.smimeSignerMismatch": {
+  "accurate": "yes",
+  "proposed": "Don't trust the sender. This is signed by {email}, which isn't the address it came from.",
+  "notes": "SEC-2. Verified: signature valid, trusted chain, cert lacks From address (model.go:19)."
+ },
+ "viewer.smimeInvalid": {
+  "accurate": "yes",
+  "proposed": "Don't trust this message. Its signature doesn't match, so it may have been changed or damaged.",
+  "notes": "SEC-2. Status also covers unreadable signatures (verifier.go:113-307), so say 'damaged'."
+ },
+ "viewer.smimeDecryptFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't decrypt this message. Check that your certificate for this account is imported.",
+  "notes": "COPY-8. Cause not verified in code (app/message.go:231)."
+ },
+ "viewer.processingPGP": {
+  "accurate": "yes",
+  "proposed": "Checking this message's security...",
+  "notes": "COPY-4"
+ },
+ "viewer.pgpEncryptedWith": {
+  "accurate": "yes",
+  "proposed": "Encrypted. Mailven unlocked it with your key.",
+  "notes": "SEC-3. Details: PGP."
+ },
+ "viewer.pgpSignedBy": {
+  "accurate": "no: 'signed' means the signature matches a key Mailven saved; it does not confirm the key belongs to that person (pgp/verifier.go:158-209)",
+  "proposed": "Signed by {email}. The signature matches a key Mailven has saved for them.",
+  "notes": "SEC-5: green 'ok' tone overstates; keys can come from key servers or older messages."
+ },
+ "viewer.pgpUnknownKey": {
+  "accurate": "no: {keyId} is always empty (extractKeyIDFromSignature returns '', pgp/verifier.go:257)",
+  "proposed": "Couldn't verify the signature. Mailven doesn't have the sender's key.",
+  "notes": "SEC-3, SEC-5. Drops the broken {keyId}; fix or hide."
+ },
+ "viewer.pgpExpiredKey": {
+  "accurate": "yes",
+  "proposed": "Signed by {email}, but the key used has expired.",
+  "notes": "SEC-3. Verified (pgp/verifier.go:197)."
+ },
+ "viewer.pgpRevokedKey": {
+  "accurate": "unverified: no code sets revoked_key (internal/pgp/model.go:19 only), so this text never appears",
+  "proposed": "Don't trust this message. The key {email} signed with was cancelled.",
+  "notes": "SEC-2. Unreachable today; either implement or remove."
+ },
+ "viewer.pgpSignerMismatch": {
+  "accurate": "yes",
+  "proposed": "Don't trust the sender. This is signed by {email}, which isn't the address it came from.",
+  "notes": "SEC-2. Verified (pgp/model.go:20,70)."
+ },
+ "viewer.pgpInvalid": {
+  "accurate": "yes",
+  "proposed": "Don't trust this message. Its signature doesn't match, so it may have been changed or damaged.",
+  "notes": "SEC-2. Matches S/MIME wording (COPY-9)."
+ },
+ "viewer.pgpDecryptFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't decrypt this message. Check that your key for this account is imported.",
+  "notes": "COPY-8. Cause not verified in code (app/message.go:360)."
+ },
+ "viewer.decryptingMessage": {
+  "accurate": "yes",
+  "proposed": "Decrypting message...",
+  "notes": "Fine as is."
+ },
+ "viewer.viewSource": {
+  "accurate": "yes",
+  "proposed": "View source",
+  "notes": "COPY-10; expert feature."
+ },
+ "viewer.hideSource": {
+  "accurate": "yes",
+  "proposed": "Hide source",
+  "notes": "COPY-10"
+ },
+ "viewer.loadingSource": {
+  "accurate": "yes",
+  "proposed": "Loading message source...",
+  "notes": "Fine as is."
+ },
+ "viewer.deleteConversationTitle": {
+  "accurate": "yes",
+  "proposed": "Delete this conversation for good?",
+  "notes": "CTRL: states what is lost."
+ },
+ "viewer.deleteConversationDescription": {
+  "accurate": "yes",
+  "proposed": "Mailven will delete this conversation permanently. You can't undo this.",
+  "notes": "COPY-2"
+ },
+ "viewer.to": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.cc": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.bcc": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.replyTo": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.from": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.attachments": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.copiedToClipboard": {
+  "accurate": "yes",
+  "proposed": "{label} copied",
+  "notes": "COPY-10"
+ },
+ "viewer.failedToCopy": {
+  "accurate": "yes",
+  "proposed": "Couldn't copy. Try again.",
+  "notes": "COPY-8"
+ },
+ "viewer.readReceiptSent": {
+  "accurate": "yes",
+  "proposed": "Read receipt sent. Mailven can't confirm the sender received it.",
+  "notes": "Glossary, COPY-8. Verified path chatThread.svelte.ts:406. Error path shows raw String(err) (chatThread.svelte.ts:408)."
+ },
+ "viewer.failedToSendReceipt": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; send failures toast raw error text instead (chatThread.svelte.ts:408). Candidate for use."
+ },
+ "viewer.failedToLoadSource": {
+  "accurate": "yes",
+  "proposed": "Couldn't load the message source. Try again.",
+  "notes": "COPY-8"
+ },
+ "viewer.failedToLoadMessages": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.noContent": {
+  "accurate": "yes",
+  "proposed": "This message has no content",
+  "notes": "COPY-2"
+ },
+ "viewer.downloadingContent": {
+  "accurate": "yes",
+  "proposed": "Downloading message...",
+  "notes": "COPY-10"
+ },
+ "viewer.failedToLoadContent": {
+  "accurate": "yes",
+  "proposed": "Couldn't download this message. Check your connection, then try again.",
+  "notes": "COPY-8"
+ },
+ "viewer.copy": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.copyLink": {
+  "accurate": "yes",
+  "proposed": "Copy link",
+  "notes": "COPY-10"
+ },
+ "viewer.selectAll": {
+  "accurate": "yes",
+  "proposed": "Select all",
+  "notes": "COPY-10"
+ },
+ "viewer.remoteImagesBlocked": {
+  "accurate": "yes",
+  "proposed": "Pictures from the internet are blocked, so the sender can't see when you open this.",
+  "notes": "SEC-1, SEC-2, glossary. Used as tooltip only (EmailBodyImageBanner.svelte:27)."
+ },
+ "viewer.loadImages": {
+  "accurate": "yes",
+  "proposed": "Load pictures",
+  "notes": "Glossary: pictures from the internet."
+ },
+ "viewer.alwaysLoad": {
+  "accurate": "yes",
+  "proposed": "Always load pictures",
+  "notes": "Glossary; also dropdown title."
+ },
+ "viewer.forDomain": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is. Fallback 'this domain' is hardcoded English (EmailBodyImageBanner.svelte:50)."
+ },
+ "viewer.forSender": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "viewer.focusThread": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.focusMessage": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.exitFocus": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "viewer.darkMailToLight": {
+  "accurate": "yes",
+  "proposed": "Show original colors",
+  "notes": "COPY-4: 'dark filter' is jargon."
+ },
+ "viewer.darkMailToDark": {
+  "accurate": "yes",
+  "proposed": "Use dark colors",
+  "notes": "COPY-4"
+ },
+ "viewer.methodSmime": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-5: security banner detail layer (UX-SEC-3/4)."
+ },
+ "viewer.methodPgp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-5: security banner detail layer (UX-SEC-3/4)."
+ },
+ "viewer.couldntVerify": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-5: security banner detail layer (UX-SEC-3/4)."
+ },
+ "viewer.warning": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-5: security banner detail layer (UX-SEC-3/4)."
+ }
+}

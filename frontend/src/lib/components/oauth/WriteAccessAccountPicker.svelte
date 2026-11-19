@@ -15,7 +15,7 @@
   import { _ } from 'svelte-i18n'
   import * as Dialog from '$lib/components/ui/dialog'
   import { Button } from '$lib/components/ui/button'
-  import { toasts } from '$lib/stores/toast'
+  import { toasts, errorDetails } from '$lib/stores/toast'
   // @ts-ignore - wailsjs bindings
   import { ListAuthContextsForProvider, Contacts_EnableWriteAccess } from '$wailsjs/go/app/App'
   // @ts-ignore - wailsjs bindings
@@ -56,11 +56,7 @@
       selected = contexts.length > 0 ? ctxKey(contexts[0]) : ''
     } catch (err) {
       console.error('Failed to load auth contexts:', err)
-      toasts.error(
-        $_('oauth.writeAccessPicker.loadFailed', {
-          values: { message: (err as Error)?.message ?? String(err) },
-        }),
-      )
+      toasts.error($_('oauth.writeAccessPicker.loadFailed'), undefined, errorDetails(err))
       contexts = []
       selected = ''
     } finally {
@@ -96,11 +92,7 @@
       onCompleted?.()
     } catch (err) {
       console.error('Failed to enable write access:', err)
-      toasts.error(
-        $_('oauth.writeAccessPicker.failureToast', {
-          values: { message: (err as Error)?.message ?? String(err) },
-        }),
-      )
+      toasts.error($_('oauth.writeAccessPicker.failureToast'), undefined, errorDetails(err))
     } finally {
       granting = false
     }

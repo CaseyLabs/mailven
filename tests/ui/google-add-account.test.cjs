@@ -61,14 +61,14 @@ test('No Google client: the Gmail form offers the checklist, and importing a cli
   await page.getByRole('button', { name: 'Add Account', exact: true }).last().click()
   const dialog = page.getByRole('dialog')
   await dialog.getByRole('button', { name: /Gmail/ }).click()
-  await dialog.getByText(/Mailven needs a Google Cloud client of your own/).waitFor()
+  await dialog.getByText(/Mailven needs a Google Cloud client that you set up/).waitFor()
   assert.equal(await dialog.getByRole('button', { name: 'Sign in with Google' }).count(), 0)
 
   await dialog.getByRole('button', { name: 'Setup checklist', exact: true }).click()
   await dialog.getByRole('button', { name: /Import JSON/ }).click()
   await dialog.getByRole('button', { name: 'Choose file…', exact: true }).click()
 
-  await dialog.getByRole('button', { name: 'Sign in with Google' }).waitFor()
+  await dialog.getByRole('button', { name: 'Sign in with Google' }).last().waitFor()
   assert.equal(await dialog.getByText(/is required/).count(), 0)
   assert.equal((await ui.calls(page, 'AddAccount')).length, 0)
 }))
@@ -96,17 +96,17 @@ test('Google sign-in names its client, hides Username, and keeps checklist ticks
     return page.getByRole('dialog')
   }
   let dialog = await openGmail()
-  await dialog.getByText('Signs in with Mailven’s Google client.').waitFor()
+  await dialog.getByText("Signs in with Mailven's Google client.").waitFor()
   assert.equal(await dialog.getByLabel('Username', { exact: true }).count(), 0)
-  await dialog.getByRole('button', { name: 'App Password', exact: true }).click()
+  await dialog.getByRole('button', { name: 'App password', exact: true }).click()
   await dialog.getByLabel('Username', { exact: true }).waitFor()
-  await dialog.getByRole('button', { name: 'OAuth', exact: true }).click()
+  await dialog.getByRole('button', { name: 'Sign in with Google', exact: true }).click()
 
   await dialog.getByRole('button', { name: 'Setup checklist', exact: true }).click()
   await dialog.getByRole('checkbox', { name: 'Mark done: Create a project' }).check()
   await dialog.getByRole('button', { name: /Import JSON/ }).click()
   await dialog.getByRole('button', { name: 'Choose file…', exact: true }).click()
-  await dialog.getByText('Signs in with your imported Google client (ID ending …wxyz).').waitFor()
+  await dialog.getByText('Signs in with the Google client you imported (ID ending …wxyz).').waitFor()
 
   await page.keyboard.press('Escape')
   await dialog.waitFor({ state: 'detached' })

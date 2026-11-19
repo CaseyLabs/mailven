@@ -1,0 +1,212 @@
+{
+ "setupDiagnostic.title": {
+  "accurate": "yes",
+  "proposed": "Check connection",
+  "notes": "COPY-10; 'setup' vague"
+ },
+ "setupDiagnostic.guidance": {
+  "accurate": "unverified: 'never retries' and 'report leaves out addresses and passwords' are backend behaviour",
+  "proposed": "Mailven tests that it can connect securely and sign in with these settings. It doesn't send any mail. A successful test doesn't prove you may send from this address or that mail arrives. It runs only when you start it. To sign in again, use the account's Sign in again option. The exported report leaves out email addresses and passwords.",
+  "notes": "COPY-1 (long, 4 ideas), COPY-6; consider split into two lines"
+ },
+ "setupDiagnostic.from": {
+  "accurate": "yes",
+  "proposed": "Send from",
+  "notes": "Fine",
+  "control": "Select",
+  "applies": "now"
+ },
+ "setupDiagnostic.chooseIdentity": {
+  "accurate": "yes",
+  "proposed": "Choose an email address",
+  "notes": "COPY-9 'identity' vs 'email address'"
+ },
+ "setupDiagnostic.route": {
+  "accurate": "yes",
+  "proposed": "Server settings",
+  "notes": "Single option and disabled; hide or drop (P4)",
+  "control": "Select (disabled)"
+ },
+ "setupDiagnostic.existingRoute": {
+  "accurate": "yes",
+  "proposed": "Saved settings (IMAP / SMTP)",
+  "notes": "COPY-4: plain term first"
+ },
+ "setupDiagnostic.owned": {
+  "accurate": "yes",
+  "proposed": "Also check the domain records for a domain I own",
+  "notes": "COPY-4 DNS; checkbox applies at Start",
+  "control": "Checkbox",
+  "applies": "now (at Start)"
+ },
+ "setupDiagnostic.domain": {
+  "accurate": "yes",
+  "proposed": "Your domain",
+  "notes": "COPY-9"
+ },
+ "setupDiagnostic.selectors": {
+  "accurate": "unverified: 'maximum 10' not enforced in this component",
+  "proposed": "DKIM selectors from your provider (optional, separate with commas, up to 10)",
+  "notes": "CTRL-5: expert, move to Advanced; COPY-4"
+ },
+ "setupDiagnostic.start": {
+  "accurate": "yes",
+  "proposed": "Start check",
+  "notes": "COPY-9 'diagnostic' to 'check'"
+ },
+ "setupDiagnostic.running": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.cancelling": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.export": {
+  "accurate": "yes",
+  "proposed": "Save report without private details",
+  "notes": "COPY-2 'redacted' jargon"
+ },
+ "setupDiagnostic.failed": {
+  "accurate": "yes",
+  "proposed": "Mailven couldn't start the check. Make sure the account, From address and server names are saved, then try again.",
+  "notes": "COPY-8"
+ },
+ "setupDiagnostic.cancelFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't cancel the check. It will stop on its own when time runs out.",
+  "notes": "COPY-8"
+ },
+ "setupDiagnostic.exportFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't save the report. Run the check again, then retry.",
+  "notes": "COPY-8"
+ },
+ "setupDiagnostic.oauth": {
+  "accurate": "yes",
+  "proposed": "Sign-in service and expiry (UTC)",
+  "notes": "COPY-4 OAuth; detail layer only already (inside Details)"
+ },
+ "setupDiagnostic.notApplicable": {
+  "accurate": "yes",
+  "proposed": "Doesn't apply or isn't available",
+  "notes": "COPY-7"
+ },
+ "setupDiagnostic.unknown": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.none": {
+  "accurate": "yes",
+  "proposed": "None",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.scopes": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine; detail layer"
+ },
+ "setupDiagnostic.age": {
+  "accurate": "yes",
+  "proposed": "Permissions last checked",
+  "notes": "Value is raw seconds like 12s (UX CTRL-9 units); SetupDiagnosticSection.svelte:80"
+ },
+ "setupDiagnostic.exportSaved": {
+  "accurate": "yes",
+  "proposed": "Report saved.",
+  "notes": "Drop 'Redacted'; COPY-2"
+ },
+ "setupDiagnostic.checkedSelection": {
+  "accurate": "yes",
+  "proposed": "Checked mailbox: {mailbox}. Send from: {from}",
+  "notes": "COPY-7 mid-dot fragment"
+ },
+ "setupDiagnostic.summary": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.details": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.area.sending": {
+  "accurate": "yes",
+  "proposed": "Connecting and signing in",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.area.dns": {
+  "accurate": "yes",
+  "proposed": "Domain records",
+  "notes": "Fine; DNS in Details"
+ },
+ "setupDiagnostic.area.permissions": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.outcome.sending.ok": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.outcome.sending.problem": {
+  "accurate": "yes",
+  "proposed": "Something failed. Open Details to see which step.",
+  "notes": "Fine; add icon+word (SEC-4)"
+ },
+ "setupDiagnostic.outcome.sending.unconfirmed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.outcome.sending.notChecked": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "setupDiagnostic.outcome.dns.ok": {
+  "accurate": "yes",
+  "proposed": "The records look correct.",
+  "notes": "COPY-1 'well formed' jargon, tense"
+ },
+ "setupDiagnostic.outcome.dns.problem": {
+  "accurate": "yes",
+  "proposed": "A record is missing or wrong. Open Details to see which.",
+  "notes": "COPY-1"
+ },
+ "setupDiagnostic.outcome.dns.unconfirmed": {
+  "accurate": "yes",
+  "proposed": "Mailven couldn't look up a record. Open Details to see which.",
+  "notes": "COPY-12"
+ },
+ "setupDiagnostic.outcome.dns.notChecked": {
+  "accurate": "yes",
+  "proposed": "Not checked. Select the domain option to check them.",
+  "notes": "'Tick' to 'Select'"
+ },
+ "setupDiagnostic.outcome.permissions.ok": {
+  "accurate": "yes",
+  "proposed": "Your saved sign-in includes the permissions Mailven needs.",
+  "notes": "COPY-12"
+ },
+ "setupDiagnostic.outcome.permissions.problem": {
+  "accurate": "yes",
+  "proposed": "Your saved sign-in is missing a permission. Sign in again to grant it.",
+  "notes": "Glossary: Sign in again"
+ },
+ "setupDiagnostic.outcome.permissions.unconfirmed": {
+  "accurate": "yes",
+  "proposed": "Your provider decides whether you may send from this address, and Mailven couldn't confirm it.",
+  "notes": "COPY-8"
+ },
+ "setupDiagnostic.outcome.permissions.notChecked": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ }
+}

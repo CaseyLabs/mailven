@@ -11,7 +11,7 @@ Mailven ships with no Google OAuth credentials, so Gmail OAuth, the Calendar ext
 - The redirect used by the sign-in flow is a local `http://localhost` address, which a Desktop app client allows automatically.
 :::
 
-Mailven also has a **Setup checklist** with the same steps: in **Settings → Accounts → OAuth Credentials**, or on the Google sign-in form, press **Setup checklist**. It opens each console page in your browser, offers a copy button for the scope list and, on the sign-in form, an **Import JSON…** button, so you can finish without leaving the Add Account dialog.
+Mailven also has a **Setup checklist** with the same steps: in **Settings → Accounts → OAuth Credentials**, or on the Google sign-in form, press **Setup checklist**. It opens each console page in your browser, offers a copy button for the scope list and, on the sign-in form, an **Import JSON…** button, so you can finish without leaving the Add email account dialog.
 
 :::note If a link opens the wrong page
 Google moves its console pages from time to time. Each checklist step also names the menu path to follow from the console home page.
@@ -93,11 +93,11 @@ You can also add your own Google accounts as test users under **Audience → Tes
 
 **Or import the downloaded file:** above the Google Mail editor (or in step 7 of the checklist on the Google sign-in form), click **Import JSON…**, tick the slots to fill (Google Mail, Google Contacts, Google Calendar — all ticked by default) and choose the file. Mailven reads the Desktop app client from it and saves it to every ticked slot at once, so steps 7 and 8 need no pasting. A file for any other client type (such as **Web application**), or one that is not valid Google JSON, is rejected with a message and changes nothing. Mailven never shows the secret after saving.
 
-If you already added your Gmail account, re-authorize it so it starts using your credentials: **Settings → Accounts → Edit** on the account → **Re-authorize**. Otherwise just [add your account with OAuth](/docs/getting-started/first-account/gmail) as usual.
+If you already added your Gmail account, sign in again so it starts using your credentials: **Settings → Accounts → Edit** on the account → **Re-authorize**. Otherwise just [add your account with OAuth](/docs/getting-started/first-account/gmail) as usual.
 
 ## 8. Sign In and Check the Setup
 
-Sign in with your Google account, then open **Settings → Accounts → Edit** on it → **Identity** and press **Check Google setup**. It reports which of the Gmail, People and Calendar APIs work and offers **Enable API** or **Re-authorize** for any that do not.
+Sign in with your Google account, then open **Settings → Accounts → Edit** on it → **Identity** and press **Check Google connection**. It reports which of the Gmail, People and Calendar APIs work and offers **Enable API** or **Re-authorize** for any that do not.
 
 ## 9. Configure the Calendar Extension
 

@@ -13,7 +13,7 @@ For account types, authentication requirements and optional mail API routes, see
 
 The quickest way to add an account is to click the **+ Add Account** button in the sidebar.
 
-Alternatively, you can go to **Settings > Accounts > Add Account**.
+Alternatively, you can go to **Settings > Accounts > Add account**.
 
 ## Quick Setup Steps
 
@@ -24,14 +24,14 @@ Alternatively, you can go to **Settings > Accounts > Add Account**.
 5. **Enter your e-mail address** - The e-mail address of the account
 6. **Enter your user name** - The username is usually also your e-mail address for most providers
 7. **Follow the authentication flow**:
-   - For Gmail/Outlook: Click the OAuth button and authorize in your browser
+   - For Gmail/Outlook: Click **Sign in with Google** or **Sign in with Microsoft** and sign in in your browser
    - For other providers: Enter app password
    - For manual setup: Enter your server details
 8. **Notable Advance Settings** - Some settings that you might care about:
-    - **Sync Period** - How much of the e-mail to sync from provider to local. Default: `1 Month`
-    - **Check for New Mail** - Aside from push mail, how often to sync. Default: `1 hour`
-    - **Request Read Receipts** - Read receipt settings for send. Default: `Never`
-9. **Click Add Account**
+    - **How far back to download** - How much of the e-mail to download from your provider. Default: `1 Month`
+    - **Check for new mail** - Besides getting new mail right away when your provider supports it, how often Mailven checks. Default: `1 hour`
+    - **Ask for read receipts** - Read receipt settings for sent mail. Default: `Never ask for read receipts`
+9. **Click Add account**
 
 Mailven will connect to your email server and begin synchronizing your messages. If it doesn't start syncing automatically, click on the 3 dot menu next to the account and click "Sync Now".
 
@@ -53,4 +53,4 @@ By default, Mailven syncs emails from the last 30 days. You can adjust this in t
 
 You can reasonably add as many email accounts as you want to Mailven. Each account can have its own color for easy identification in the unified inbox.
 
-To add another account, click the **+ Add Account** button in the sidebar, or go to **Settings > Accounts > Add Account**.
+To add another account, click the **+ Add Account** button in the sidebar, or go to **Settings > Accounts > Add account**.

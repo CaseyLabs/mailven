@@ -701,3 +701,10 @@ mark {
     scroll-behavior: auto !important;
   }
 }
+
+/* A setting reached from Settings search stays marked for a moment. */
+.settings-found {
+  border-radius: 0.375rem;
+  outline: 2px solid var(--color-ring);
+  outline-offset: 4px;
+}

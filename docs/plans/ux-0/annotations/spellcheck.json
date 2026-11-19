@@ -1,0 +1,66 @@
+{
+ "spellcheck.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-2."
+ },
+ "spellcheck.enable": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine. CTRL-1: switch in Save form."
+ },
+ "spellcheck.enableHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine.",
+  "control": "none (help text)"
+ },
+ "spellcheck.languages": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Label; control per language is a switch in Save form."
+ },
+ "spellcheck.languagesHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-3, CTRL-1: multi-select should be checkboxes. Applied in UX-2.",
+  "control": "Switch per dictionary (multi-select list)"
+ },
+ "spellcheck.addToDictionary": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Right-click menu; applies at once.",
+  "applies": "now"
+ },
+ "spellcheck.ignore": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "spellcheck.noSuggestions": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "spellcheck.addedWords": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-12. Applied in UX-2."
+ },
+ "spellcheck.noAddedWords": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "spellcheck.removeWord": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Removes at once, outside Save (ComposerTab.svelte:55 comment).",
+  "applies": "now"
+ },
+ "spellcheck.languagesDisabled": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-CTRL-7: says why dictionaries are dimmed."
+ }
+}

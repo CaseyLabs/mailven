@@ -3,7 +3,7 @@
 // detached composer window counts down in place before it sends.
 import { get } from 'svelte/store'
 import { _ } from '$lib/i18n'
-import { addToast, toasts } from '$lib/stores/toast'
+import { addToast, errorDetails, toasts } from '$lib/stores/toast'
 import { UNDO_SEND_MS, undoSend, whenSent } from '$lib/stores/sendQueue'
 import type { ComposerApi } from '$lib/composerApi'
 import type { smtp } from '../../../../wailsjs/go/models'
@@ -47,10 +47,10 @@ export async function queueWithUndo(
     toasts.remove(toastId)
     if (r.error) {
       console.error('Failed to send message:', r.error)
-      addToast({ type: 'error', message: r.error })
+      addToast({ type: 'error', message: t('toast.sendFailedDraftKept'), details: errorDetails(r.error) })
       return
     }
-    if (r.warnings) addToast({ type: 'info', message: r.warnings + ' ' + t('composer.acceptedCleanupWarning') })
+    if (r.warnings) addToast({ type: 'info', message: t('composer.acceptedCleanupWarning'), details: errorDetails(r.warnings) })
     addToast({ type: 'success', message: t('composer.messageSent') })
   })
 }

@@ -1,0 +1,17 @@
+{
+ "messageList.syncFolder": {
+  "accurate": "yes",
+  "proposed": "Check this folder for new mail",
+  "notes": "Glossary"
+ },
+ "messageList.forceResync": {
+  "accurate": "yes",
+  "proposed": "Download everything again",
+  "notes": "Glossary. No confirmation in FolderContextMenu.svelte:95; clears stored bodies and attachments (app/sync.go:171)."
+ },
+ "messageList.syncNow": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ }
+}

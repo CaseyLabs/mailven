@@ -51,8 +51,12 @@
 {/if}
 
 {#each banners as b (b.icon + b.text)}
-  <div class="flex items-center gap-2 px-3 py-1.5 border rounded-md text-xs {TONES[b.tone]}">
-    <Icon icon={b.icon} class="w-4 h-4 shrink-0 {b.spin ? 'animate-spin' : ''}" />
-    <span>{b.text}</span>
+  <div class="flex items-start gap-2 px-3 py-1.5 border rounded-md text-xs {TONES[b.tone]}">
+    <Icon icon={b.icon} class="w-4 h-4 shrink-0 mt-px {b.spin ? 'animate-spin' : ''}" aria-hidden="true" />
+    <span>
+      {#if b.word}<strong class="font-semibold">{b.word}.</strong>{/if}
+      {b.text}
+      {#if b.detail}<span class="block opacity-80">{b.detail}</span>{/if}
+    </span>
   </div>
 {/each}

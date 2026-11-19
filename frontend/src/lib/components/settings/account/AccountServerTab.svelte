@@ -3,7 +3,7 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import * as Select from '$lib/components/ui/select'
-  import Switch from '$lib/components/ui/switch/Switch.svelte'
+  import Checkbox from '$lib/components/ui/checkbox/Checkbox.svelte'
   import {
     securityOptions,
     authMechanismOptions,
@@ -16,6 +16,7 @@
   import AccountServerSmtp from './AccountServerSmtp.svelte'
   import AccountServerFolderMapping from './AccountServerFolderMapping.svelte'
   import AccountServerFolderSync from './AccountServerFolderSync.svelte'
+  import type { FolderSubscriptionChanges } from './folderSubscriptionChanges'
   import AccountServerTrustedCerts from './AccountServerTrustedCerts.svelte'
 
   interface Props {
@@ -87,6 +88,7 @@
     onSyncAllFoldersChange: (value: boolean) => void
     syncFoldersEnabled: boolean
     onSyncFoldersEnabledChange: (value: boolean) => void
+    folderChanges: FolderSubscriptionChanges
   }
 
   let {
@@ -134,6 +136,7 @@
     onSyncAllFoldersChange,
     syncFoldersEnabled = $bindable(),
     onSyncFoldersEnabledChange,
+    folderChanges = $bindable(),
   }: Props = $props()
 
   // Read receipt request policy options
@@ -194,7 +197,7 @@
           />
         </div>
         <div class="space-y-2">
-          <Label>{$_('account.security')}</Label>
+          <Label>{$_('account.connectionSecurity')}</Label>
           <Select.Root
             value={imapSecurity}
             onValueChange={(v) => { imapSecurity = v; onImapSecurityChange(v) }}
@@ -245,8 +248,8 @@
        subsection are hidden, the backend skips SMTP wiring, and the
        composer's From dropdown excludes this account. -->
   <div class="space-y-2">
-    <label class="flex items-center gap-3 text-sm">
-      <Switch
+    <label class="flex min-h-6 items-center gap-3 text-sm">
+      <Checkbox
         checked={noOutgoingServer}
         onCheckedChange={(v) => { noOutgoingServer = v; onNoOutgoingServerChange(v) }}
       />
@@ -401,6 +404,7 @@
     {onSyncAllFoldersChange}
     bind:syncFoldersEnabled
     {onSyncFoldersEnabledChange}
+    bind:folderChanges
   />
 
   <AccountServerTrustedCerts />

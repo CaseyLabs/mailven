@@ -2,7 +2,7 @@
 // Provides reactive state for application settings
 
 // @ts-ignore - wailsjs path
-import { GetMessageListDensity, GetMessageListSortOrder, GetThemeMode, GetShowTitleBar, GetRunBackground, GetStartHidden, GetAutostart, GetLanguage, GetComposerMode, GetMailtoMode, GetComposerFormat, GetNativeTitleBar, GetAlwaysLoadImages, GetDarkMailContent, GetDarkComposerBody, GetAccentBarUnread, GetAccentUnreadStyle, GetShowMessageListCircles, GetShowMessageListProfilePics, GetAlwaysShowMessageCheckbox, GetShowMessagePreview, GetShowViewerCircles, GetSpellcheckEnabled, GetSpellcheckLanguages, GetSpellcheckCustomWords, GetChatSendKey, GetChatAutoAdvance, GetChatShowLowGroup, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle, GetChatShowAvatars, GetChatHoverActions, GetChatMessageAvatars, GetChatReadingFont } from '../../../wailsjs/go/app/App'
+import { GetMessageListDensity, GetMessageListSortOrder, GetThemeMode, GetShowTitleBar, GetRunBackground, GetStartHidden, GetAutostart, GetLanguage, GetComposerMode, GetMailtoMode, GetComposerFormat, GetNativeTitleBar, GetAlwaysLoadImages, GetDarkMailContent, GetDarkComposerBody, GetShowMessagePreview, GetSpellcheckEnabled, GetSpellcheckLanguages, GetSpellcheckCustomWords, GetChatSendKey, GetChatAutoAdvance, GetChatShowLowGroup, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle, GetChatShowAvatars, GetChatHoverActions, GetChatMessageAvatars, GetChatReadingFont } from '../../../wailsjs/go/app/App'
 import { setLocale as setI18nLocale, resolveLocale } from '$lib/i18n'
 import { filterSupportedDicts } from '$lib/spellcheck/locales'
 import { loadDateFnsLocale, getDateFnsLocale } from '$lib/i18n/dateFnsLocale'
@@ -48,13 +48,7 @@ let nativeTitleBar = $state<boolean>(true)
 let alwaysLoadImages = $state<boolean>(false)
 let darkMailContent = $state<boolean>(true)
 let darkComposerBody = $state<boolean>(true)
-let accentBarUnread = $state<boolean>(false)
-let accentUnreadStyle = $state<string>('dot')
-let showMessageListCircles = $state<boolean>(true)
-let showMessageListProfilePics = $state<boolean>(false)
-let alwaysShowMessageCheckbox = $state<boolean>(false)
 let showMessagePreview = $state<boolean>(true)
-let showViewerCircles = $state<boolean>(true)
 // Chat-list row extras; both are opt-in.
 let chatShowAvatars = $state<boolean>(true)
 let chatHoverActions = $state<boolean>(false)
@@ -176,6 +170,18 @@ export function getNativeTitleBar(): boolean {
   return nativeTitleBar
 }
 
+// The title bar the window started with. Fixed for the app run, so Settings
+// offers a restart only when the choice differs from it (UX8).
+let startupNativeTitleBar: boolean | null = null
+
+export function getStartupNativeTitleBar(): boolean | null {
+  return startupNativeTitleBar
+}
+
+export function setStartupNativeTitleBar(v: boolean) {
+  if (startupNativeTitleBar === null) startupNativeTitleBar = v
+}
+
 export function getAlwaysLoadImages(): boolean {
   return alwaysLoadImages
 }
@@ -186,26 +192,6 @@ export function getDarkMailContent(): boolean {
 
 export function getDarkComposerBody(): boolean {
   return darkComposerBody
-}
-
-export function getAccentBarUnread(): boolean {
-  return accentBarUnread
-}
-
-export function getAccentUnreadStyle(): string {
-  return accentUnreadStyle
-}
-
-export function getShowMessageListCircles(): boolean {
-  return showMessageListCircles
-}
-
-export function getShowMessageListProfilePics(): boolean {
-  return showMessageListProfilePics
-}
-
-export function getAlwaysShowMessageCheckbox(): boolean {
-  return alwaysShowMessageCheckbox
 }
 
 export function getChatShowAvatars(): boolean {
@@ -226,10 +212,6 @@ export function getChatReadingFont(): ChatReadingFont {
 
 export function getShowMessagePreview(): boolean {
   return showMessagePreview
-}
-
-export function getShowViewerCircles(): boolean {
-  return showViewerCircles
 }
 
 export function getCurrentDateFnsLocale(): Locale | undefined {
@@ -313,26 +295,6 @@ export function setDarkComposerBody(v: boolean) {
   darkComposerBody = v
 }
 
-export function setAccentBarUnread(v: boolean) {
-  accentBarUnread = v
-}
-
-export function setAccentUnreadStyle(v: string) {
-  accentUnreadStyle = v
-}
-
-export function setShowMessageListCircles(v: boolean) {
-  showMessageListCircles = v
-}
-
-export function setShowMessageListProfilePics(v: boolean) {
-  showMessageListProfilePics = v
-}
-
-export function setAlwaysShowMessageCheckbox(v: boolean) {
-  alwaysShowMessageCheckbox = v
-}
-
 export function setChatShowAvatars(v: boolean) {
   chatShowAvatars = v
 }
@@ -356,14 +318,10 @@ export function setShowMessagePreview(v: boolean) {
   showMessagePreview = v
 }
 
-export function setShowViewerCircles(v: boolean) {
-  showViewerCircles = v
-}
-
 // Load settings from backend (call on app startup)
 export async function loadSettings(): Promise<ThemeMode> {
   try {
-    const [density, sortOrder, theme, titleBar, runBg, startHid, autoSt, lang, compMode, mailMode, compFormat, nativeTB, alwaysImages, darkMail, darkComposer, accentBar, accentStyle, listCircles, listProfilePics, alwaysCheckbox, messagePreview, viewerCircles, scEnabled, scLangs, scWords, sendKey, autoAdvance, showLowGroup, readingWidth, displayStyle, richStyle, showAvatars, hoverActions, messageAvatars, readingFont] = await Promise.all([
+    const [density, sortOrder, theme, titleBar, runBg, startHid, autoSt, lang, compMode, mailMode, compFormat, nativeTB, alwaysImages, darkMail, darkComposer, messagePreview, scEnabled, scLangs, scWords, sendKey, autoAdvance, showLowGroup, readingWidth, displayStyle, richStyle, showAvatars, hoverActions, messageAvatars, readingFont] = await Promise.all([
       GetMessageListDensity(),
       GetMessageListSortOrder(),
       GetThemeMode(),
@@ -379,13 +337,7 @@ export async function loadSettings(): Promise<ThemeMode> {
       GetAlwaysLoadImages(),
       GetDarkMailContent(),
       GetDarkComposerBody(),
-      GetAccentBarUnread(),
-      GetAccentUnreadStyle(),
-      GetShowMessageListCircles(),
-      GetShowMessageListProfilePics(),
-      GetAlwaysShowMessageCheckbox(),
       GetShowMessagePreview(),
-      GetShowViewerCircles(),
       GetSpellcheckEnabled(),
       GetSpellcheckLanguages(),
       GetSpellcheckCustomWords(),
@@ -411,20 +363,15 @@ export async function loadSettings(): Promise<ThemeMode> {
     mailtoMode = (mailMode as ComposerMode) || 'inline'
     composerFormat = (compFormat as ComposerFormat) || 'rich'
     nativeTitleBar = nativeTB ?? true
+    setStartupNativeTitleBar(nativeTitleBar)
     alwaysLoadImages = alwaysImages ?? false
     darkMailContent = darkMail ?? true
     darkComposerBody = darkComposer ?? true
-    accentBarUnread = accentBar ?? false
-    accentUnreadStyle = accentStyle || 'dot'
-    showMessageListCircles = listCircles ?? true
-    showMessageListProfilePics = listProfilePics ?? false
-    alwaysShowMessageCheckbox = alwaysCheckbox ?? false
     showMessagePreview = messagePreview ?? true
     chatShowAvatars = showAvatars ?? true
     chatHoverActions = hoverActions ?? false
     chatMessageAvatars = messageAvatars ?? true
     setChatReadingFont(readingFont === 'serif' ? 'serif' : 'sans')
-    showViewerCircles = viewerCircles ?? true
     spellcheckEnabled = scEnabled ?? true
     spellcheckLanguages = filterSupportedDicts(scLangs ?? [])
     spellcheckCustomWords = scWords ?? []

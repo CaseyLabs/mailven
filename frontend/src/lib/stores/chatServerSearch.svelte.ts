@@ -6,7 +6,9 @@ import { LoadOlderGmail, LoadOlderIMAP, SearchGmailServer, SearchIMAPServer } fr
 import { accountStore } from '$lib/stores/accounts.svelte'
 import { chatList } from '$lib/stores/chat.svelte'
 import { mailApiRoutes } from '$lib/stores/mailApiRoutes.svelte'
-import { toasts } from '$lib/stores/toast'
+import { get } from 'svelte/store'
+import { _ } from '$lib/i18n'
+import { toasts, errorDetails } from '$lib/stores/toast'
 
 // Most matches one account's search stores; Gmail's page size is the ceiling.
 const LIMIT = 100
@@ -49,7 +51,7 @@ class ChatServerSearch {
       this.doneQuery = query
       if (added > 0) await chatList.reload(true)
     } catch (err) {
-      toasts.error(err instanceof Error ? err.message : String(err))
+      toasts.error(get(_)('toast.serverSearchFailed'), undefined, errorDetails(err))
     } finally {
       this.busy = false
     }
@@ -69,7 +71,7 @@ class ChatServerSearch {
       this.olderAdded = added
       if (added > 0) await chatList.reload(true)
     } catch (err) {
-      toasts.error(err instanceof Error ? err.message : String(err))
+      toasts.error(get(_)('toast.olderMailFailed'), undefined, errorDetails(err))
     } finally {
       this.olderBusy = false
     }

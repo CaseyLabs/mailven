@@ -3,35 +3,21 @@
   import { Label } from '$lib/components/ui/label'
   import Switch from '$lib/components/ui/switch/Switch.svelte'
   import { _ } from '$lib/i18n'
+  import type { GeneralChange } from './settingsApply'
 
   interface Props {
     runBackground: boolean
     startHidden: boolean
     autostart: boolean
+    onChange: (change: GeneralChange) => void
   }
 
-  let {
-    runBackground = $bindable(),
-    startHidden = $bindable(),
-    autostart = $bindable(),
-  }: Props = $props()
+  let { runBackground, startHidden, autostart, onChange }: Props = $props()
 
   function handleRunBackgroundChange(value: boolean) {
-    runBackground = value
-    if (!value) {
-      startHidden = false
-    }
-  }
-
-  function handleStartHiddenChange(value: boolean) {
-    startHidden = value
-    if (value && !runBackground) {
-      runBackground = true
-    }
-  }
-
-  function handleAutostartChange(value: boolean) {
-    autostart = value
+    onChange({ key: 'runBackground', value })
+    // "Start hidden" needs the background option, so turning that off turns this off too.
+    if (!value && startHidden) onChange({ key: 'startHidden', value: false })
   }
 </script>
 
@@ -45,7 +31,7 @@
       {$_('settingsGeneral.background')}
     </h3>
 
-    <div class="space-y-2">
+    <div class="space-y-2" data-setting="run-background">
       <div class="flex items-center justify-between">
         <div class="space-y-0.5">
           <Label for="run-background">{$_('settingsGeneral.runInBackground')}</Label>
@@ -55,24 +41,25 @@
         </div>
         <Switch
           id="run-background"
-          bind:checked={runBackground}
+          checked={runBackground}
           onCheckedChange={handleRunBackgroundChange}
         />
       </div>
     </div>
 
-    <div class="space-y-2">
+    <div class="space-y-2" data-setting="start-hidden">
       <div class="flex items-center justify-between">
         <div class="space-y-0.5">
           <Label for="start-hidden" class={!runBackground ? 'text-muted-foreground' : ''}>{$_('settingsGeneral.startHidden')}</Label>
           <p class="text-xs text-muted-foreground">
             {$_('settingsGeneral.startHiddenHelp')}
+            {#if !runBackground}{$_('settingsGeneral.startHiddenNeedsBackground')}{/if}
           </p>
         </div>
         <Switch
           id="start-hidden"
-          bind:checked={startHidden}
-          onCheckedChange={handleStartHiddenChange}
+          checked={startHidden}
+          onCheckedChange={(v) => onChange({ key: 'startHidden', value: v })}
           disabled={!runBackground}
         />
       </div>
@@ -89,7 +76,7 @@
       {$_('settingsGeneral.startup')}
     </h3>
 
-    <div class="space-y-2">
+    <div class="space-y-2" data-setting="autostart">
       <div class="flex items-center justify-between">
         <div class="space-y-0.5">
           <Label for="autostart">{$_('settingsGeneral.autostartOnLogin')}</Label>
@@ -99,8 +86,8 @@
         </div>
         <Switch
           id="autostart"
-          bind:checked={autostart}
-          onCheckedChange={handleAutostartChange}
+          checked={autostart}
+          onCheckedChange={(v) => onChange({ key: 'autostart', value: v })}
         />
       </div>
     </div>

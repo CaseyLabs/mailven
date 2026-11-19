@@ -2,7 +2,7 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import * as Select from '$lib/components/ui/select'
-  import Switch from '$lib/components/ui/switch/Switch.svelte'
+  import Checkbox from '$lib/components/ui/checkbox/Checkbox.svelte'
   import { securityOptions, authMechanismOptions } from '$lib/config/providers'
   import { handleSmtpUseSameAsIncomingChange } from './accountFormLoad'
   import type { AccountFormState } from './accountFormState.svelte'
@@ -53,7 +53,7 @@
         />
       </div>
       <div class="space-y-2">
-        <Label>{$_('account.security')}</Label>
+        <Label>{$_('account.connectionSecurity')}</Label>
         <Select.Root bind:value={s.imapSecurity}>
           <Select.Trigger class="h-10">
             <Select.Value placeholder="Select">
@@ -94,8 +94,8 @@
      SMTP-auth sections collapse and the composer's From dropdown
      excludes this account. -->
 <div class="space-y-2">
-  <label class="flex items-center gap-3 text-sm">
-    <Switch bind:checked={s.noOutgoingServer} />
+  <label class="flex min-h-6 items-center gap-3 text-sm">
+    <Checkbox bind:checked={s.noOutgoingServer} />
     <span class="font-medium">{$_('account.noOutgoingServer')}</span>
   </label>
   <p class="text-xs text-muted-foreground">{$_('account.noOutgoingServerHelp')}</p>
@@ -177,7 +177,7 @@
         />
       </div>
       <div class="space-y-2">
-        <Label>{$_('account.security')}</Label>
+        <Label>{$_('account.connectionSecurity')}</Label>
         <Select.Root bind:value={s.smtpSecurity}>
           <Select.Trigger class="h-10">
             <Select.Value placeholder="Select">
@@ -198,8 +198,8 @@
     <!-- SMTP authentication subsection — Generic only. -->
     <div class="space-y-3 pt-3 border-t border-border">
       <h4 class="text-sm font-medium">{$_('account.smtpAuthentication')}</h4>
-      <label class="flex items-center gap-3 text-sm">
-        <Switch
+      <label class="flex min-h-6 items-center gap-3 text-sm">
+        <Checkbox
           checked={s.smtpUseSameAsIncoming}
           onCheckedChange={(v) => handleSmtpUseSameAsIncomingChange(s, v)}
         />

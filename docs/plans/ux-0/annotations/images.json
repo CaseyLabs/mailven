@@ -1,0 +1,39 @@
+{
+ "images.addresses": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9: list holds sender addresses. Applied in UX-2."
+ },
+ "images.domains": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Entries are sender domains; fine, or 'Domains' with a one-line hint (COPY-6)."
+ },
+ "images.noAddresses": {
+  "accurate": "no: the viewer menu reads 'Always Load' then 'For {email}', not 'For sender'",
+  "proposed": "",
+  "notes": "COPY-8. viewer.alwaysLoad/forSender. Applied in UX-2."
+ },
+ "images.noDomains": {
+  "accurate": "no: the viewer menu reads 'For {domain}', not 'For domain'",
+  "proposed": "",
+  "notes": "COPY-8. viewer.forDomain. Applied in UX-2."
+ },
+ "images.removeButton": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9: 'allowlist' is jargon. Applies at once, outside Save. Applied in UX-2.",
+  "applies": "now"
+ },
+ "images.removed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9. Applied in UX-2.",
+  "applies": "now"
+ },
+ "images.listHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6: says what the lists do."
+ }
+}

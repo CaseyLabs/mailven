@@ -55,7 +55,7 @@
       {#if !s.editAccount}
         <button
           type="button"
-          class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          class="flex min-h-6 items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
           onclick={() => goBackToProviders(s)}
         >
           <Icon icon="lucide:arrow-left" class="w-4 h-4" />
@@ -66,7 +66,7 @@
       {#if s.selectedProvider?.notes}
         <div class="flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
           <Icon icon="lucide:info" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-          <p class="text-sm text-amber-600 dark:text-amber-400">
+          <p class="text-sm text-foreground">
             {s.selectedProvider.notesKey ? $_(s.selectedProvider.notesKey) : s.selectedProvider.notes}
           </p>
         </div>
@@ -78,7 +78,7 @@
       <!-- Advanced Settings Toggle -->
       <button
         type="button"
-        class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        class="flex min-h-6 items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         onclick={() => (s.showAdvanced = !s.showAdvanced)}
       >
         <Icon

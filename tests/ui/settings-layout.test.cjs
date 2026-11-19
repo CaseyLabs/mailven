@@ -34,14 +34,14 @@ for (const height of [600, 800, 1000]) {
 }
 
 // Mark-as-read delay is a named choice in words, not an unlabeled number field with a "-1 = manual" legend.
-test('Mark as read delay offers named choices', ui.run({}, async (page) => {
+test('Mark as read delay offers named choices', ui.run({ allow: ['SetMarkAsReadDelay'] }, async (page) => {
   const dialog = await ui.openSettings(page)
-  const trigger = dialog.getByRole('button', { name: 'When I open a message, mark it as read', exact: true })
-  assert.equal((await trigger.innerText()).trim(), 'After 1 second')
+  const trigger = dialog.getByRole('button', { name: 'When I open a chat, mark it as read', exact: true })
+  assert.equal((await trigger.innerText()).trim(), 'After 1 second (default)')
   await trigger.click()
   const list = page.getByRole('listbox').last()
   const options = (await list.getByRole('option').allInnerTexts()).map((o) => o.trim())
-  assert.deepEqual(options, ['Never (only when I mark it myself)', 'Immediately', 'After 0.5 seconds', 'After 1 second', 'After 2 seconds', 'After 3 seconds', 'After 5 seconds'])
+  assert.deepEqual(options, ['Never (only when I mark it myself)', 'Immediately', 'After 0.5 seconds', 'After 1 second (default)', 'After 2 seconds', 'After 3 seconds', 'After 5 seconds'])
   await list.getByRole('option', { name: 'Never (only when I mark it myself)', exact: true }).click()
   assert.equal((await trigger.innerText()).trim(), 'Never (only when I mark it myself)')
 }))
@@ -50,13 +50,16 @@ test('Mark as read delay offers named choices', ui.run({}, async (page) => {
 test('Settings switches are named after their setting', ui.run({}, async (page) => {
   const dialog = await ui.openSettings(page)
   const switches = {
-    General: ['Dark mail content', 'Accent for unread messages', 'Run in background'],
-    Composer: ['Check spelling', 'English (UK)', 'Default Reply-To: Personal — alex@example.com'],
-    Chat: ['Include quoted history', 'Notify only for priority mail'],
-    Images: ['Always load remote images'],
+    General: ['Dark email content', 'Hide message previews', 'Keep running in the background'],
+    Composer: ['Check spelling', 'English (UK)', 'Send replies to: Personal — alex@example.com'],
+    Chat: ['Include the message you reply to', 'Only notify for priority mail'],
+    Images: ['Always load pictures from the internet'],
   }
   for (const [tab, names] of Object.entries(switches)) {
     await dialog.getByRole('tab', { name: tab, exact: true }).click()
+    // Expert options sit under Advanced (UX-CTRL-5).
+    const adv = dialog.getByRole('button', { name: 'Advanced', exact: true })
+    if (await adv.count()) await adv.click()
     for (const name of names) await dialog.getByRole('switch', { name, exact: true }).waitFor({ state: 'attached', timeout: 3000 })
     assert.equal(await dialog.getByRole('switch', { name: /^Toggle (on|off)$/ }).count(), 0, `${tab} has a switch named only by its state`)
   }
@@ -68,11 +71,13 @@ test('Settings switches are named after their setting', ui.run({}, async (page) 
   }
   for (const tab of await dialog.getByRole('tab').allInnerTexts()) {
     await dialog.getByRole('tab', { name: tab.trim(), exact: true }).click()
+    const adv = dialog.getByRole('button', { name: 'Advanced', exact: true })
+    if (await adv.count()) await adv.click()
     await check(tab.trim())
   }
   await dialog.getByRole('tab', { name: 'Accounts', exact: true }).click()
   await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
-  const account = page.getByRole('dialog', { name: 'Edit Account', exact: true })
+  const account = page.getByRole('dialog', { name: 'Edit account', exact: true })
   for (const tab of ['General', 'Identity', 'Server', 'Security']) {
     await account.getByRole('tab', { name: tab, exact: true }).click()
     await check(`Edit Account/${tab}`)
@@ -91,7 +96,7 @@ test('Account section prose does not split words', ui.run({ beforeMount: sentPol
   const dialog = await ui.openSettings(page)
   await dialog.getByRole('tab', { name: 'Accounts', exact: true }).click()
   await page.getByRole('button', { name: 'Edit account', exact: true }).first().click()
-  const account = page.getByRole('dialog', { name: 'Edit Account', exact: true })
+  const account = page.getByRole('dialog', { name: 'Edit account', exact: true })
   const splitting = []
   for (const tab of ['General', 'Identity', 'Server', 'Security']) {
     await account.getByRole('tab', { name: tab, exact: true }).click()

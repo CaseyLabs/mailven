@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from '@iconify/svelte'
   import { Button } from '$lib/components/ui/button'
-  import { addToast } from '$lib/stores/toast'
+  import { addToast, errorDetails } from '$lib/stores/toast'
   import { oauthStore } from '$lib/stores/oauth.svelte'
   import { _ } from '$lib/i18n'
   // @ts-ignore - wailsjs path
@@ -40,7 +40,7 @@
     try {
       await OpenURL(url)
     } catch (err) {
-      addToast({ type: 'error', message: (err as Error).message })
+      addToast({ type: 'error', message: $_('toast.openLinkFailed'), details: errorDetails(err) })
     }
   }
 

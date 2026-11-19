@@ -157,7 +157,7 @@
             class="flex-1"
           >
             <Icon icon={getOAuthButtonIcon(s.selectedProvider)} class="w-4 h-4 mr-2" />
-            OAuth
+            {getOAuthButtonText(s.selectedProvider)}
           </Button>
           <Button
             type="button"
@@ -219,7 +219,7 @@
           class="flex-1"
         >
           <Icon icon="lucide:shield-ellipsis" class="w-4 h-4 mr-2" />
-          OAuth
+          {$_('account.signInWithProvider')}
         </Button>
       </div>
 
@@ -282,6 +282,17 @@
               disabled={s.customOAuthInputsLocked}
             />
           </div>
+          <!-- Expert options: permissions, redirect address and manual addresses (UX-CTRL-5) -->
+          <button
+            type="button"
+            class="text-sm font-medium inline-flex items-center gap-1 hover:text-primary transition-colors"
+            aria-expanded={s.customOAuthAdvanced}
+            onclick={() => s.customOAuthAdvanced = !s.customOAuthAdvanced}
+          >
+            <Icon icon={s.customOAuthAdvanced ? 'lucide:chevron-down' : 'lucide:chevron-right'} class="w-4 h-4" />
+            {$_('account.customOAuthAdvanced')}
+          </button>
+          {#if s.customOAuthAdvanced}
           <div class="space-y-2">
             <Label for="custom-oauth-scopes">{$_('account.customOAuthScopes')}</Label>
             <Input
@@ -341,6 +352,7 @@
                 disabled={s.customOAuthInputsLocked}
               />
             </div>
+          {/if}
           {/if}
         </div>
 

@@ -12,7 +12,7 @@ import { EventsOn } from '../../../../wailsjs/runtime/runtime'
 import { app as appModels, message as messageModels } from '../../../../wailsjs/go/models'
 import { isDialogGuardActive } from '$lib/stores/dialogGuard'
 import { senderEmailOf } from '$lib/stores/chat.svelte'
-import { toasts } from '$lib/stores/toast'
+import { toasts, errorDetails } from '$lib/stores/toast'
 import { _ } from '$lib/i18n'
 import { get } from 'svelte/store'
 import { nearBottom } from './chatScroll.svelte'
@@ -406,7 +406,7 @@ export class ChatThread {
       toasts.success(t('viewer.readReceiptSent'))
     } catch (err) {
       console.error('Failed to send read receipt:', err)
-      toasts.error(String(err))
+      toasts.error(t('toast.readReceiptFailed'), undefined, errorDetails(err))
     } finally {
       const next = new Set(this.sendingReadReceipt)
       next.delete(msg.id)

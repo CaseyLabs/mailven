@@ -22,7 +22,7 @@ Mailven bundles no Microsoft OAuth credentials. Register your own application in
 2. A browser window will open to Microsoft's sign-in page
 3. Sign in with your Microsoft account
 4. Review the permissions and click **Accept**
-5. Return to Mailven and click **Add Account**
+5. Return to Mailven and click **Add account**
 
 ## Permissions Requested
 
@@ -60,7 +60,7 @@ Mailven refreshes Microsoft access tokens automatically during normal use. An ex
 
 1. Go to **Settings > Accounts**
 2. Click **Edit** on your Outlook account
-3. Click **Re-authorize**
+3. Click **Sign in again**
 4. Complete the OAuth flow again
 
 Mailven records the permissions returned by the provider separately from those requested. If a known grant lacks a required permission, only the affected feature is unavailable and its error explains the missing access. Mail authorization does not prove contacts access. Older accounts can have unknown permission evidence: their configured mail route remains available, while contacts may need explicit authorization. A new sign-in that omits permission evidence is also recorded as unknown. Mailven does not start reauthorization automatically.

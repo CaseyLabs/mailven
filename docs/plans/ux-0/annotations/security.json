@@ -1,0 +1,482 @@
+{
+ "security.smime": {
+  "accurate": "yes",
+  "proposed": "Certificates (S/MIME)",
+  "notes": "COPY-4: plain term first, protocol in parentheses."
+ },
+ "security.onlineRevocation": {
+  "accurate": "yes",
+  "proposed": "Check whether certificates were cancelled",
+  "notes": "COPY-4, CTRL-5: move to Advanced; setting is app-wide but sits in account dialog (IA-4).",
+  "applies": "now"
+ },
+ "security.onlineRevocationHelp": {
+  "accurate": "yes",
+  "proposed": "Off by default and applies to all accounts. When on, Mailven asks the certificate's issuer whether a signer's certificate was cancelled. The issuer can then see when you read or download messages. When it's off or the check fails, signed messages show a warning.",
+  "notes": "SEC-1, COPY-2. Verified: default false (settings/store.go:1167), OCSP/CRL contact (smime/revocation.go)."
+ },
+ "security.revocationLoadFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't load this setting. Close and reopen the dialog to try again.",
+  "notes": "COPY-8: say what to do."
+ },
+ "security.revocationSaveFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't save this setting. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.pgp": {
+  "accurate": "yes",
+  "proposed": "Keys (PGP)",
+  "notes": "COPY-4"
+ },
+ "security.yourKeys": {
+  "accurate": "yes",
+  "proposed": "Your keys",
+  "notes": "COPY-10: sentence case."
+ },
+ "security.importSecretKey": {
+  "accurate": "yes",
+  "proposed": "Import your key",
+  "notes": "COPY-10; 'secret key' is jargon (picker takes .asc/.gpg/.key/.pub)."
+ },
+ "security.noPGPKeysHelp": {
+  "accurate": "yes",
+  "proposed": "You haven't added a key yet. Import a key file (.asc, .gpg, .key or .pub) to sign and encrypt messages.",
+  "notes": "COPY-1, COPY-4. Picker also accepts .key/.pub (app/pgp.go:19)."
+ },
+ "security.defaultBadge": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.expiredBadge": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is; SEC-4 has text plus colour."
+ },
+ "security.selfSignedBadge": {
+  "accurate": "yes",
+  "proposed": "Not from a trusted issuer",
+  "notes": "SEC-5: 'Self-signed' is jargon; explain in tooltip."
+ },
+ "security.created": {
+  "accurate": "yes",
+  "proposed": "Created",
+  "notes": "Colon belongs in layout, not string."
+ },
+ "security.expires": {
+  "accurate": "yes",
+  "proposed": "Expires",
+  "notes": "Colon belongs in layout, not string."
+ },
+ "security.setAsDefault": {
+  "accurate": "yes",
+  "proposed": "Use as default",
+  "notes": "COPY-10"
+ },
+ "security.removeKey": {
+  "accurate": "yes",
+  "proposed": "Remove key",
+  "notes": "Remove has no confirmation (accountSecurityPgp.ts); check CTRL destructive-action rule."
+ },
+ "security.signingPolicy": {
+  "accurate": "yes",
+  "proposed": "Signing",
+  "notes": "COPY-10, COPY-4"
+ },
+ "security.encryptionPolicy": {
+  "accurate": "yes",
+  "proposed": "Encryption",
+  "notes": "COPY-10"
+ },
+ "security.neverSignByDefault": {
+  "accurate": "yes",
+  "proposed": "Don't sign new messages",
+  "notes": "COPY-2, CTRL-3: spell out the radio.",
+  "applies": "now"
+ },
+ "security.alwaysSignByDefault": {
+  "accurate": "yes",
+  "proposed": "Sign all new messages",
+  "notes": "COPY-2",
+  "applies": "now"
+ },
+ "security.neverEncryptByDefault": {
+  "accurate": "yes",
+  "proposed": "Don't encrypt new messages",
+  "notes": "COPY-2",
+  "applies": "now"
+ },
+ "security.alwaysEncryptByDefault": {
+  "accurate": "yes",
+  "proposed": "Encrypt all new messages",
+  "notes": "COPY-2",
+  "applies": "now"
+ },
+ "security.policyOverrideHint": {
+  "accurate": "yes",
+  "proposed": "You can change this for each message when you write it.",
+  "notes": "COPY-12"
+ },
+ "security.encryptRequiresRecipientKeys": {
+  "accurate": "yes",
+  "proposed": "You can change this for each message. To encrypt, Mailven needs each recipient's public key.",
+  "notes": "CTRL-7: repeats the previous hint; merge."
+ },
+ "security.encryptRequiresRecipientCerts": {
+  "accurate": "yes",
+  "proposed": "You can change this for each message. To encrypt, Mailven needs each recipient's certificate.",
+  "notes": "CTRL-7: repeats policyOverrideHint; merge."
+ },
+ "security.keyServersLabel": {
+  "accurate": "yes",
+  "proposed": "Key servers",
+  "notes": "COPY-10: all-caps; move to Advanced (CTRL-5)."
+ },
+ "security.keyServersHelp": {
+  "accurate": "yes",
+  "proposed": "Mailven looks for recipients' keys on these servers, in order. If you remove them all, Mailven uses its built-in list.",
+  "notes": "CTRL-5 Advanced. Defaults in internal/pgp/hkp.go:16 and app/pgp.go getHKPServers."
+ },
+ "security.removeServer": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.addButton": {
+  "accurate": "yes",
+  "proposed": "Add server",
+  "notes": "COPY-10: name the thing added."
+ },
+ "security.recipientKeys": {
+  "accurate": "yes",
+  "proposed": "Other people's keys",
+  "notes": "Glossary: key; plain term."
+ },
+ "security.importButton": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.searchByEmail": {
+  "accurate": "yes",
+  "proposed": "Find a key by email address...",
+  "notes": "COPY-4: WKD jargon; Verified: LookupPGPKey tries WKD then key servers (app/pgp.go:276)."
+ },
+ "security.noRecipientPGPKeysHelp": {
+  "accurate": "no: received messages only re-save keys Mailven already has; no code adds a new key from a message",
+  "proposed": "No keys from other people yet. Mailven saves keys it finds online when you search, and keys you import.",
+  "notes": "SEC-5. CacheSenderKey callers: lookups and verifier only (app/pgp.go, verifier.go:158)."
+ },
+ "security.removeButton": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.yourCertificates": {
+  "accurate": "yes",
+  "proposed": "Your certificates",
+  "notes": "COPY-10"
+ },
+ "security.importP12": {
+  "accurate": "yes",
+  "proposed": "Import certificate",
+  "notes": "COPY-4: file extension is jargon."
+ },
+ "security.noSMIMECertsHelp": {
+  "accurate": "yes",
+  "proposed": "You haven't added a certificate yet. Import a certificate file (.p12 or .pfx) to sign messages.",
+  "notes": "COPY-4. Picker filter is .p12/.pfx (app/smime.go:20)."
+ },
+ "security.issuerLabel": {
+  "accurate": "yes",
+  "proposed": "Issued by",
+  "notes": "Colon belongs in layout."
+ },
+ "security.validLabel": {
+  "accurate": "yes",
+  "proposed": "Valid",
+  "notes": "Colon belongs in layout."
+ },
+ "security.removeCertificate": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.recipientCertificates": {
+  "accurate": "yes",
+  "proposed": "Other people's certificates",
+  "notes": "Plain term."
+ },
+ "security.noRecipientCertsHelp": {
+  "accurate": "yes",
+  "proposed": "No certificates from other people yet. Mailven saves a signer's certificate when you receive a signed message. You can also import one.",
+  "notes": "Verified (smime/verifier.go cacheSenderCert); only trusted ones can be used to encrypt."
+ },
+ "security.importCertificateTitle": {
+  "accurate": "yes",
+  "proposed": "Import certificate",
+  "notes": "COPY-10"
+ },
+ "security.importRecipientCertTitle": {
+  "accurate": "yes",
+  "proposed": "Import someone else's certificate",
+  "notes": "Plain term."
+ },
+ "security.importPGPKeyTitle": {
+  "accurate": "yes",
+  "proposed": "Import PGP key",
+  "notes": ""
+ },
+ "security.importRecipientPGPKeyTitle": {
+  "accurate": "yes",
+  "proposed": "Import someone else's key",
+  "notes": "Plain term."
+ },
+ "security.fileLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.certificatePassword": {
+  "accurate": "yes",
+  "proposed": "File password",
+  "notes": "COPY-10"
+ },
+ "security.certificatePasswordPlaceholder": {
+  "accurate": "yes",
+  "proposed": "Password for this certificate file",
+  "notes": "COPY-4"
+ },
+ "security.certificatePasswordHelp": {
+  "accurate": "yes",
+  "proposed": "The password you chose when you exported the file.",
+  "notes": "COPY-2"
+ },
+ "security.recipientEmailAddress": {
+  "accurate": "yes",
+  "proposed": "Their email address",
+  "notes": "COPY-10"
+ },
+ "security.recipientEmailHelp": {
+  "accurate": "yes",
+  "proposed": "The email address this certificate belongs to.",
+  "notes": "COPY-6"
+ },
+ "security.recipientEmailHelpKey": {
+  "accurate": "yes",
+  "proposed": "The email address this key belongs to.",
+  "notes": "COPY-6"
+ },
+ "security.keyPassphrase": {
+  "accurate": "yes",
+  "proposed": "Key passphrase (optional)",
+  "notes": "COPY-10: sentence case."
+ },
+ "security.keyPassphrasePlaceholder": {
+  "accurate": "yes",
+  "proposed": "Passphrase, if the key has one",
+  "notes": "COPY-2"
+ },
+ "security.keyPassphraseHelp": {
+  "accurate": "yes",
+  "proposed": "Leave blank if your key has no passphrase.",
+  "notes": "COPY-12"
+ },
+ "security.enterRecipientEmail": {
+  "accurate": "yes",
+  "proposed": "Enter the person's email address.",
+  "notes": "COPY-10: avoid 'Please'."
+ },
+ "security.keysCount": {
+  "accurate": "yes",
+  "proposed": "{count, plural, one {# key} other {# keys}}",
+  "notes": "Pluralise; '(s)' is untidy."
+ },
+ "security.certsCount": {
+  "accurate": "yes",
+  "proposed": "{count, plural, one {# certificate} other {# certificates}}",
+  "notes": "Pluralise; 'cert' is jargon."
+ },
+ "security.certImported": {
+  "accurate": "yes",
+  "proposed": "Certificate imported.",
+  "notes": "COPY-4: chain count dropped, expert detail."
+ },
+ "security.certRemoved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.failedToRemoveCert": {
+  "accurate": "yes",
+  "proposed": "Couldn't remove the certificate. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.defaultCertUpdated": {
+  "accurate": "yes",
+  "proposed": "Default certificate changed",
+  "notes": "COPY-9"
+ },
+ "security.failedToSetDefaultCert": {
+  "accurate": "yes",
+  "proposed": "Couldn't change the default certificate. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.failedToUpdateSignPolicy": {
+  "accurate": "yes",
+  "proposed": "Couldn't change the signing setting. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.failedToUpdateEncryptPolicy": {
+  "accurate": "yes",
+  "proposed": "Couldn't change the encryption setting. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.recipientCertImported": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.senderCertRemoved": {
+  "accurate": "yes",
+  "proposed": "Certificate removed",
+  "notes": "COPY-9: same word as certRemoved."
+ },
+ "security.failedToRemoveSenderCert": {
+  "accurate": "yes",
+  "proposed": "Couldn't remove the certificate. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.pgpKeyImported": {
+  "accurate": "yes",
+  "proposed": "Key imported",
+  "notes": "COPY-10"
+ },
+ "security.pgpKeyRemoved": {
+  "accurate": "yes",
+  "proposed": "Key removed",
+  "notes": "COPY-9"
+ },
+ "security.failedToRemovePGPKey": {
+  "accurate": "yes",
+  "proposed": "Couldn't remove the key. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.defaultPGPKeyUpdated": {
+  "accurate": "yes",
+  "proposed": "Default key changed",
+  "notes": "COPY-9"
+ },
+ "security.failedToSetDefaultPGPKey": {
+  "accurate": "yes",
+  "proposed": "Couldn't change the default key. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.failedToUpdatePGPSignPolicy": {
+  "accurate": "yes",
+  "proposed": "Couldn't change the signing setting. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.failedToUpdatePGPEncryptPolicy": {
+  "accurate": "yes",
+  "proposed": "Couldn't change the encryption setting. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.recipientPGPKeyImported": {
+  "accurate": "yes",
+  "proposed": "Key imported for {email}",
+  "notes": "COPY-9"
+ },
+ "security.recipientPGPKeyRemoved": {
+  "accurate": "yes",
+  "proposed": "Key removed",
+  "notes": "COPY-9"
+ },
+ "security.failedToRemoveRecipientPGPKey": {
+  "accurate": "yes",
+  "proposed": "Couldn't remove the key. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.keyServerAdded": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.failedToAddKeyServer": {
+  "accurate": "yes",
+  "proposed": "Couldn't add the key server. Check the address and try again.",
+  "notes": "COPY-8"
+ },
+ "security.keyServerRemoved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "security.failedToRemoveKeyServer": {
+  "accurate": "yes",
+  "proposed": "Couldn't remove the key server. Try again.",
+  "notes": "COPY-8"
+ },
+ "security.pgpKeyFound": {
+  "accurate": "yes",
+  "proposed": "Found and saved a key for {email}",
+  "notes": "COPY-2"
+ },
+ "security.pgpKeyNotFound": {
+  "accurate": "yes",
+  "proposed": "Couldn't find a key for {email}",
+  "notes": "COPY-8; consider adding what to do (import a file)."
+ },
+ "security.keyLookupFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't search for a key. Check your connection and try again.",
+  "notes": "COPY-8"
+ },
+ "security.certEmailMismatch": {
+  "accurate": "yes",
+  "proposed": "This certificate is for a different email address than this account or its aliases. Choose a certificate that matches.",
+  "notes": "COPY-8"
+ },
+ "security.keyEmailMismatch": {
+  "accurate": "yes",
+  "proposed": "This key is for a different email address than this account or its aliases. Choose a key that matches.",
+  "notes": "COPY-8"
+ },
+ "security.certImportFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't import the certificate. Check that you chose the right file and typed its password correctly.",
+  "notes": "COPY-8"
+ },
+ "security.keyImportFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't import the key. Check that you chose the right file and typed its passphrase correctly.",
+  "notes": "COPY-8"
+ },
+ "security.recipientCertImportFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't import the certificate. Check that you chose the right file.",
+  "notes": "COPY-8"
+ },
+ "security.recipientKeyImportFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't import the key. Check that you chose the right file.",
+  "notes": "COPY-8"
+ },
+ "security.berConversionTitle": {
+  "accurate": "yes",
+  "proposed": "Convert this certificate file?",
+  "notes": "COPY-4, COPY-2"
+ },
+ "security.berConversionMessage": {
+  "accurate": "unverified: 'lossless' claim not checked against the conversion code",
+  "proposed": "This file uses an older format. Mailven can convert it to the current format before importing. The certificate itself doesn't change. Convert and import it?",
+  "notes": "COPY-1, COPY-4"
+ },
+ "security.berConversionConfirm": {
+  "accurate": "yes",
+  "proposed": "Convert and import",
+  "notes": "CTRL: button names action; COPY-10 no ampersand."
+ }
+}

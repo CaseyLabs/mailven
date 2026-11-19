@@ -3,7 +3,7 @@
   import { onMount } from 'svelte'
   import Icon from '@iconify/svelte'
   import { Button } from '$lib/components/ui/button'
-  import { addToast } from '$lib/stores/toast'
+  import { addToast, errorDetails } from '$lib/stores/toast'
   import { refreshExtensionRegistry, openExtensionSettings } from '$lib/stores/extensionRegistry.svelte'
   import { _ } from '$lib/i18n'
   // @ts-ignore - wailsjs bindings
@@ -25,7 +25,7 @@
       extensions = await ListExtensions() || []
     } catch (err) {
       console.error('Failed to load extensions:', err)
-      addToast({ type: 'error', message: 'Failed to load extensions' })
+      addToast({ type: 'error', message: $_('toast.extensionsLoadFailed'), details: errorDetails(err) })
     } finally {
       loading = false
     }
@@ -41,7 +41,7 @@
       await load()
     } catch (err) {
       console.error('Failed to toggle extension:', err)
-      addToast({ type: 'error', message: `Failed to ${next ? 'enable' : 'disable'} ${ext.name}` })
+      addToast({ type: 'error', message: $_(next ? 'toast.extensionEnableFailed' : 'toast.extensionDisableFailed', { values: { name: ext.name } }), details: errorDetails(err) })
     } finally {
       togglingId = null
     }

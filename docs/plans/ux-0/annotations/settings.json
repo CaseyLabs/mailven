@@ -1,0 +1,186 @@
+{
+ "settings.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.description": {
+  "accurate": "yes",
+  "proposed": "Change how Mailven looks and works",
+  "notes": "COPY-12, COPY-2: avoid 'application'."
+ },
+ "settings.general": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.accounts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.contacts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.about": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.extensions": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.extensionsCoreHeading": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.extensionsCoreDescription": {
+  "accurate": "yes",
+  "proposed": "Built-in extensions you can turn on or off.",
+  "notes": "COPY-3. Toggle applies now, outside Save.",
+  "applies": "now"
+ },
+ "settings.extensionsEnabled": {
+  "accurate": "yes",
+  "proposed": "On",
+  "notes": "COPY-3."
+ },
+ "settings.extensionsDisabled": {
+  "accurate": "yes",
+  "proposed": "Off",
+  "notes": "COPY-3."
+ },
+ "settings.extensionsEnable": {
+  "accurate": "yes",
+  "proposed": "Turn on",
+  "notes": "COPY-3. Button acts at once (ExtensionsTab.svelte:118).",
+  "applies": "now"
+ },
+ "settings.extensionsDisable": {
+  "accurate": "yes",
+  "proposed": "Turn off",
+  "notes": "COPY-3: avoid bare 'Disable'.",
+  "applies": "now"
+ },
+ "settings.extensionsCapabilities": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.extensionsVersion": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.extensionsNone": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settings.images": {
+  "accurate": "yes",
+  "proposed": "Pictures",
+  "notes": "COPY-9: glossary says 'pictures from the internet'; tab holds that setting and its allowlist."
+ },
+ "settings.composer": {
+  "accurate": "yes",
+  "proposed": "Writing",
+  "notes": "COPY-10, IA-1: group by task; 'Composer' is a tool name."
+ },
+ "settings.composerMode": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-2."
+ },
+ "settings.composerModeInline": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-12. Applied in UX-2."
+ },
+ "settings.composerModeDetached": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2. Applied in UX-2."
+ },
+ "settings.composerModeDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6. Choosing separate also sets the mailto option (SettingsDialog.svelte:430). Applied in UX-2."
+ },
+ "settings.mailtoMode": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: 'mailto' is jargon. Applied in UX-2."
+ },
+ "settings.mailtoModeDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6. Does not say it follows 'Where new messages open' when that is a separate window. Applied in UX-2."
+ },
+ "settings.composerFormat": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Applied in UX-2."
+ },
+ "settings.composerFormatRich": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: Formatted text / Plain text. Applied in UX-2."
+ },
+ "settings.composerFormatPlain": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary term already used."
+ },
+ "settings.composerFormatDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2. Plain-text toggle exists in composer (ComposerBody.svelte:28). Applied in UX-2."
+ },
+ "settings.defaultCc": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Saves at once per account, outside Save. Applied in UX-2.",
+  "applies": "now"
+ },
+ "settings.defaultCcHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2, COPY-3. Code: composerInit.ts:87 (new/reply/forward only). Applied in UX-2.",
+  "applies": "now"
+ },
+ "settings.defaultBcc": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Saves at once. Applied in UX-2.",
+  "applies": "now"
+ },
+ "settings.defaultBccHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6. BCC explained. Applied in UX-2.",
+  "applies": "now"
+ },
+ "settings.defaultReplyTo": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. Saves at once. Applied in UX-2.",
+  "applies": "now"
+ },
+ "settings.defaultReplyToHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6: say why. Reply-To is jargon. Applied in UX-2.",
+  "applies": "now"
+ },
+ "settings.chat": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ }
+}

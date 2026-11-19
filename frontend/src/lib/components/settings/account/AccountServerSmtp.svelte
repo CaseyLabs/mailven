@@ -3,7 +3,7 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import * as Select from '$lib/components/ui/select'
-  import Switch from '$lib/components/ui/switch/Switch.svelte'
+  import Checkbox from '$lib/components/ui/checkbox/Checkbox.svelte'
   import { securityOptions, authMechanismOptions } from '$lib/config/providers'
   import { _ } from '$lib/i18n'
   import { getSecurityLabel, getAuthMechanismLabel } from './accountServerLabels'
@@ -110,7 +110,7 @@
           />
         </div>
         <div class="space-y-2">
-          <Label>{$_('account.security')}</Label>
+          <Label>{$_('account.connectionSecurity')}</Label>
           <Select.Root
             value={smtpSecurity}
             onValueChange={(v) => { smtpSecurity = v; onSmtpSecurityChange(v) }}
@@ -136,8 +136,8 @@
            username + password. Generic provider only. -->
       <div class="space-y-3 pt-3 border-t border-border">
         <h4 class="text-sm font-medium">{$_('account.smtpAuthentication')}</h4>
-        <label class="flex items-center gap-3 text-sm">
-          <Switch
+        <label class="flex min-h-6 items-center gap-3 text-sm">
+          <Checkbox
             checked={smtpUseSameAsIncoming}
             onCheckedChange={handleSmtpUseSameAsIncomingChange}
           />

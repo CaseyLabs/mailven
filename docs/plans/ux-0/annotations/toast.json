@@ -1,0 +1,437 @@
+{
+ "toast.archived": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.conversationArchived": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.movedToTrash": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.deletedFromFolder": {
+  "accurate": "yes",
+  "proposed": "Deleted",
+  "notes": "Used when the folder deletes outright (chatTriage.ts:52-57); no Undo shown."
+ },
+ "toast.permanentlyDeleted": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.trashEmptied": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "toast.spamEmptied": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "toast.markedAsRead": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.markedAsUnread": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.markedAsSpam": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.markedAsNotSpam": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.starred": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.starRemoved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.removedStar": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "toast.markedAllAsRead": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.markedAllAsUnread": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.settingsSaved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.undone": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.contactSourceSynced": {
+  "accurate": "yes",
+  "proposed": "Address book updated",
+  "notes": "Glossary, COPY-9."
+ },
+ "toast.contactSourceForceSynced": {
+  "accurate": "yes",
+  "proposed": "Address book downloaded again",
+  "notes": "Glossary"
+ },
+ "toast.contactSourceForceSyncFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't download the address book again. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.contactSourceDeleted": {
+  "accurate": "yes",
+  "proposed": "Address book removed",
+  "notes": "Glossary"
+ },
+ "toast.contactSourceAdded": {
+  "accurate": "yes",
+  "proposed": "Address book added",
+  "notes": "Glossary"
+ },
+ "toast.contactSourceUpdated": {
+  "accurate": "yes",
+  "proposed": "Address book updated",
+  "notes": "Glossary"
+ },
+ "toast.contactSourceLinked": {
+  "accurate": "yes",
+  "proposed": "Address book linked to your account",
+  "notes": "Glossary"
+ },
+ "toast.contactSourceCreated": {
+  "accurate": "yes",
+  "proposed": "Address book created",
+  "notes": "Glossary"
+ },
+ "toast.failedToArchive": {
+  "accurate": "yes",
+  "proposed": "Couldn't archive. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToDelete": {
+  "accurate": "yes",
+  "proposed": "Couldn't delete. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToEmptyTrash": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "toast.failedToEmptySpam": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "toast.failedToMarkAsRead": {
+  "accurate": "yes",
+  "proposed": "Couldn't mark as read. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToMarkAsUnread": {
+  "accurate": "yes",
+  "proposed": "Couldn't mark as unread. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToMarkAsSpam": {
+  "accurate": "yes",
+  "proposed": "Couldn't mark as spam. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToMarkAsNotSpam": {
+  "accurate": "yes",
+  "proposed": "Couldn't mark as not spam. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToMove": {
+  "accurate": "yes",
+  "proposed": "Couldn't move. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToCopy": {
+  "accurate": "yes",
+  "proposed": "Couldn't copy. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToUpdateStar": {
+  "accurate": "yes",
+  "proposed": "Couldn't change the star. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToUpdateReadStatus": {
+  "accurate": "yes",
+  "proposed": "Couldn't change read status. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToMarkAllAsRead": {
+  "accurate": "yes",
+  "proposed": "Couldn't mark all as read. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToMarkAllAsUnread": {
+  "accurate": "yes",
+  "proposed": "Couldn't mark all as unread. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToSaveSettings": {
+  "accurate": "yes",
+  "proposed": "Couldn't save your settings. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToSave": {
+  "accurate": "yes",
+  "proposed": "Couldn't save. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.undoFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't undo. Try again.",
+  "notes": "COPY-8"
+ },
+ "toast.failedToPrepare": {
+  "accurate": "no: {mode} is a raw code such as 'reply-all' (appComposer.svelte.ts:148)",
+  "proposed": "Couldn't start your message. Opening a blank draft instead.",
+  "notes": "COPY-8. Drop raw {mode}."
+ },
+ "toast.noAccountConfigured": {
+  "accurate": "yes",
+  "proposed": "You haven't added an email account yet. Add one to continue.",
+  "notes": "COPY-10: avoid 'Please'."
+ },
+ "toast.movedTo": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.copyingTo": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.attachmentSaved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.attachmentsSaved": {
+  "accurate": "yes",
+  "proposed": "{count, plural, one {Saved # attachment} other {Saved # attachments}}",
+  "notes": "Pluralise."
+ },
+ "toast.failedToSaveAttachment": {
+  "accurate": "yes",
+  "proposed": "Couldn't save \"{filename}\". Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.failedToOpenAttachment": {
+  "accurate": "yes",
+  "proposed": "Couldn't open \"{filename}\". Make sure you have an app that can open this file type.",
+  "notes": "COPY-8. Cause is a guess; verify before shipping."
+ },
+ "toast.failedToSaveAttachments": {
+  "accurate": "yes",
+  "proposed": "Couldn't save the attachments. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.mainWindowClosing": {
+  "accurate": "yes",
+  "proposed": "Mailven is closing. Your draft will be saved.",
+  "notes": "COPY-12"
+ },
+ "toast.syncFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't update. Check your connection and try again.",
+  "notes": "Glossary, COPY-8."
+ },
+ "toast.failedToDeleteContactSource": {
+  "accurate": "yes",
+  "proposed": "Couldn't remove the address book. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.oauthFailed": {
+  "accurate": "yes",
+  "proposed": "Sign-in didn't work. Try signing in again.",
+  "notes": "COPY-4, COPY-8."
+ },
+ "toast.failedToStartOAuth": {
+  "accurate": "yes",
+  "proposed": "Couldn't start sign-in. Try again.",
+  "notes": "COPY-4"
+ },
+ "toast.fillRequiredFields": {
+  "accurate": "yes",
+  "proposed": "Fill in all required fields.",
+  "notes": "COPY-10: avoid 'Please'."
+ },
+ "toast.passwordRequired": {
+  "accurate": "yes",
+  "proposed": "Enter a password for this address book.",
+  "notes": "COPY-8"
+ },
+ "toast.selectAddressbook": {
+  "accurate": "yes",
+  "proposed": "Choose at least one address book.",
+  "notes": "COPY-10"
+ },
+ "toast.selectOAuthAccount": {
+  "accurate": "yes",
+  "proposed": "Choose an account to sign in with.",
+  "notes": "COPY-4"
+ },
+ "toast.linkAccountOrSignIn": {
+  "accurate": "yes",
+  "proposed": "Link an account or sign in to continue.",
+  "notes": "COPY-10"
+ },
+ "toast.accountSaved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine as is."
+ },
+ "toast.failedToSaveAccount": {
+  "accurate": "yes",
+  "proposed": "Couldn't save this account. Check your settings and try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.accountEmailExists": {
+  "accurate": "yes",
+  "proposed": "You've already added this email address.",
+  "notes": "COPY-12"
+ },
+ "toast.reauthorized": {
+  "accurate": "yes",
+  "proposed": "Signed in to {name} again. Updating mail...",
+  "notes": "Glossary: Sign in again; no exclamation."
+ },
+ "toast.syncCompleted": {
+  "accurate": "yes",
+  "proposed": "{name} is up to date",
+  "notes": "Glossary"
+ },
+ "toast.failedToReauthorize": {
+  "accurate": "yes",
+  "proposed": "Couldn't sign in again. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.oauthExpired": {
+  "accurate": "yes",
+  "proposed": "{name} needs you to sign in again. Open account settings to sign in.",
+  "notes": "COPY-8, glossary (UX_GUIDELINES 10.2)."
+ },
+ "toast.failedToDeleteIdentity": {
+  "accurate": "yes",
+  "proposed": "Couldn't delete this identity. Try again.",
+  "notes": "COPY-8: what happened, then what to do."
+ },
+ "toast.linkOpened": {
+  "accurate": "yes",
+  "proposed": "Link opened in your browser",
+  "notes": "COPY-12"
+ },
+ "toast.showDetails": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.hideDetails": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.readReceiptFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.sendFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.sendFailedDraftKept": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.serverSearchFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.olderMailFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.oauthChoiceSwitched": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.oauthChoiceSwitchFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.oauthCredsSaved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.oauthCredsCleared": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.openLinkFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.extensionsLoadFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.extensionEnableFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.extensionDisableFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3 (raw error text moved behind Show details)."
+ },
+ "toast.folderSubscriptionsFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added in UX-4. Applies on Save."
+ }
+}

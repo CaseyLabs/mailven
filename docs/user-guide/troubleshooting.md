@@ -19,12 +19,12 @@ If you can't connect to your email server:
 
 ### OAuth token expired
 
-For Gmail and Outlook accounts:
+For Gmail and Outlook accounts. Mailven tells you with a message such as "Work needs you to sign in again":
 
 1. Go to **Settings > Accounts**
 2. Click **Edit** on the affected account
-3. Click **Re-authorize**
-4. Complete the OAuth flow in your browser
+3. Click **Sign in again**
+4. Finish signing in in your browser
 
 ### "Certificate error" or SSL issues
 
@@ -47,9 +47,9 @@ If emails you expect to see aren't showing up:
 4. **Sync Folder** - Right-click the folder in the sidebar and choose **Sync Folder**
 5. **Force Re-sync** - If that doesn't help, right-click the folder and choose **Force Re-sync**
 
-### "Sync error" under an account
+### "Couldn't update" under an account
 
-When an account's sync fails, a red **Sync error** line appears under its name in the sidebar. Click it to open the sync status dialog, which shows the full error and, for sign-in failures, a short explanation. Choose **Edit account** there to re-authorize the account or change its OAuth client. Hover over the line to see the raw error as a tooltip. The error clears after the next successful sync and is not kept when Mailven restarts.
+When Mailven can't update an account, a red **Couldn't update. Show what happened** line appears under its name in the sidebar. Click it to open the update status dialog. It says what happened and what to do, for example to sign in again. Choose **Show details** there to see the full error message, which is useful when you ask for help. Choose **Open account** to sign in again or change the account's sign-in settings. Hover over the line to see the error as a tooltip. The error clears after the next successful update and is not kept when Mailven restarts.
 
 ### Slow initial sync
 
@@ -57,7 +57,7 @@ First-time sync of large mailboxes can take several minutes. The sync progress i
 
 ### Sync appears stuck
 
-If a sync seems to be stuck or unresponsive, click the sync icon at the top of the message list or the sync button in the bottom left corner and choose **Cancel sync** in the sync status dialog, then click again to restart the sync.
+If a sync seems to be stuck or unresponsive, click the update icon at the top of the message list or the update button in the bottom left corner and choose **Stop updating** in the update status dialog, then click again to start over.
 
 ### Sent messages not appearing in Sent folder
 

@@ -23,7 +23,7 @@ Providers marked with 🧪 have not yet been tested. They should work based on t
 2. Select **Yahoo** from the provider screen
 3. Enter your Yahoo email address
 4. Enter your [app password](#generating-app-passwords)
-5. Click **Add Account**
+5. Click **Add account**
 
 ### iCloud Mail 🧪
 
@@ -31,20 +31,20 @@ Providers marked with 🧪 have not yet been tested. They should work based on t
 2. Select **iCloud** from the provider screen
 3. Enter your iCloud email address
 4. Enter your [app-specific password](https://support.apple.com/en-us/HT204397)
-5. Click **Add Account**
+5. Click **Add account**
 
 ### ProtonMail (via Proton Bridge)
 
 ProtonMail requires Proton Bridge for third-party email clients.
 
 1. Install and configure [Proton Bridge](https://proton.me/mail/bridge)
-2. <a href="proton-cert" target="_blank">Install your Proton Bridge certificate</a> on your system (Skip this step if you only want Mailven to recognize this cert)
+2. [Install your Proton Bridge certificate](proton-cert.mdx) on your system (Skip this step if you only want Mailven to recognize this cert)
 3. Click **+ Add Account** in the sidebar
 4. Select **ProtonMail Bridge** from the provider screen
 5. Enter your ProtonMail address
 6. Enter the Bridge-generated password (not your ProtonMail password)
 7. Click **Test Connection** and then click **Accept Always** if you skipped step 2
-8. Click **Add Account**
+8. Click **Add account**
 
 ### Fastmail 🧪
 
@@ -52,7 +52,7 @@ ProtonMail requires Proton Bridge for third-party email clients.
 2. Select **Fastmail** from the provider screen
 3. Enter your Fastmail email address
 4. Enter your [app password](https://www.fastmail.help/hc/en-us/articles/360058752854)
-5. Click **Add Account**
+5. Click **Add account**
 
 ### Zoho Mail 🧪
 
@@ -60,7 +60,7 @@ ProtonMail requires Proton Bridge for third-party email clients.
 2. Select **Zoho** from the provider screen
 3. Enter your Zoho email address
 4. Enter your [app-specific password](https://www.zoho.com/mail/help/adminconsole/two-factor-authentication.html#alink5)
-5. Click **Add Account**
+5. Click **Add account**
 
 ### AOL Mail 🧪
 
@@ -68,7 +68,7 @@ ProtonMail requires Proton Bridge for third-party email clients.
 2. Select **AOL** from the provider screen
 3. Enter your AOL email address
 4. Enter your [app password](#generating-app-passwords)
-5. Click **Add Account**
+5. Click **Add account**
 
 ### GMX Mail 🧪
 
@@ -76,7 +76,7 @@ ProtonMail requires Proton Bridge for third-party email clients.
 2. Select **GMX** from the provider screen
 3. Enter your GMX email address
 4. Enable IMAP in GMX settings, then enter your password
-5. Click **Add Account**
+5. Click **Add account**
 
 ### Mail.com 🧪
 
@@ -84,7 +84,7 @@ ProtonMail requires Proton Bridge for third-party email clients.
 2. Select **Mail.com** from the provider screen
 3. Enter your Mail.com email address
 4. Enable IMAP in Mail.com settings, then enter your password
-5. Click **Add Account**
+5. Click **Add account**
 
 ## Generating App Passwords
 
@@ -106,22 +106,22 @@ For providers not listed above, or for self-hosted email servers:
 4. Enter your password or app password
 5. Configure server settings:
 
-### IMAP Settings (Incoming Mail)
+### Receiving mail (IMAP)
 
 | Setting | Description |
 |---------|-------------|
 | Server | Your IMAP server hostname (e.g., `mail.example.com`) |
 | Port | Usually 993 (SSL) or 143 (STARTTLS) |
-| Security | SSL/TLS or STARTTLS |
+| Secure connection | SSL/TLS or STARTTLS |
 | Username | Usually your full email address |
 
-### SMTP Settings (Outgoing Mail)
+### Sending mail (SMTP)
 
 | Setting | Description |
 |---------|-------------|
 | Server | Your SMTP server hostname (e.g., `smtp.example.com`) |
 | Port | Usually 465 (SSL) or 587 (STARTTLS) |
-| Security | SSL/TLS or STARTTLS |
+| Secure connection | SSL/TLS or STARTTLS |
 | Username | Usually your full email address |
 
 ### Common Server Settings

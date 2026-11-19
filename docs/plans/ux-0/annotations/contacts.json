@@ -1,0 +1,128 @@
+{
+ "contacts.settings.title": {
+  "accurate": "yes",
+  "proposed": "Contacts settings",
+  "notes": "Fine."
+ },
+ "contacts.settings.description": {
+  "accurate": "unverified: read-via-mail-account claim depends on provider scopes",
+  "proposed": "Mailven can already read contacts through your mail account. To change contacts on Google or Microsoft, it needs its own sign-in permission. Set that up here.",
+  "notes": "COPY-4, COPY-2, COPY-1: grade 11.6; drop OAuth, creds, WRITE caps; move client setup to Advanced (CTRL-5)"
+ },
+ "contacts.settings.oauthHeading": {
+  "accurate": "yes",
+  "proposed": "Sign-in credentials (advanced)",
+  "notes": "COPY-4, CTRL-5: client setup is expert-only; put under Advanced"
+ },
+ "contacts.settings.oauthDescription": {
+  "accurate": "unverified: 'verified credentials' depends on build; not checked",
+  "proposed": "Mailven includes its own verified sign-in details when available. Choose Custom to use your own project's Client ID and Secret.",
+  "notes": "CTRL-5: expert-only; COPY-1; keep Client ID/Secret as Advanced terms"
+ },
+ "contacts.settings.googleLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Names the service."
+ },
+ "contacts.settings.microsoftLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Names the service."
+ },
+ "contacts.settings.writeAccessHeading": {
+  "accurate": "yes",
+  "proposed": "Editing contacts",
+  "notes": "COPY-9: plain; 'Write access' is jargon; sentence case (COPY-10)"
+ },
+ "contacts.settings.writeAccessDescription": {
+  "accurate": "yes",
+  "proposed": "Choose which address books Mailven may change. Mailven can then add, edit and delete contacts there. Google and Microsoft ask you to sign in once to allow this.",
+  "notes": "COPY-3, COPY-4, COPY-2; avoid CardDAV/OAuth/Enable/Disable",
+  "applies": "now"
+ },
+ "contacts.settings.writeAccessRowSubtitle": {
+  "accurate": "yes",
+  "proposed": "Read only. Mailven can't change these contacts.",
+  "notes": "COPY-7: sentence; COPY-6",
+  "applies": "now"
+ },
+ "contacts.settings.writeAccessRowSubtitleEnabled": {
+  "accurate": "yes",
+  "proposed": "Mailven can change these contacts",
+  "notes": "COPY-7, COPY-2",
+  "applies": "now"
+ },
+ "contacts.settings.enableWriteAccess": {
+  "accurate": "yes",
+  "proposed": "Allow editing",
+  "notes": "COPY-3: avoid bare Enable; button applies at once (ContactsSettingsDialog.svelte:217)",
+  "control": "Button (applies now, not a toggle)",
+  "applies": "now"
+ },
+ "contacts.settings.disableWriteAccess": {
+  "accurate": "yes",
+  "proposed": "Stop allowing edits",
+  "notes": "COPY-3: avoid bare Disable; button applies at once",
+  "control": "Button",
+  "applies": "now"
+ },
+ "contacts.settings.reauthorizeWriteAccess": {
+  "accurate": "yes",
+  "proposed": "Sign in again",
+  "notes": "Glossary: Sign in again",
+  "control": "Button",
+  "applies": "now"
+ },
+ "contacts.settings.writeAccessEnabled": {
+  "accurate": "yes",
+  "proposed": "Mailven can now edit contacts in {name}",
+  "notes": "COPY-2, COPY-3",
+  "applies": "now"
+ },
+ "contacts.settings.writeAccessDisabled": {
+  "accurate": "yes",
+  "proposed": "Mailven can no longer edit contacts in {name}",
+  "notes": "COPY-2, COPY-3",
+  "applies": "now"
+ },
+ "contacts.settings.writeAccessDisableFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't turn off editing. Try again.",
+  "notes": "COPY-8: what happened then what to do; code shows err.message first (ContactsSettingsDialog.svelte:81), may expose raw error"
+ },
+ "contacts.settings.writeAccessCanceled": {
+  "accurate": "yes",
+  "proposed": "Editing wasn't turned on. Sign in again to allow it.",
+  "notes": "COPY-8; shown only if no error message (ContactsSettingsDialog.svelte:101)"
+ },
+ "contacts.settings.close": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "contacts.hook.skip": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "contacts.hook.setUp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "contacts.hook.done": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "contacts.hook.successMessage": {
+  "accurate": "yes",
+  "proposed": "Contacts from {name} are set up",
+  "notes": "Glossary; avoid 'sync' (COPY-9)"
+ },
+ "contacts.hook.completeMessage": {
+  "accurate": "yes",
+  "proposed": "Contacts are set up.",
+  "notes": "Glossary; avoid 'sync'"
+ }
+}

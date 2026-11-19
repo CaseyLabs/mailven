@@ -11,6 +11,8 @@ export interface Toast {
   type: 'success' | 'error' | 'info' | 'warning'
   duration?: number
   actions?: ToastAction[]
+  /** Technical detail (raw error text); shown only after "Show details" (UX-COPY-8). */
+  details?: string
 }
 
 function createToastStore() {
@@ -22,8 +24,8 @@ function createToastStore() {
 
     update(toasts => [...toasts, newToast])
 
-    // Auto-remove after duration (default 5 seconds, longer if there are actions)
-    const duration = toast.duration ?? (toast.actions ? 8000 : 5000)
+    // Auto-remove after duration (default 5 seconds, longer with actions, longest with details to read)
+    const duration = toast.duration ?? (toast.details ? 12000 : toast.actions ? 8000 : 5000)
     setTimeout(() => {
       remove(id)
     }, duration)
@@ -39,8 +41,8 @@ function createToastStore() {
     return add({ message, type: 'success', actions })
   }
 
-  function error(message: string, actions?: ToastAction[]) {
-    return add({ message, type: 'error', actions })
+  function error(message: string, actions?: ToastAction[], details?: string) {
+    return add({ message, type: 'error', actions, details })
   }
 
   function info(message: string, actions?: ToastAction[]) {
@@ -67,4 +69,10 @@ export const toasts = createToastStore()
 // Helper function for easy toast creation
 export function addToast(toast: Omit<Toast, 'id'>) {
   return toasts.add(toast)
+}
+
+/** Raw error text for a toast's detail layer; empty when the error has none worth showing. */
+export function errorDetails(err: unknown): string | undefined {
+  const text = err instanceof Error ? err.message : String(err ?? '')
+  return text.trim() || undefined
 }

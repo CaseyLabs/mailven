@@ -187,7 +187,7 @@
 
 {#snippet badgeList()}
   {#each badges as b (b.icon + b.text)}
-    <span class="inline-flex items-center gap-1 px-1.5 py-px self-center rounded-full border text-caption leading-4 {TONES[b.tone]}" title={b.text}>
+    <span class="inline-flex items-center gap-1 px-1.5 py-px self-center rounded-full border text-caption leading-4 {TONES[b.tone]}" title={b.detail ? `${b.text} (${b.detail})` : b.text}>
       <Icon icon={b.icon} class="w-3 h-3 shrink-0" aria-hidden="true" />
       <span class="max-w-48 truncate">{b.text}</span>
     </span>

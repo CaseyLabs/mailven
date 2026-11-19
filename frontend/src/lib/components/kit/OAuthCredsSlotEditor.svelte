@@ -42,7 +42,7 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import * as Select from '$lib/components/ui/select'
-  import { toasts } from '$lib/stores/toast'
+  import { toasts, errorDetails } from '$lib/stores/toast'
   // @ts-ignore - wailsjs bindings
   import { GetOAuthCredsChoices, SetOAuthCreds, SetOAuthCredsChoice, ClearOAuthCreds } from '$wailsjs/go/app/App'
   // @ts-ignore - wailsjs bindings
@@ -122,11 +122,11 @@
     try {
       await SetOAuthCredsChoice(configID, next)
       const labelText = choices?.choices.find(c => c.id === next)?.label ?? next
-      toasts.success(`${label} is now using ${labelText}`)
+      toasts.success($_('toast.oauthChoiceSwitched', { values: { label, choice: labelText } }))
       await refresh()
     } catch (err) {
       console.error('Failed to switch OAuth choice:', err)
-      toasts.error(`Failed to switch credentials: ${(err as Error)?.message ?? err}`)
+      toasts.error($_('toast.oauthChoiceSwitchFailed'), undefined, errorDetails(err))
       await refresh()
     }
   }
@@ -164,7 +164,7 @@
       } catch (err) {
         console.warn('Failed to record active choice after Custom save:', err)
       }
-      toasts.success(`${label} credentials saved`)
+      toasts.success($_('toast.oauthCredsSaved', { values: { label } }))
       clientID = ''
       clientSecret = ''
       await refresh()
@@ -187,7 +187,7 @@
     }
     try {
       await ClearOAuthCreds(configID)
-      toasts.success(`${label} saved Custom credentials cleared`)
+      toasts.success($_('toast.oauthCredsCleared', { values: { label } }))
       clientID = ''
       clientSecret = ''
       await refresh()

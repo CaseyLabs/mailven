@@ -86,7 +86,7 @@
         </div>
       {/each}
     </div>
-    <label class="flex items-center gap-2 text-xs text-muted-foreground">
+    <label class="flex min-h-6 items-center gap-2 text-xs text-muted-foreground">
       <input type="checkbox" bind:checked={withSignature} />
       {$_('identity.sendAsImportSignature')}
     </label>

@@ -111,6 +111,7 @@ class Workflow(unittest.TestCase):
         self.assertEqual(CHECK.infer_scopes(['image.bin'])[1], ['image.bin'])
         self.assertEqual(CHECK.infer_scopes(['docs/ss.png', 'docs/guide/diagram.svg']), ({'docs'}, []))
         self.assertEqual(CHECK.infer_scopes(['frontend/logo.png']), ({'frontend'}, []))
+        self.assertEqual(CHECK.infer_scopes(['docs/plans/ux-0/annotations/toast.json']), ({'docs'}, []))
         self.assertEqual(CHECK.infer_scopes(['build/appicon.png'])[1], ['build/appicon.png'])
         self.assertEqual(CHECK.infer_scopes(['.agents/skills/test/SKILL.md'])[0], {'docs', 'tooling'})
         self.assertEqual(CHECK.infer_scopes(['extensions/calendar/frontend/components/View.svelte']), ({'frontend'}, []))

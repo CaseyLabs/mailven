@@ -1,0 +1,163 @@
+{
+ "googleGuide.help": {
+  "accurate": "yes",
+  "proposed": "Set up your own Google Cloud client by following this checklist. It takes a few minutes and needs no command line.",
+  "notes": "COPY-4: \"client\" is jargon; define once as the Google sign-in app you create. Keep wording consistent (COPY-9)."
+ },
+ "googleGuide.button": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Names the checklist; fine."
+ },
+ "googleGuide.markDone": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Screen-reader label for a checkbox; fine.",
+  "control": "Checkbox (per step, local to the guide)"
+ },
+ "googleGuide.scopeList": {
+  "accurate": "yes",
+  "proposed": "Permissions to add",
+  "notes": "COPY-4: \"scopes\" is Google console wording; keep in parentheses: \"Permissions (scopes) to add\"."
+ },
+ "googleGuide.copyScopes": {
+  "accurate": "yes",
+  "proposed": "Copy permissions",
+  "notes": "Match scopeList wording (COPY-9)."
+ },
+ "googleGuide.scopesCopied": {
+  "accurate": "yes",
+  "proposed": "Copied",
+  "notes": "COPY-10 shorter."
+ },
+ "googleGuide.copyFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't copy. Select the text and copy it yourself.",
+  "notes": "COPY-8: say what to do next."
+ },
+ "googleGuide.notRight": {
+  "accurate": "yes",
+  "proposed": "Page doesn't look right? Go to {path} in",
+  "notes": "COPY-10; sentence is split with the link button, keep word order."
+ },
+ "googleGuide.openConsole": {
+  "accurate": "yes",
+  "proposed": "the Google Cloud console",
+  "notes": "COPY-4 clarity: name the site."
+ },
+ "googleGuide.step.project.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "googleGuide.step.project.body": {
+  "accurate": "yes",
+  "proposed": "Create a new Google Cloud project, or pick one you already have. Keep it selected for the next steps.",
+  "notes": "COPY-2 minor."
+ },
+ "googleGuide.step.project.open": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Button; fine."
+ },
+ "googleGuide.step.apis.title": {
+  "accurate": "yes",
+  "proposed": "Turn on the APIs",
+  "notes": "COPY-3: Enable to Turn on. Button text in Google console says Enable (unverified)."
+ },
+ "googleGuide.step.apis.body": {
+  "accurate": "unverified: PROVIDERS.md says Gmail API is required for OAuth accounts; text says \"every Google account, even on IMAP\"; app-password accounts do not use this client",
+  "proposed": "Turn on the Gmail, People and Calendar APIs together. Mailven needs the Gmail API for every Google account, including ones that use IMAP.",
+  "notes": "COPY-3/4; PROVIDERS.md line 13 confirms Gmail API needed for OAuth accounts (check the \"even on IMAP\" claim for app-password accounts)."
+ },
+ "googleGuide.step.apis.open": {
+  "accurate": "yes",
+  "proposed": "Turn on APIs",
+  "notes": "COPY-3. If it mirrors the Google button label, keep \"Enable\" in quotes only in the body."
+ },
+ "googleGuide.step.branding.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Google console term; fine."
+ },
+ "googleGuide.step.branding.body": {
+  "accurate": "yes",
+  "proposed": "Enter an app name such as Mailven. Use your email address for the support and contact addresses.",
+  "notes": "COPY-12 clarity."
+ },
+ "googleGuide.step.branding.open": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Button; fine."
+ },
+ "googleGuide.step.audience.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Google console term; fine."
+ },
+ "googleGuide.step.audience.body": {
+  "accurate": "unverified: 7-day Testing expiry matches PROVIDERS.md line 39; \"exempt from verification\" for personal use is a Google policy claim not in the docs",
+  "proposed": "Choose External. While the app is in Testing, add your Google address under Test users. Only listed users can sign in, and their sign-in expires after 7 days. To remove the 7-day limit, publish the app. Google then shows a warning screen for unverified apps. For personal use by a few people you know, you don't need verification.",
+  "notes": "COPY-1 grade 8+; split long sentence. PROVIDERS.md line 39 supports 7 days. Verification-exempt claim needs a Google source."
+ },
+ "googleGuide.step.audience.open": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Button; fine."
+ },
+ "googleGuide.step.scopes.title": {
+  "accurate": "yes",
+  "proposed": "Add the data access permissions",
+  "notes": "COPY-4; match scopeList (COPY-9)."
+ },
+ "googleGuide.step.scopes.body": {
+  "accurate": "yes",
+  "proposed": "Open Data Access and choose Add or remove scopes. Copy the permissions below. Paste them into Manually add scopes at the bottom of the panel. Then choose Add to table, Update, and Save.",
+  "notes": "COPY-1: shorter sentences; keep Google button names exactly."
+ },
+ "googleGuide.step.scopes.open": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Button; names the Google page."
+ },
+ "googleGuide.step.clients.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Keep: matches Google console."
+ },
+ "googleGuide.step.clients.body": {
+  "accurate": "yes",
+  "proposed": "Create a client of type Desktop app and download its JSON file now. Google shows the client secret only once.",
+  "notes": "COPY-2 minor."
+ },
+ "googleGuide.step.clients.open": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Button; fine."
+ },
+ "googleGuide.step.import.title": {
+  "accurate": "yes",
+  "proposed": "Import the JSON file",
+  "notes": "COPY-10."
+ },
+ "googleGuide.step.import.body": {
+  "accurate": "unverified: \"Google Mail\" slot (googleClient.slotMail) location not confirmed",
+  "proposed": "Choose Import JSON… below this checklist, or paste the Client ID and Secret into Google Mail in the extension settings.",
+  "notes": "Where \"Google Mail\" lives is unclear (slotMail); verify and name the path (COPY-5)."
+ },
+ "googleGuide.step.import.bodyInline": {
+  "accurate": "yes",
+  "proposed": "Choose Import JSON… and pick the file you downloaded. Sign in with Google will then use your client.",
+  "notes": "Fine; tiny tense fix."
+ },
+ "googleGuide.step.signin.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "googleGuide.step.signin.body": {
+  "accurate": "yes",
+  "proposed": "Sign in with your Google account. Then open the account's Identity settings and choose Check Google setup.",
+  "notes": "Button is \"Check Google setup\" (en.json:919); \"press\" to \"choose\" (COPY-9)."
+ }
+}

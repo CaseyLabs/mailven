@@ -240,7 +240,7 @@ export function getOAuthProviders(): EmailProvider[] {
 export const securityOptions = [
   { value: 'tls', label: 'SSL/TLS', labelKey: 'account.securitySsl' },
   { value: 'starttls', label: 'STARTTLS', labelKey: 'account.securityStarttls' },
-  { value: 'none', label: 'None (insecure)', labelKey: 'account.securityNone' },
+  { value: 'none', label: 'None (not secure)', labelKey: 'account.securityNone' },
 ] as const
 
 /**

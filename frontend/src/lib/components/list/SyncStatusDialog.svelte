@@ -45,12 +45,12 @@
       .filter((r) => r.syncing || r.error)
   )
 
-  // OAuth failures get a plain-language hint above the raw error.
+  // Says what happened and what to do in plain words; the raw error stays behind "Show details" (UX-COPY-8).
   function errorHint(message: string): string {
     const missing = /not configured \(missing client ID\)(?:: (\S+))?/.exec(message)
-    if (missing) return $_('sidebar.syncErrorOAuthNotConfigured', { values: { provider: missing[1] ?? 'this provider' } })
+    if (missing) return $_('sidebar.syncErrorOAuthNotConfigured', { values: { provider: missing[1] ?? $_('sidebar.syncProviderFallback') } })
     if (/unauthorized_client|invalid_grant|token refresh failed/i.test(message)) return $_('sidebar.syncErrorReauthorize')
-    return ''
+    return $_('sidebar.syncErrorGeneric')
   }
 
   function phaseLabel(progress: SyncProgress | null): string {
@@ -107,13 +107,13 @@
             {/if}
           {/if}
           {#if row.error}
-            {@const hint = errorHint(row.error.error)}
-            {#if hint}
-              <p class="text-xs text-destructive pl-6 break-words">{hint}</p>
-            {/if}
-            <p class="text-xs text-destructive pl-6 break-words select-text">
-              {#if row.errorFolder}{row.errorFolder}: {/if}{row.error.error}
-            </p>
+            <p class="text-xs text-destructive pl-6 break-words">{errorHint(row.error.error)}</p>
+            <details class="pl-6 text-xs text-muted-foreground">
+              <summary class="cursor-pointer">{$_('sidebar.syncErrorDetails')}</summary>
+              <p class="break-words select-text">
+                {#if row.errorFolder}{row.errorFolder}: {/if}{row.error.error}
+              </p>
+            </details>
             {#if onFixAccount}
               <div class="pl-6">
                 <Button type="button" size="sm" variant="outline" onclick={() => onFixAccount(row.id)}>{$_('sidebar.syncErrorFixAccount')}</Button>

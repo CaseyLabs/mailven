@@ -1,0 +1,330 @@
+{
+ "settingsGeneral.display": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.titleBar": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine. CTRL-1: switch in Save form (Select)."
+ },
+ "settingsGeneral.titleBarHelp": {
+  "accurate": "yes",
+  "proposed": "Choose which title bar Mailven shows. Changing to or from System takes effect after you restart Mailven.",
+  "notes": "COPY-5. Restart only checked for the native flag (SettingsDialog.svelte:310)."
+ },
+ "settingsGeneral.titleBarAerion": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.titleBarAerionDesc": {
+  "accurate": "yes",
+  "proposed": "Use Mailven's own title bar",
+  "notes": "COPY-12."
+ },
+ "settingsGeneral.titleBarNative": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.titleBarNativeDesc": {
+  "accurate": "yes",
+  "proposed": "Use your computer's standard title bar. Takes effect after you restart Mailven.",
+  "notes": "COPY-5 (guidelines 10.2)."
+ },
+ "settingsGeneral.titleBarDisable": {
+  "accurate": "yes",
+  "proposed": "None",
+  "notes": "COPY-3: bare 'Disable'. Stored value 'disable' stays."
+ },
+ "settingsGeneral.titleBarDisableDesc": {
+  "accurate": "yes",
+  "proposed": "Hide the title bar to get more space for your mail",
+  "notes": "COPY-6 (guidelines 10.2)."
+ },
+ "settingsGeneral.language": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Language applies at once via setLocale (GeneralTab.svelte:143) before Save; CTRL-1 mismatch.",
+  "applies": "now"
+ },
+ "settingsGeneral.theme": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Theme previews at once and reverts on Cancel (SettingsDialog.svelte:328).",
+  "applies": "now"
+ },
+ "settingsGeneral.themeHelp": {
+  "accurate": "yes",
+  "proposed": "Choose light or dark, or match your computer's setting.",
+  "notes": "COPY-4: 'system preference' is vague."
+ },
+ "settingsGeneral.selectTheme": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Select placeholder only."
+ },
+ "settingsGeneral.messageListDensity": {
+  "accurate": "yes",
+  "proposed": "Chat list spacing",
+  "notes": "COPY-9: list is called 'chat list' elsewhere; only ChatRow reads it (ChatRow.svelte:86)."
+ },
+ "settingsGeneral.messageListDensityHelp": {
+  "accurate": "unverified: text-size effect of density not checked",
+  "proposed": "Change how much space each row in the chat list uses.",
+  "notes": "COPY-9, COPY-6."
+ },
+ "settingsGeneral.darkMailContent": {
+  "accurate": "yes",
+  "proposed": "Dark email content",
+  "notes": "COPY-12. Shown only when a dark theme is active. CTRL-1: switch in Save form."
+ },
+ "settingsGeneral.darkMailContentHelp": {
+  "accurate": "yes",
+  "proposed": "When Mailven is dark, show email with a dark filter so it is easier on the eyes.",
+  "notes": "COPY-6. Used in ChatBubble.svelte:101.",
+  "control": "none (help text)"
+ },
+ "settingsGeneral.darkComposerBody": {
+  "accurate": "yes",
+  "proposed": "Dark writing area",
+  "notes": "COPY-10. Shown only in dark theme. CTRL-1: switch in Save form."
+ },
+ "settingsGeneral.darkComposerBodyHelp": {
+  "accurate": "yes",
+  "proposed": "When Mailven is dark, use a dark background where you write a message. Off keeps it white.",
+  "notes": "Code: ComposerBody.svelte:19 forces light when off.",
+  "control": "none (help text)"
+ },
+ "settingsGeneral.hideMessagePreview": {
+  "accurate": "yes",
+  "proposed": "Hide message previews",
+  "notes": "COPY-10. Read by ChatRow.svelte:94. CTRL-1: switch in Save form."
+ },
+ "settingsGeneral.hideMessagePreviewHelp": {
+  "accurate": "no: only the chat list reads it; 'message list' no longer exists",
+  "proposed": "Hide the first lines of the latest message under each chat's subject. Search results still show the matching text.",
+  "notes": "COPY-9.",
+  "control": "none (help text)"
+ },
+ "settingsGeneral.selectDensity": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Select placeholder only."
+ },
+ "settingsGeneral.readReceipts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10: sentence case. Stored under settingsGeneral but shown on Composer tab. Applied in UX-2."
+ },
+ "settingsGeneral.readReceiptPolicy": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "CTRL-3: 3 options with consequences; consider radios. Default not shown (CTRL-4)."
+ },
+ "settingsGeneral.readReceiptPolicyHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6, glossary. Applied in UX-2."
+ },
+ "settingsGeneral.selectPolicy": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Select placeholder only."
+ },
+ "settingsGeneral.neverSendReceipts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.askEachTime": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.alwaysSendReceipts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.markAsRead": {
+  "accurate": "yes",
+  "proposed": "Mark as read",
+  "notes": "COPY-10: sentence case."
+ },
+ "settingsGeneral.markAsReadAfter": {
+  "accurate": "yes",
+  "proposed": "When I open a chat, mark it as read",
+  "notes": "COPY-9: chat vs message; code marks unread in the open chat (chatThread.svelte.ts:368)."
+ },
+ "settingsGeneral.markAsReadManual": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.markAsReadImmediately": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.markAsReadDelay": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Units given (CTRL-9)."
+ },
+ "settingsGeneral.markAsReadHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.background": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.runInBackground": {
+  "accurate": "yes",
+  "proposed": "Keep running in the background",
+  "notes": "COPY-7. CTRL-1: switch in Save form."
+ },
+ "settingsGeneral.runInBackgroundHelp": {
+  "accurate": "yes",
+  "proposed": "Keep Mailven running after you close its window.",
+  "notes": "COPY-2. Turning off also turns off 'Start hidden' (GeneralBackgroundSections.svelte:18).",
+  "control": "none (help text)"
+ },
+ "settingsGeneral.startHidden": {
+  "accurate": "yes",
+  "proposed": "Start with the window hidden",
+  "notes": "COPY-7. Disabled until background is on. CTRL-1: switch in Save form."
+ },
+ "settingsGeneral.startHiddenHelp": {
+  "accurate": "yes",
+  "proposed": "Mailven opens without showing its window. Turn on 'Keep running in the background' first.",
+  "notes": "COPY-6, CTRL-7. Turning this on also turns background on (GeneralBackgroundSections.svelte:24).",
+  "control": "none (help text)"
+ },
+ "settingsGeneral.startup": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.autostartOnLogin": {
+  "accurate": "yes",
+  "proposed": "Start Mailven when I log in",
+  "notes": "COPY-7, COPY-12. CTRL-1: switch in Save form."
+ },
+ "settingsGeneral.autostartHelp": {
+  "accurate": "yes",
+  "proposed": "Open Mailven each time you log in to your computer.",
+  "notes": "COPY-6: help repeats the label."
+ },
+ "settingsGeneral.densityMicro": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.densityCompact": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.densityStandard": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.densityLarge": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.themeSystem": {
+  "accurate": "yes",
+  "proposed": "Match system",
+  "notes": "COPY-4: bare 'System' unclear."
+ },
+ "settingsGeneral.themeLight": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.themeDark": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsGeneral.restartRequired": {
+  "accurate": "yes",
+  "proposed": "Restart to finish",
+  "notes": "COPY-5."
+ },
+ "settingsGeneral.restartRequiredDescription": {
+  "accurate": "no: 'Quit now' only quits; Mailven is not reopened",
+  "proposed": "Your title bar change takes effect after you quit and reopen Mailven.",
+  "notes": "COPY-5. QuitApp used, no relaunch (SettingsDialog.svelte)."
+ },
+ "settingsGeneral.quitNow": {
+  "accurate": "yes",
+  "proposed": "Quit Mailven",
+  "notes": "COPY-10: names the action."
+ },
+ "settingsGeneral.restartLater": {
+  "accurate": "yes",
+  "proposed": "Not now",
+  "notes": "COPY-10."
+ },
+ "settingsGeneral.alwaysLoadImages": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary. CTRL-1: switch in Save form; confirm dialog sets form value only. Applied in UX-2."
+ },
+ "settingsGeneral.alwaysLoadImagesHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "SEC-1: default and what changes. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsGeneral.alwaysLoadImagesWarningTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "SEC-2. Applied in UX-2."
+ },
+ "settingsGeneral.alwaysLoadImagesWarningDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "SEC-2: name risk, then buttons [Keep blocking] [Load automatically]. Facts match viewer behavior. Applied in UX-2."
+ },
+ "settingsGeneral.withDefault": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-1: marks the install default (UX-CTRL-4)."
+ },
+ "settingsGeneral.chatList": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-1: section heading for the chat list controls."
+ },
+ "settingsGeneral.darkOnlyHint": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-1: explains why the dark switches are disabled (UX-CTRL-7)."
+ },
+ "settingsGeneral.startHiddenNeedsBackground": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-1: explains why Start hidden is disabled (UX-CTRL-7)."
+ },
+ "settingsGeneral.alwaysLoadImagesConfirm": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-SEC-2: names the action. Replaces the bare \"Disable\" key."
+ },
+ "settingsGeneral.alwaysLoadImagesKeepBlocking": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "UX-SEC-2: names the safe choice."
+ }
+}

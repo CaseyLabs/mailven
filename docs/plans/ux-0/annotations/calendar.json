@@ -1,0 +1,822 @@
+{
+ "calendar.common.cancel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label."
+ },
+ "calendar.common.save": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label."
+ },
+ "calendar.common.saving": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label."
+ },
+ "calendar.common.delete": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label; confirmation names item (CalendarSettingsDialog.svelte:267)."
+ },
+ "calendar.common.loading": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.common.close": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.hooks.loading": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.hooks.consentNeeded": {
+  "accurate": "yes",
+  "proposed": "Mailven needs your permission to use this account's calendars. Choose the button below to allow it.",
+  "notes": "COPY-4, COPY-8: drop 'scope'; say what and why"
+ },
+ "calendar.hooks.grantButton": {
+  "accurate": "yes",
+  "proposed": "Allow calendar access",
+  "notes": "COPY-9, COPY-10: sentence case, verb first"
+ },
+ "calendar.hooks.granting": {
+  "accurate": "yes",
+  "proposed": "Opening the permission window…",
+  "notes": "COPY-4: 'consent window' is jargon"
+ },
+ "calendar.hooks.calendarsLabel": {
+  "accurate": "yes",
+  "proposed": "Calendars to add",
+  "notes": "COPY-9: 'subscribe' is jargon; these are added, not subscribed"
+ },
+ "calendar.hooks.selectAll": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.hooks.sourceNameLabel": {
+  "accurate": "yes",
+  "proposed": "Name for these calendars",
+  "notes": "COPY-9: 'source' is jargon",
+  "control": "Input"
+ },
+ "calendar.hooks.primary": {
+  "accurate": "yes",
+  "proposed": "main",
+  "notes": "COPY-9: plain word; shown as a badge"
+ },
+ "calendar.hooks.defaultBadge": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain badge."
+ },
+ "calendar.hooks.readOnlyHint": {
+  "accurate": "yes",
+  "proposed": "You can view this calendar but not change it.",
+  "notes": "COPY-2: plain wording"
+ },
+ "calendar.hooks.readOnlyBadge": {
+  "accurate": "yes",
+  "proposed": "view only",
+  "notes": "COPY-9"
+ },
+ "calendar.hooks.skip": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.hooks.setup": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.hooks.done": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.hooks.completeMessage": {
+  "accurate": "unverified: sync starts after add, per toast text; backend not checked",
+  "proposed": "Calendars added. Mailven is downloading your events now.",
+  "notes": "COPY-2, glossary: avoid 'sync'"
+ },
+ "calendar.hooks.successToast": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.hooks.errorPick": {
+  "accurate": "yes",
+  "proposed": "Choose at least one calendar.",
+  "notes": "COPY-8: 'Pick' to 'Choose' (COPY-9)"
+ },
+ "calendar.hooks.errorName": {
+  "accurate": "yes",
+  "proposed": "Enter a name.",
+  "notes": "COPY-8"
+ },
+ "calendar.sidebar.addSource": {
+  "accurate": "yes",
+  "proposed": "Add calendar server (CalDAV)",
+  "notes": "COPY-4, COPY-9: protocol in parentheses"
+ },
+ "calendar.viewSwitcher.tzLabel": {
+  "accurate": "yes",
+  "proposed": "Time zone: {tz}",
+  "notes": "COPY-10: 'tz' is an abbreviation; use 'time zone' (two words) throughout"
+ },
+ "calendar.add.title": {
+  "accurate": "yes",
+  "proposed": "Add calendar server (CalDAV)",
+  "notes": "COPY-4, COPY-9"
+ },
+ "calendar.add.description": {
+  "accurate": "unverified: 'reads events' only; Mailven can also create events (add.organizerEmailPrompt) so the old text understated",
+  "proposed": "Connect to a calendar server such as Nextcloud, Radicale, iCloud or FastMail. Mailven shows events from the calendars you choose.",
+  "notes": "COPY-4: CalDAV out of main line; COPY-1"
+ },
+ "calendar.add.nameLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label.",
+  "control": "Input"
+ },
+ "calendar.add.namePlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Example text."
+ },
+ "calendar.add.urlLabel": {
+  "accurate": "yes",
+  "proposed": "Server address",
+  "notes": "COPY-4: URL is jargon",
+  "control": "Input"
+ },
+ "calendar.add.urlPlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Example URL."
+ },
+ "calendar.add.urlHelp": {
+  "accurate": "yes",
+  "proposed": "Enter the server address or the full address of your calendars. Mailven will try the usual locations.",
+  "notes": "COPY-2, COPY-1: drop 'probe', 'base URL', 'calendar-home'"
+ },
+ "calendar.add.usernameLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label.",
+  "control": "Input"
+ },
+ "calendar.add.passwordLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label.",
+  "control": "Input"
+ },
+ "calendar.add.authMethod": {
+  "accurate": "yes",
+  "proposed": "How to sign in",
+  "notes": "COPY-10",
+  "control": "Button pair acting as radio group - not verified"
+ },
+ "calendar.add.authPassword": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.add.authOAuth": {
+  "accurate": "yes",
+  "proposed": "Sign in with a connected account",
+  "notes": "COPY-4, glossary"
+ },
+ "calendar.add.oauthAccountLabel": {
+  "accurate": "yes",
+  "proposed": "Connected account",
+  "notes": "COPY-4, glossary"
+ },
+ "calendar.add.oauthAccountRequired": {
+  "accurate": "yes",
+  "proposed": "Choose a connected account to sign in with.",
+  "notes": "COPY-4, COPY-8"
+ },
+ "calendar.add.noCustomAccounts": {
+  "accurate": "yes",
+  "proposed": "No connected accounts are available. Add a mail account that uses your own sign-in setup under Accounts first.",
+  "notes": "COPY-4, CTRL-5: custom OAuth is advanced"
+ },
+ "calendar.add.submit": {
+  "accurate": "yes",
+  "proposed": "Connect",
+  "notes": "COPY-2: 'Discover' is jargon; submit button name; label becomes 'Connect' (matches add.submitting)"
+ },
+ "calendar.add.submitting": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.add.successToast": {
+  "accurate": "yes",
+  "proposed": "Added {count} calendars from {name}",
+  "notes": "COPY-7: '(s)' placeholder for plural; use ICU plural in implementation"
+ },
+ "calendar.add.errorTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.add.errorHelp": {
+  "accurate": "yes",
+  "proposed": "Check the address, username and password. The server's error message is shown below.",
+  "notes": "COPY-8"
+ },
+ "calendar.add.fieldRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine; {field} must be a plain label."
+ },
+ "calendar.add.colorPickStage.title": {
+  "accurate": "yes",
+  "proposed": "Choose colors for your calendars",
+  "notes": "COPY-9: 'Pick' to 'Choose'"
+ },
+ "calendar.add.colorPickStage.help": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.add.colorPickStage.done": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.add.defaultColumnHeader": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.add.globalDefaultLabel": {
+  "accurate": "unverified: 'Global default' wording; meaning per AddCalendarDefaultsControl.svelte:19 (default calendar for new events)",
+  "proposed": "Default calendar for new events",
+  "notes": "COPY-6: states what it does"
+ },
+ "calendar.add.globalDefaultUnset": {
+  "accurate": "yes",
+  "proposed": "None chosen",
+  "notes": "COPY-7: '(not set)' is a fragment"
+ },
+ "calendar.add.makeProviderDefault": {
+  "accurate": "yes",
+  "proposed": "Use as default for {provider}",
+  "notes": "COPY-9: 'Set as default' fine; consistent with checkbox form (CTRL-1)"
+ },
+ "calendar.add.makeGlobalDefault": {
+  "accurate": "yes",
+  "proposed": "Use as default for new events",
+  "notes": "COPY-6"
+ },
+ "calendar.add.providerLabelLocal": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.add.providerLabelGoogle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Names the service."
+ },
+ "calendar.add.providerLabelMicrosoft": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Names the service."
+ },
+ "calendar.add.organizerEmailLabel": {
+  "accurate": "yes",
+  "proposed": "Your email for invitations",
+  "notes": "COPY-9: 'Organizer' is jargon",
+  "control": "Input"
+ },
+ "calendar.add.organizerEmailPlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Example."
+ },
+ "calendar.add.organizerEmailPrompt": {
+  "accurate": "yes",
+  "proposed": "Your server didn't give Mailven an email address for you. Enter the address Mailven should use as the sender of invitations for events you create here.",
+  "notes": "COPY-2, COPY-12"
+ },
+ "calendar.add.organizerEmailHelp": {
+  "accurate": "yes",
+  "proposed": "This is the address invitees see as the organizer of events you create here.",
+  "notes": "COPY-4: ORGANIZER is a protocol term"
+ },
+ "calendar.add.organizerEmailInvalid": {
+  "accurate": "yes",
+  "proposed": "Enter a valid email address.",
+  "notes": "Fine."
+ },
+ "calendar.toast.sourceDeleted": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.toast.forceResyncDone": {
+  "accurate": "yes",
+  "proposed": "Downloaded everything again for {name}",
+  "notes": "Glossary: Download everything again"
+ },
+ "calendar.tzSelector.searchPlaceholder": {
+  "accurate": "yes",
+  "proposed": "Search time zones…",
+  "notes": "COPY-9: 'time zone' two words"
+ },
+ "calendar.tzSelector.autoDetect": {
+  "accurate": "yes",
+  "proposed": "Use my computer's time zone",
+  "notes": "COPY-12, glossary; control applies now"
+ },
+ "calendar.tzSelector.noResults": {
+  "accurate": "yes",
+  "proposed": "No matching time zones",
+  "notes": "COPY-9"
+ },
+ "calendar.tzSelector.tooltip": {
+  "accurate": "yes",
+  "proposed": "Change the time zone used to show events",
+  "notes": "COPY-9, COPY-6"
+ },
+ "calendar.settings.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.localCalendarsSection": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.noLocalCalendars": {
+  "accurate": "yes",
+  "proposed": "No local calendars yet. Add one to create events.",
+  "notes": "COPY-7: sentence break instead of dash"
+ },
+ "calendar.settings.addLocalCalendar": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.calendarDeleted": {
+  "accurate": "yes",
+  "proposed": "Deleted calendar \"{name}\"",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.deleteCalendarConfirmTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.deleteCalendarConfirmDescription": {
+  "accurate": "yes",
+  "proposed": "Mailven will delete all events in this calendar. You can't undo this.",
+  "notes": "COPY-5, COPY-2"
+ },
+ "calendar.settings.sourcesSection": {
+  "accurate": "yes",
+  "proposed": "Calendar servers and accounts",
+  "notes": "COPY-9: 'Sources' is jargon"
+ },
+ "calendar.settings.noSources": {
+  "accurate": "yes",
+  "proposed": "Nothing added yet. Add a calendar server or account to see its events here.",
+  "notes": "COPY-9, COPY-2: avoid 'sync'"
+ },
+ "calendar.settings.calendarCount": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Use plural (ICU) rather than separate key."
+ },
+ "calendar.settings.calendarCountOne": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.lastSync": {
+  "accurate": "no: {time} can be 'just now' (CalendarSettingsSourcesSection.svelte:162) giving 'Synced just now ago'; 'm/h/d' are hard-coded English",
+  "proposed": "Updated {time} ago",
+  "notes": "Glossary: Update, not sync"
+ },
+ "calendar.settings.lastSyncNever": {
+  "accurate": "yes",
+  "proposed": "Not updated yet",
+  "notes": "Glossary"
+ },
+ "calendar.settings.syncNow": {
+  "accurate": "yes",
+  "proposed": "Update now",
+  "notes": "Glossary: Update / Check for new mail"
+ },
+ "calendar.settings.forceResync": {
+  "accurate": "yes",
+  "proposed": "Download everything again",
+  "notes": "Glossary"
+ },
+ "calendar.settings.forceResyncConfirmTitle": {
+  "accurate": "yes",
+  "proposed": "Download everything again for {name}?",
+  "notes": "Glossary"
+ },
+ "calendar.settings.forceResyncConfirmDescription": {
+  "accurate": "unverified: 'clears sync state' not checked in backend",
+  "proposed": "Mailven will clear what it remembers about this calendar and download every event again. Use this if events are missing. It can take longer than a normal update.",
+  "notes": "COPY-5, COPY-2, glossary"
+ },
+ "calendar.settings.deleteConfirmTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine; button names action (Delete) — mismatch with 'Remove' title; use Remove button label (COPY-9)."
+ },
+ "calendar.settings.deleteConfirmDescription": {
+  "accurate": "unverified: names CalDAV only, but dialog is shared by all source types (CalendarSettingsDialog.svelte:265)",
+  "proposed": "Mailven will remove all calendars and events from this account or server from this device. Nothing changes on the server.",
+  "notes": "COPY-5, UX-SEC-5; same dialog serves Google/Outlook too"
+ },
+ "calendar.settings.defaultsSection": {
+  "accurate": "yes",
+  "proposed": "Default calendar for new events",
+  "notes": "COPY-6"
+ },
+ "calendar.settings.globalDefaultLabel": {
+  "accurate": "yes",
+  "proposed": "Default for all accounts",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.providerDefaultsLabel": {
+  "accurate": "yes",
+  "proposed": "Default for each account",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.noDefaultsHint": {
+  "accurate": "yes",
+  "proposed": "Add a calendar to choose defaults.",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.oauthSection": {
+  "accurate": "yes",
+  "proposed": "Sign-in credentials (advanced)",
+  "notes": "COPY-4: OAuth out of label; already in Advanced section (CalendarSettingsDialog.svelte:223)"
+ },
+ "calendar.settings.oauthHelp": {
+  "accurate": "unverified: default credential names not found in code (set by credential store)",
+  "proposed": "Choose which sign-in credentials Mailven uses for Google and Microsoft calendars. The default works for most people.",
+  "notes": "COPY-4, CTRL-5, COPY-1"
+ },
+ "calendar.settings.oauthGoogleLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Names the service."
+ },
+ "calendar.settings.oauthMicrosoftLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Names the service."
+ },
+ "calendar.settings.intervalMinutes": {
+  "accurate": "yes",
+  "proposed": "Every {n} minutes",
+  "notes": "CTRL-9, COPY-7"
+ },
+ "calendar.settings.intervalHours": {
+  "accurate": "yes",
+  "proposed": "Every {n} hours",
+  "notes": "CTRL-9, COPY-7"
+ },
+ "calendar.settings.intervalToastSuccess": {
+  "accurate": "yes",
+  "proposed": "Update frequency changed for {name}",
+  "notes": "Glossary, COPY-9"
+ },
+ "calendar.settings.intervalToastError": {
+  "accurate": "yes",
+  "proposed": "Couldn't change how often {name} updates. Try again.",
+  "notes": "COPY-8: {message} is raw; move to details"
+ },
+ "calendar.settings.addGoogle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.addGoogleTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.addGoogleDescription": {
+  "accurate": "yes",
+  "proposed": "Add your Google calendars using a Gmail account you already added to Mailven.",
+  "notes": "COPY-9: 'Subscribe' is jargon"
+ },
+ "calendar.settings.addGoogleAccountLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.addGooglePickAccount": {
+  "accurate": "yes",
+  "proposed": "Choose an account…",
+  "notes": "COPY-9: 'Pick/Select' to 'Choose'"
+ },
+ "calendar.settings.addGoogleNoAccounts": {
+  "accurate": "yes",
+  "proposed": "No Gmail accounts found. Add a Gmail account first, then you can add its calendars.",
+  "notes": "COPY-8"
+ },
+ "calendar.settings.addGoogleLoadingCalendars": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.settings.addGoogleCalendarsLabel": {
+  "accurate": "yes",
+  "proposed": "Calendars to add",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addGoogleSelectAll": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.settings.addGoogleSourceNameLabel": {
+  "accurate": "yes",
+  "proposed": "Name for these calendars",
+  "notes": "COPY-9",
+  "control": "Input"
+ },
+ "calendar.settings.addGooglePrimary": {
+  "accurate": "yes",
+  "proposed": "main",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addGoogleReadOnly": {
+  "accurate": "yes",
+  "proposed": "You can view this calendar but not change it.",
+  "notes": "COPY-2"
+ },
+ "calendar.settings.addGoogleReadOnlyBadge": {
+  "accurate": "yes",
+  "proposed": "view only",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addGoogleConsentNeeded": {
+  "accurate": "yes",
+  "proposed": "Mailven needs your permission to use this account's calendars. Choose the button below to allow it.",
+  "notes": "COPY-4, COPY-8"
+ },
+ "calendar.settings.addGoogleGrantButton": {
+  "accurate": "yes",
+  "proposed": "Allow calendar access",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addGoogleGranting": {
+  "accurate": "yes",
+  "proposed": "Opening the permission window…",
+  "notes": "COPY-4"
+ },
+ "calendar.settings.addGoogleConsentFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't get calendar access. Try again. Details: {message}",
+  "notes": "COPY-8: what happened then what to do; detail behind Show details"
+ },
+ "calendar.settings.addGoogleErrorAccount": {
+  "accurate": "yes",
+  "proposed": "Choose an account.",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addGoogleErrorPick": {
+  "accurate": "yes",
+  "proposed": "Choose at least one calendar.",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addGoogleErrorName": {
+  "accurate": "yes",
+  "proposed": "Enter a name.",
+  "notes": "COPY-8"
+ },
+ "calendar.settings.addGoogleToastSuccess": {
+  "accurate": "yes",
+  "proposed": "Google calendars added. Mailven is downloading your events now.",
+  "notes": "Glossary; avoid 'sync'"
+ },
+ "calendar.settings.addGoogleToastError": {
+  "accurate": "yes",
+  "proposed": "Couldn't add the Google calendar. Try again. Details: {message}",
+  "notes": "COPY-8"
+ },
+ "calendar.settings.addOutlook": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.addOutlookTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.addOutlookDescription": {
+  "accurate": "yes",
+  "proposed": "Add your Outlook or Microsoft 365 calendars using an Outlook account you already added to Mailven.",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addOutlookAccountLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.addOutlookPickAccount": {
+  "accurate": "yes",
+  "proposed": "Choose an account…",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addOutlookNoAccounts": {
+  "accurate": "yes",
+  "proposed": "No Outlook accounts found. Add an Outlook account first, then you can add its calendars.",
+  "notes": "COPY-8"
+ },
+ "calendar.settings.addOutlookLoadingCalendars": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.settings.addOutlookCalendarsLabel": {
+  "accurate": "yes",
+  "proposed": "Calendars to add",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addOutlookSelectAll": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.settings.addOutlookSourceNameLabel": {
+  "accurate": "yes",
+  "proposed": "Name for these calendars",
+  "notes": "COPY-9",
+  "control": "Input"
+ },
+ "calendar.settings.addOutlookDefault": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain badge."
+ },
+ "calendar.settings.addOutlookReadOnly": {
+  "accurate": "yes",
+  "proposed": "You can view this calendar but not change it.",
+  "notes": "COPY-2"
+ },
+ "calendar.settings.addOutlookReadOnlyBadge": {
+  "accurate": "yes",
+  "proposed": "view only",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addOutlookConsentNeeded": {
+  "accurate": "yes",
+  "proposed": "Mailven needs your permission to use this account's calendars. Choose the button below to allow it.",
+  "notes": "COPY-4: Calendars.ReadWrite scope name is expert detail (CTRL-5)"
+ },
+ "calendar.settings.addOutlookGrantButton": {
+  "accurate": "yes",
+  "proposed": "Allow calendar access",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addOutlookGranting": {
+  "accurate": "yes",
+  "proposed": "Opening the permission window…",
+  "notes": "COPY-4"
+ },
+ "calendar.settings.addOutlookConsentFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't get calendar access. Try again. Details: {message}",
+  "notes": "COPY-8"
+ },
+ "calendar.settings.addOutlookErrorAccount": {
+  "accurate": "yes",
+  "proposed": "Choose an account.",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addOutlookErrorPick": {
+  "accurate": "yes",
+  "proposed": "Choose at least one calendar.",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.addOutlookErrorName": {
+  "accurate": "yes",
+  "proposed": "Enter a name.",
+  "notes": "COPY-8"
+ },
+ "calendar.settings.addOutlookToastSuccess": {
+  "accurate": "yes",
+  "proposed": "Outlook calendars added. Mailven is downloading your events now.",
+  "notes": "Glossary"
+ },
+ "calendar.settings.addOutlookToastError": {
+  "accurate": "yes",
+  "proposed": "Couldn't add the Outlook calendar. Try again. Details: {message}",
+  "notes": "COPY-8"
+ },
+ "calendar.settings.organizerEmailLabel": {
+  "accurate": "yes",
+  "proposed": "Your email for invitations",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.organizerEmailPlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Example."
+ },
+ "calendar.settings.organizerEmailSaved": {
+  "accurate": "yes",
+  "proposed": "Email for invitations saved",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.organizerEmailReprobed": {
+  "accurate": "unverified: count wording not checked in backend",
+  "proposed": "Found {count} addresses on the server",
+  "notes": "COPY-7: '(es)' placeholder for plural; use ICU plural"
+ },
+ "calendar.settings.organizerEmailReprobeEmpty": {
+  "accurate": "unverified: 'above' depends on layout; field is nearby (CalendarSettingsSourcesSection.svelte:373)",
+  "proposed": "The server still has no email address for you. Type one in the box and choose Save.",
+  "notes": "COPY-8, COPY-4: 'calendar user address'"
+ },
+ "calendar.settings.organizerEmailReprobeTitle": {
+  "accurate": "yes",
+  "proposed": "Ask the server for your email address again",
+  "notes": "COPY-4: 'Re-probe' and 'calendar user addresses' are jargon"
+ },
+ "calendar.settings.renameTitle": {
+  "accurate": "yes",
+  "proposed": "Rename",
+  "notes": "COPY-10: shorter"
+ },
+ "calendar.settings.renameToastSuccess": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.settings.timezoneSection": {
+  "accurate": "yes",
+  "proposed": "Time zone",
+  "notes": "COPY-9"
+ },
+ "calendar.settings.timezoneHelp": {
+  "accurate": "yes",
+  "proposed": "Choose the time zone Mailven uses to show event times. Auto-detect uses your computer's time zone.",
+  "notes": "COPY-9, COPY-12"
+ },
+ "calendar.localCalendar.title": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "calendar.localCalendar.description": {
+  "accurate": "yes",
+  "proposed": "Local calendars stay on this computer. They are not shared or updated from a server.",
+  "notes": "COPY-2, COPY-1"
+ },
+ "calendar.localCalendar.nameLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain.",
+  "control": "Input"
+ },
+ "calendar.localCalendar.namePlaceholder": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Example."
+ },
+ "calendar.localCalendar.colorLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain."
+ },
+ "calendar.localCalendar.colorAuto": {
+  "accurate": "yes",
+  "proposed": "Automatic",
+  "notes": "COPY-7"
+ },
+ "calendar.localCalendar.errorNameRequired": {
+  "accurate": "yes",
+  "proposed": "Enter a calendar name.",
+  "notes": "COPY-8"
+ },
+ "calendar.localCalendar.toastCreated": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ }
+}

@@ -1,0 +1,199 @@
+{
+ "mailApi.title": {
+  "accurate": "yes",
+  "proposed": "Provider connection",
+  "notes": "COPY-4: route/API jargon; applies on button press, not form"
+ },
+ "mailApi.routeLabel": {
+  "accurate": "yes",
+  "proposed": "Current connection",
+  "notes": "COPY-9"
+ },
+ "mailApi.routeProtocol": {
+  "accurate": "yes",
+  "proposed": "Standard mail servers (IMAP / SMTP)",
+  "notes": "COPY-4"
+ },
+ "mailApi.routeGmail": {
+  "accurate": "yes",
+  "proposed": "Gmail (Gmail API)",
+  "notes": "COPY-4"
+ },
+ "mailApi.routeGraph": {
+  "accurate": "yes",
+  "proposed": "Microsoft 365 (Microsoft Graph API)",
+  "notes": "COPY-4; unverified that all Graph accounts are Microsoft 365"
+ },
+ "mailApi.badge": {
+  "accurate": "yes",
+  "proposed": "Connection: {route}",
+  "notes": "COPY-9; shown in Accounts list"
+ },
+ "mailApi.intro": {
+  "accurate": "yes",
+  "proposed": "Optionally switch this account from standard mail servers to its provider's own connection. Nothing changes until you confirm, and you can switch back.",
+  "notes": "COPY-4, COPY-1, glossary"
+ },
+ "mailApi.scopes": {
+  "accurate": "yes",
+  "proposed": "Mailven asks your provider for permission to read, change and send mail for this account only. This is separate from your current sign-in, and you can remove it here.",
+  "notes": "COPY-12, COPY-4, SEC-1"
+ },
+ "mailApi.limits": {
+  "accurate": "unverified: provider limits, shared mailbox rule and cross-account move are product/provider facts",
+  "proposed": "Limits: Mailven can't promise delivery or inbox placement. Shared mailboxes stay on standard mail servers for now. Some provider limits, such as message size and Bcc handling, haven't been tested live. You can't move messages between accounts on this connection.",
+  "notes": "COPY-1, COPY-4, SEC-5; long, split into list; CTRL-5 candidate"
+ },
+ "mailApi.sharedNote": {
+  "accurate": "unverified: delegation checks are provider-side",
+  "proposed": "This shared mailbox uses your main account's work or school sign-in. It needs shared mail permissions and delegation from an administrator: Full Access to read, or Send As or Send on Behalf to send. Switching stays unavailable until those checks pass.",
+  "notes": "COPY-1, COPY-12"
+ },
+ "mailApi.authorize": {
+  "accurate": "yes",
+  "proposed": "Allow provider access",
+  "notes": "Glossary: Sign in; 'authorize' jargon, CTRL-1 button applies now"
+ },
+ "mailApi.reauthorizeAction": {
+  "accurate": "yes",
+  "proposed": "Sign in again for provider access",
+  "notes": "Glossary: Sign in again"
+ },
+ "mailApi.waiting": {
+  "accurate": "yes",
+  "proposed": "Waiting for you to finish in your browser…",
+  "notes": "COPY-2"
+ },
+ "mailApi.authorized": {
+  "accurate": "unverified: no use found in the code",
+  "proposed": "",
+  "notes": "no use found; candidate for removal"
+ },
+ "mailApi.removeAuth": {
+  "accurate": "yes",
+  "proposed": "Remove provider access",
+  "notes": "COPY-9, destructive: no confirm (CTRL table); MailAPISection.svelte:134"
+ },
+ "mailApi.reauthorize": {
+  "accurate": "yes",
+  "proposed": "Your provider access has expired. Sign in again to continue.",
+  "notes": "COPY-8, glossary"
+ },
+ "mailApi.partialConsent": {
+  "accurate": "yes",
+  "proposed": "You didn't allow every permission Mailven asked for. Sign in again and allow them all.",
+  "notes": "COPY-8"
+ },
+ "mailApi.planTitle": {
+  "accurate": "yes",
+  "proposed": "Before you switch",
+  "notes": "COPY-9: migrate vs switch"
+ },
+ "mailApi.counts": {
+  "accurate": "yes",
+  "proposed": "{folders} folders, {imap} messages from your mail server, {api} messages from the provider, {drafts} drafts, {queued} messages waiting to send, {pending} actions waiting.",
+  "notes": "COPY-4 IMAP/API; counts jargon (CTRL-9)"
+ },
+ "mailApi.blockers": {
+  "accurate": "yes",
+  "proposed": "You can't switch until these are fixed:",
+  "notes": "COPY-8"
+ },
+ "mailApi.review": {
+  "accurate": "yes",
+  "proposed": "Review switch",
+  "notes": "COPY-9"
+ },
+ "mailApi.consent": {
+  "accurate": "unverified: matching by Message-ID and no automatic fallback are backend behaviour",
+  "proposed": "I understand this account will use its provider's connection. Mailven keeps your existing messages, drafts and messages waiting to send. It won't switch back by itself.",
+  "notes": "COPY-1, COPY-4; checkbox applies at Switch click (CTRL-1 ok)",
+  "control": "Checkbox",
+  "applies": "now (inside review form)"
+ },
+ "mailApi.snapshotNote": {
+  "accurate": "yes",
+  "proposed": "Mailven saves a backup of your local mail data before anything changes.",
+  "notes": "COPY-12; 'snapshot' jargon"
+ },
+ "mailApi.migrate": {
+  "accurate": "yes",
+  "proposed": "Switch this account",
+  "notes": "COPY-9"
+ },
+ "mailApi.migrating": {
+  "accurate": "yes",
+  "proposed": "Switching… this can take a while for large mailboxes.",
+  "notes": "COPY-9"
+ },
+ "mailApi.migrated": {
+  "accurate": "yes",
+  "proposed": "Switched. {correlated} messages matched and {uncorrelated} added.",
+  "notes": "COPY-1; 'correlated' jargon"
+ },
+ "mailApi.migrateFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't switch. The account still uses its standard mail servers (IMAP / SMTP). Details: {error}",
+  "notes": "COPY-8: raw {error} in main line"
+ },
+ "mailApi.resumeNote": {
+  "accurate": "yes",
+  "proposed": "An earlier switch was interrupted. Switching again continues it.",
+  "notes": "COPY-9"
+ },
+ "mailApi.active": {
+  "accurate": "yes",
+  "proposed": "This account uses its provider's connection.",
+  "notes": "COPY-9"
+ },
+ "mailApi.rollback": {
+  "accurate": "yes",
+  "proposed": "Switch back to standard mail servers",
+  "notes": "COPY-4"
+ },
+ "mailApi.rollbackConfirm": {
+  "accurate": "unverified: replay and queued-action behaviour is backend",
+  "proposed": "Switch this account back to standard mail servers? Mailven won't resend anything to the provider. Actions still waiting for the provider stay waiting, and Mailven lists them afterwards.",
+  "notes": "COPY-5, COPY-4; confirm names action (CTRL table)"
+ },
+ "mailApi.rollbackConfirmAction": {
+  "accurate": "yes",
+  "proposed": "Switch back",
+  "notes": "Names the action; COPY-4"
+ },
+ "mailApi.rollingBack": {
+  "accurate": "yes",
+  "proposed": "Switching back…",
+  "notes": "COPY-4"
+ },
+ "mailApi.rolledBackSyncRequested": {
+  "accurate": "unverified: sync request outcome",
+  "proposed": "Switched back to standard mail servers. {applied} actions went through the provider since the switch. Mailven asked to check for new mail but can't confirm it finished.",
+  "notes": "COPY-4, glossary; keep 'can't confirm it finished' (SEC-5)"
+ },
+ "mailApi.rolledBackSyncNotRequested": {
+  "accurate": "yes",
+  "proposed": "Switched back to standard mail servers. {applied} actions were done through the provider since the switch. Mailven didn't check for new mail. Check for new mail yourself.",
+  "notes": "COPY-4, glossary"
+ },
+ "mailApi.unfinished": {
+  "accurate": "yes",
+  "proposed": "Actions that didn't finish through the provider:",
+  "notes": "COPY-4"
+ },
+ "mailApi.snapshotAt": {
+  "accurate": "yes",
+  "proposed": "Backup saved before the switch: {path}",
+  "notes": "COPY-12; path is expert detail"
+ },
+ "mailApi.failed": {
+  "accurate": "yes",
+  "proposed": "Something went wrong. Details: {error}",
+  "notes": "COPY-8 raw error in main line"
+ },
+ "mailApi.authFailed": {
+  "accurate": "yes",
+  "proposed": "Provider sign-in didn't work. Details: {failure}: {error}",
+  "notes": "COPY-8; raw failure code"
+ }
+}

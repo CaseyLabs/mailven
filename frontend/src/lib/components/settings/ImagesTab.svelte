@@ -7,6 +7,7 @@
   import ConfirmDialog from '$lib/components/ui/confirm-dialog/ConfirmDialog.svelte'
   import { addToast } from '$lib/stores/toast'
   import { _ } from '$lib/i18n'
+  import type { SettingChange } from './settingsApply'
   import { refreshImageAllowlist } from '$lib/stores/imageAllowlist.svelte'
   // @ts-ignore - wailsjs path
   import { settings } from '../../../../wailsjs/go/models'
@@ -18,13 +19,10 @@
 
   interface Props {
     alwaysLoadImages: boolean
-    onAlwaysLoadImagesChange: (value: boolean) => void
+    onChange: (change: SettingChange) => void
   }
 
-  let {
-    alwaysLoadImages = $bindable(),
-    onAlwaysLoadImagesChange,
-  }: Props = $props()
+  let { alwaysLoadImages, onChange }: Props = $props()
 
   // State
   let entries = $state<settings.AllowlistEntry[]>([])
@@ -32,18 +30,21 @@
   let addressesCollapsed = $state(false)
   let domainsCollapsed = $state(false)
   let showAlwaysLoadImagesConfirm = $state(false)
+  // The switch follows the saved value; asking first can put it back without a write.
+  let loadAlways = $state(false)
+  $effect(() => { loadAlways = alwaysLoadImages })
 
   // Derived
   let addresses = $derived(entries.filter(e => e.type === 'sender'))
   let domains = $derived(entries.filter(e => e.type === 'domain'))
 
+  // Turning it on asks first (UX-SEC-2); turning it off needs no question.
   function handleAlwaysLoadImagesChange(value: boolean) {
     if (value) {
       showAlwaysLoadImagesConfirm = true
       return
     }
-    alwaysLoadImages = false
-    onAlwaysLoadImagesChange?.(false)
+    onChange({ key: 'alwaysLoadImages', value: false })
   }
 
   async function loadData() {
@@ -82,7 +83,7 @@
 {:else}
   <div class="space-y-6">
     <!-- Always Load Remote Images Toggle -->
-    <div class="space-y-2">
+    <div class="space-y-2" data-setting="always-load-images">
       <div class="flex items-center justify-between">
         <div class="space-y-0.5">
           <Label for="always-load-images">{$_('settingsGeneral.alwaysLoadImages')}</Label>
@@ -92,7 +93,7 @@
         </div>
         <Switch
           id="always-load-images"
-          bind:checked={alwaysLoadImages}
+          bind:checked={loadAlways}
           onCheckedChange={handleAlwaysLoadImagesChange}
         />
       </div>
@@ -101,10 +102,12 @@
     <!-- Divider -->
     <div class="border-t border-border"></div>
 
+    <p class="text-sm text-muted-foreground" data-setting="image-allowlist">{$_('images.listHelp')}</p>
+
     <!-- Addresses Section -->
     <div class="space-y-3">
       <button
-        class="w-full flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
+        class="w-full min-h-6 flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
         onclick={() => addressesCollapsed = !addressesCollapsed}
       >
         <Icon icon={addressesCollapsed ? 'lucide:chevron-right' : 'lucide:chevron-down'} class="w-4 h-4 shrink-0" />
@@ -135,7 +138,7 @@
     <!-- Domains Section -->
     <div class="space-y-3">
       <button
-        class="w-full flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
+        class="w-full min-h-6 flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
         onclick={() => domainsCollapsed = !domainsCollapsed}
       >
         <Icon icon={domainsCollapsed ? 'lucide:chevron-right' : 'lucide:chevron-down'} class="w-4 h-4 shrink-0" />
@@ -169,8 +172,9 @@
   bind:open={showAlwaysLoadImagesConfirm}
   title={$_('settingsGeneral.alwaysLoadImagesWarningTitle')}
   description={$_('settingsGeneral.alwaysLoadImagesWarningDescription')}
-  confirmLabel={$_('settingsGeneral.disable')}
+  confirmLabel={$_('settingsGeneral.alwaysLoadImagesConfirm')}
+  cancelLabel={$_('settingsGeneral.alwaysLoadImagesKeepBlocking')}
   variant="destructive"
-  onConfirm={() => { onAlwaysLoadImagesChange?.(true) }}
-  onCancel={() => { alwaysLoadImages = false }}
+  onConfirm={() => { onChange({ key: 'alwaysLoadImages', value: true }) }}
+  onCancel={() => { loadAlways = false }}
 />

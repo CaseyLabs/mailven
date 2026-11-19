@@ -1,0 +1,37 @@
+{
+ "settingsAccounts.emailAccounts": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10: sentence case. Applied in UX-4."
+ },
+ "settingsAccounts.noAccountsConfigured": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2, COPY-12. Applied in UX-4."
+ },
+ "settingsAccounts.addAccount": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10: sentence case. Applied in UX-4."
+ },
+ "settingsAccounts.moveUp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Applies at once (AccountsTab.svelte:53)."
+ },
+ "settingsAccounts.moveDown": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Applies at once."
+ },
+ "settingsAccounts.editAccount": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsAccounts.deleteAccount": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Destructive; confirmed by DeleteAccountDialog."
+ }
+}

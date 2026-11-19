@@ -1,0 +1,58 @@
+{
+ "oauth.writeAccessPicker.title": {
+  "accurate": "yes",
+  "proposed": "Allow editing",
+  "notes": "COPY-3 bare Enable; says what you get. Matches \"write access\" in contacts/calendar sources."
+ },
+ "oauth.writeAccessPicker.description": {
+  "accurate": "yes",
+  "proposed": "Choose the {provider} account that Mailven may use to make changes to {sourceName}.",
+  "notes": "COPY-4/12: drop \"authorize\", \"write access\"; say what it allows."
+ },
+ "oauth.writeAccessPicker.providerGoogle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Brand name; fine."
+ },
+ "oauth.writeAccessPicker.providerMicrosoft": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Brand name; fine."
+ },
+ "oauth.writeAccessPicker.loadFailed": {
+  "accurate": "yes",
+  "proposed": "Couldn't load your accounts. {message}",
+  "notes": "COPY-8: say what happened; {message} is raw detail, move behind Show details."
+ },
+ "oauth.writeAccessPicker.emptyHeading": {
+  "accurate": "yes",
+  "proposed": "You have no {provider} accounts yet.",
+  "notes": "COPY-8, COPY-10."
+ },
+ "oauth.writeAccessPicker.emptyHint": {
+  "accurate": "yes",
+  "proposed": "Add a {provider} account first, in Settings → Accounts or Settings → Contacts → Add source. Then come back here.",
+  "notes": "COPY-8: action first, shorter sentences."
+ },
+ "oauth.writeAccessPicker.cancel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label."
+ },
+ "oauth.writeAccessPicker.continue": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Plain label; consider naming the action (\"Sign in\") because it starts a browser sign-in (unverified)."
+ },
+ "oauth.writeAccessPicker.successToast": {
+  "accurate": "yes",
+  "proposed": "You can now edit {sourceName} with {name}.",
+  "notes": "COPY-3: avoid \"enabled\". Note {name} is the account used.",
+  "applies": "now"
+ },
+ "oauth.writeAccessPicker.failureToast": {
+  "accurate": "yes",
+  "proposed": "Couldn't turn on editing. {message}",
+  "notes": "COPY-8: what happened; raw {message} behind Show details."
+ }
+}

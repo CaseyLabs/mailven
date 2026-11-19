@@ -117,12 +117,11 @@ describe('chat display styles', () => {
     assert.deepEqual(r, { bubble: null, avatar: true }, 'no bubble; the avatar spacer lines it up with my messages')
   }))
 
-  it('settings switch to Blocks live and save it', ui.run({ allow: SETTINGS_SAVE }, async (page) => {
+  it('settings switch to Blocks at once and save it', ui.run({ allow: SETTINGS_SAVE }, async (page) => {
     await ui.openSettings(page)
     await page.getByRole('tab', { name: 'Chat' }).click()
     await page.getByRole('button', { name: 'Message style' }).click()
     await page.getByRole('option', { name: 'Blocks' }).click()
-    await page.getByRole('button', { name: 'Save' }).click()
     await page.locator('[role="article"][data-message-id]').first().waitFor()
     await page.waitForFunction(() => document.documentElement.dataset.displayStyle === 'flat' && !document.querySelector('[data-bubble]'))
     const calls = await ui.calls(page, 'SetChatDisplayStyle')

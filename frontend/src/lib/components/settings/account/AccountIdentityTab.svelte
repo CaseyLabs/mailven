@@ -271,15 +271,19 @@
           <button
             type="button"
             onclick={() => handleSetDefault(identity)}
-            class="shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors
-              {identity.isDefault
-                ? 'border-primary bg-primary'
-                : 'border-muted-foreground hover:border-primary'}"
+            class="shrink-0 w-6 h-6 flex items-center justify-center group/default"
             title={identity.isDefault ? $_('identity.defaultAddress') : $_('identity.setAsDefaultAddress')}
           >
-            {#if identity.isDefault}
-              <div class="w-2 h-2 rounded-full bg-white"></div>
-            {/if}
+            <span
+              class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors
+                {identity.isDefault
+                  ? 'border-primary bg-primary'
+                  : 'border-muted-foreground group-hover/default:border-primary'}"
+            >
+              {#if identity.isDefault}
+                <span class="w-2 h-2 rounded-full bg-white"></span>
+              {/if}
+            </span>
           </button>
 
           <!-- Identity info -->
@@ -308,7 +312,7 @@
           </div>
 
           <!-- Actions -->
-          <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
             <Button
               variant="ghost"
               size="sm"
@@ -386,7 +390,7 @@
                 <div class="text-xs text-muted-foreground truncate">{mailbox.name}</div>
               {/if}
             </div>
-            <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
               <Button
                 variant="ghost"
                 size="sm"

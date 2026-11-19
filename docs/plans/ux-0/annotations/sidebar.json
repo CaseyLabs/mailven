@@ -1,0 +1,107 @@
+{
+ "sidebar.syncing": {
+  "accurate": "yes",
+  "proposed": "Updating...",
+  "notes": "Glossary: Update / Check for new mail."
+ },
+ "sidebar.notSynced": {
+  "accurate": "yes",
+  "proposed": "Not updated yet",
+  "notes": "Glossary"
+ },
+ "sidebar.synced": {
+  "accurate": "yes",
+  "proposed": "Updated {time}",
+  "notes": "Glossary"
+ },
+ "sidebar.clickForSyncStatus": {
+  "accurate": "yes",
+  "proposed": "Show update details",
+  "notes": "COPY-2; tooltip should not say 'click' (keyboard)."
+ },
+ "sidebar.syncStatusTitle": {
+  "accurate": "yes",
+  "proposed": "Update status",
+  "notes": "Glossary"
+ },
+ "sidebar.syncFinished": {
+  "accurate": "yes",
+  "proposed": "Update finished",
+  "notes": "Glossary"
+ },
+ "sidebar.syncNoDetails": {
+  "accurate": "yes",
+  "proposed": "Nothing is updating",
+  "notes": "Glossary, COPY-2"
+ },
+ "sidebar.cancelSync": {
+  "accurate": "yes",
+  "proposed": "Stop updating",
+  "notes": "Glossary"
+ },
+ "sidebar.syncAllAccounts": {
+  "accurate": "yes",
+  "proposed": "Check all accounts for new mail",
+  "notes": "Glossary"
+ },
+ "sidebar.syncNow": {
+  "accurate": "yes",
+  "proposed": "Check for new mail",
+  "notes": "Glossary, COPY-10"
+ },
+ "sidebar.syncError": {
+  "accurate": "no: the button opens the sync status dialog; it does not retry (Sidebar.svelte:423)",
+  "proposed": "Couldn't update this account. Show details",
+  "notes": "COPY-8"
+ },
+ "sidebar.syncErrorShowDetails": {
+  "accurate": "yes",
+  "proposed": "Couldn't update. Show details",
+  "notes": "COPY-8"
+ },
+ "sidebar.syncErrorOAuthNotConfigured": {
+  "accurate": "unverified: matches the 'missing client ID' error text only",
+  "proposed": "This version of Mailven has no sign-in credentials for {provider}. Add your own in Settings, or install a version that includes them.",
+  "notes": "COPY-4, CTRL-5: client setup is expert-only. Fallback 'this provider' is hardcoded English (SyncStatusDialog.svelte:51)."
+ },
+ "sidebar.syncErrorReauthorize": {
+  "accurate": "no: shown for any provider and any token refresh failure, not only Google or Microsoft (SyncStatusDialog.svelte:52)",
+  "proposed": "Your saved sign-in for this account stopped working. Sign in again.",
+  "notes": "Glossary: Sign in again; COPY-8."
+ },
+ "sidebar.syncErrorFixAccount": {
+  "accurate": "yes",
+  "proposed": "Open account settings",
+  "notes": "COPY-2: says where the button goes."
+ },
+ "sidebar.syncingFolders": {
+  "accurate": "yes",
+  "proposed": "Updating folders...",
+  "notes": "Glossary"
+ },
+ "sidebar.syncingContent": {
+  "accurate": "unverified: assumes the content phase downloads message bodies",
+  "proposed": "Updating messages {percentage}%",
+  "notes": "Glossary, COPY-7"
+ },
+ "sidebar.noFoldersSynced": {
+  "accurate": "yes",
+  "proposed": "No folders downloaded yet",
+  "notes": "Glossary; shown whenever the folder list is empty."
+ },
+ "sidebar.syncErrorGeneric": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3: the plain main line for an update error with no known cause."
+ },
+ "sidebar.syncErrorDetails": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3: the disclosure that holds the raw error."
+ },
+ "sidebar.syncProviderFallback": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Added by UX-3: replaces a hard-coded English fallback."
+ }
+}

@@ -17,7 +17,8 @@
   import { onMount } from 'svelte'
   import { _ } from 'svelte-i18n'
   import { Button } from '$lib/components/ui/button'
-  import { toasts } from '$lib/stores/toast'
+  import Checkbox from '$lib/components/ui/checkbox/Checkbox.svelte'
+  import { toasts, errorDetails } from '$lib/stores/toast'
   import GoogleClientImport from './GoogleClientImport.svelte'
   // @ts-ignore - wailsjs bindings
   import { GetGoogleSetupGuide, OpenURL } from '$wailsjs/go/app/App'
@@ -57,7 +58,7 @@
     try {
       await OpenURL(url)
     } catch (err) {
-      toasts.error((err as Error)?.message ?? String(err))
+      toasts.error($_('toast.openLinkFailed'), undefined, errorDetails(err))
     }
   }
 
@@ -87,12 +88,14 @@
       {#each stepIds as id, i (id)}
         {@const link = links[id]}
         <li class="flex gap-3">
-          <input
-            type="checkbox"
-            class="mt-1 self-start"
-            aria-label={$_('googleGuide.markDone', { values: { step: $_(`googleGuide.step.${id}.title`) } })}
-            bind:checked={done[id]}
-          />
+          <!-- The label is the 24 px target (UX-A11Y-4). -->
+          <label class="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center">
+            <Checkbox
+              ariaLabel={$_('googleGuide.markDone', { values: { step: $_(`googleGuide.step.${id}.title`) } })}
+              checked={!!done[id]}
+              onCheckedChange={(v) => { done[id] = v }}
+            />
+          </label>
           <div class="flex-1 min-w-0 space-y-1">
             <p class="text-sm font-medium" class:line-through={done[id]}>{i + 1}. {$_(`googleGuide.step.${id}.title`)}</p>
             <p class="text-xs text-muted-foreground">{$_(`googleGuide.step.${id}.${id === 'import' && inlineImport ? 'bodyInline' : 'body'}`)}</p>

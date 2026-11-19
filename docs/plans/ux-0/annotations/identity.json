@@ -1,0 +1,483 @@
+{
+ "identity.googleCheckTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9: 'check' + connection; 'setup' is vague Applied in UX-4."
+ },
+ "identity.googleCheckHelp": {
+  "accurate": "unverified: read-only claim depends on backend requests",
+  "proposed": "",
+  "notes": "COPY-2, COPY-4 (API names to Advanced) Applied in UX-4."
+ },
+ "identity.googleCheckRun": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9, COPY-10 Applied in UX-4."
+ },
+ "identity.googleCheckRunning": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "identity.googleCheckFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8: say what to do Applied in UX-4."
+ },
+ "identity.googleCheckFirstRun": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8; 'Identity settings' tab name; unclear 'Google setup: ' fragment Applied in UX-4."
+ },
+ "identity.googleCheckGmail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4: plain name first Applied in UX-4."
+ },
+ "identity.googleCheckPeople": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4, glossary: contacts from {service} Applied in UX-4."
+ },
+ "identity.googleCheckCalendar": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4 Applied in UX-4."
+ },
+ "identity.googleCheckOk": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine; add icon with word for SEC-4 colour-independence"
+ },
+ "identity.googleCheckDisabled": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-3 avoid Disabled; project name is expert detail Applied in UX-4."
+ },
+ "identity.googleCheckDisabledHint": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-3; button name differs from current Check Google setup (COPY-9) Applied in UX-4."
+ },
+ "identity.googleCheckEnable": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-3 (bare Enable); opens Google Cloud console, say so Applied in UX-4."
+ },
+ "identity.googleCheckMissingScope": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Reads as noun phrase; COPY-10 Applied in UX-4."
+ },
+ "identity.googleCheckReauthorize": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: Sign in again Applied in UX-4."
+ },
+ "identity.googleCheckReauthorizeFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8, glossary Applied in UX-4."
+ },
+ "identity.googleCheckNotConnected": {
+  "accurate": "yes",
+  "proposed": "Not set up for this account",
+  "notes": "Fine"
+ },
+ "identity.googleCheckError": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8; bare 'Error' says nothing Applied in UX-4."
+ },
+ "identity.sendAsTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9: 'send-as' is Gmail jargon Applied in UX-4."
+ },
+ "identity.sendAsHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-1 (grade), COPY-12; 'evidence' is jargon; rewrite unverified against sender-evidence logic Applied in UX-4."
+ },
+ "identity.sendAsRefresh": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9; bare Refresh unclear. Button, applies now Applied in UX-4."
+ },
+ "identity.sendAsRefreshed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.sendAsRefreshFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8; component appends raw err.message (SendAsSection.svelte:32) Applied in UX-4."
+ },
+ "identity.sendAsNone": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine Applied in UX-4."
+ },
+ "identity.sendAsNever": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 follows button label Applied in UX-4."
+ },
+ "identity.sendAsAdd": {
+  "accurate": "yes",
+  "proposed": "Add",
+  "notes": "Fine; add address in aria-label"
+ },
+ "identity.sendAsAdded": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "identity.sendAsNotAdded": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.sendAsAddFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8; raw err.message appended (SendAsSection.svelte:46) Applied in UX-4."
+ },
+ "identity.sendAsImportSignature": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 'import'; raw checkbox applies at Add click (CTRL-1 ok) Applied in UX-4.",
+  "control": "Checkbox",
+  "applies": "now (next Add click)"
+ },
+ "identity.sendAsVerified": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine; has text so SEC-4 ok"
+ },
+ "identity.sendAsPending": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "'Pending' vague, COPY-10 Applied in UX-4."
+ },
+ "identity.sendAsNotConfigured": {
+  "accurate": "yes",
+  "proposed": "Not in Gmail",
+  "notes": "Fine"
+ },
+ "identity.sendAsVerifiedTitle": {
+  "accurate": "unverified: delivery claim is policy, not checked here",
+  "proposed": "",
+  "notes": "COPY-1, SEC-5 keep accuracy Applied in UX-4."
+ },
+ "identity.sendAsPendingTitle": {
+  "accurate": "unverified: Gmail rewrite behaviour is provider-side",
+  "proposed": "",
+  "notes": "COPY-12 Applied in UX-4."
+ },
+ "identity.sendAsNotConfiguredTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8, COPY-1 Applied in UX-4."
+ },
+ "identity.emailAddresses": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case Applied in UX-4."
+ },
+ "identity.emailAddressesHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6 Applied in UX-4."
+ },
+ "identity.addEmailAddress": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case Applied in UX-4."
+ },
+ "identity.noEmailAddresses": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7 Applied in UX-4."
+ },
+ "identity.defaultAddress": {
+  "accurate": "yes",
+  "proposed": "Default email address",
+  "notes": "Fine"
+ },
+ "identity.setAsDefaultAddress": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; used as button title Applied in UX-4."
+ },
+ "identity.default": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "identity.noSignature": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "identity.emptySignature": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7 Applied in UX-4."
+ },
+ "identity.cannotDeleteDefault": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 what to do Applied in UX-4."
+ },
+ "identity.emailUpdated": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 Applied in UX-4."
+ },
+ "identity.emailAdded": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 Applied in UX-4."
+ },
+ "identity.emailDeleted": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 Applied in UX-4."
+ },
+ "identity.isNowDefault": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7 Applied in UX-4."
+ },
+ "identity.failedToLoadAddresses": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.failedToSetDefault": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.defaultHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2; 'Click' to 'Select'; consider showing default state in text (SEC-4/A11Y) Applied in UX-4."
+ },
+ "identity.cannotDeleteDefaultTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.editEmailTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 Applied in UX-4."
+ },
+ "identity.addEmailTitle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 Applied in UX-4."
+ },
+ "identity.editEmailDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2 Applied in UX-4."
+ },
+ "identity.addEmailDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2 Applied in UX-4."
+ },
+ "identity.emailAddressLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 Applied in UX-4."
+ },
+ "identity.displayNameLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 Applied in UX-4."
+ },
+ "identity.displayNameHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6 Applied in UX-4."
+ },
+ "identity.replyToLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10; hyphen jargon, expert: CTRL-5 candidate Applied in UX-4."
+ },
+ "identity.replyToHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9; 'account default' unverified wording Applied in UX-4."
+ },
+ "identity.emailRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.invalidEmailFormat": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 what to do Applied in UX-4."
+ },
+ "identity.displayNameRequired": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.useSignature": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Checkbox in Save form; COPY-7 Applied in UX-4.",
+  "control": "Checkbox",
+  "applies": "on Save"
+ },
+ "identity.htmlSignature": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4; glossary Formatted text Applied in UX-4."
+ },
+ "identity.signatureHelp": {
+  "accurate": "unverified: toolbar URL entry uses prompt(); paste/drop of images verified",
+  "proposed": "",
+  "notes": "COPY-4 (HTML); SignatureEditor.svelte:115,143 Applied in UX-4."
+ },
+ "identity.plainTextSignature": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Glossary: Plain text; label for textarea not button Applied in UX-4.",
+  "control": "Textarea",
+  "applies": "on Save"
+ },
+ "identity.generateFromHtml": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-4; button, applies now to the field Applied in UX-4."
+ },
+ "identity.plainTextHelp": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6 Applied in UX-4."
+ },
+ "identity.appendSignatureTo": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7; colon dropped Applied in UX-4."
+ },
+ "identity.newMessages": {
+  "accurate": "yes",
+  "proposed": "New messages",
+  "notes": "Fine",
+  "control": "Checkbox",
+  "applies": "on Save"
+ },
+ "identity.replies": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine",
+  "control": "Checkbox",
+  "applies": "on Save"
+ },
+ "identity.forwards": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine",
+  "control": "Checkbox",
+  "applies": "on Save"
+ },
+ "identity.signaturePlacementLabel": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7, COPY-10 Applied in UX-4.",
+  "control": "Radio",
+  "applies": "on Save"
+ },
+ "identity.aboveQuotedText": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 'quoted text' uncommon; check composer wording Applied in UX-4."
+ },
+ "identity.belowQuotedText": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 Applied in UX-4."
+ },
+ "identity.addSeparator": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2; the '-- ' marker is expert detail (CTRL-5) Applied in UX-4.",
+  "control": "Checkbox",
+  "applies": "on Save"
+ },
+ "identity.saveIdentityChanges": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 sentence case Applied in UX-4."
+ },
+ "identity.saveFailed": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.addEmailAddressButton": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 Applied in UX-4."
+ },
+ "identity.sharedMailboxes": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 Applied in UX-4."
+ },
+ "identity.sharedMailboxesHelp": {
+  "accurate": "unverified: delegation rules are server-side",
+  "proposed": "",
+  "notes": "COPY-1, COPY-4 (Send As / Send on Behalf to Advanced), COPY-12 Applied in UX-4."
+ },
+ "identity.addSharedMailbox": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 Applied in UX-4."
+ },
+ "identity.noSharedMailboxes": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7 Applied in UX-4."
+ },
+ "identity.sharedMailboxEmail": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9 email/address Applied in UX-4."
+ },
+ "identity.sharedMailboxDisplayName": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "identity.sharedMailboxAdded": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10 no 'successfully' Applied in UX-4."
+ },
+ "identity.sharedMailboxRemoved": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine"
+ },
+ "identity.failedToAddSharedMailbox": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ },
+ "identity.failedToDeleteSharedMailbox": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-8 Applied in UX-4."
+ }
+}

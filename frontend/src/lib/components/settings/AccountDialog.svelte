@@ -16,7 +16,13 @@
   import type { v1 } from '../../../../wailsjs/go/models'
   import { accountStore } from '$lib/stores/accounts.svelte'
   import { oauthStore } from '$lib/stores/oauth.svelte'
-  import { addToast } from '$lib/stores/toast'
+  import { addToast, errorDetails } from '$lib/stores/toast'
+  import {
+    emptyFolderSubscriptionChanges,
+    hasFolderSubscriptionChanges,
+    applyFolderSubscriptionChanges,
+    type FolderSubscriptionChanges,
+  } from './account/folderSubscriptionChanges'
   import { dialogGuardOpen, dialogGuardClose } from '$lib/stores/dialogGuard'
   import { _ } from '$lib/i18n'
   // @ts-ignore - wailsjs path
@@ -71,6 +77,8 @@
   let syncInterval = $state('30')
   let syncAllFolders = $state(false)
   let syncFoldersEnabled = $state(false)
+  // Folder subscriptions the user changed; applied on Save, dropped on Cancel.
+  let folderChanges = $state<FolderSubscriptionChanges>(emptyFolderSubscriptionChanges())
   let readReceiptRequestPolicy = $state('never')
   let authType = $state('password')
 
@@ -123,6 +131,7 @@
       syncInterval = String(editAccount.syncInterval ?? 30)
       syncAllFolders = editAccount.syncAllFolders || false
       syncFoldersEnabled = editAccount.syncFoldersEnabled || false
+      folderChanges = emptyFolderSubscriptionChanges()
       readReceiptRequestPolicy = editAccount.readReceiptRequestPolicy || 'never'
       authType = editAccount.authType || 'password'
       color = editAccount.color || ''
@@ -245,10 +254,22 @@
 
       const result = await accountStore.updateAccount(editAccount.id, config)
 
+      const folderError = hasFolderSubscriptionChanges(folderChanges)
+        ? await applyFolderSubscriptionChanges(editAccount.id, folderChanges)
+        : null
+      folderChanges = emptyFolderSubscriptionChanges()
+
       addToast({
         type: 'success',
         message: $_('toast.accountSaved'),
       })
+      if (folderError) {
+        addToast({
+          type: 'error',
+          message: $_('toast.folderSubscriptionsFailed'),
+          details: errorDetails(folderError),
+        })
+      }
 
       onSuccess?.(result)
       open = false
@@ -435,6 +456,7 @@
               bind:syncAllFolders
               onSyncAllFoldersChange={(v) => syncAllFolders = v}
               bind:syncFoldersEnabled
+              bind:folderChanges
               onSyncFoldersEnabledChange={(v) => syncFoldersEnabled = v}
               onFolderMappingChange={(type, v) => {
                 switch (type) {

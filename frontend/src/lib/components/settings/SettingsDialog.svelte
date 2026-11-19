@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import Icon from '@iconify/svelte'
   import * as Dialog from '$lib/components/ui/dialog'
   import * as Tabs from '$lib/components/ui/tabs'
   import { Button } from '$lib/components/ui/button'
   // @ts-ignore - wailsjs path
-  import { GetReadReceiptResponsePolicy, SetReadReceiptResponsePolicy, GetMarkAsReadDelay, SetMarkAsReadDelay, GetMessageListDensity, SetMessageListDensity, GetThemeMode, SetThemeMode, GetShowTitleBar, SetShowTitleBar, GetRunBackground, SetRunBackground, GetStartHidden, SetStartHidden, GetAutostart, SetAutostart, GetLanguage, SetLanguage, GetComposerMode, SetComposerMode, GetMailtoMode, SetMailtoMode, GetComposerFormat, SetComposerFormat, GetNativeTitleBar, SetNativeTitleBar, GetAlwaysLoadImages, SetAlwaysLoadImages, GetDarkMailContent, SetDarkMailContent, GetDarkComposerBody, SetDarkComposerBody, GetAccentBarUnread, SetAccentBarUnread, GetAccentUnreadStyle, SetAccentUnreadStyle, GetShowMessageListCircles, SetShowMessageListCircles, GetShowMessageListProfilePics, SetShowMessageListProfilePics, GetAlwaysShowMessageCheckbox, SetAlwaysShowMessageCheckbox, GetShowMessagePreview, SetShowMessagePreview, GetShowViewerCircles, SetShowViewerCircles, GetSpellcheckEnabled, SetSpellcheckEnabled, GetSpellcheckLanguages, SetSpellcheckLanguages, GetChatSendKey, SetChatSendKey, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle, GetChatShowAvatars, SetChatShowAvatars, GetChatHoverActions, SetChatHoverActions, GetChatMessageAvatars, SetChatMessageAvatars, GetChatReadingFont, SetChatReadingFont, SetChatReadingWidth, SetChatDisplayStyle, SetChatRichStyle, GetChatIncludeQuote, SetChatIncludeQuote, GetChatAutoAdvance, SetChatAutoAdvance, GetChatNotifyPriorityOnly, SetChatNotifyPriorityOnly, GetChatShowLowGroup, SetChatShowLowGroup, GetChatCombineSenders, SetChatCombineSenders, QuitApp } from '../../../../wailsjs/go/app/App.js'
-  import { addToast } from '$lib/stores/toast'
-  import { setMessageListDensity as updateDensityStore, setThemeMode as updateThemeStore, setShowTitleBar as updateShowTitleBarStore, setRunBackground as updateRunBackgroundStore, setStartHidden as updateStartHiddenStore, setAutostart as updateAutostartStore, setLanguage as updateLanguageStore, setComposerMode as updateComposerModeStore, setMailtoMode as updateMailtoModeStore, setComposerFormat as updateComposerFormatStore, setNativeTitleBar as updateNativeTitleBarStore, setAlwaysLoadImages as updateAlwaysLoadImagesStore, setDarkMailContent as updateDarkMailContentStore, setDarkComposerBody as updateDarkComposerBodyStore, setAccentBarUnread as updateAccentBarUnreadStore, setAccentUnreadStyle as updateAccentUnreadStyleStore, setShowMessageListCircles as updateShowMessageListCirclesStore, setShowMessageListProfilePics as updateShowMessageListProfilePicsStore, setAlwaysShowMessageCheckbox as updateAlwaysShowMessageCheckboxStore, setShowMessagePreview as updateShowMessagePreviewStore, setShowViewerCircles as updateShowViewerCirclesStore, setSpellcheckEnabled as updateSpellcheckEnabledStore, setSpellcheckLanguages as updateSpellcheckLanguagesStore, setChatSendKey as updateChatSendKeyStore, setChatReadingWidth as updateChatReadingWidthStore, setChatDisplayStyle as updateChatDisplayStyleStore, setChatRichStyle as updateChatRichStyleStore, setChatShowAvatars as updateChatShowAvatarsStore, setChatHoverActions as updateChatHoverActionsStore, setChatMessageAvatars as updateChatMessageAvatarsStore, setChatReadingFont as updateChatReadingFontStore, type ChatReadingFont, type ChatReadingWidth, type ChatDisplayStyle, type ChatRichStyle, setChatAutoAdvance as updateChatAutoAdvanceStore, setChatShowLowGroup as updateChatShowLowGroupStore, type ChatSendKey, type ChatAutoAdvance, type MessageListDensity, type ThemeMode, type ComposerMode, type ComposerFormat, DEFAULT_THEME } from '$lib/stores/settings.svelte'
+  import { GetReadReceiptResponsePolicy, GetMarkAsReadDelay, GetMessageListDensity, GetThemeMode, GetShowTitleBar, GetRunBackground, GetStartHidden, GetAutostart, GetLanguage, GetComposerMode, GetMailtoMode, GetComposerFormat, GetNativeTitleBar, GetAlwaysLoadImages, GetDarkMailContent, GetDarkComposerBody, GetShowMessagePreview, GetSpellcheckEnabled, GetSpellcheckLanguages, GetChatSendKey, GetChatReadingWidth, GetChatDisplayStyle, GetChatRichStyle, GetChatShowAvatars, GetChatHoverActions, GetChatMessageAvatars, GetChatReadingFont, GetChatIncludeQuote, GetChatAutoAdvance, GetChatNotifyPriorityOnly, GetChatShowLowGroup, GetChatCombineSenders, QuitApp } from '../../../../wailsjs/go/app/App.js'
+  import { addToast, errorDetails } from '$lib/stores/toast'
+  import { setStartupNativeTitleBar, getStartupNativeTitleBar } from '$lib/stores/settings.svelte'
   import { filterSupportedDicts } from '$lib/spellcheck/locales'
-  import { syncSpellcheckLanguagesIfActive, defaultSpellcheckLanguages } from '$lib/spellcheck/settings'
-  import { applyThemeFromMode } from '$lib/stores/theme.svelte'
+  import { defaultSpellcheckLanguages } from '$lib/spellcheck/settings'
   import { dialogGuardOpen, dialogGuardClose } from '$lib/stores/dialogGuard'
-  import { _ } from '$lib/i18n'
+  import { _, setLocale } from '$lib/i18n'
   import ConfirmDialog from '$lib/components/ui/confirm-dialog/ConfirmDialog.svelte'
+  import { applySettingChange, type SettingChange, type SettingKey, type SettingValues } from './settingsApply'
   import GeneralTab from './GeneralTab.svelte'
   import ComposerTab from './ComposerTab.svelte'
   import ImagesTab from './ImagesTab.svelte'
@@ -22,6 +22,9 @@
   import ContactsTab from './ContactsTab.svelte'
   import ExtensionsTab from './ExtensionsTab.svelte'
   import AboutTab from './AboutTab.svelte'
+  import SettingsSearch from './SettingsSearch.svelte'
+  import type { SettingsMatch } from './settingsSearch'
+  import { goToSetting, clearSettingTarget } from './settingsNav.svelte'
 
   interface Props {
     /** Whether the dialog is open */
@@ -35,68 +38,80 @@
     onClose,
   }: Props = $props()
 
-  // Settings state
-  let readReceiptResponsePolicy = $state<string>('never')
-  let markAsReadDelaySeconds = $state<number>(1) // Display in seconds, store in ms
-  let messageListDensity = $state<string>('standard')
-  let themeMode = $state<string>(DEFAULT_THEME)
-  let showTitleBar = $state<boolean>(true)
-  let runBackground = $state<boolean>(false)
-  let startHidden = $state<boolean>(false)
-  let autostart = $state<boolean>(false)
-  let language = $state<string>('')
-  let composerMode = $state<string>('inline')
-  let mailtoMode = $state<string>('inline')
-  let composerFormat = $state<string>('rich')
-  let spellcheckEnabled = $state<boolean>(true)
-  let spellcheckLanguages = $state<string[]>([])
-  let nativeTitleBar = $state<boolean>(true)
-  let alwaysLoadImages = $state<boolean>(false)
-  let darkMailContent = $state<boolean>(true)
-  let darkComposerBody = $state<boolean>(true)
-  let accentBarUnread = $state<boolean>(false)
-  let accentUnreadStyle = $state<string>('dot')
-  let showMessageListCircles = $state<boolean>(true)
-  let showMessageListProfilePics = $state<boolean>(false)
-  let alwaysShowMessageCheckbox = $state<boolean>(false)
-  let showMessagePreview = $state<boolean>(false)
-  let showViewerCircles = $state<boolean>(true)
-  let chatSendKey = $state<string>('ctrl-enter')
-  let chatReadingWidth = $state<string>('standard')
-  let chatDisplayStyle = $state<string>('bubbles')
-  let chatRichStyle = $state<string>('reader')
-  let chatShowAvatars = $state<boolean>(true)
-  let chatHoverActions = $state<boolean>(false)
-  let chatMessageAvatars = $state<boolean>(true)
-  let chatReadingFont = $state<string>('sans')
-  let chatIncludeQuote = $state<boolean>(true)
-  let chatAutoAdvance = $state<string>('next')
-  let chatNotifyPriorityOnly = $state<boolean>(true)
-  let chatShowLowGroup = $state<boolean>(true)
-  let chatCombineSenders = $state<boolean>(true)
-  let originalNativeTitleBar = true
-  // Snapshot of the saved theme at dialog open time. Used to revert live preview
-  // if the dialog closes without Save (Cancel / ESC / click-outside).
-  let originalThemeMode = ''
-  let hasSaved = $state(false)
+  // Settings state: the values the General, Composer, Chat and Images tabs show.
+  // Every change applies at once, so this only mirrors what is saved.
+  let s = $state<SettingValues & { showTitleBar: boolean; nativeTitleBar: boolean }>({
+    readReceiptResponsePolicy: 'never',
+    markAsReadDelaySeconds: 1, // Display in seconds, store in ms
+    messageListDensity: 'standard',
+    themeMode: 'dark',
+    showTitleBar: true,
+    runBackground: false,
+    startHidden: false,
+    autostart: false,
+    language: '',
+    composerMode: 'inline',
+    mailtoMode: 'inline',
+    composerFormat: 'rich',
+    spellcheckEnabled: true,
+    spellcheckLanguages: [],
+    nativeTitleBar: true,
+    alwaysLoadImages: false,
+    darkMailContent: true,
+    darkComposerBody: true,
+    showMessagePreview: false,
+    chatSendKey: 'ctrl-enter',
+    chatReadingWidth: 'standard',
+    chatDisplayStyle: 'bubbles',
+    chatRichStyle: 'reader',
+    chatShowAvatars: true,
+    chatHoverActions: false,
+    chatMessageAvatars: true,
+    chatReadingFont: 'sans',
+    chatIncludeQuote: true,
+    chatAutoAdvance: 'next',
+    chatNotifyPriorityOnly: true,
+    chatShowLowGroup: true,
+    chatCombineSenders: true,
+  })
   let showRestartDialog = $state(false)
   let loading = $state(true)
-  let saving = $state(false)
   let activeTab = $state('general')
   let tabScrollEl = $state<HTMLDivElement | null>(null)
+  let tabsEl = $state<HTMLDivElement | null>(null)
+  let searchQuery = $state('')
+  const searching = $derived(searchQuery.trim().length > 0)
+
+  // Open the tab that holds a search result, then scroll to its row and focus its control.
+  async function openSearchResult(match: SettingsMatch) {
+    searchQuery = ''
+    activeTab = match.entry.tab
+    goToSetting(match.entry.id)
+    await tick()
+    // The tab and any Advanced section render over the next frames.
+    let row: HTMLElement | null = null
+    for (let i = 0; i < 20 && !row; i++) {
+      row = tabScrollEl?.querySelector<HTMLElement>(`[data-setting="${match.entry.id}"]`) ?? null
+      if (!row && !['general', 'composer', 'chat', 'images'].includes(match.entry.tab)) break
+      if (!row) await new Promise((r) => requestAnimationFrame(r))
+    }
+    clearSettingTarget()
+    if (!row) {
+      // Accounts, Contacts and Extensions have no single row; land on the tab itself.
+      tabsEl?.querySelector<HTMLElement>('[role="tab"][data-state="active"]')?.focus()
+      return
+    }
+    row.scrollIntoView({ block: 'center' })
+    const control = row.querySelector<HTMLElement>('button:not([disabled]), input:not([disabled]), [role="switch"]:not([disabled]), [tabindex="0"]')
+    control?.focus({ preventScroll: true })
+    row.classList.add('settings-found')
+    setTimeout(() => row?.classList.remove('settings-found'), 1600)
+  }
 
   // All tabs share one scroll container; start each tab at the top.
   $effect(() => {
     void activeTab
     if (tabScrollEl) tabScrollEl.scrollTop = 0
-  })
-
-  // Live theme preview: apply the picker's current value to the document
-  // immediately so the user sees what each theme looks like before saving.
-  // The revert path is in handleOpenChange when the dialog closes unsaved.
-  $effect(() => {
-    if (loading || !themeMode) return
-    applyThemeFromMode(themeMode as ThemeMode)
   })
 
   // Load settings on mount
@@ -123,9 +138,8 @@
 
   async function loadSettings() {
     loading = true
-    hasSaved = false
     try {
-      const [policy, delayMs, density, theme, titleBar, runBg, startHid, autoSt, lang, comp, mail, compFmt, nativeTB, alwaysImages, darkMail, darkComposer, accentBar, accentStyle, listCircles, listProfilePics, alwaysCheckbox, messagePreview, viewerCircles, scEnabled, scLangs, sendKey, includeQuote, autoAdvance, notifyPriority, showLow, combineSenders, readingWidth, displayStyle, richStyle, showAvatars, hoverActions, messageAvatars, readingFont] = await Promise.all([
+      const [policy, delayMs, density, theme, titleBar, runBg, startHid, autoSt, lang, comp, mail, compFmt, nativeTB, alwaysImages, darkMail, darkComposer, messagePreview, scEnabled, scLangs, sendKey, includeQuote, autoAdvance, notifyPriority, showLow, combineSenders, readingWidth, displayStyle, richStyle, showAvatars, hoverActions, messageAvatars, readingFont] = await Promise.all([
         GetReadReceiptResponsePolicy(),
         GetMarkAsReadDelay(),
         GetMessageListDensity(),
@@ -142,13 +156,7 @@
         GetAlwaysLoadImages(),
         GetDarkMailContent(),
         GetDarkComposerBody(),
-        GetAccentBarUnread(),
-        GetAccentUnreadStyle(),
-        GetShowMessageListCircles(),
-        GetShowMessageListProfilePics(),
-        GetAlwaysShowMessageCheckbox(),
         GetShowMessagePreview(),
-        GetShowViewerCircles(),
         GetSpellcheckEnabled(),
         GetSpellcheckLanguages(),
         GetChatSendKey(),
@@ -165,49 +173,46 @@
         GetChatMessageAvatars(),
         GetChatReadingFont(),
       ])
-      readReceiptResponsePolicy = policy
-      // Convert ms to seconds for display
-      markAsReadDelaySeconds = delayMs < 0 ? -1 : delayMs / 1000
-      messageListDensity = density
-      themeMode = theme
-      originalThemeMode = theme
-      showTitleBar = titleBar
-      runBackground = runBg
-      startHidden = startHid
-      autostart = autoSt
-      language = lang
-      composerMode = comp || 'inline'
-      mailtoMode = mail || 'inline'
-      composerFormat = compFmt || 'rich'
-      spellcheckEnabled = scEnabled ?? true
       // Empty stored list = "use defaults" — show the same set the engine uses.
       const supportedDicts = filterSupportedDicts(scLangs ?? [])
-      spellcheckLanguages = supportedDicts.length ? supportedDicts : defaultSpellcheckLanguages()
-      nativeTitleBar = nativeTB ?? true
-      alwaysLoadImages = alwaysImages ?? false
-      darkMailContent = darkMail ?? true
-      darkComposerBody = darkComposer ?? true
-      accentBarUnread = accentBar ?? false
-      accentUnreadStyle = accentStyle || 'dot'
-      showMessageListCircles = listCircles ?? true
-      showMessageListProfilePics = listProfilePics ?? false
-      alwaysShowMessageCheckbox = alwaysCheckbox ?? false
-      showMessagePreview = messagePreview ?? false
-      showViewerCircles = viewerCircles ?? true
-      chatSendKey = sendKey || 'ctrl-enter'
-      chatReadingWidth = readingWidth || 'standard'
-      chatDisplayStyle = displayStyle || 'bubbles'
-      chatRichStyle = richStyle || 'reader'
-      chatShowAvatars = showAvatars ?? true
-      chatHoverActions = hoverActions ?? false
-      chatMessageAvatars = messageAvatars ?? true
-      chatReadingFont = readingFont || 'sans'
-      chatIncludeQuote = includeQuote ?? true
-      chatAutoAdvance = autoAdvance || 'next'
-      chatNotifyPriorityOnly = notifyPriority ?? true
-      chatShowLowGroup = showLow ?? true
-      chatCombineSenders = combineSenders ?? true
-      originalNativeTitleBar = nativeTitleBar
+      Object.assign(s, {
+        readReceiptResponsePolicy: policy,
+        // Convert ms to seconds for display
+        markAsReadDelaySeconds: delayMs < 0 ? -1 : delayMs / 1000,
+        messageListDensity: density,
+        themeMode: theme,
+        showTitleBar: titleBar,
+        runBackground: runBg,
+        startHidden: startHid,
+        autostart: autoSt,
+        language: lang,
+        composerMode: comp || 'inline',
+        mailtoMode: mail || 'inline',
+        composerFormat: compFmt || 'rich',
+        spellcheckEnabled: scEnabled ?? true,
+        spellcheckLanguages: supportedDicts.length ? supportedDicts : defaultSpellcheckLanguages(),
+        nativeTitleBar: nativeTB ?? true,
+        alwaysLoadImages: alwaysImages ?? false,
+        darkMailContent: darkMail ?? true,
+        darkComposerBody: darkComposer ?? true,
+        showMessagePreview: messagePreview ?? false,
+        chatSendKey: sendKey || 'ctrl-enter',
+        chatReadingWidth: readingWidth || 'standard',
+        chatDisplayStyle: displayStyle || 'bubbles',
+        chatRichStyle: richStyle || 'reader',
+        chatShowAvatars: showAvatars ?? true,
+        chatHoverActions: hoverActions ?? false,
+        chatMessageAvatars: messageAvatars ?? true,
+        chatReadingFont: readingFont || 'sans',
+        chatIncludeQuote: includeQuote ?? true,
+        chatAutoAdvance: autoAdvance || 'next',
+        chatNotifyPriorityOnly: notifyPriority ?? true,
+        chatShowLowGroup: showLow ?? true,
+        chatCombineSenders: combineSenders ?? true,
+      })
+      // The title bar the window started with is fixed for this app run (UX8):
+      // the first load, before any change here, is that value.
+      setStartupNativeTitleBar(s.nativeTitleBar) // no-op once set
     } catch (err) {
       console.error('Failed to load settings:', err)
     } finally {
@@ -215,123 +220,48 @@
     }
   }
 
-  async function handleSave() {
-    saving = true
-    try {
-      // Convert seconds to ms for storage
-      const delayMs = markAsReadDelaySeconds < 0 ? -1 : Math.round(markAsReadDelaySeconds * 1000)
+  // Every tab here applies each change at once (UX-CTRL-1). Writes run one at a
+  // time to avoid SQLite lock conflicts; a failed write puts the control back.
+  let writeQueue: Promise<void> = Promise.resolve()
 
-      // Save settings sequentially to avoid SQLite lock conflicts
-      await SetReadReceiptResponsePolicy(readReceiptResponsePolicy)
-      await SetMarkAsReadDelay(delayMs)
-      await SetMessageListDensity(messageListDensity)
-      await SetThemeMode(themeMode)
-      await SetShowTitleBar(showTitleBar)
-      await SetRunBackground(runBackground)
-      await SetStartHidden(startHidden)
-      await SetAutostart(autostart)
-      if (language) {
-        await SetLanguage(language)
-      }
-      await SetComposerMode(composerMode)
-      await SetMailtoMode(mailtoMode)
-      await SetComposerFormat(composerFormat)
-      await SetSpellcheckEnabled(spellcheckEnabled)
-      await SetSpellcheckLanguages(spellcheckLanguages)
-      await SetNativeTitleBar(nativeTitleBar)
-      await SetAlwaysLoadImages(alwaysLoadImages)
-      await SetDarkMailContent(darkMailContent)
-      await SetDarkComposerBody(darkComposerBody)
-      await SetAccentBarUnread(accentBarUnread)
-      await SetAccentUnreadStyle(accentUnreadStyle)
-      await SetShowMessageListCircles(showMessageListCircles)
-      await SetShowMessageListProfilePics(showMessageListProfilePics)
-      await SetAlwaysShowMessageCheckbox(alwaysShowMessageCheckbox)
-      await SetShowMessagePreview(showMessagePreview)
-      await SetShowViewerCircles(showViewerCircles)
-      await SetChatSendKey(chatSendKey)
-      await SetChatReadingWidth(chatReadingWidth)
-      await SetChatDisplayStyle(chatDisplayStyle)
-      await SetChatRichStyle(chatRichStyle)
-      await SetChatShowAvatars(chatShowAvatars)
-      await SetChatHoverActions(chatHoverActions)
-      await SetChatMessageAvatars(chatMessageAvatars)
-      await SetChatReadingFont(chatReadingFont)
-      await SetChatIncludeQuote(chatIncludeQuote)
-      await SetChatAutoAdvance(chatAutoAdvance)
-      await SetChatNotifyPriorityOnly(chatNotifyPriorityOnly)
-      await SetChatShowLowGroup(chatShowLowGroup)
-      await SetChatCombineSenders(chatCombineSenders)
-      // Update the reactive stores so UI updates immediately
-      updateDensityStore(messageListDensity as MessageListDensity)
-      updateThemeStore(themeMode as ThemeMode)
-      updateShowTitleBarStore(showTitleBar)
-      updateRunBackgroundStore(runBackground)
-      updateStartHiddenStore(startHidden)
-      updateAutostartStore(autostart)
-      if (language) {
-        updateLanguageStore(language)
-      }
-      updateComposerModeStore(composerMode as ComposerMode)
-      updateMailtoModeStore(mailtoMode as ComposerMode)
-      updateComposerFormatStore(composerFormat as ComposerFormat)
-      updateSpellcheckEnabledStore(spellcheckEnabled)
-      updateSpellcheckLanguagesStore(spellcheckLanguages)
-      syncSpellcheckLanguagesIfActive() // live-apply to an open composer; stays lazy otherwise
-      updateNativeTitleBarStore(nativeTitleBar)
-      updateAlwaysLoadImagesStore(alwaysLoadImages)
-      updateDarkMailContentStore(darkMailContent)
-      updateDarkComposerBodyStore(darkComposerBody)
-      updateAccentBarUnreadStore(accentBarUnread)
-      updateAccentUnreadStyleStore(accentUnreadStyle)
-      updateShowMessageListCirclesStore(showMessageListCircles)
-      updateShowMessageListProfilePicsStore(showMessageListProfilePics)
-      updateAlwaysShowMessageCheckboxStore(alwaysShowMessageCheckbox)
-      updateShowMessagePreviewStore(showMessagePreview)
-      updateShowViewerCirclesStore(showViewerCircles)
-      updateChatSendKeyStore(chatSendKey as ChatSendKey)
-      updateChatReadingWidthStore(chatReadingWidth as ChatReadingWidth)
-      updateChatDisplayStyleStore(chatDisplayStyle as ChatDisplayStyle)
-      updateChatRichStyleStore(chatRichStyle as ChatRichStyle)
-      updateChatShowAvatarsStore(chatShowAvatars)
-      updateChatHoverActionsStore(chatHoverActions)
-      updateChatMessageAvatarsStore(chatMessageAvatars)
-      updateChatReadingFontStore(chatReadingFont as ChatReadingFont)
-      updateChatAutoAdvanceStore(chatAutoAdvance as ChatAutoAdvance)
-      updateChatShowLowGroupStore(chatShowLowGroup)
-      addToast({
-        type: 'success',
-        message: $_('toast.settingsSaved'),
-      })
-      hasSaved = true
-      originalThemeMode = themeMode
-      // Show restart dialog if native title bar setting changed
-      if (nativeTitleBar !== originalNativeTitleBar) {
-        originalNativeTitleBar = nativeTitleBar
-        showRestartDialog = true
-        return
-      }
-      open = false
-      onClose?.()
-    } catch (err) {
-      console.error('Failed to save settings:', err)
-      addToast({
-        type: 'error',
-        message: $_('toast.failedToSaveSettings'),
-      })
-    } finally {
-      saving = false
-    }
+  // Show a new value now; the returned function puts the old one back unless a newer value replaced it.
+  function showValue<K extends SettingKey>(key: K, value: SettingValues[K]): () => void {
+    const values: SettingValues = s
+    const old = values[key]
+    values[key] = value
+    return () => { if (values[key] === value) values[key] = old }
   }
 
-  function revertLivePreview() {
-    if (!hasSaved && originalThemeMode && themeMode !== originalThemeMode) {
-      applyThemeFromMode(originalThemeMode as ThemeMode)
+  function handleSettingChange(change: SettingChange) {
+    // Show the new value now and keep a way back to the old one. The revert
+    // touches only this setting, and skips it if a newer change has replaced it.
+    let revert: () => void
+    if (change.key === 'titleBar') {
+      const old = { native: s.nativeTitleBar, show: s.showTitleBar }, v = change.value
+      s.nativeTitleBar = v.native; s.showTitleBar = v.show
+      revert = () => { if (s.nativeTitleBar === v.native && s.showTitleBar === v.show) { s.nativeTitleBar = old.native; s.showTitleBar = old.show } }
+    } else {
+      revert = showValue(change.key, change.value)
     }
+    // Choosing a separate window for new messages also opens email links there.
+    if (change.key === 'composerMode' && change.value === 'detached' && s.mailtoMode !== 'detached') {
+      handleSettingChange({ key: 'mailtoMode', value: 'detached' })
+    }
+    writeQueue = writeQueue.then(async () => {
+      try {
+        await applySettingChange(change)
+        if (change.key === 'language') setLocale(change.value)
+        // Offer a restart only when the title bar now differs from the one the window started with.
+        if (change.key === 'titleBar' && s.nativeTitleBar !== getStartupNativeTitleBar()) showRestartDialog = true
+      } catch (err) {
+        console.error('Failed to save setting:', err)
+        revert()
+        addToast({ type: 'error', message: $_('toast.failedToSaveSettings'), details: errorDetails(err) })
+      }
+    })
   }
 
-  function handleCancel() {
-    revertLivePreview()
+  function handleClose() {
     open = false
     onClose?.()
   }
@@ -339,7 +269,6 @@
   function handleOpenChange(isOpen: boolean) {
     open = isOpen
     if (!isOpen) {
-      revertLivePreview()
       onClose?.()
     }
   }
@@ -359,6 +288,9 @@
         <Icon icon="lucide:loader-circle" class="w-6 h-6 animate-spin text-muted-foreground" />
       </div>
     {:else}
+      <SettingsSearch bind:query={searchQuery} onSelect={openSearchResult} />
+
+      <div hidden={searching} bind:this={tabsEl}>
       <Tabs.Root bind:value={activeTab} class="w-full">
         <Tabs.List class="grid h-auto w-full grid-cols-4">
           <Tabs.Trigger value="general" class="flex min-w-0 items-center gap-2">
@@ -398,67 +330,32 @@
         <div bind:this={tabScrollEl} class="mt-4 h-[clamp(14rem,calc(100vh-22rem),40rem)] overflow-y-auto pl-1 pr-3">
           <Tabs.Content value="general" class="mt-0">
             <GeneralTab
-              bind:markAsReadDelaySeconds
-              bind:messageListDensity
-              bind:themeMode
-              bind:nativeTitleBar
-              bind:showTitleBar
-              bind:runBackground
-              bind:startHidden
-              bind:autostart
-              bind:language
-              bind:accentBarUnread
-              bind:accentUnreadStyle
-              bind:showMessageListCircles
-              bind:showMessageListProfilePics
-              bind:alwaysShowMessageCheckbox
-              bind:showMessagePreview
-              bind:showViewerCircles
-              bind:darkMailContent
-              bind:darkComposerBody
+              markAsReadDelaySeconds={s.markAsReadDelaySeconds}
+              messageListDensity={s.messageListDensity}
+              themeMode={s.themeMode}
+              nativeTitleBar={s.nativeTitleBar}
+              showTitleBar={s.showTitleBar}
+              runBackground={s.runBackground}
+              startHidden={s.startHidden}
+              autostart={s.autostart}
+              language={s.language}
+              showMessagePreview={s.showMessagePreview}
+              darkMailContent={s.darkMailContent}
+              darkComposerBody={s.darkComposerBody}
+              onChange={handleSettingChange}
             />
           </Tabs.Content>
 
           <Tabs.Content value="composer" class="mt-0">
-            <ComposerTab
-              bind:composerMode
-              bind:mailtoMode
-              bind:composerFormat
-              bind:readReceiptResponsePolicy
-              bind:spellcheckEnabled
-              bind:spellcheckLanguages
-              onComposerModeChange={(v) => { composerMode = v; if (v === 'detached') mailtoMode = 'detached' }}
-              onMailtoModeChange={(v) => mailtoMode = v}
-              onFormatChange={(v) => composerFormat = v}
-              onPolicyChange={(v) => readReceiptResponsePolicy = v}
-              onSpellcheckEnabledChange={(v) => spellcheckEnabled = v}
-              onSpellcheckLanguagesChange={(v) => spellcheckLanguages = v}
-            />
+            <ComposerTab values={s} onChange={handleSettingChange} />
           </Tabs.Content>
 
           <Tabs.Content value="chat" class="mt-0">
-            <ChatTab
-              bind:sendKey={chatSendKey}
-              bind:readingWidth={chatReadingWidth}
-              bind:displayStyle={chatDisplayStyle}
-              bind:richStyle={chatRichStyle}
-              bind:showAvatars={chatShowAvatars}
-              bind:hoverActions={chatHoverActions}
-              bind:messageAvatars={chatMessageAvatars}
-              bind:readingFont={chatReadingFont}
-              bind:includeQuote={chatIncludeQuote}
-              bind:autoAdvance={chatAutoAdvance}
-              bind:notifyPriorityOnly={chatNotifyPriorityOnly}
-              bind:showLowGroup={chatShowLowGroup}
-              bind:combineSenders={chatCombineSenders}
-            />
+            <ChatTab values={s} onChange={handleSettingChange} />
           </Tabs.Content>
 
           <Tabs.Content value="images" class="mt-0">
-            <ImagesTab
-              bind:alwaysLoadImages
-              onAlwaysLoadImagesChange={(v) => alwaysLoadImages = v}
-            />
+            <ImagesTab alwaysLoadImages={s.alwaysLoadImages} onChange={handleSettingChange} />
           </Tabs.Content>
 
           <Tabs.Content value="accounts" class="mt-0">
@@ -478,27 +375,14 @@
           </Tabs.Content>
         </div>
       </Tabs.Root>
+      </div>
 
-      <!-- Actions - show Save/Cancel on the tabs with dialog-saved settings -->
-      {#if ['general', 'composer', 'chat', 'images'].includes(activeTab)}
-        <div class="flex items-center justify-end gap-2 pt-4 border-t border-border">
-          <Button variant="ghost" onclick={handleCancel} disabled={saving}>
-            {$_('common.cancel')}
-          </Button>
-          <Button onclick={handleSave} disabled={saving}>
-            {#if saving}
-              <Icon icon="lucide:loader-circle" class="w-4 h-4 mr-2 animate-spin" />
-            {/if}
-            {$_('common.save')}
-          </Button>
-        </div>
-      {:else}
-        <div class="flex items-center justify-end gap-2 pt-4 border-t border-border">
-          <Button variant="ghost" onclick={handleCancel}>
-            {$_('common.close')}
-          </Button>
-        </div>
-      {/if}
+      <!-- Every tab applies each change at once, so the dialog only closes (UX-CTRL-1). -->
+      <div class="flex items-center justify-end gap-2 pt-4 border-t border-border">
+        <Button variant="ghost" onclick={handleClose}>
+          {$_('common.close')}
+        </Button>
+      </div>
     {/if}
   </Dialog.Content>
 </Dialog.Root>
@@ -510,5 +394,5 @@
   confirmLabel={$_('settingsGeneral.quitNow')}
   cancelLabel={$_('settingsGeneral.restartLater')}
   onConfirm={() => QuitApp()}
-  onCancel={() => { showRestartDialog = false; open = false; onClose?.() }}
+  onCancel={() => { showRestartDialog = false }}
 />

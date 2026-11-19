@@ -1,0 +1,215 @@
+{
+ "settingsChat.sendKey": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.sendKeyEnter": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Shift+Enter adds a line; Ctrl or Cmd also blocks send (ChatComposer.svelte:111)."
+ },
+ "settingsChat.sendKeyCtrlEnter": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Code accepts ctrl or meta (ChatComposer.svelte:111). Applied in UX-2."
+ },
+ "settingsChat.sendKeyDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-2. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.displayStyle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "CTRL-6: needs one-line summary per option. CTRL-1: switch in Save form."
+ },
+ "settingsChat.displayStyleBubbles": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsChat.displayStyleFlat": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Label 'Blocks' vs key 'flat'; fine."
+ },
+ "settingsChat.displayStyleDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-1: long, grade too high. Split per option (CTRL-6). Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.richStyle": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.richStyleReader": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9. Applied in UX-2."
+ },
+ "settingsChat.richStyleCard": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9: 'layout' vs 'design'. Applied in UX-2."
+ },
+ "settingsChat.richStyleDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-1, CTRL-6. Matches ChatBubble.svelte:77-96. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.readingWidth": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine. CTRL-1: switch in Save form."
+ },
+ "settingsChat.readingWidthNarrow": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsChat.readingWidthStandard": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsChat.readingWidthWide": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsChat.readingWidthDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-1. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.readingFont": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine. CTRL-1: switch in Save form."
+ },
+ "settingsChat.readingFontSerif": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Font names ok in parentheses."
+ },
+ "settingsChat.readingFontSans": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsChat.readingFontDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.messageAvatars": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9: avatar not in glossary. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.messageAvatarsDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-3. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.showAvatars": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.showAvatarsDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine.",
+  "control": "none (help text)"
+ },
+ "settingsChat.hoverActions": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine. CTRL-1: switch in Save form."
+ },
+ "settingsChat.hoverActionsDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "ChatRow.svelte:283-285 matches; buttons also show on keyboard focus. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.includeQuote": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9: 'quoted history' is jargon. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.includeQuoteDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-12. Code: chat_reply.go:274. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.triage": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Jargon-light; 'Triage' could be 'Sort mail' (COPY-9)."
+ },
+ "settingsChat.autoAdvance": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-7, COPY-9. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.autoAdvanceNext": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsChat.autoAdvancePrevious": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine."
+ },
+ "settingsChat.autoAdvanceDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-6. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.combineSenders": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-9. CTRL-1: switch in Save form."
+ },
+ "settingsChat.combineSendersDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Matches chat.combineSender / splitSender strings. Applied in UX-2.",
+  "control": "none (help text)"
+ },
+ "settingsChat.showLowGroup": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.showLowGroupDescription": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "Fine.",
+  "control": "none (help text)"
+ },
+ "settingsChat.notifyPriorityOnly": {
+  "accurate": "yes",
+  "proposed": "",
+  "notes": "COPY-10. CTRL-1: switch in Save form. Applied in UX-2."
+ },
+ "settingsChat.notifyPriorityOnlyDescription": {
+  "accurate": "unverified: priority filter matches background.go:572; snooze-return claim not traced",
+  "proposed": "",
+  "notes": "Sentence 2 not checked.",
+  "control": "none (help text)"
+ }
+}

@@ -50,6 +50,7 @@ export class AccountFormState {
   customOAuthTokenURL = $state('')
   customOAuthUserinfoURL = $state('')
   customOAuthManual = $state(false)
+  customOAuthAdvanced = $state(false)
   customOAuthDiscovering = $state(false)
   customOAuthDiscoverError = $state('')
   customOAuthDiscovered = $state(false)

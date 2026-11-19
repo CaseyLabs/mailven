@@ -1,7 +1,7 @@
 // Sending: validation, confirmation dialogs, the send pipeline and pop-out.
 import { get } from 'svelte/store'
 import { _ } from '$lib/i18n'
-import { addToast } from '$lib/stores/toast'
+import { addToast, errorDetails } from '$lib/stores/toast'
 import { queueWithUndo } from './undoSend.svelte'
 import { bodyMentionsAttachment, getDisplayMode } from './composerContent'
 import { buildMessage } from './composerMessage'
@@ -126,7 +126,7 @@ ${evidence.guidance}`
     // Reading cleanup status cannot turn accepted mail into a failed send.
     try {
       const accepted = await s.api.getSubmissionReview(s.activeAccountId, message, s.currentDraftId || '')
-      if (accepted?.warnings) addToast({ type: 'info', message: accepted.warnings + ' ' + get(_)('composer.acceptedCleanupWarning') })
+      if (accepted?.warnings) addToast({ type: 'info', message: get(_)('composer.acceptedCleanupWarning'), details: errorDetails(accepted.warnings) })
     } catch (err) { console.error('Failed to read submission cleanup status:', err) }
 
     // Delete the draft on successful send (fire-and-forget - don't block UI)
@@ -146,7 +146,8 @@ ${evidence.guidance}`
     scheduleDraftSave(s) // review/preflight may have cancelled the pending autosave
     addToast({
       type: 'error',
-      message: String(err),
+      message: get(_)('toast.sendFailed'),
+      details: errorDetails(err),
     })
   } finally {
     s.sending = false
