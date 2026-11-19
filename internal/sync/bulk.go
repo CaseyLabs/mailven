@@ -76,10 +76,12 @@ func bulkFlag(rawHeader []byte, fromEmail string) *bool {
 	return &bulk
 }
 
-// applyHeaderFlags sets the header-derived IsBulk and DeliveredTo of m,
-// parsing rawHeader once; both stay nil when there are no headers to read.
+// applyHeaderFlags sets the header-derived IsBulk, DeliveredTo and
+// List-Unsubscribe fields of m, parsing rawHeader once; all stay nil when
+// there are no headers to read.
 func applyHeaderFlags(m *message.Message, rawHeader []byte) {
 	m.IsBulk, m.DeliveredTo = nil, nil
+	m.ListUnsubscribe, m.ListUnsubscribePost = nil, nil
 	h, ok := readRawHeader(rawHeader)
 	if !ok {
 		return
@@ -88,6 +90,26 @@ func applyHeaderFlags(m *message.Message, rawHeader []byte) {
 	m.IsBulk = &bulk
 	delivered := encodeAddrs(headerForwardingAddresses(h))
 	m.DeliveredTo = &delivered
+	unsub, post := listUnsubscribeHeaders(h)
+	m.ListUnsubscribe, m.ListUnsubscribePost = &unsub, &post
+}
+
+// listUnsubscribeHeaders returns the trimmed List-Unsubscribe and
+// List-Unsubscribe-Post values of h; "" when absent.
+func listUnsubscribeHeaders(h textproto.Header) (header, post string) {
+	return strings.TrimSpace(h.Get("List-Unsubscribe")), strings.TrimSpace(h.Get("List-Unsubscribe-Post"))
+}
+
+// ExtractListUnsubscribe returns the List-Unsubscribe and
+// List-Unsubscribe-Post values from raw header (or whole message) bytes, and
+// whether the header block could be read.
+func ExtractListUnsubscribe(raw []byte) (header, post string, ok bool) {
+	h, ok := readRawHeader(raw)
+	if !ok {
+		return "", "", false
+	}
+	header, post = listUnsubscribeHeaders(h)
+	return header, post, true
 }
 
 // backfillBulkFlags classifies messages in the selected mailbox whose is_bulk

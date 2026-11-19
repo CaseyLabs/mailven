@@ -15,6 +15,7 @@ import {smtp} from '../models';
 import {oauth2} from '../models';
 import {imap} from '../models';
 import {settings} from '../models';
+import {unsubscribe} from '../models';
 import {pgp} from '../models';
 import {smime} from '../models';
 import {snapshotrestore} from '../models';
@@ -369,6 +370,8 @@ export function GetInlineAttachments(arg1:string):Promise<Record<string, string>
 export function GetLanguage():Promise<string>;
 
 export function GetLinkedAccountsForContactSync():Promise<Array<app.LinkedAccountInfo>>;
+
+export function GetListUnsubscribeInfo(arg1:string):Promise<unsubscribe.Info>;
 
 export function GetMailAPIRouteStatus(arg1:string):Promise<app.MailAPIRouteStatus>;
 
@@ -865,6 +868,8 @@ export function UnsnoozeChat(arg1:string,arg2:string):Promise<void>;
 export function Unstar(arg1:Array<string>):Promise<void>;
 
 export function UnsubscribeFolder(arg1:string,arg2:string):Promise<void>;
+
+export function UnsubscribeFromList(arg1:string):Promise<app.UnsubscribeResult>;
 
 export function UpdateAccount(arg1:string,arg2:account.AccountConfig):Promise<account.Account>;
 

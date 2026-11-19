@@ -384,15 +384,13 @@ func (ops *composeOps) sendMessage(ctx context.Context, accountID string, msg sm
 // contact updates and draft deletion. Failures become attempt warnings.
 func (ops *composeOps) afterSend(ctx context.Context, msg smtp.ComposeMessage, d *draft.Draft, attempt *submission.Attempt) {
 	log := logging.WithComponent("composeOps")
-	// Add recipients to local contacts (best-effort; send already succeeded)
-	for _, to := range msg.To {
-		if err := ops.contactStore.AddOrUpdate(to.Address, to.Name); err != nil {
-			attempt.Warnings += "Contact update failed: " + err.Error() + "\n"
-		}
-	}
-	for _, cc := range msg.Cc {
-		if err := ops.contactStore.AddOrUpdate(cc.Address, cc.Name); err != nil {
-			attempt.Warnings += "Contact update failed: " + err.Error() + "\n"
+	// Add recipients to local contacts (best-effort; send already succeeded),
+	// except for automated mail such as unsubscribe requests.
+	if !msg.SkipContacts {
+		for _, addr := range append(append([]smtp.Address{}, msg.To...), msg.Cc...) {
+			if err := ops.contactStore.AddOrUpdate(addr.Address, addr.Name); err != nil {
+				attempt.Warnings += "Contact update failed: " + err.Error() + "\n"
+			}
 		}
 	}
 

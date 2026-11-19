@@ -120,6 +120,8 @@
   })
   const people = $derived(threadPeople(thread.messages, myEmails))
   const messageIds: string[] = $derived(thread.messages.map((m) => m.id))
+  // The newest few incoming messages, newest first, for Unsubscribe.
+  const unsubscribeIds = $derived(thread.messages.filter((m) => !m.isDraft && !myEmails.has(m.fromEmail?.toLowerCase() ?? '')).slice(-3).reverse().map((m) => m.id))
   const effectiveFolderType = $derived(folderType || 'inbox')
   const allRead = $derived(thread.messages.every((m) => m.isRead))
   const isStarred = $derived(thread.messages.length > 0 && thread.messages.every((m) => m.isStarred))
@@ -403,6 +405,7 @@
       {onPreviousChat}
       {onNextChat}
       {messageIds}
+      {unsubscribeIds}
       accountId={accountId ?? ''}
       folderId={folderId ?? ''}
       folderType={effectiveFolderType}

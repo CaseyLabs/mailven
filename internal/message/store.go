@@ -591,8 +591,9 @@ func (s *Store) createWith(ex execer, m *Message) error {
 			subject, from_name, from_email, to_list, cc_list, bcc_list, reply_to, date,
 			snippet, is_read, is_starred, is_answered, is_forwarded, is_draft, is_deleted,
 			size, has_attachments, body_text, body_html, body_fetched,
-			read_receipt_to, read_receipt_handled, received_at, is_bulk
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			read_receipt_to, read_receipt_handled, received_at, is_bulk,
+			list_unsubscribe, list_unsubscribe_post
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
 	_, err := ex.Exec(query,
@@ -606,6 +607,7 @@ func (s *Store) createWith(ex execer, m *Message) error {
 		nullString(m.BodyText), nullString(m.BodyHTML), m.BodyFetched,
 		nullString(m.ReadReceiptTo), m.ReadReceiptHandled,
 		m.ReceivedAt, m.IsBulk,
+		m.ListUnsubscribe, m.ListUnsubscribePost,
 	)
 	if err != nil {
 		return fmt.Errorf("failed to create message: %w", err)
@@ -631,8 +633,9 @@ func (s *Store) Upsert(m *Message) error {
 			subject, from_name, from_email, to_list, cc_list, bcc_list, reply_to, date,
 			snippet, is_read, is_starred, is_answered, is_forwarded, is_draft, is_deleted,
 			size, has_attachments, body_text, body_html, body_fetched,
-			read_receipt_to, read_receipt_handled, received_at, is_bulk, delivered_to
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			read_receipt_to, read_receipt_handled, received_at, is_bulk, delivered_to,
+			list_unsubscribe, list_unsubscribe_post
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(folder_id, uid) DO UPDATE SET
 			id=excluded.id, account_id=excluded.account_id,
 			message_id=excluded.message_id, in_reply_to=excluded.in_reply_to,
@@ -649,7 +652,9 @@ func (s *Store) Upsert(m *Message) error {
 			read_receipt_to=excluded.read_receipt_to, read_receipt_handled=excluded.read_receipt_handled,
 			received_at=excluded.received_at,
 			is_bulk=COALESCE(excluded.is_bulk, messages.is_bulk),
-			delivered_to=COALESCE(excluded.delivered_to, messages.delivered_to)
+			delivered_to=COALESCE(excluded.delivered_to, messages.delivered_to),
+			list_unsubscribe=COALESCE(excluded.list_unsubscribe, messages.list_unsubscribe),
+			list_unsubscribe_post=COALESCE(excluded.list_unsubscribe_post, messages.list_unsubscribe_post)
 	`
 
 	_, err := s.db.Exec(query,
@@ -663,6 +668,7 @@ func (s *Store) Upsert(m *Message) error {
 		nullString(m.BodyText), nullString(m.BodyHTML), m.BodyFetched,
 		nullString(m.ReadReceiptTo), m.ReadReceiptHandled,
 		m.ReceivedAt, m.IsBulk, m.DeliveredTo,
+		m.ListUnsubscribe, m.ListUnsubscribePost,
 	)
 	if err != nil {
 		return fmt.Errorf("failed to upsert message: %w", err)
@@ -790,6 +796,35 @@ func (s *Store) MarkReadReceiptHandled(id string) error {
 	_, err := s.db.Exec("UPDATE messages SET read_receipt_handled = 1 WHERE id = ?", id)
 	if err != nil {
 		return fmt.Errorf("failed to mark read receipt handled: %w", err)
+	}
+	return nil
+}
+
+// GetListUnsubscribe returns the stored List-Unsubscribe and
+// List-Unsubscribe-Post values of a message. known is false when the headers
+// were never read (rows synced before migration 67, or written without them).
+func (s *Store) GetListUnsubscribe(id string) (header, post string, known bool, err error) {
+	var h, p sql.NullString
+	err = s.db.QueryRow(
+		"SELECT list_unsubscribe, list_unsubscribe_post FROM messages WHERE id = ?", id,
+	).Scan(&h, &p)
+	if err == sql.ErrNoRows {
+		return "", "", false, fmt.Errorf("message not found: %s", id)
+	}
+	if err != nil {
+		return "", "", false, fmt.Errorf("failed to get list-unsubscribe headers: %w", err)
+	}
+	return h.String, p.String, h.Valid, nil
+}
+
+// SetListUnsubscribe stores the List-Unsubscribe and List-Unsubscribe-Post
+// values of a message; empty strings record that the headers are absent.
+func (s *Store) SetListUnsubscribe(id, header, post string) error {
+	if _, err := s.db.Exec(
+		"UPDATE messages SET list_unsubscribe = ?, list_unsubscribe_post = ? WHERE id = ?",
+		header, post, id,
+	); err != nil {
+		return fmt.Errorf("failed to set list-unsubscribe headers: %w", err)
 	}
 	return nil
 }

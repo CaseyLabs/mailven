@@ -89,6 +89,10 @@ type ComposeMessage struct {
 	EncryptMessage     bool `json:"encrypt_message"`     // S/MIME encrypt this message
 	PGPSignMessage     bool `json:"pgp_sign_message"`    // PGP sign this message
 	PGPEncryptMessage  bool `json:"pgp_encrypt_message"` // PGP encrypt this message
+
+	// SkipContacts keeps the recipients out of local contacts after the send,
+	// for automated mail such as list unsubscribe requests. Backend-only.
+	SkipContacts bool `json:"-"`
 }
 
 // AllRecipients returns all recipients (To + Cc + Bcc)

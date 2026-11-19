@@ -84,6 +84,12 @@ type Message struct {
 	// nil = headers not fetched. Upserts keep the stored value when nil.
 	DeliveredTo *string `json:"-"`
 
+	// Raw List-Unsubscribe (RFC 2369) and List-Unsubscribe-Post (RFC 8058)
+	// header values, "" when absent; nil = headers not read. Upserts keep the
+	// stored value when nil. The frontend uses App.GetUnsubscribeInfo instead.
+	ListUnsubscribe     *string `json:"-"`
+	ListUnsubscribePost *string `json:"-"`
+
 	// Chat view text; computed on read by the conversation binding, never persisted
 	Chat *ChatText `json:"chat,omitempty"`
 	// Mine marks my own message (account address or Sent folder); computed

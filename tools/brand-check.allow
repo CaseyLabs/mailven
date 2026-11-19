@@ -14,6 +14,7 @@ docs/SQL_ROLLBACK.md :: Aerion :: Rollback scripts were released as Aerion versi
 tools/db/rollback-v*.sql :: Aerion :: Rollback scripts describe Aerion releases (0.2.x/0.3.x)
 
 # --- Statements of origin, import guide, upstream pointers ---
+app/unsubscribe.go :: Ported from Aerion PR hkdb/aerion#497 :: Statement of origin for code ported from an upstream PR
 README.md :: Aerion :: "Built on Aerion" origin statement and import link
 CHANGELOG.md :: Aerion :: Origin statement and link to the Aerion history
 docs/RELEASE_NOTES_v0.4.0.md :: Aerion :: Draft release notes: origin statement, separation from Aerion and import link

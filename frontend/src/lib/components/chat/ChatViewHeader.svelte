@@ -3,13 +3,13 @@
   // (when the chat covers the list), the avatar or an overlapping pair, then
   // the people (which open the participant list) over the subject and message
   // count, then Compose (when set; not on narrow windows), Search in
-  // conversation, Archive, Delete, Spam ("Not Spam" in the Spam folder) and
-  // "⋯".
+  // conversation, Unsubscribe (list mail only), Archive, Delete, Spam ("Not
+  // Spam" in the Spam folder) and "⋯".
   // "⋯" is the shared thread context menu (Delete, Mark read/unread, Move,
   // Spam, Reply) plus Snooze, Pin, the sender actions, Forward for
-  // multi-message chats and previous/next chat. Archive, Delete and Spam carry
-  // their labels from 1100 px of window width and are icon-only (named for
-  // screen readers) below.
+  // multi-message chats and previous/next chat. Unsubscribe, Archive, Delete
+  // and Spam carry their labels from 1100 px of window width and are icon-only
+  // (named for screen readers) below.
   // A sender chat names its sender and shows no subject.
   import Icon from '@iconify/svelte'
   import { _ } from '$lib/i18n'
@@ -22,6 +22,7 @@
   import { canToggleSenderChat, chatSender, displayName, type Person, type ReplyMode } from './chatFormat'
   import ChatPeopleMenu from './ChatPeopleMenu.svelte'
   import ChatSnoozeMenu from './ChatSnoozeMenu.svelte'
+  import ChatUnsubscribeButton from './ChatUnsubscribeButton.svelte'
   import { formatSnoozedUntil } from './chatSnooze'
 
   interface Props {
@@ -29,6 +30,8 @@
     // Set for a sender chat: the header names the sender, not a subject.
     senderEmail: string
     messageIds: string[]
+    // Incoming messages that Unsubscribe checks, newest first.
+    unsubscribeIds?: string[]
     accountId: string
     folderId: string
     folderType: string
@@ -67,7 +70,7 @@
   }
 
   let {
-    people: allPeople, senderEmail, messageIds, accountId, folderId, folderType, isStarred, allRead, isPinned, snoozedUntil, isLowPriority, canTriage,
+    people: allPeople, senderEmail, messageIds, unsubscribeIds = [], accountId, folderId, folderType, isStarred, allRead, isPinned, snoozedUntil, isLowPriority, canTriage,
     showBackButton, onBack, onCompose, onComposeTo, onArchive, onFind, findOpen = false, onForward, onDelete, onSpam, onPin, onSnooze, onUnsnooze, onToggleRead, onToggleSenderLow, onToggleSenderChat, onActionComplete, subject = '', onPreviousChat, onNextChat, onReply,
   }: Props = $props()
 
@@ -90,6 +93,9 @@
   // The shared menu offers Forward only for single-message threads.
   const forwardInMenu = $derived(messageIds.length > 1)
   const senderInMenu = $derived(canTriage && isLowPriority !== null && people.length > 0)
+  // Not for your own mail, and not for spam: unsubscribing there confirms
+  // your address to the sender.
+  const canUnsubscribe = $derived(unsubscribeIds.length > 0 && !['drafts', 'sent', 'spam'].includes(folderType))
 
   // The people head the chat, then the subject (none for a sender chat).
   const names = $derived.by(() => {
@@ -209,6 +215,9 @@
     <button bind:this={findButton} class={iconButtonClass} title={$_('chat.findInConversation')} aria-label={$_('chat.findInConversation')} aria-expanded={findOpen} onclick={onFind} data-find-button>
       <Icon icon="lucide:search" class="w-5 h-5 {findOpen ? 'text-foreground' : 'text-muted-foreground'}" />
     </button>
+    {#if canUnsubscribe}
+      <ChatUnsubscribeButton messageIds={unsubscribeIds} {compact} onArchive={folderType === 'trash' ? undefined : onArchive} />
+    {/if}
     <ToolbarButton icon="lucide:archive" label={$_('viewer.archive')} {compact} onclick={onArchive} />
     <ToolbarButton icon="lucide:trash-2" label={$_(folderType === 'trash' ? 'viewer.deletePermanently' : 'viewer.delete')} {compact} onclick={onDelete} />
     <ToolbarButton

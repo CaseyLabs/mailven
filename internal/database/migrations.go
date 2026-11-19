@@ -1668,6 +1668,17 @@ var migrations = []Migration{
 			ALTER TABLE chat_drafts ADD COLUMN cc_extra INTEGER NOT NULL DEFAULT 0;
 			ALTER TABLE chat_drafts ADD COLUMN bcc_extra INTEGER NOT NULL DEFAULT 0;`,
 	},
+	{
+		Version: 67,
+		// Mailing-list unsubscribe: the raw List-Unsubscribe (RFC 2369) and
+		// List-Unsubscribe-Post (RFC 8058) header values. Sync writes '' when
+		// a header is absent, so NULL means "never read" (rows synced before
+		// this migration); IMAP rows are filled in on demand when the
+		// Unsubscribe button asks for them.
+		SQL: `
+			ALTER TABLE messages ADD COLUMN list_unsubscribe TEXT;
+			ALTER TABLE messages ADD COLUMN list_unsubscribe_post TEXT;`,
+	},
 }
 
 // ThreadKeyExpr is the normalized thread key of a messages row: row is ""

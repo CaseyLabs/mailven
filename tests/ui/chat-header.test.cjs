@@ -1,6 +1,7 @@
 // The open chat's header (CF-3): one row with the avatar, the people (a button listing the participants) over the subject and
 // message count, then Search in conversation (UI22), Archive, Delete and Spam (labelled from 1100px, icon-only below,
 // always named) and "⋯", which holds every other action.
+// Unsubscribe shows before Archive only for list mail, outside Drafts, Sent and Spam.
 // Writes resolve only for the bindings each test allows; assertions read the recorded binding calls.
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
@@ -28,6 +29,11 @@ const commaName = `{ const A = window.go.app.App, get = A.GetConversation
     const c = await get(id)
     return { ...c, messages: c.messages.map((m) => (m.mine ? m : { ...m, fromName: 'Shah, Priya' })) }
   } }`
+
+// Every incoming message offers one-click unsubscribe; the unsubscribe itself succeeds.
+const listMail = `{ const A = window.go.app.App
+  A.GetListUnsubscribeInfo = async () => ({ available: true, method: 'one-click', target: 'news.example.com', fromBody: false })
+  A.UnsubscribeFromList = async () => ({ method: 'one-click', target: 'news.example.com' }) }`
 
 const people = (page) => header(page).getByRole('heading', { level: 2 }).getByRole('button')
 
@@ -60,6 +66,52 @@ describe('chat header', () => {
       assert.equal(await sub.evaluate((el) => getComputedStyle(el).fontSize), '12px')
       assert.equal(await header(page).locator('[data-header-avatar] [data-avatar-tint]').count(), 2, 'a group shows an overlapping pair')
       assert.doesNotMatch(await header(page).innerText(), /priya@example\.net/, 'no address in the header')
+    }))
+  }
+
+  for (const width of [1400, 1100, 900]) {
+    it(`Unsubscribe shows before Archive for list mail, labelled from 1100px, at ${width}px`, ui.run({ width, beforeMount: listMail }, async (page) => {
+      await open(page, 'Omar Haddad')
+      const toolbar = header(page).getByRole('toolbar', { name: 'Chat actions' })
+      const button = toolbar.getByRole('button', { name: 'Unsubscribe', exact: true })
+      await button.waitFor()
+      const names = await toolbar.getByRole('button').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label') || e.textContent.trim()))
+      assert.deepEqual(names.filter((n) => n !== 'Compose').slice(0, 3), ['Search in conversation', 'Unsubscribe', 'Archive'])
+      const label = await button.locator('span').first().evaluate((el) => el.getBoundingClientRect().width > 1)
+      assert.equal(label, width >= 1100, `the label ${width >= 1100 ? 'shows' : 'is icon-only'} at ${width}px`)
+      const box = await button.boundingBox()
+      assert.ok(box.width >= 24 && box.height >= 24, `the target is at least 24px (${box.width}x${box.height})`)
+    }))
+  }
+
+  it('Unsubscribe confirms the target, then shows Unsubscribed and offers Archive', ui.run({ beforeMount: listMail, allow: ['Archive', 'Undo'] }, async (page) => {
+    await open(page, 'Omar Haddad')
+    const toolbar = header(page).getByRole('toolbar', { name: 'Chat actions' })
+    await toolbar.getByRole('button', { name: 'Unsubscribe', exact: true }).click()
+    const dialog = page.getByRole('alertdialog').or(page.getByRole('dialog'))
+    await dialog.waitFor()
+    assert.match(await dialog.innerText(), /news\.example\.com/, 'the dialog names where the request goes')
+    await dialog.getByRole('button', { name: 'Unsubscribe', exact: true }).click()
+    await toolbar.getByRole('button', { name: 'Unsubscribed', exact: true }).waitFor()
+    assert.equal((await argsOf(page, 'UnsubscribeFromList')).length, 1, 'one unsubscribe request')
+    const toast = page.getByText(/Asked news\.example\.com to stop sending these emails/)
+    await toast.waitFor()
+    await page.getByRole('button', { name: 'Archive', exact: true }).last().click()
+    assert.equal((await argsOf(page, 'Archive')).length, 1, 'the toast archives the chat')
+  }))
+
+  it('Unsubscribe is absent without an unsubscribe option', ui.run({}, async (page) => {
+    await open(page, 'Omar Haddad')
+    assert.ok((await argsOf(page, 'GetListUnsubscribeInfo')).length > 0, 'the header asked about the newest incoming messages')
+    assert.equal(await header(page).getByRole('button', { name: 'Unsubscribe' }).count(), 0, 'no button without an unsubscribe option')
+  }))
+
+  for (const folder of ['f1-spam', 'f1-drafts']) {
+    it(`Unsubscribe is absent in ${folder.slice(3)}, even for list mail`, ui.run({ beforeMount: listMail }, async (page) => {
+      await page.locator(`[data-folder-id="${folder}"]`).first().click()
+      await page.locator('[data-chat-row]').first().click()
+      await header(page).getByRole('button', { name: 'More actions' }).waitFor()
+      assert.equal(await header(page).getByRole('button', { name: 'Unsubscribe' }).count(), 0, `no Unsubscribe in ${folder}`)
     }))
   }
 

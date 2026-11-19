@@ -698,6 +698,10 @@ export function GetLinkedAccountsForContactSync() {
   return window['go']['app']['App']['GetLinkedAccountsForContactSync']();
 }
 
+export function GetListUnsubscribeInfo(arg1) {
+  return window['go']['app']['App']['GetListUnsubscribeInfo'](arg1);
+}
+
 export function GetMailAPIRouteStatus(arg1) {
   return window['go']['app']['App']['GetMailAPIRouteStatus'](arg1);
 }
@@ -1688,6 +1692,10 @@ export function Unstar(arg1) {
 
 export function UnsubscribeFolder(arg1, arg2) {
   return window['go']['app']['App']['UnsubscribeFolder'](arg1, arg2);
+}
+
+export function UnsubscribeFromList(arg1) {
+  return window['go']['app']['App']['UnsubscribeFromList'](arg1);
 }
 
 export function UpdateAccount(arg1, arg2) {

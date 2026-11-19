@@ -1,7 +1,10 @@
 package sync
 
 import (
+	"strings"
 	"testing"
+
+	"github.com/caseylabs/mailven/internal/message"
 )
 
 func TestClassifyBulk(t *testing.T) {
@@ -47,5 +50,32 @@ func TestClassifyBulk(t *testing.T) {
 
 	if got := bulkFlag(nil, "noreply@x"); got != nil {
 		t.Errorf("bulkFlag(nil) = %v, want nil", *got)
+	}
+}
+
+func TestApplyHeaderFlagsReadsListUnsubscribe(t *testing.T) {
+	raw := []byte("From: news@shop.example\r\nList-Unsubscribe: <mailto:u@shop.example>,\r\n <https://shop.example/u>\r\nList-Unsubscribe-Post: List-Unsubscribe=One-Click\r\n\r\n")
+	m := &message.Message{FromEmail: "news@shop.example"}
+	applyHeaderFlags(m, raw)
+	if m.ListUnsubscribe == nil || m.ListUnsubscribePost == nil {
+		t.Fatal("headers not read")
+	}
+	if got := *m.ListUnsubscribePost; got != "List-Unsubscribe=One-Click" {
+		t.Errorf("post = %q", got)
+	}
+	if got := *m.ListUnsubscribe; !strings.Contains(got, "mailto:u@shop.example") || !strings.Contains(got, "https://shop.example/u") {
+		t.Errorf("header = %q", got)
+	}
+
+	// No header block: left nil so the stored value is kept.
+	applyHeaderFlags(m, nil)
+	if m.ListUnsubscribe != nil || m.ListUnsubscribePost != nil {
+		t.Error("expected nil without headers")
+	}
+
+	// Headers without List-Unsubscribe: known absent.
+	applyHeaderFlags(m, []byte("From: bob@example.com\r\n\r\n"))
+	if m.ListUnsubscribe == nil || *m.ListUnsubscribe != "" {
+		t.Errorf("expected known-absent, got %v", m.ListUnsubscribe)
 	}
 }

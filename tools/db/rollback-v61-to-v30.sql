@@ -33,6 +33,8 @@ DROP TABLE sender_category;
 DROP TABLE conversation_state;
 ALTER TABLE accounts DROP COLUMN last_sync_error_folder;
 ALTER TABLE accounts DROP COLUMN last_sync_error;
+ALTER TABLE messages DROP COLUMN list_unsubscribe_post;
+ALTER TABLE messages DROP COLUMN list_unsubscribe;
 ALTER TABLE messages DROP COLUMN pinned;
 ALTER TABLE messages DROP COLUMN delivered_to;
 ALTER TABLE identities DROP COLUMN reply_to;
