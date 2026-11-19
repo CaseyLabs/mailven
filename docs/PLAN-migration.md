@@ -20,9 +20,14 @@ The output must answer:
 
 ### Current starting point (revalidate in M0)
 
-Repository `main` was inspected on 2026-10-11. It used Go 1.26, `github.com/wailsapp/wails/v2 v2.16.0`, Svelte 5 and Wails v2 generated frontend bindings. `main.go` creates separate Wails applications for the main mailbox and detached composer. `app/detached_composer.go` + `app/ipc.go` coordinate the composer with the main process. Linux builds use `webkit2_41` / GTK3 / WebKit2GTK 4.1, with WebKit pre-initialization (`webkit_preinit_linux.go`), GPU/DMABUF handling (`internal/platform/gbmcheck_linux.go`), and special Flatpak file-dialog handling (`app/attachment.go`). The Flathub manifest targets GNOME Platform 50. Treat these as **leads, not immutable facts**.
+Repository `main` was inspected on 2026-10-11. It used Go 1.26, `github.com/wailsapp/wails/v2 v2.16.0`, Svelte 5 and Wails v2 generated frontend bindings. `main.go` creates separate Wails applications for the main mailbox and detached composer. `app/detached_composer.go` + `app/ipc.go` coordinate the composer with the main process. Linux builds use `webkit2_41` / GTK3 / WebKit2GTK 4.1, with WebKit pre-initialization (`webkit_preinit_linux.go`), GPU/DMABUF handling (`internal/platform/gbmcheck_linux.go`), and special Flatpak file-dialog handling (`app/attachment.go`). The Flathub manifest targets GNOME Platform 50. Treat these as **leads, not immutable facts**. Rechecked 2026-11-19: all of the above still holds (`go 1.26.0` directive, two `wails.Run` calls in `main.go`, `webkit2_41` in `Makefile` and both Flathub manifests, `runtime-version: '50'`). GNOME 51 is now on Flathub; the GNOME 50 and 51 SDKs both ship `webkitgtk-6.0` and `webkit2gtk-4.1` (`gnome-build-meta` `elements/sdk`, branches `gnome-50`/`gnome-51`; `.pc` files confirmed in a local GNOME 50 SDK).
 
-At preparation time, the latest checked v3 prerelease was `v3.0.0-beta.28` (2026-10-05), with a stable-API claim but beta warning. Do not assume it remains the latest when running this plan. Update 2026-11-19: Wails v3.0.0 was released stable on 2026-10-26 and v3.1.0 (2026-11-01) is the current Latest release; v2.17.1 (2026-11-01) is the newest v2 release, while Mailven still pins v2.16.0. M0/M1 must re-check these. **Do not target a speculative Wails v4** without an official release and documented migration path.
+At preparation time, the latest checked v3 prerelease was `v3.0.0-beta.28` (2026-10-05), with a stable-API claim but beta warning. Status as of 2026-11-19 ([GitHub releases](https://github.com/wailsapp/wails/releases)):
+
+- **v3:** v3.0.0 stable 2026-10-26 (after beta.34), v3.1.0 Latest 2026-11-01. The v3.0.0 notes set the cadence: weekly minor releases, nightly prereleases (`vX.Y.0-nightly.YYYYMMDD`) and patch hotfixes; pin an exact version. The stable compatibility promise covers desktop only (mobile is experimental). v3 requires Go 1.26+ (1.26.10+ recommended for GO-2026-6809).
+- **v2:** maintained for critical updates, with docs moved to [v2.wails.io](https://v2.wails.io/). v2.15.0 and v2.16.0 were tagged without GitHub releases. Mailven's pinned v2.16.0 is affected by advisories fixed in v2.17.0 and v2.17.1, including GHSA-r5j2-ghh9-2jqw (high, Linux iframe bridge); see [MA13](../ISSUES.md#ma13).
+
+M0/M1 must re-check these. **Do not target a speculative Wails v4** without an official release and documented migration path (none found 2026-11-19).
 
 ### Scope
 
@@ -65,7 +70,7 @@ Keep documents compact and actionable. Use tables where useful. Every claim abou
 ## Source priorities
 
 1. Current local Mailven checkout and its build scripts/tests; `git log` and `git status` for state.
-2. Official Wails: [v2 -> v3 migration](https://v3.wails.io/migration/v2-to-v3/), [v3 docs](https://v3.wails.io/), [Wails releases](https://github.com/wailsapp/wails/releases), [Wails issues/milestones](https://github.com/wailsapp/wails/milestones) and the matching tagged source.
+2. Official Wails: [v2 -> v3 migration](https://wails.io/migration/v2-to-v3/), [v3 docs](https://wails.io/) (`v3.wails.io` serves the same pages with `wails.io` as canonical), [v2 docs](https://v2.wails.io/), [Wails releases](https://github.com/wailsapp/wails/releases) and their notes, [security advisories](https://github.com/wailsapp/wails/security/advisories), [Wails issues/milestones](https://github.com/wailsapp/wails/milestones) and the matching tagged source. Docs and tagged source can disagree (see M1); the tagged source wins for what a version actually does.
 3. Official [GTK4](https://docs.gtk.org/gtk4/), [WebKitGTK](https://webkitgtk.org/), [Flatpak](https://docs.flatpak.org/) and [xdg-desktop-portal](https://flatpak.github.io/xdg-desktop-portal/) documentation.
 4. Official [Claude Code best practices](https://code.claude.com/docs/en/best-practices), particularly explore -> plan -> implement, bounded context, evidence-based verification, and subagents for isolated investigation.
 
@@ -96,12 +101,12 @@ Keep documents compact and actionable. Use tables where useful. Every claim abou
 - Verify latest v2 stable and v3 stable/prerelease status at execution time; check v3 release notes, breaking changes, unresolved GA blockers, security or platform regressions and project support expectations. Verify v4 only if an official release or roadmap exists.
 - Read current v2-to-v3 guide and tagged documentation/source for: app/window lifecycle, services, bindings, events, multi-window, single instance, dialogs, tray, notifications, Linux build tags, platform APIs and CLI/build customization.
 - Distinguish `libwebkitgtk-6.0` **API/GTK ABI** from WebKitGTK's `2.x` browser-engine version. Determine which CSS/JS, compositor, GPU and sandboxing improvements also reach the older `4.1` API with the same engine version.
-- Confirm GTK4/WebKitGTK 6.0 Linux prerequisites and Wails' supported GTK3 compatibility option, including any removal/deprecation timetable. Flag unverified benefits instead of presenting them as guaranteed performance gains.
+- Confirm GTK4/WebKitGTK 6.0 Linux prerequisites and Wails' supported GTK3 compatibility option, including any removal/deprecation timetable. Flag unverified benefits instead of presenting them as guaranteed performance gains. Leads from 2026-11-19: GTK4/WebKitGTK 6.0 is the v3 default (Ubuntu 24.04+/Debian 13+); GTK3/WebKit2GTK 4.1 is the opt-in `-tags gtk3` path, which the [installation](https://wails.io/quick-start/installation/) and [Linux build](https://wails.io/guides/build/linux/) docs say will be removed in v3.1, yet v3.1.0 source still ships it (`v3/pkg/application/application_linux_gtk3.go`). Resolve that conflict against the pinned tag.
 
 **Deliverable:** `ASSESSMENT.md` section `Versions, APIs, platform maturity` with an explicit **v3 readiness assessment**.
 
 **Acceptance criteria**
-- [ ] Source links and check dates support each version/support claim; prerelease target is pinned for repeatability if subsequently prototyped.
+- [ ] Source links and check dates support each version/support claim; the exact target release (not `@latest` or a nightly) is pinned for repeatability if subsequently prototyped.
 - [ ] v3 readiness includes blockers that could affect Mailven, and a supported/unsupported/unknown classification for needed APIs.
 - [ ] Engine improvements are separated from framework/API improvements; no unsourced performance promises.
 
@@ -135,7 +140,7 @@ Keep documents compact and actionable. Use tables where useful. Every claim abou
 - Specify how frontend binding imports and generated models change, including the `ComposerApi` abstraction, core App methods, calendar/contacts extension methods, event subscribers and composer-specific APIs.
 - Specify event scoping and data access across windows: per-window UI state, shared singleton service concurrency, drafts/sends, attachment handling, cancellation and failure. Identify race tests and how to avoid duplicate sends or corrupt drafts.
 - Map use of v3 native single instance, notifications, dialogs and menus against current bespoke helpers; separate **must-port** from **optional cleanup** to prevent scope explosion.
-- Include security boundary analysis: remote HTML in email, URL/navigation policy, untrusted content, privileged Go methods, local file reads, attachment path validation and cross-window access. Preserve existing protections.
+- Include security boundary analysis: remote HTML in email, URL/navigation policy, untrusted content, privileged Go methods, local file reads, attachment path validation and cross-window access. Preserve existing protections. Mailven renders sanitized email HTML in a `srcdoc` iframe with `sandbox="allow-scripts …"` (`frontend/src/lib/components/viewer/EmailBody.svelte`). The v3.0.0 release notes list known limitations that apply directly: on Linux, same-origin child frames can still reach the native bridge, and on all platforms bound-method calls from child frames go over HTTP to `/wails/runtime` and are not restricted by the frame guard. Verify the iframe's opaque origin cannot reach bound methods by either path.
 
 **Deliverable:** `ASSESSMENT.md` `Architecture options and decision` with a dependency diagram and a proposed source-level change map.
 
@@ -153,6 +158,7 @@ Keep documents compact and actionable. Use tables where useful. Every claim abou
 - Review GNOME 50 Flatpak runtime and SDK availability of required `.pc` dependencies and portals. Review file chooser/save, drag/drop, clipboard, notifications, URL handlers, sandbox access and display sockets on KDE Plasma Wayland and GNOME; distinguish documented support from proven runtime success.
 - Map current `Makefile`, `wails.json`, `build/flatpak/**`, `.github/workflows/{ci,release}.yml`, OS bundles, Windows NSIS and macOS signing/build requirements to v3 CLI/config/build flow. Preserve release artifact IDs, source reproducibility and offline/vendor build constraints.
 - Identify current workarounds that can be **tested for removal**, rather than removing them based on framework-version claims.
+- Leads from 2026-11-19: v3 packaging covers AppImage, deb, rpm and Arch, but its Linux build guide does not mention Flatpak, so Flatpak build integration is Mailven's own. GTK4 builds use xdg-desktop-portal file dialogs by default, with some dialog options unsupported (compare `app/attachment.go`). v3.1.0 adds an experimental CGO-free (`purego`) Linux backend; treat it as an option to assess, not a default.
 
 **Deliverable:** `ASSESSMENT.md` `Platform and distribution matrix` with `Linux native / Linux Flatpak / Windows / macOS` and `Wayland / X11 where applicable`.
 
@@ -252,6 +258,7 @@ Tick a milestone only after its acceptance criteria are evidenced. Keep entries 
 ## Surprises & Discoveries
 
 - 2026-11-19: the stable-release gate is met (official GitHub releases: v3.0.0 stable 2026-10-26, v3.1.0 Latest 2026-11-01). The owner reopened the project as proposed; no milestone is selected yet. Record further material facts, blockers and changed assumptions with source and date.
+- 2026-11-19 source review: the canonical Wails docs moved to `wails.io` (v2 at `v2.wails.io`); v3 docs and v3.1.0 source disagree on GTK3 removal; v3 has documented child-frame IPC limitations relevant to the email iframe; Wails' Linux packaging docs omit Flatpak; GNOME 51 is available and keeps both WebKit APIs. The pinned v2.16.0 has unpatched advisories, recorded as [MA13](../ISSUES.md#ma13) (independent of this assessment).
 
 ## Decision Log
 

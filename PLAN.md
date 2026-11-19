@@ -13,7 +13,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [SYNC — Mail synchronization and action reliability](#sync) | proposed | P1 | [1](ISSUES.md#sync) | SYNC-1–4 done; SY9 resolved by API-7; SYNC-5 done (Gmail Load older, SY10 partly); SYNC-7 done (older IMAP mail, SY10 partly); SYNC-6 deferred (Graph window) |
 | [GOAUTH — Google OAuth client setup](#goauth) | done | P2 | [0](ISSUES.md#goauth) | GOAUTH-1–4 done (GO1, GO2 resolved); GOAUTH-5 done (assessment; owner kept bring-your-own); GO3 and GO4 resolved by independent fixes |
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
-| [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [1](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked |
+| [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [2](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked; MA13 (P1, Wails v2 security upgrade) open, needs owner approval |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [DS — Reading-first redesign](#ds) | done | P3 | [0](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17, UI18 and UI19 resolved 2026-10-21 |
 | [DSR — Reading redesign revision](#dsr) | done | P3 | 0 | DSR-1–4 done (2026-10-21) |
@@ -34,7 +34,7 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 **Active:** none. [UX-8](#ux-8) is done (2026-11-18; [plan](docs/plans/ux-8.md)). [UX-7](#ux-7) is done (2026-11-18; [plan](docs/plans/ux-7.md)). [UX-6](#ux-6) is done (2026-11-18; decision only). [UX-4](#ux-4) is done (2026-11-18; [plan](docs/plans/ux-4.md)). [UX-0](#ux-0) is done (2026-11-09; [plan and audit](docs/plans/ux-0.md)). [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** [W3-M0](#w3-m0) — the WAILS release gate is met (Wails v3.1.0 stable) and the owner reopened the project on 2026-11-19; W3-M0 is its first local, prototype-free step. [UX9](ISSUES.md#ux9) (P2) remains the best open issue to turn into a milestone; SEND-2 still needs separately authorized live verification.
+**Next recommended:** [W3-M0](#w3-m0) — the WAILS release gate is met (Wails v3.1.0 stable) and the owner reopened the project on 2026-11-19; W3-M0 is its first local, prototype-free step. [UX9](ISSUES.md#ux9) (P2) remains the best open issue to turn into a milestone; SEND-2 still needs separately authorized live verification. [MA13](ISSUES.md#ma13) (P1: Wails v2.16.0 has unpatched advisories) needs an owner-approved dependency upgrade to v2.17.1+ and is more urgent than W3-M0.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 

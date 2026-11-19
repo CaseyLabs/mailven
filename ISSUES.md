@@ -15,7 +15,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10)
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded
-- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [MA12](#ma12)
+- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [MA12](#ma12), [MA13](#ma13)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 - [DS — Reading-first redesign](#ds): no unresolved issue recorded
@@ -540,6 +540,15 @@ Project: [MAINT](PLAN.md#maint).
 - **Severity / proposed priority / status:** low / P3 / open.
 - **Resolution criteria:** shared UI test fakes live under `tests/ui/` (or one shared fixtures directory that both the tests and run-mailven use), and the suites no longer read files from `.agents/skills/`.
 - **Evidence / impact / reproduction:** `tests/ui/harness.cjs` and the `chat-compose`, `chat-compose-extras`, `chat-composer-card`, `chat-flat` and `chat-presentation` suites read `fake-backend.js`, `screenshot-fakes.js`, `composer-fakes.js` and `pw.js` from `.agents/skills/run-mailven/`. Moving or renaming those agent-skill helpers breaks the test suite at load time.
+
+<a id="ma13"></a>
+
+### MA13 — Wails v2.16.0 has unpatched security advisories
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / unassigned; found 2026-11-19 while reviewing [the Wails assessment brief](docs/PLAN-migration.md) against official sources. Independent of the [WAILS](PLAN.md#wails) v3 assessment. Fixing it is a dependency upgrade, which the roadmap does not authorize without owner approval.
+- **Severity / proposed priority / status:** high (upstream rating of GHSA-r5j2-ghh9-2jqw) / P1 / open.
+- **Evidence / impact:** `go.mod` pins `github.com/wailsapp/wails/v2 v2.16.0`. The [Wails advisories](https://github.com/wailsapp/wails/security/advisories) list v2 < 2.17.0 as affected by GHSA-c8qg-xhgr-798r (high, Windows notification text run as PowerShell), GHSA-qg59-r6hv-pvm6 (high, `wails dev` IPC accepts any origin; dev only), GHSA-cjw4-96p8-36wh (low, `wailsapp/mimetype` fork) and GHSA-3vcq-4frm-47ph (low, templates; CLI only). The advisories list v2 <= 2.17.0 as affected by GHSA-r5j2-ghh9-2jqw (high): on Linux, script in a cross-origin or sandboxed iframe can call bound Go methods, and the advisory notes that `allow-scripts` sandboxing is not sufficient. Mailven shows email HTML in a `sandbox="allow-scripts …"` `srcdoc` iframe (`frontend/src/lib/components/viewer/EmailBody.svelte`). The bluemonday sanitizer (`internal/email/sanitizer.go`) strips email scripts first, so exploitation needs a sanitizer bypass; the advisory fix is a missing defense-in-depth layer. Whether Mailven calls the affected Windows notification path was not checked.
+- **Resolution criteria:** Wails v2 upgraded to v2.17.1 or later (including `go.mod`, `vendor`/Flathub `go.mod.yml` module sources, and the `wails` CLI version in CI and Flatpak builds), with the full check suite passing and a Linux run confirming the email view still renders and its links and images still work.
 
 <a id="tf1"></a>
 
