@@ -62,8 +62,8 @@ If a prototype or other implementation is needed to answer a question, describe 
 ### Durable deliverables
 
 1. **This file:** milestone definitions plus brief living Progress, Surprises & Discoveries, Decision Log and Outcomes & Retrospective entries.
-2. `plans/wails-v3/ASSESSMENT.md`: evidence-backed current state, API mapping, risk register, alternatives, known unknowns and test matrix. Update it incrementally, without duplicating long content in this file.
-3. `plans/wails-v3/MIGRATION_BLUEPRINT.md`: proposed phased implementation plan, exact file groups, sequencing, verification gates, platform matrix, deployment safeguards and rollback. Create only after completing the assessment milestones.
+2. `docs/wails-v3/ASSESSMENT.md` (originally `plans/wails-v3/`; reconciled in W3-M0): evidence-backed current state, API mapping, risk register, alternatives, known unknowns and test matrix. Update it incrementally, without duplicating long content in this file.
+3. `docs/wails-v3/MIGRATION_BLUEPRINT.md`: proposed phased implementation plan, exact file groups, sequencing, verification gates, platform matrix, deployment safeguards and rollback. Create only after completing the assessment milestones.
 
 Keep documents compact and actionable. Use tables where useful. Every claim about Mailven should point to a `path:line`, symbol or reproducible command; every Wails API claim should link to documentation or a versioned source file. Do not treat untested projections as facts.
 
@@ -246,27 +246,40 @@ Performance claims require comparable measurements. An upgrade need not improve 
 
 Tick a milestone only after its acceptance criteria are evidenced. Keep entries short, with links to the relevant deliverable section. A missing test is **unverified**, not **passed**.
 
-- [ ] M0. Repository preflight and safe v2 baseline
-- [ ] M1. Verify Wails v3 and GTK4/WebKitGTK 6.0 readiness
-- [ ] M2. Inventory every Mailven v2 dependency and behavior
-- [ ] M3. Design backend, frontend and multi-window migration
-- [ ] M4. Platform, GTK4, Flatpak and packaging feasibility
-- [ ] M5. Define a regression, performance and security test plan
-- [ ] M6. Write the staged migration implementation blueprint
-- [ ] M7. Independent review and owner decision gate
+- [x] M0. Repository preflight and safe v2 baseline (2026-11-19; [Baseline](wails-v3/ASSESSMENT.md#baseline))
+- [x] M1. Verify Wails v3 and GTK4/WebKitGTK 6.0 readiness (2026-11-19; pinned v3.1.0; [Versions, APIs, platform maturity](wails-v3/ASSESSMENT.md#versions-apis-platform-maturity))
+- [x] M2. Inventory every Mailven v2 dependency and behavior (2026-11-19; [Migration inventory](wails-v3/ASSESSMENT.md#migration-inventory))
+- [x] M3. Design backend, frontend and multi-window migration (2026-11-19; [Architecture options and decision](wails-v3/ASSESSMENT.md#architecture-options-and-decision))
+- [x] M4. Platform, GTK4, Flatpak and packaging feasibility (2026-11-19; [Platform and distribution matrix](wails-v3/ASSESSMENT.md#platform-and-distribution-matrix))
+- [x] M5. Define a regression, performance and security test plan (2026-11-19; [Verification matrix](wails-v3/ASSESSMENT.md#verification-matrix))
+- [x] M6. Write the staged migration implementation blueprint (2026-11-19; [Blueprint](wails-v3/MIGRATION_BLUEPRINT.md))
+- [x] M7. Independent review and owner decision gate (2026-11-19; proposed DEFER; [Executive decision](wails-v3/ASSESSMENT.md#executive-decision))
 
 ## Surprises & Discoveries
 
 - 2026-11-19: the stable-release gate is met (official GitHub releases: v3.0.0 stable 2026-10-26, v3.1.0 Latest 2026-11-01). The owner reopened the project as proposed; no milestone is selected yet. Record further material facts, blockers and changed assumptions with source and date.
 - 2026-11-19 source review: the canonical Wails docs moved to `wails.io` (v2 at `v2.wails.io`); v3 docs and v3.1.0 source disagree on GTK3 removal; v3 has documented child-frame IPC limitations relevant to the email iframe; Wails' Linux packaging docs omit Flatpak; GNOME 51 is available and keeps both WebKit APIs. The pinned v2.16.0 has unpatched advisories, recorded as [MA13](../ISSUES.md#ma13) (independent of this assessment).
 
+- 2026-11-19 (W3-M0): deliverable path reconciled to `docs/wails-v3/ASSESSMENT.md`. Host has both GTK3/WebKit2GTK 4.1 and GTK4/WebKitGTK 6.0 dev files; Xvfb is missing; the release workflow installs the Wails CLI with `@latest`.
+
+- 2026-11-19 (W3-M2): single instance, notifications, composer IPC, file chooser and spellcheck are already Wails-independent, which shrinks the migration surface to window/lifecycle, bindings/events (107 frontend files) and the cgo WebKit preinit. v3's generator binds promoted methods, so the extension bridge pattern survives.
+
+- 2026-11-19 (W3-M3): v3 bound-call window identity is a client header and desktop `/wails/runtime` has no origin check, so the email-iframe question stays open; closing a v3 window cancels its pending bound calls; extension frontends import `$wailsjs` in 46 files (not 16).
+
+- 2026-11-19 (W3-M4): Wails v3 has no Flatpak support (CLI/docs), so Flatpak integration stays Mailven's own; v3 Flatpak builds must set `ApplicationID`; tag-source geometry hints no longer use monitor size, making `RefreshWindowConstraints` a removal candidate; CI/release runners on `ubuntu-22.04` cannot build the GTK4 default.
+
+- 2026-11-19 (W3-M5): no existing repo fixture serves a full mailbox to the real app (only in-process Go fakes and the backend-free UI harness), so the matrix needs new fixtures FX-1–FX-6; B-vs-C comparison requires a recorded v2 baseline first, and the SEC-3/SEC-4 iframe probe plus CSP hardening and the PERF baselines can run on v2 without any v3 candidate.
+
 ## Decision Log
 
 - 2026-10-11: This is **analysis/design only**. No Wails/GTK migration, no release and no change to existing app data is authorized.
 - 2026-10-11 (original proposal): keep the root plan separate and use `plans/wails-v3/PLAN.md`. Superseded for routing only on 2026-10-14: root PLAN.md now owns the WAILS roadmap; select W3-M IDs and create linked checkpoints only when authorized.
 - 2026-10-11: Treat native v3 composer windows as an architectural **option**, not an automatic requirement for minimum parity.
+- 2026-11-19 (W3-M7): proposed **DEFER**; see [Executive decision](wails-v3/ASSESSMENT.md#executive-decision). Owner decision pending; no spike or stage authorized.
+- 2026-11-19 (W3-M3): recommend Option A (compatibility-first, composer process and IPC kept) for any migration; Option B (in-process native composer windows) deferred behind a synthetic-data spike. Recommendation only; no implementation authorized.
 
 ## Outcomes & Retrospective
 
-- Pending M7. Summarize outcome and lessons in <=10 lines; do not copy the assessment.
+- 2026-11-19: assessment complete (W3-M0–M7, docs only). Proposed decision: **DEFER**, not owner-approved. v3.1.0 has the APIs Mailven needs in tag source, but the email-iframe bridge exposure and GTK4 buildability are unproven, and no fixture yet runs the real app. A conditional GO needs MA13, stage S0, and spikes SP-1 to SP-3.
+- Lessons: tag source contradicted docs more than once, so cite source; a security question (iframe to bridge) outlived three design milestones because only a run can answer it, so schedule such probes early; and the doc-link checker passed a broken link and once checked 0 paths ([MA14](../ISSUES.md#ma14)), so read check output, not just exit status.
 

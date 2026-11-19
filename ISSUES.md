@@ -15,7 +15,7 @@ Resolved entries below are compact references retained for live links; Git histo
 - [SYNC — Mail synchronization and action reliability](#sync): [SY10](#sy10)
 - [GOAUTH — Google OAuth client setup](#goauth): no unresolved issue recorded
 - [CHAT — Chat composer sender review](#chat): no unresolved issue recorded
-- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [MA12](#ma12), [MA13](#ma13)
+- [MAINT — Maintenance and documentation](#maint): [D2](#d2), [MA12](#ma12), [MA13](#ma13), [MA14](#ma14)
 - [AI — AI development workflows](#ai): [AI6](#ai6)
 - [WAILS — Desktop framework migration assessment](#wails): no unresolved issue recorded
 - [DS — Reading-first redesign](#ds): no unresolved issue recorded
@@ -547,8 +547,17 @@ Project: [MAINT](PLAN.md#maint).
 
 - **Owner / milestone:** [MAINT](PLAN.md#maint) / unassigned; found 2026-11-19 while reviewing [the Wails assessment brief](docs/PLAN-migration.md) against official sources. Independent of the [WAILS](PLAN.md#wails) v3 assessment. Fixing it is a dependency upgrade, which the roadmap does not authorize without owner approval.
 - **Severity / proposed priority / status:** high (upstream rating of GHSA-r5j2-ghh9-2jqw) / P1 / open.
-- **Evidence / impact:** `go.mod` pins `github.com/wailsapp/wails/v2 v2.16.0`. The [Wails advisories](https://github.com/wailsapp/wails/security/advisories) list v2 < 2.17.0 as affected by GHSA-c8qg-xhgr-798r (high, Windows notification text run as PowerShell), GHSA-qg59-r6hv-pvm6 (high, `wails dev` IPC accepts any origin; dev only), GHSA-cjw4-96p8-36wh (low, `wailsapp/mimetype` fork) and GHSA-3vcq-4frm-47ph (low, templates; CLI only). The advisories list v2 <= 2.17.0 as affected by GHSA-r5j2-ghh9-2jqw (high): on Linux, script in a cross-origin or sandboxed iframe can call bound Go methods, and the advisory notes that `allow-scripts` sandboxing is not sufficient. Mailven shows email HTML in a `sandbox="allow-scripts …"` `srcdoc` iframe (`frontend/src/lib/components/viewer/EmailBody.svelte`). The bluemonday sanitizer (`internal/email/sanitizer.go`) strips email scripts first, so exploitation needs a sanitizer bypass; the advisory fix is a missing defense-in-depth layer. Whether Mailven calls the affected Windows notification path was not checked.
+- **Evidence / impact:** `go.mod` pins `github.com/wailsapp/wails/v2 v2.16.0`. The [Wails advisories](https://github.com/wailsapp/wails/security/advisories) list v2 < 2.17.0 as affected by GHSA-c8qg-xhgr-798r (high, Windows notification text run as PowerShell), GHSA-qg59-r6hv-pvm6 (high, `wails dev` IPC accepts any origin; dev only), GHSA-cjw4-96p8-36wh (low, `wailsapp/mimetype` fork) and GHSA-3vcq-4frm-47ph (low, templates; CLI only). The advisories list v2 <= 2.17.0 as affected by GHSA-r5j2-ghh9-2jqw (high): on Linux, script in a cross-origin or sandboxed iframe can call bound Go methods, and the advisory notes that `allow-scripts` sandboxing is not sufficient. Mailven shows email HTML in a `sandbox="allow-scripts …"` `srcdoc` iframe (`frontend/src/lib/components/viewer/EmailBody.svelte`). The bluemonday sanitizer (`internal/email/sanitizer.go`) strips email scripts first, so exploitation needs a sanitizer bypass; the advisory fix is a missing defense-in-depth layer. Whether Mailven calls the affected Windows notification path was not checked. 2026-11-19 (W3-M3, unverified): the iframe CSP (`frontend/src/lib/components/viewer/emailBodyIframe.ts:200`) sets `default-src 'self' data:` with no explicit `connect-src`; whether that blocks `fetch` to the bridge from an opaque-origin `srcdoc` is untested, so an explicit `connect-src 'none'` is a candidate defense-in-depth layer.
 - **Resolution criteria:** Wails v2 upgraded to v2.17.1 or later (including `go.mod`, `vendor`/Flathub `go.mod.yml` module sources, and the `wails` CLI version in CI and Flatpak builds), with the full check suite passing and a Linux run confirming the email view still renders and its links and images still work.
+
+<a id="ma14"></a>
+
+### MA14 — Doc-link checker accepts heading slugs GitHub does not render
+
+- **Owner / milestone:** [MAINT](PLAN.md#maint) / unassigned; found 2026-11-19 by the [W3-M7](PLAN.md#w3-m7) independent review.
+- **Severity / proposed priority / status:** low / P3 / open.
+- **Evidence / impact:** `tools/project_markdown.py` `slugify` drops punctuation and then collapses runs of whitespace into one hyphen, and `anchors()` registers only that slug (plus explicit `<a id>` anchors). For a heading such as `Assumptions / test environment`, GitHub renders `#assumptions--test-environment`, but the checker registers only `#assumptions-test-environment`: it rejects the correct link and accepts a broken one (headings with ` + `, ` & ` or ` / ` work today only through explicit anchors). A link of the collapsed form passed `tools/check-doc-links.py` yet was broken on GitHub (fixed in `docs/wails-v3/ASSESSMENT.md` with an explicit anchor). Also, run without arguments the checker covers only uncommitted changes, so on a clean tree it checks 0 paths; a baseline doc recorded that as a pass.
+- **Resolution criteria:** `slugify` matches GitHub (each space becomes a hyphen, no collapsing), so the checker accepts only slugs GitHub renders (or explicit `<a id>` anchors), a regression test covers a heading with ` / ` and ` + `, any existing links it then reports are fixed, and the no-argument behaviour is either documented in CONTRIBUTING or prints a hint when it checks 0 paths.
 
 <a id="tf1"></a>
 
@@ -587,7 +596,7 @@ Project: [AI](PLAN.md#ai).
 
 Project: [WAILS](PLAN.md#wails).
 
-The 2026-10-14 deferral until a stable Wails v3 release ended when the owner reopened the project on 2026-11-19 (v3.0.0 stable 2026-10-26; v3.1.0 latest); each milestone still needs owner selection. No verified issue recorded. Proposed research questions and risks remain in [the assessment brief](docs/PLAN-migration.md); do not turn them into confirmed defects.
+The 2026-10-14 deferral until a stable Wails v3 release ended when the owner reopened the project on 2026-11-19 (v3.0.0 stable 2026-10-26; v3.1.0 latest); each milestone still needs owner selection. No verified issue recorded. The assessment finished with W3-M7 on 2026-11-19 with a proposed DEFER ([executive decision](docs/wails-v3/ASSESSMENT.md#executive-decision)); its blockers are open research questions, not confirmed defects. The iframe exposure question is shared with [MA13](#ma13).
 
 <a id="ds"></a>
 

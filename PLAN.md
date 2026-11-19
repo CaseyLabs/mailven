@@ -13,16 +13,16 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [SYNC — Mail synchronization and action reliability](#sync) | proposed | P1 | [1](ISSUES.md#sync) | SYNC-1–4 done; SY9 resolved by API-7; SYNC-5 done (Gmail Load older, SY10 partly); SYNC-7 done (older IMAP mail, SY10 partly); SYNC-6 deferred (Graph window) |
 | [GOAUTH — Google OAuth client setup](#goauth) | done | P2 | [0](ISSUES.md#goauth) | GOAUTH-1–4 done (GO1, GO2 resolved); GOAUTH-5 done (assessment; owner kept bring-your-own); GO3 and GO4 resolved by independent fixes |
 | [CHAT — Chat composer sender review](#chat) | done | P3 | [0](ISSUES.md#chat) | CHAT-1 done (R1 resolved); CH1 resolved by an independent fix |
-| [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [2](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked; MA13 (P1, Wails v2 security upgrade) open, needs owner approval |
+| [MAINT — Maintenance and documentation](#maint) | proposed | P3 | [3](ISSUES.md#maint) | MAINT-1–24 done (UI13, UI16 resolved); D2 deferred/upstream blocked; MA13 (P1, Wails v2 security upgrade) open, needs owner approval; MA14 (P3, doc-link checker slugs differ from GitHub) open |
 | [UIX — UI refresh](#uix) | done | P3 | 0 | UIX-1 (UI1 resolved) to UIX-8 done |
 | [DS — Reading-first redesign](#ds) | done | P3 | [0](ISSUES.md#ds) | DS-1–6 done (tokens and fonts; avatar tints and chat rows; reading-first thread messages, 2026-10-20; anchored composer and controls; sidebar states and Lucide icons; visual matrix and screenshots, 2026-10-21); UI17, UI18 and UI19 resolved 2026-10-21 |
 | [DSR — Reading redesign revision](#dsr) | done | P3 | 0 | DSR-1–4 done (2026-10-21) |
 | [CF — Chat-first revision](#cf) | done | P3 | [0](ISSUES.md#cf) | CF-1–5 done (2026-10-21); UI21–UI23 resolved (2026-10-22) |
 | [UX — Plain-language settings and messages](#ux) | done | P3 (UX-5 P2) | [9](ISSUES.md#ux) | UX-0 done 2026-11-09; UX-1 done 2026-11-15; UX-5 done 2026-11-16; UX-2 done 2026-11-18; UX-3 done 2026-11-18; UX-4 done 2026-11-18; UX-6 done 2026-11-18 (decision only); UX-7 done 2026-11-18; UX-8 done 2026-11-18 |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
-| [WAILS — Desktop framework migration assessment](#wails) | proposed | P3 | [0](ISSUES.md#wails) | Release gate met 2026-11-19 (Wails v3.0.0 stable 2026-10-26; v3.1.0 latest); W3-M0–M7 proposed, owner selection required |
+| [WAILS — Desktop framework migration assessment](#wails) | done | P3 | [0](ISSUES.md#wails) | W3-M0–M7 done 2026-11-19; proposed decision **DEFER** ([executive decision](docs/wails-v3/ASSESSMENT.md#executive-decision)), awaiting owner decision; any spike or stage needs separate authorization |
 
-**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; WAILS W3-M0–M7 (reopened 2026-11-19) await selection. Completed milestones are not selectable work.
+**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; the WAILS assessment is complete (proposed DEFER awaits the owner's decision; no migration milestone exists). Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
@@ -32,9 +32,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**Active:** none. [UX-8](#ux-8) is done (2026-11-18; [plan](docs/plans/ux-8.md)). [UX-7](#ux-7) is done (2026-11-18; [plan](docs/plans/ux-7.md)). [UX-6](#ux-6) is done (2026-11-18; decision only). [UX-4](#ux-4) is done (2026-11-18; [plan](docs/plans/ux-4.md)). [UX-0](#ux-0) is done (2026-11-09; [plan and audit](docs/plans/ux-0.md)). [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
+**Active:** none. [W3-M7](#w3-m7) is done (2026-11-19), completing the WAILS assessment. [UX-8](#ux-8) is done (2026-11-18; [plan](docs/plans/ux-8.md)). [UX-7](#ux-7) is done (2026-11-18; [plan](docs/plans/ux-7.md)). [UX-6](#ux-6) is done (2026-11-18; decision only). [UX-4](#ux-4) is done (2026-11-18; [plan](docs/plans/ux-4.md)). [UX-0](#ux-0) is done (2026-11-09; [plan and audit](docs/plans/ux-0.md)). [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** [W3-M0](#w3-m0) — the WAILS release gate is met (Wails v3.1.0 stable) and the owner reopened the project on 2026-11-19; W3-M0 is its first local, prototype-free step. [UX9](ISSUES.md#ux9) (P2) remains the best open issue to turn into a milestone; SEND-2 still needs separately authorized live verification. [MA13](ISSUES.md#ma13) (P1: Wails v2.16.0 has unpatched advisories) needs an owner-approved dependency upgrade to v2.17.1+ and is more urgent than W3-M0.
+**Next recommended:** [MA13](ISSUES.md#ma13) — P1 Wails v2.17.1+ security upgrade (needs owner approval); it is also the first step of the proposed W3 DEFER path ([executive decision](docs/wails-v3/ASSESSMENT.md#executive-decision)). [UX9](ISSUES.md#ux9) (P2) remains the best open issue to turn into a milestone; SEND-2 still needs separately authorized live verification.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -927,7 +927,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 ## WAILS — Desktop framework migration assessment
 
 - **Objective / outcome:** Assess Wails v3 and GTK4/WebKitGTK 6.0 feasibility and produce a decision-ready design, without migration implementation.
-- **Status / proposed priority:** proposed / P3 (reopened 2026-11-19 by owner; no milestone selected).
+- **Status / proposed priority:** done (2026-11-19) / P3. W3-M0–M7 complete; the proposed decision is DEFER, not owner-approved. Implementation, spikes and stages each need separate authorization.
 - **Dependencies / blockers:** the 2026-10-14 deferral waited for an official stable Wails v3 release. Gate met: verified 2026-11-19 from the official `wailsapp/wails` GitHub releases — v3.0.0 (stable, 2026-10-26) and v3.1.0 (marked Latest, not a prerelease, 2026-11-01). Each milestone still needs explicit owner selection and its prerequisites; the assessment remains analysis/design only.
 - **Issues:** [owning register section](ISSUES.md#wails); each linked milestone lists its relevant issues.
 - **Technical references:** [existing assessment brief](docs/PLAN-migration.md) (original M0–M7 scope and constraints; now W3-M0–W3-M7).
@@ -936,81 +936,81 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M0 — Repository preflight and safe v2 baseline
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection.
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection (given 2026-11-19).
 - **Scope / deliverable:** Baseline and synthetic-data strategy with checkout, tools, test commands and unrun checks.
 - **Acceptance:** Meet the corresponding original M0 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M0 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** none recorded; research risks are not verified findings. **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `431b3f8`: [Baseline and Assumptions / test environment](docs/wails-v3/ASSESSMENT.md#baseline) written. `go test ./...` and `go build -tags webkit2_41,mailven_creds .` passed; GUI, Flatpak, cross-platform, live-provider and UI-suite checks are recorded unrun. No prototype and no code changes.
 
 <a id="w3-m1"></a>
 
 ### W3-M1 — Wails v3 and GTK4/WebKitGTK readiness
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M0](#w3-m0).
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection (given 2026-11-19); [W3-M0](#w3-m0).
 - **Scope / deliverable:** Official version/API maturity assessment, dated evidence and explicit unknowns.
 - **Acceptance:** Meet the corresponding original M1 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M1 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** none recorded; research risks are not verified findings. **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `bfad3bf`: [Versions, APIs, platform maturity](docs/wails-v3/ASSESSMENT.md#versions-apis-platform-maturity) pins `v3.1.0` and records the GTK3-removal docs/source conflict (tag and `master` still ship gtk3), engine-vs-API separation, API classification and readiness blockers. Key open unknown for W3-M2/M3: whether the sandboxed email iframe can reach `/wails/runtime` bound methods. Analysis only; nothing built or installed.
 
 <a id="w3-m2"></a>
 
 ### W3-M2 — Mailven v2 dependency inventory
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M0](#w3-m0).
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection (given 2026-11-19); [W3-M0](#w3-m0).
 - **Scope / deliverable:** File/symbol/API mapping covering lifecycle, bindings, extensions, platform helpers and both windows.
 - **Acceptance:** Meet the corresponding original M2 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M2 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** none recorded; research risks are not verified findings. **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `594f88e`: [Migration inventory](docs/wails-v3/ASSESSMENT.md#migration-inventory) maps 30 Mailven v2 touchpoints (Go runtime, 428/41 bound methods, 124 events, both extensions, platform helpers, both windows) to v3.1.0 APIs with impact/risk/validation. Findings: single instance, notifications, IPC and spellcheck are already Wails-independent; promoted extension-bridge methods are bound by the v3 generator (`IntuitiveMethodSet`); high-risk: iframe/`/wails/runtime` reachability, composer model, `webkit_preinit_linux.go` cgo link, 107-file bindings/event-payload churn. Eight open questions carried to M3/M4. No code changes, no prototype; GUI, generator, Wayland, Flatpak and cross-platform checks unrun.
 
 <a id="w3-m3"></a>
 
 ### W3-M3 — Backend, frontend and windowing design
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M1](#w3-m1), [W3-M2](#w3-m2).
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection; [W3-M1](#w3-m1), [W3-M2](#w3-m2).
 - **Scope / deliverable:** Compare compatibility-first and native multiwindow options; preserve mail/security invariants.
 - **Acceptance:** Meet the corresponding original M3 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M3 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** none recorded; research risks are not verified findings. **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `6b3febc`: [Architecture options and decision](docs/wails-v3/ASSESSMENT.md#architecture-options-and-decision) compares Option A (keep composer process and IPC) with Option B (native in-process composer windows), recommends A first and B deferred behind a spike, and gives the lifecycle order, bindings/event/`ComposerApi` approach, cross-window race requirements, must-port vs optional native features, security analysis, five traced flows (send/reply, draft save, notification click, `mailto:`, close/reopen), a dependency diagram and a source-level change map. Findings: bound-call window identity is client-asserted and desktop `/wails/runtime` has no origin check, so the email-iframe question stays open (spike); closing a window cancels its pending calls (send/draft sync need an app-lifetime ctx); `DefaultContextMenuDisabled` exists; extension frontend imports `$wailsjs` in 46 files (M2 said 16, corrected). No code changes, no prototype; builds, generator, GUI, Wayland, Flatpak and the iframe probe unrun.
 
 <a id="w3-m4"></a>
 
 ### W3-M4 — Platform and packaging feasibility
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M1](#w3-m1), [W3-M2](#w3-m2), [W3-M3](#w3-m3).
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection (given 2026-11-19); [W3-M1](#w3-m1), [W3-M2](#w3-m2), [W3-M3](#w3-m3).
 - **Scope / deliverable:** Linux/GTK/Flatpak, macOS and Windows risks and explicit platform validation limits.
 - **Acceptance:** Meet the corresponding original M4 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M4 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** none recorded; research risks are not verified findings. **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `2db9d87`: [Platform and distribution matrix](docs/wails-v3/ASSESSMENT.md#platform-and-distribution-matrix) maps the Linux dependency/ABI stack, classifies every current Linux workaround in ten rows (retain, replace, test removal or spike, each with a test), compares Linux native, Flatpak, Windows and macOS build/release flows, and assesses `purego` (not a candidate). Findings: Flatpak is not supported by the Wails v3 CLI or docs (Mailven keeps its manifests); the installed GNOME 50 SDK ships `gtk4`, `webkitgtk-6.0` and `webkit2gtk-4.1` at 2.54.1; v3 Flatpak builds must set `ApplicationID` (Mailven sets only `ProgramName`); the 22.04 CI/release runners cannot build GTK4; `wails.json`, `Makefile` and the NSIS/`Info.plist` customizations need re-expression in `build/config.yml`/Taskfiles; the preinit and GBM workarounds are retained, the max-size workaround is a removal candidate. No code changes, no prototype; builds, GTK4 launch, Flatpak, Wayland/X11, Windows and macOS checks unrun.
 
 <a id="w3-m5"></a>
 
 ### W3-M5 — Regression, performance and security test design
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M2](#w3-m2), [W3-M3](#w3-m3), [W3-M4](#w3-m4).
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection (given 2026-11-19); [W3-M2](#w3-m2), [W3-M3](#w3-m3), [W3-M4](#w3-m4).
 - **Scope / deliverable:** Behavior-to-fixture matrix with pass/fail evidence and owner/hardware requirements.
 - **Acceptance:** Meet the corresponding original M5 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M5 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** none recorded; research risks are not verified findings. **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `f959ebc`: [Verification matrix](docs/wails-v3/ASSESSMENT.md#verification-matrix) defines 8 critical gates (G0–G7), 21 functional, 6 window/composer, 12 data/sending/auth, 10 security, 8 performance and 9 packaging cases with pass/fail evidence, run mode (auto, hardware, owner) and status, a performance method with investigation thresholds (proposals, not measurements), fixtures to build (FX-1–FX-6) and a coverage check against M2–M4 risks. Plan only: nothing was run, built or installed; live-provider checks stay owner-gated. Validation: doc links, brand check.
 
 <a id="w3-m6"></a>
 
 ### W3-M6 — Staged migration blueprint
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M3](#w3-m3), [W3-M4](#w3-m4), [W3-M5](#w3-m5).
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection; [W3-M3](#w3-m3), [W3-M4](#w3-m4), [W3-M5](#w3-m5).
 - **Scope / deliverable:** Bounded future implementation steps, pinned target, rollback and separately approvable spikes.
 - **Acceptance:** Meet the corresponding original M6 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M6 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** none recorded; research risks are not verified findings. **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `0a1e24c`: [Migration blueprint](docs/wails-v3/MIGRATION_BLUEPRINT.md) defines stages S0–S9 (Option A first; S9 native composer optional), seven separately approvable spikes SP-1–SP-7 (none run), parity-vs-cleanup split, v2 fallback with revisit triggers, per-stage rollback (schema and distribution included) and a coverage table of every high-risk row. Design only; nothing built or run.
 
 <a id="w3-m7"></a>
 
 ### W3-M7 — Independent review and owner decision gate
 
-- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M6](#w3-m6).
+- **Status / proposed priority:** done (2026-11-19) / P3. **Dependencies / gates:** explicit owner selection (given 2026-11-19); [W3-M6](#w3-m6).
 - **Scope / deliverable:** Evidence-backed proposed GO/DEFER/NO-GO, unresolved questions and separate implementation authorization.
 - **Acceptance:** Meet the corresponding original M7 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M7 validation in docs/PLAN-migration.md; record source/date and unrun checks.
-- **Issues:** none recorded; research risks are not verified findings. **Progress:** not started.
+- **Issues:** [MA14](ISSUES.md#ma14) (found by the review; doc-link checker). **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `756cf95`: an independent read-only acceptance check passed every W3-M0–M6 criterion; its gaps (one broken anchor, a stale intro, a false link-check claim, missing PKG pass rules, blueprint S8/S9 Files/Depends) were fixed and the checker slug mismatch recorded as MA14. The [Executive decision](docs/wails-v3/ASSESSMENT.md#executive-decision) proposes **DEFER**, mapped to the brief's criteria, with conditions for a conditional GO, ranked blockers, the smallest first step (MA13, then S0 and SP-1), stop/revisit triggers, and what is ready, unknown and owner-gated. Releases re-checked 2026-11-19 (v3.1.0 still latest). Docs only; no build, spike or prototype. Brand-check allowlist entry widened to all `docs/wails-v3` docs (blueprint isolation lines).
 
 ## Completed scope and historical evidence
 
@@ -1019,6 +1019,6 @@ Completed work is not a selectable backlog. Stable historical identifiers remain
 - Provider P1 audit and P2 architecture: [deliverability review](docs/validation/provider-deliverability-review.md), [transport recommendations](docs/validation/provider-transport-recommendations.md). F1–F5 local implementation: [implementation validation](docs/validation/provider-implementation.md); live limits remain explicit.
 - G1–G3 shared-guidance implementation and partial runtime checks: [verification record](docs/validation/shared-skills-g3.md). Do not infer full G3/G4 runtime/context completion from parsing/discovery. AI5 bidirectional handoff completed under the 2026-10-14 request: [handoff record](docs/validation/shared-handoff-ai5.md); remaining G4 belongs to AI.
 - Earlier rebrand/UI execution records remain in Git history (`git log -- PLAN.md`; original legal flags: `git show 33c1851:PLAN.md`). Upstream history and architecture: [Aerion history](docs/history/AERION_CHANGELOG.md), [upstream CASA record](docs/history/AERION_CASA_TIER2.md), [extension rules](docs/EXT_RULES.md) and [extension reference](docs/EXTENSIONS.md).
-- Wails assessment remains unstarted; its stable-release gate was met and the project reopened as proposed on 2026-11-19, pending owner selection; existing M0–M7 proposal details are retained in [the brief](docs/PLAN-migration.md), mapped to W3-M0–W3-M7 here to avoid old M-number collisions. Intended `plans/wails-v3/` output paths were never created; selection should reconcile them with the new execution-plan convention.
+- Wails assessment: W3-M0 to W3-M6 are done (2026-11-19); the stable-release gate was met and the project reopened as proposed on 2026-11-19, with W3-M7 pending owner selection; existing M0–M7 proposal details are retained in [the brief](docs/PLAN-migration.md), mapped to W3-M0–W3-M7 here to avoid old M-number collisions. Intended `plans/wails-v3/` output paths were never created; selection should reconcile them with the new execution-plan convention.
 
 - Documentation/workflow reorganization evidence: [mapping and validation](docs/validation/project-management.md). This was documentation-only work and did not select any product milestone.

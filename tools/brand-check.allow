@@ -72,6 +72,7 @@ docs/user-guide/getting-started/import-from-aerion.md :: . :: The import guide n
 tools/db/rollback-v39-to-v30.sql :: . :: Historical rollback script for Aerion databases (0.3.0 to 0.2.5)
 frontend/src/lib/stores/contactSources.svelte.ts :: "aerion" local :: Comment about the D6 'aerion' contact source
 docs/PLAN-migration.md :: Aerion :: Migration plan, a history document
+docs/wails-v3/*.md :: Aerion|aerion :: Assessment and blueprint require isolation from existing Aerion installations (statement of coexistence)
 PLAN.md :: The Aerion questionnaire :: GOAUTH-5 names the historical CASA Tier 2 questionnaire inherited from Aerion
 docs/validation/goauth-5.md :: Aerion CASA Tier 2 questionnaire :: Heading naming the inherited historical questionnaire (docs/history/AERION_CASA_TIER2.md)
 docs/plans/ux-1.md :: persisted `'aerion'` title-bar identifier :: UX-1 checkpoint records why earlier brand-check entries were added
