@@ -578,7 +578,7 @@ Project: [AI](PLAN.md#ai).
 
 Project: [WAILS](PLAN.md#wails).
 
-All future Wails work is deferred by owner decision on 2026-10-14 until the official stable Wails v3 release; owner selection is still required afterward. No verified issue recorded. Proposed research questions and risks remain in [the assessment brief](docs/PLAN-migration.md); do not turn them into confirmed defects.
+The 2026-10-14 deferral until a stable Wails v3 release ended when the owner reopened the project on 2026-11-19 (v3.0.0 stable 2026-10-26; v3.1.0 latest); each milestone still needs owner selection. No verified issue recorded. Proposed research questions and risks remain in [the assessment brief](docs/PLAN-migration.md); do not turn them into confirmed defects.
 
 <a id="ds"></a>
 

@@ -20,9 +20,9 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [CF — Chat-first revision](#cf) | done | P3 | [0](ISSUES.md#cf) | CF-1–5 done (2026-10-21); UI21–UI23 resolved (2026-10-22) |
 | [UX — Plain-language settings and messages](#ux) | done | P3 (UX-5 P2) | [9](ISSUES.md#ux) | UX-0 done 2026-11-09; UX-1 done 2026-11-15; UX-5 done 2026-11-16; UX-2 done 2026-11-18; UX-3 done 2026-11-18; UX-4 done 2026-11-18; UX-6 done 2026-11-18 (decision only); UX-7 done 2026-11-18; UX-8 done 2026-11-18 |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
-| [WAILS — Desktop framework migration assessment](#wails) | deferred | P3 | [0](ISSUES.md#wails) | W3-M0–M7 deferred until official stable Wails v3 release and owner selection |
+| [WAILS — Desktop framework migration assessment](#wails) | proposed | P3 | [0](ISSUES.md#wails) | Release gate met 2026-11-19 (Wails v3.0.0 stable 2026-10-26; v3.1.0 latest); W3-M0–M7 proposed, owner selection required |
 
-**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification. Completed milestones are not selectable work.
+**Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; WAILS W3-M0–M7 (reopened 2026-11-19) await selection. Completed milestones are not selectable work.
 
 ## Scope and preserved decisions
 
@@ -34,7 +34,7 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 **Active:** none. [UX-8](#ux-8) is done (2026-11-18; [plan](docs/plans/ux-8.md)). [UX-7](#ux-7) is done (2026-11-18; [plan](docs/plans/ux-7.md)). [UX-6](#ux-6) is done (2026-11-18; decision only). [UX-4](#ux-4) is done (2026-11-18; [plan](docs/plans/ux-4.md)). [UX-0](#ux-0) is done (2026-11-09; [plan and audit](docs/plans/ux-0.md)). [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** no eligible UX milestone remains (UX-0–UX-8 are done). The best open issue to turn into one is [UX9](ISSUES.md#ux9) (P2: PGP revocation is never checked). SEND-2 still needs separately authorized live verification.
+**Next recommended:** [W3-M0](#w3-m0) — the WAILS release gate is met (Wails v3.1.0 stable) and the owner reopened the project on 2026-11-19; W3-M0 is its first local, prototype-free step. [UX9](ISSUES.md#ux9) (P2) remains the best open issue to turn into a milestone; SEND-2 still needs separately authorized live verification.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -927,8 +927,8 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 ## WAILS — Desktop framework migration assessment
 
 - **Objective / outcome:** Assess Wails v3 and GTK4/WebKitGTK 6.0 feasibility and produce a decision-ready design, without migration implementation.
-- **Status / proposed priority:** deferred / P3.
-- **Dependencies / blockers:** owner decision 2026-10-14 defers all future Wails work, including assessment, until Wails v3 officially releases as a stable version (not a prerelease). Verify the official release before proposing resumption; explicit owner selection and milestone prerequisites still apply.
+- **Status / proposed priority:** proposed / P3 (reopened 2026-11-19 by owner; no milestone selected).
+- **Dependencies / blockers:** the 2026-10-14 deferral waited for an official stable Wails v3 release. Gate met: verified 2026-11-19 from the official `wailsapp/wails` GitHub releases — v3.0.0 (stable, 2026-10-26) and v3.1.0 (marked Latest, not a prerelease, 2026-11-01). Each milestone still needs explicit owner selection and its prerequisites; the assessment remains analysis/design only.
 - **Issues:** [owning register section](ISSUES.md#wails); each linked milestone lists its relevant issues.
 - **Technical references:** [existing assessment brief](docs/PLAN-migration.md) (original M0–M7 scope and constraints; now W3-M0–W3-M7).
 
@@ -936,7 +936,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M0 — Repository preflight and safe v2 baseline
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection.
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection.
 - **Scope / deliverable:** Baseline and synthetic-data strategy with checkout, tools, test commands and unrun checks.
 - **Acceptance:** Meet the corresponding original M0 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M0 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -946,7 +946,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M1 — Wails v3 and GTK4/WebKitGTK readiness
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection; [W3-M0](#w3-m0).
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M0](#w3-m0).
 - **Scope / deliverable:** Official version/API maturity assessment, dated evidence and explicit unknowns.
 - **Acceptance:** Meet the corresponding original M1 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M1 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -956,7 +956,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M2 — Mailven v2 dependency inventory
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection; [W3-M0](#w3-m0).
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M0](#w3-m0).
 - **Scope / deliverable:** File/symbol/API mapping covering lifecycle, bindings, extensions, platform helpers and both windows.
 - **Acceptance:** Meet the corresponding original M2 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M2 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -966,7 +966,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M3 — Backend, frontend and windowing design
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection; [W3-M1](#w3-m1), [W3-M2](#w3-m2).
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M1](#w3-m1), [W3-M2](#w3-m2).
 - **Scope / deliverable:** Compare compatibility-first and native multiwindow options; preserve mail/security invariants.
 - **Acceptance:** Meet the corresponding original M3 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M3 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -976,7 +976,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M4 — Platform and packaging feasibility
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection; [W3-M1](#w3-m1), [W3-M2](#w3-m2), [W3-M3](#w3-m3).
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M1](#w3-m1), [W3-M2](#w3-m2), [W3-M3](#w3-m3).
 - **Scope / deliverable:** Linux/GTK/Flatpak, macOS and Windows risks and explicit platform validation limits.
 - **Acceptance:** Meet the corresponding original M4 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M4 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -986,7 +986,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M5 — Regression, performance and security test design
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection; [W3-M2](#w3-m2), [W3-M3](#w3-m3), [W3-M4](#w3-m4).
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M2](#w3-m2), [W3-M3](#w3-m3), [W3-M4](#w3-m4).
 - **Scope / deliverable:** Behavior-to-fixture matrix with pass/fail evidence and owner/hardware requirements.
 - **Acceptance:** Meet the corresponding original M5 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M5 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -996,7 +996,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M6 — Staged migration blueprint
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection; [W3-M3](#w3-m3), [W3-M4](#w3-m4), [W3-M5](#w3-m5).
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M3](#w3-m3), [W3-M4](#w3-m4), [W3-M5](#w3-m5).
 - **Scope / deliverable:** Bounded future implementation steps, pinned target, rollback and separately approvable spikes.
 - **Acceptance:** Meet the corresponding original M6 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M6 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -1006,7 +1006,7 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 
 ### W3-M7 — Independent review and owner decision gate
 
-- **Status / proposed priority:** deferred / P3. **Dependencies / gates:** official stable Wails v3 release and explicit owner selection; [W3-M6](#w3-m6).
+- **Status / proposed priority:** proposed / P3. **Dependencies / gates:** explicit owner selection; [W3-M6](#w3-m6).
 - **Scope / deliverable:** Evidence-backed proposed GO/DEFER/NO-GO, unresolved questions and separate implementation authorization.
 - **Acceptance:** Meet the corresponding original M7 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M7 validation in docs/PLAN-migration.md; record source/date and unrun checks.
@@ -1019,6 +1019,6 @@ Completed work is not a selectable backlog. Stable historical identifiers remain
 - Provider P1 audit and P2 architecture: [deliverability review](docs/validation/provider-deliverability-review.md), [transport recommendations](docs/validation/provider-transport-recommendations.md). F1–F5 local implementation: [implementation validation](docs/validation/provider-implementation.md); live limits remain explicit.
 - G1–G3 shared-guidance implementation and partial runtime checks: [verification record](docs/validation/shared-skills-g3.md). Do not infer full G3/G4 runtime/context completion from parsing/discovery. AI5 bidirectional handoff completed under the 2026-10-14 request: [handoff record](docs/validation/shared-handoff-ai5.md); remaining G4 belongs to AI.
 - Earlier rebrand/UI execution records remain in Git history (`git log -- PLAN.md`; original legal flags: `git show 33c1851:PLAN.md`). Upstream history and architecture: [Aerion history](docs/history/AERION_CHANGELOG.md), [upstream CASA record](docs/history/AERION_CASA_TIER2.md), [extension rules](docs/EXT_RULES.md) and [extension reference](docs/EXTENSIONS.md).
-- Wails assessment remains unstarted and deferred until the official stable Wails v3 release and subsequent owner selection; existing M0–M7 proposal details are retained in [the brief](docs/PLAN-migration.md), mapped to W3-M0–W3-M7 here to avoid old M-number collisions. Intended `plans/wails-v3/` output paths were never created; selection should reconcile them with the new execution-plan convention.
+- Wails assessment remains unstarted; its stable-release gate was met and the project reopened as proposed on 2026-11-19, pending owner selection; existing M0–M7 proposal details are retained in [the brief](docs/PLAN-migration.md), mapped to W3-M0–W3-M7 here to avoid old M-number collisions. Intended `plans/wails-v3/` output paths were never created; selection should reconcile them with the new execution-plan convention.
 
 - Documentation/workflow reorganization evidence: [mapping and validation](docs/validation/project-management.md). This was documentation-only work and did not select any product milestone.

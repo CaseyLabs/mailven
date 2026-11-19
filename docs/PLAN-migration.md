@@ -1,6 +1,6 @@
 # PLAN: Assess and design Mailven's Wails v2 -> v3 migration
 
-**Status:** Deferred by owner decision on 2026-10-14 until Wails v3 officially releases as a stable version (not a prerelease); explicit owner selection is still required afterward. Analysis and design only; **migration implementation is not authorized**.
+**Status:** Proposed. Deferred on 2026-10-14 until a stable Wails v3 release; that gate was met (v3.0.0 stable 2026-10-26) and the owner reopened the assessment on 2026-11-19. Each milestone still requires explicit owner selection. Analysis and design only; **migration implementation is not authorized**.
 **Repository:** `https://github.com/CaseyLabs/mailven`
 **Roadmap:** [WAILS](../PLAN.md#wails); original M0–M7 below map to W3-M0–W3-M7 there. Status/selection belongs to the root roadmap.
 **Original intended path:** `plans/wails-v3/PLAN.md` (never created). This file retains the assessment scope; on explicit selection, use a linked `docs/plans/<milestone-id>.md` checkpoint and reconcile deliverable paths before writing them.
@@ -22,7 +22,7 @@ The output must answer:
 
 Repository `main` was inspected on 2026-10-11. It used Go 1.26, `github.com/wailsapp/wails/v2 v2.16.0`, Svelte 5 and Wails v2 generated frontend bindings. `main.go` creates separate Wails applications for the main mailbox and detached composer. `app/detached_composer.go` + `app/ipc.go` coordinate the composer with the main process. Linux builds use `webkit2_41` / GTK3 / WebKit2GTK 4.1, with WebKit pre-initialization (`webkit_preinit_linux.go`), GPU/DMABUF handling (`internal/platform/gbmcheck_linux.go`), and special Flatpak file-dialog handling (`app/attachment.go`). The Flathub manifest targets GNOME Platform 50. Treat these as **leads, not immutable facts**.
 
-At preparation time, the latest checked v3 prerelease was `v3.0.0-beta.28` (2026-10-05), with a stable-API claim but beta warning. Do not assume it remains the latest when running this plan. **Do not target a speculative Wails v4** without an official release and documented migration path.
+At preparation time, the latest checked v3 prerelease was `v3.0.0-beta.28` (2026-10-05), with a stable-API claim but beta warning. Do not assume it remains the latest when running this plan. Update 2026-11-19: Wails v3.0.0 was released stable on 2026-10-26 and v3.1.0 (2026-11-01) is the current Latest release; v2.17.1 (2026-11-01) is the newest v2 release, while Mailven still pins v2.16.0. M0/M1 must re-check these. **Do not target a speculative Wails v4** without an official release and documented migration path.
 
 ### Scope
 
@@ -251,7 +251,7 @@ Tick a milestone only after its acceptance criteria are evidenced. Keep entries 
 
 ## Surprises & Discoveries
 
-- No findings yet. Record only material new facts, blockers and changed assumptions, with source and date.
+- 2026-11-19: the stable-release gate is met (official GitHub releases: v3.0.0 stable 2026-10-26, v3.1.0 Latest 2026-11-01). The owner reopened the project as proposed; no milestone is selected yet. Record further material facts, blockers and changed assumptions with source and date.
 
 ## Decision Log
 
