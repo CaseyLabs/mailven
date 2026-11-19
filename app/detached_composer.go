@@ -990,14 +990,16 @@ func (c *ComposerApp) buildReplyMessage(msg *message.Message, mode string) *smtp
 		textBody = fmt.Sprintf("\n\n%s\n%s", citation, quoteText(quotedText))
 	}
 
+	inReplyTo, refs := replyThreadHeaders(msg, mode)
 	return &smtp.ComposeMessage{
-		From:      from,
-		To:        to,
-		Cc:        cc,
-		Subject:   subject,
-		HTMLBody:  htmlBody,
-		TextBody:  textBody,
-		InReplyTo: msg.MessageID,
+		From:       from,
+		To:         to,
+		Cc:         cc,
+		Subject:    subject,
+		HTMLBody:   htmlBody,
+		TextBody:   textBody,
+		InReplyTo:  inReplyTo,
+		References: refs,
 	}
 }
 

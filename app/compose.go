@@ -990,16 +990,7 @@ func (a *App) PrepareReply(messageID, mode string) (*smtp.ComposeMessage, error)
 		textBody = fmt.Sprintf("\n\n%s\n%s", citation, quoteText(quotedText))
 	}
 
-	// Build References header per RFC 5322:
-	// References = parent's References + parent's Message-ID
-	var refs []string
-	if msg.References != "" {
-		// References are stored as a JSON array in the DB
-		_ = json.Unmarshal([]byte(msg.References), &refs)
-	}
-	if msg.MessageID != "" {
-		refs = append(refs, ensureAngleBrackets(msg.MessageID))
-	}
+	inReplyTo, refs := replyThreadHeaders(msg, mode)
 
 	// Fetch inline attachments so cid: references in quoted HTML render correctly
 	var attachments []smtp.Attachment
@@ -1059,7 +1050,7 @@ func (a *App) PrepareReply(messageID, mode string) (*smtp.ComposeMessage, error)
 		Subject:     subject,
 		HTMLBody:    htmlBody,
 		TextBody:    textBody,
-		InReplyTo:   ensureAngleBrackets(msg.MessageID),
+		InReplyTo:   inReplyTo,
 		References:  refs,
 		Attachments: attachments,
 	}, nil

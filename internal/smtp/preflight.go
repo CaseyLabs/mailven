@@ -52,6 +52,11 @@ func NormalizeEnvelopeAddress(address string) (string, error) {
 	return address[:at+1] + domain, nil
 }
 
+// ValidMessageID reports whether id is one RFC 5322 msg-id in angle brackets.
+func ValidMessageID(id string) bool {
+	return len(strings.Fields(id)) == 1 && validMessageIDs(id)
+}
+
 func validMessageIDs(value string) bool {
 	fields := strings.Fields(value)
 	if len(fields) == 0 {

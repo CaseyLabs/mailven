@@ -64,6 +64,13 @@ Before MAIL FROM, RCPT TO or DATA, Mailven validates the final serialized MIME
 and envelope, after signing and encryption. Invalid required headers, threading,
 addresses, injected header controls and overlong physical lines stop submission.
 The original draft remains editable; content is never truncated to pass a check.
+Message-IDs, including those on read receipts, use the sender's domain, or
+`mailven` when the sender address has no usable domain. Replies set In-Reply-To
+to the parent's Message-ID, and References to the parent's References plus its
+Message-ID ([RFC 5322 §3.6.4](https://www.rfc-editor.org/rfc/rfc5322#section-3.6.4)).
+If the parent has no References, its In-Reply-To is used in their place.
+Forwards carry References only. Parent IDs that are not valid msg-id syntax are
+left out instead of blocking the reply.
 Bcc recipients stay in the envelope and are omitted from outgoing headers. This is the SMTP path;
 the [API path](MAIL_APIS.md#api-submission) adds hidden recipients to a Bcc
 header for provider recipient selection, and Gmail delivered-copy privacy

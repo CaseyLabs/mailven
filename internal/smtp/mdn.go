@@ -39,8 +39,9 @@ func BuildMDN(originalMsg *message.Message, fromName, fromEmail string, disposit
 		return nil, fmt.Errorf("from email is required")
 	}
 
-	// Generate a unique message ID
-	msgID := fmt.Sprintf("<%d.%s@%s>", time.Now().UnixNano(), "mdn", domainFromEmail(fromEmail, "localhost"))
+	// Generate a unique message ID under the sender's domain, with the same
+	// "mailven" fallback as NewMessageID (not "localhost").
+	msgID := fmt.Sprintf("<%d.%s@%s>", time.Now().UnixNano(), "mdn", domainFromEmail(fromEmail, "mailven"))
 
 	// Build the recipient (who requested the receipt)
 	recipientEmail := extractEmailAddress(originalMsg.ReadReceiptTo)
