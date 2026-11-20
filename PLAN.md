@@ -20,7 +20,7 @@ Priorities are recommendations assigned in this reorganization: P1 privacy/data 
 | [CF — Chat-first revision](#cf) | done | P3 | [0](ISSUES.md#cf) | CF-1–5 done (2026-10-21); UI21–UI23 resolved (2026-10-22) |
 | [UX — Plain-language settings and messages](#ux) | done | P3 (UX-5 P2) | [9](ISSUES.md#ux) | UX-0 done 2026-11-09; UX-1 done 2026-11-15; UX-5 done 2026-11-16; UX-2 done 2026-11-18; UX-3 done 2026-11-18; UX-4 done 2026-11-18; UX-6 done 2026-11-18 (decision only); UX-7 done 2026-11-18; UX-8 done 2026-11-18 |
 | [AI — AI development workflows](#ai) | deferred | P3 | [1](ISSUES.md#ai) | G4 deferred; no eligible work |
-| [WAILS — Desktop framework migration assessment](#wails) | done | P3 | [0](ISSUES.md#wails) | W3-M0–M7 done 2026-11-19; proposed decision **DEFER** ([executive decision](docs/wails-v3/ASSESSMENT.md#executive-decision)), awaiting owner decision; any spike or stage needs separate authorization |
+| [WAILS — Desktop framework migration assessment](#wails) | blocked | P3 | [1](ISSUES.md#wails) | W3-M0–M7 done (proposed DEFER); W3-SP1 done 2026-11-19: **fail**, mail-iframe content reaches v3.1.0 bound methods ([WA1](ISSUES.md#wa1)); W3-SP1b (WA1 mitigation spike) approved 2026-11-20, next; W3-SP3 and W3-SP2 blocked by WA1 (owner stop condition); MA13 and the rest of S0 not approved |
 
 **Remaining nondeferred scope:** SEND-2 requires separately authorized live verification; the WAILS assessment is complete (proposed DEFER awaits the owner's decision; no migration milestone exists). Completed milestones are not selectable work.
 
@@ -32,9 +32,9 @@ No live provider access, test emails, credentials changes, mailbox migration, pr
 
 ## Progress
 
-**Active:** none. [W3-M7](#w3-m7) is done (2026-11-19), completing the WAILS assessment. [UX-8](#ux-8) is done (2026-11-18; [plan](docs/plans/ux-8.md)). [UX-7](#ux-7) is done (2026-11-18; [plan](docs/plans/ux-7.md)). [UX-6](#ux-6) is done (2026-11-18; decision only). [UX-4](#ux-4) is done (2026-11-18; [plan](docs/plans/ux-4.md)). [UX-0](#ux-0) is done (2026-11-09; [plan and audit](docs/plans/ux-0.md)). [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
+**Active:** none. [W3-SP1](#w3-sp1) is done (2026-11-19) and hit its stop condition ([WA1](ISSUES.md#wa1)); [W3-SP3](#w3-sp3) and [W3-SP2](#w3-sp2) are blocked. [W3-M7](#w3-m7) is done (2026-11-19), completing the WAILS assessment. [UX-8](#ux-8) is done (2026-11-18; [plan](docs/plans/ux-8.md)). [UX-7](#ux-7) is done (2026-11-18; [plan](docs/plans/ux-7.md)). [UX-6](#ux-6) is done (2026-11-18; decision only). [UX-4](#ux-4) is done (2026-11-18; [plan](docs/plans/ux-4.md)). [UX-0](#ux-0) is done (2026-11-09; [plan and audit](docs/plans/ux-0.md)). [CF-1](#cf-1) to [CF-5](#cf-5) are done (2026-10-21). [DSR-1](#dsr-1) to [DSR-4](#dsr-4) are done (2026-10-21). The DS project is done: [DS-6](#ds-6) completed it on 2026-10-21, and branch `feat/ds-3` (DS-3–6) lands with it; [DS-1](#ds-1) and [DS-2](#ds-2) were already on `main`.
 
-**Next recommended:** [MA13](ISSUES.md#ma13) — P1 Wails v2.17.1+ security upgrade (needs owner approval); it is also the first step of the proposed W3 DEFER path ([executive decision](docs/wails-v3/ASSESSMENT.md#executive-decision)). [UX9](ISSUES.md#ux9) (P2) remains the best open issue to turn into a milestone; SEND-2 still needs separately authorized live verification.
+**Next recommended:** [W3-SP1b](#w3-sp1b) — owner-approved 2026-11-20 spike prototyping [WA1](ISSUES.md#wa1) mitigations and re-running the W3-SP1 corpus; W3-SP3 and W3-SP2 stay blocked until it passes and the owner unblocks them. [MA13](ISSUES.md#ma13) — P1 Wails v2.17.1+ security upgrade — still needs owner approval. [UX9](ISSUES.md#ux9) (P2) remains the best open issue to turn into a milestone; SEND-2 still needs separately authorized live verification.
 
 Completed milestones below retain their IDs and evidence; detailed execution history is in Git.
 
@@ -927,10 +927,10 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 ## WAILS — Desktop framework migration assessment
 
 - **Objective / outcome:** Assess Wails v3 and GTK4/WebKitGTK 6.0 feasibility and produce a decision-ready design, without migration implementation.
-- **Status / proposed priority:** done (2026-11-19) / P3. W3-M0–M7 complete; the proposed decision is DEFER, not owner-approved. Implementation, spikes and stages each need separate authorization.
+- **Status / proposed priority:** blocked / P3. W3-SP1 failed its security gate on 2026-11-19 ([WA1](ISSUES.md#wa1)), so W3-SP3 and W3-SP2 are not run. W3-M0–M7 complete (2026-11-19); the proposed decision is DEFER, not owner-approved. On 2026-11-19 the owner set the DEFER path aside for now and approved only spikes SP-1, SP-3 and SP-2 from the [blueprint](docs/wails-v3/MIGRATION_BLUEPRINT.md#spikes) as W3-SP1, W3-SP3, W3-SP2; On 2026-11-20 the owner approved [W3-SP1b](#w3-sp1b), a WA1 mitigation spike. MA13 and the rest of stage S0, and every other stage and spike, still need separate authorization.
 - **Dependencies / blockers:** the 2026-10-14 deferral waited for an official stable Wails v3 release. Gate met: verified 2026-11-19 from the official `wailsapp/wails` GitHub releases — v3.0.0 (stable, 2026-10-26) and v3.1.0 (marked Latest, not a prerelease, 2026-11-01). Each milestone still needs explicit owner selection and its prerequisites; the assessment remains analysis/design only.
 - **Issues:** [owning register section](ISSUES.md#wails); each linked milestone lists its relevant issues.
-- **Technical references:** [existing assessment brief](docs/PLAN-migration.md) (original M0–M7 scope and constraints; now W3-M0–W3-M7).
+- **Technical references:** [assessment](docs/wails-v3/ASSESSMENT.md), [blueprint and decision log](docs/wails-v3/MIGRATION_BLUEPRINT.md#decision-log), [existing assessment brief](docs/PLAN-migration.md) (original M0–M7 scope and constraints; now W3-M0–W3-M7).
 
 <a id="w3-m0"></a>
 
@@ -1011,6 +1011,42 @@ Shared validation for UX-1–UX-8 (UX-TEST-1–6): Flesch–Kincaid grade ≤ 8 
 - **Acceptance:** Meet the corresponding original M7 criteria in the assessment brief; do not implement or run a prototype.
 - **Validation:** Corresponding M7 validation in docs/PLAN-migration.md; record source/date and unrun checks.
 - **Issues:** [MA14](ISSUES.md#ma14) (found by the review; doc-link checker). **Progress:** done 2026-11-19 on branch `docs/wails-v3-assessment` from `756cf95`: an independent read-only acceptance check passed every W3-M0–M6 criterion; its gaps (one broken anchor, a stale intro, a false link-check claim, missing PKG pass rules, blueprint S8/S9 Files/Depends) were fixed and the checker slug mismatch recorded as MA14. The [Executive decision](docs/wails-v3/ASSESSMENT.md#executive-decision) proposes **DEFER**, mapped to the brief's criteria, with conditions for a conditional GO, ranked blockers, the smallest first step (MA13, then S0 and SP-1), stop/revisit triggers, and what is ready, unknown and owner-gated. Releases re-checked 2026-11-19 (v3.1.0 still latest). Docs only; no build, spike or prototype. Brand-check allowlist entry widened to all `docs/wails-v3` docs (blueprint isolation lines).
+
+<a id="w3-sp1"></a>
+
+### W3-SP1 — Spike: can mail-iframe script reach the v3 bridge?
+
+- **Status / proposed priority:** done (2026-11-19; result **fail**, stop condition met) / P3 (security gate). **Dependencies / gates:** owner approval 2026-11-19 (this spike, then W3-SP3, then W3-SP2, one per session). Allowed: fixtures FX-3, FX-5, FX-6 only; `wails3@v3.1.0` in an isolated `GOBIN`; network only for the Go/npm toolchain and modules. Ask before any sudo or system package install. Blueprint spike rules apply: disposable worktree outside the checkout, tag `v3.1.0`, throwaway `HOME`/`XDG_*`, private session bus, synthetic data, no merge, no release; app code on `main` unchanged; owner profile directories hashed before and after (G0).
+- **Scope / deliverable:** [Blueprint SP-1](docs/wails-v3/MIGRATION_BLUEPRINT.md#spikes): on a minimal v3.1.0 app, scripts in an iframe with Mailven's sandbox attributes and CSP probe `/wails/runtime` and bound methods (SEC-3, SEC-4, SEC-7), with and without `connect-src 'none'`.
+- **Acceptance:** yes/no per probe with logs, both CSP variants; G0 hashes unchanged; results in `docs/validation/w3-sp1.md` and the blueprint decision log; worktree, `GOBIN` and throwaway profiles removed. **Stop condition:** any probe reaching `/wails/runtime` or a bound method stops the spike series (W3-SP3 and W3-SP2 not run) and is recorded.
+- **Issues:** [WA1](ISSUES.md#wa1) (found here); related [MA13](ISSUES.md#ma13). **Progress:** done 2026-11-19 on branch `docs/wails-v3-spikes` from `c6ba959` ([validation](docs/validation/w3-sp1.md)). On a minimal v3.1.0 GTK4 app under headless nested KWin, an iframe with Mailven's sandbox and CSP invoked a bound method through `fetch`, XHR and GET query; with `connect-src 'none'` hardening, `<img>` and CSS `url()` markup still did. Five positive controls passed. G0 hashes were identical, and strace showed no owner-path access. The worktree, `GOBIN`, module cache and profiles were removed; probe source and logs are on the local, unmerged branch `spike/w3-sp1`. Unrun: GTK3 fallback, X11, a v2 rerun, Mailven itself on v3.
+
+<a id="w3-sp1b"></a>
+
+### W3-SP1b — Spike: do prototype mitigations close WA1 on v3.1.0?
+
+- **Status / proposed priority:** proposed, owner-approved 2026-11-20 / P3 (security gate). **Dependencies / gates:** [W3-SP1](#w3-sp1) done; same allowances and blueprint spike rules as W3-SP1 (fixtures FX-3, FX-5, FX-6 only; `wails3@v3.1.0` in an isolated `GOBIN`; network only for the Go/npm toolchain and modules; ask before any sudo or system package install; disposable worktree outside the checkout at tag `v3.1.0`; throwaway `HOME`/`XDG_*`; synthetic data; no merge, no release; G0 hashes before and after). App code on `main`, including the sanitizer, stays unchanged: mitigations are prototyped only in the spike worktree. A v2 exposure check was declined by the owner on 2026-11-20 and is not in scope.
+- **Scope / deliverable:** on the W3-SP1 probe app, prototype each [WA1](ISSUES.md#wa1) mitigation layer separately and combined: (a) a `/wails/runtime` guard middleware rejecting frame-originated or non-POST calls (e.g. `Sec-Fetch-Dest`/`Sec-Fetch-Site`, method and a main-frame-only header); (b) sanitizer-style stripping of relative and `wails:` URLs in CSS `url()` and `background` attributes, applied to the FX-3 corpus; (c) an `img-src` without `'self'`. Re-run the W3-SP1 corpus under every CSP variant, plus positive controls proving the main frame can still call bound methods.
+- **Acceptance:** yes/no per probe per mitigation configuration, with logs; a recommended minimal mitigation set that reaches zero frame-originated `/wails/runtime` requests reaching a bound method in all CSP variants, with main-frame controls passing; G0 hashes unchanged; results in `docs/validation/w3-sp1b.md`, the blueprint decision log and WA1; worktree, `GOBIN` and throwaway profiles removed. **Stop condition:** if no configuration reaches zero, record it and stop. A pass does not unblock W3-SP3 or W3-SP2 by itself; ask the owner first. Implementing a mitigation in Mailven needs separate approval.
+- **Issues:** [WA1](ISSUES.md#wa1).
+
+<a id="w3-sp3"></a>
+
+### W3-SP3 — Spike: minimal v3 app on GTK4/WebKitGTK 6.0 and GTK3 fallback
+
+- **Status / proposed priority:** blocked / P3 by [WA1](ISSUES.md#wa1) (W3-SP1 stop condition; owner instruction 2026-11-19: do not run). **Dependencies / gates:** owner approval 2026-11-19; [W3-SP1](#w3-sp1) done without a stop; same allowances as W3-SP1 plus a podman/docker container (Ubuntu 24.04+ and GNOME 50 SDK).
+- **Scope / deliverable:** [Blueprint SP-3](docs/wails-v3/MIGRATION_BLUEPRINT.md#spikes): build and launch a minimal v3.1.0 app on GTK4/WebKitGTK 6.0 in clean containers and with the GTK3 fallback; record build logs, launch evidence and package names.
+- **Acceptance:** blueprint SP-3 exit criteria; G0 hashes unchanged; results in `docs/validation/w3-sp3.md` and the decision log; cleanup done. **Stop condition:** if GTK4 cannot be built, record it and ask the owner before continuing.
+- **Issues:** blocked by [WA1](ISSUES.md#wa1).
+
+<a id="w3-sp2"></a>
+
+### W3-SP2 — Spike: v3 binding generation on the real service set
+
+- **Status / proposed priority:** blocked / P3 by [WA1](ISSUES.md#wa1) (W3-SP1 stop condition; owner instruction 2026-11-19: do not run). **Dependencies / gates:** owner approval 2026-11-19; [W3-SP3](#w3-sp3) done; same allowances as W3-SP1.
+- **Scope / deliverable:** [Blueprint SP-2](docs/wails-v3/MIGRATION_BLUEPRINT.md#spikes): run `wails3 generate bindings` on a stub of the real service set; check the full method set, promoted extension methods and `models` usability.
+- **Acceptance:** method-set diff against v2 `wailsjs` and a list of shape differences; G0 hashes unchanged; results in `docs/validation/w3-sp2.md` and the decision log; cleanup done.
+- **Issues:** blocked by [WA1](ISSUES.md#wa1).
 
 ## Completed scope and historical evidence
 

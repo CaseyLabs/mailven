@@ -91,7 +91,11 @@ Each stage lists scope, files, dependencies, narrow checks, done criteria, risk 
 - **Checks:** WIN-1..WIN-6 and B-only items specified at that time, race tests, G1, G2, G6.
 - **Risk:** H (deletes an isolation boundary). **Rollback:** revert to Option A on the same v3 base.
 
-## Separately approvable spikes (none run; none authorized)
+<a id="spikes"></a>
+
+## Separately approvable spikes
+
+Authorization: on 2026-11-19 the owner approved SP-1, SP-3 and SP-2 only, run in that order as [W3-SP1](../../PLAN.md#w3-sp1), [W3-SP3](../../PLAN.md#w3-sp3) and [W3-SP2](../../PLAN.md#w3-sp2). SP-4 to SP-7 and every stage (including S0 and MA13) remain unauthorized. Results are in the [decision log](#decision-log).
 
 Common rules: disposable git worktree outside the checkout's tracked tree, exact v3 tag, throwaway `HOME`/`XDG_*`/keyring and a private session bus, synthetic data only (FX fixtures), no owner data, no merge, no release, no network except what the toolchain fetch needs (state it in the approval request). Evidence saved to the scratchpad or a spike branch. Cleanup: remove the worktree, isolated `GOBIN`, module cache additions made for the spike, and any throwaway profile; confirm owner profile hashes unchanged (G0).
 
@@ -134,6 +138,16 @@ If SP-1 shows an iframe-to-bridge path with no mitigation, SP-3 shows GTK4 is no
 
 A later session can begin at S0 without rediscovering the repo: read [Baseline](ASSESSMENT.md#baseline), [Verification matrix](ASSESSMENT.md#verification-matrix) (fixtures FX-1..FX-6 and run order) and [AGENTS.md](../../AGENTS.md) validation rules; use `make test`, `make test-ui`, `go build -tags webkit2_41,mailven_creds .`.
 
+<a id="decision-log"></a>
+
+## Decision log
+
+| Date | Item | Result | Decision | Evidence |
+| --- | --- | --- | --- | --- |
+| 2026-11-19 | Spike approval | Owner approved SP-1, SP-3, SP-2 (in that order); DEFER path set aside for now; MA13 and the rest of S0 not approved | Run W3-SP1 first | [PLAN WAILS](../../PLAN.md#wails) |
+| 2026-11-19 | SP-1 ([W3-SP1](../../PLAN.md#w3-sp1)) | **Fail.** Sandboxed mail-iframe content reached bound methods on v3.1.0 (GTK4): script via `fetch`/XHR under Mailven's current CSP; markup-only `<img>`/CSS `url()` GETs even with `connect-src 'none'` hardening | **Stop:** SP-3 and SP-2 not run; S2 onward blocked until a mitigation is designed and SP-1 re-run passes ([WA1](../../ISSUES.md#wa1)) | [validation](../validation/w3-sp1.md) |
+| 2026-11-20 | Mitigation spike approval | Owner approved [W3-SP1b](../../PLAN.md#w3-sp1b): prototype WA1 mitigations (runtime guard, CSS/`background` URL stripping, `img-src` without `'self'`) in a spike worktree and re-run the SP-1 corpus; v2 exposure check declined | Run W3-SP1b next; SP-3 and SP-2 stay blocked until it passes and the owner unblocks them | [PLAN WAILS](../../PLAN.md#wails) |
+
 ## Unrun checks
 
-Everything above is unrun design. No stage, spike, build, binding generation, fixture, GUI, Flatpak, Windows or macOS check was executed. Stage ordering and spike boundaries were reviewed in [W3-M7](../../PLAN.md#w3-m7); see the [executive decision](ASSESSMENT.md#executive-decision).
+Everything above is unrun design except the spikes recorded in the [decision log](#decision-log). No stage, other spike, build, binding generation, fixture, GUI, Flatpak, Windows or macOS check was executed. Stage ordering and spike boundaries were reviewed in [W3-M7](../../PLAN.md#w3-m7); see the [executive decision](ASSESSMENT.md#executive-decision).
